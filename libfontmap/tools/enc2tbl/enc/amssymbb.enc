@@ -1,0 +1,220 @@
+% Encoding of AMS math symbols, group B (MSBM)
+%
+/AMSSymbolsBEncoding [
+% 0x00  (  0)
+/$lessnotequal % glyph variant of code point 0x07
+/$greaternotequal % glyph variant of code point 0x08
+/$notlessequal
+/$notgreaterequal
+
+/$notless
+/$notgreater
+/$precedesnot
+/$followsnot
+
+/$lessnotequal
+/$greaternotequal
+/$notlessequalslanted
+/$notgreaterequalslanted
+
+/$lessnotequal1
+/$greaternotequal1
+/$notprecedesequal % Unicode character chart has slightly different shape
+/$notfollowsequal % Unicode character chart has slightly different shape
+
+% 0x10  ( 16)
+/$precedesnotsimilar
+/$followsnotsimilar
+/$lessnotsimilar
+/$greaternotsimilar
+
+/$notlessequal2
+/$notgreaterequal2
+/$precedesnotequal
+/$followsnotequal
+
+/$precedesnotapprox
+/$followsnotapprox
+/$lessnotapprox
+/$greaternotapprox
+
+/$notsimilar % bold glyph variant
+/$notcongruent
+/$divisionslashbig
+/$divisionbackslashbig
+
+% 0x20  ( 32)
+/$subsetnotequal % glyph variant of code point 0x28
+/$supersetnotequal % glyph variant of code point 0x29
+/$notsubsetequal2
+/$notsupersetequal2
+
+/$subsetnotequal2
+/$supersetnotequal2
+/$subsetnotequal2 % glyph variant of code point 0x24
+/$supersetnotequal2 % glyph variant of code point 0x25
+
+/$subsetnotequal
+/$supersetnotequal
+/$notsubsetequal
+/$notsupersetequal
+
+/$notparallel
+/$dividesnot
+/$dividesnot % short glyph variant
+/$notparallel % short glyph variant
+
+% 0x30  ( 48)
+/$provesnot
+/$forcesnot
+/$nottrue
+/$notforcesdoublehbar
+
+/$notreflexnormalizes
+/$notreflexnormalin
+/$notnormalin
+/$notnormalizes
+
+/$notarrowleft
+/$notarrowright
+/$notarrowdblleft
+/$notarrowdblright
+
+/$notarrowdblboth
+/$notarrowboth
+/$divideontimes
+/emptyset
+
+% 0x40  ( 64)
+/$notexistential
+/$Amathbb
+/$Bmathbb
+/$Cdblstruck
+
+/$Dmathbb
+/$Emathbb
+/$Fmathbb
+/$Gmathbb
+
+/$Hdblstruck
+/$Imathbb
+/$Jmathbb
+/$Kmathbb
+
+/$Lmathbb
+/$Mmathbb
+/$Ndblstruck
+/$Omathbb
+
+% 0x50  ( 80)
+/$Pdblstruck
+/$Qdblstruck
+/$Rdblstruck
+/$Smathbb
+
+/$Tmathbb
+/$Umathbb
+/$Vmathbb
+/$Wmathbb
+
+/$Xmathbb
+/$Ymathbb
+/$Zdblstruck
+/$hatxwide
+
+/$hatxwide
+/$tildexwide
+/$tildexwide
+/.notdef
+
+% 0x60  ( 96)
+/$Finv
+/$Game
+/.notdef
+/.notdef
+
+/.notdef
+/.notdef
+/$Mho
+/eth
+
+/$equalsimilar
+/$beth
+/$gimel
+/$daleth
+
+/$lessdot
+/$greaterdot
+/$lefttimes
+/$righttimes
+
+% 0x70  (112)
+/bar % short glyph variant
+/$parallel % short glyph variant
+/$setminus
+/similar % bold glyph variant
+
+/approxequal % bold glyph variant
+/$approxequal1
+/$followsapprox
+/$precedesapprox
+
+/$curvearrowleft
+/$curvearrowright
+/$digamma
+/$kappa1
+
+/$kmathbb
+/$planckhbar % glyph variant of code point 0x7e
+/$planckhbar
+/$epsilon1inv
+
+% 0x80  (128)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x90  (144)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xa0  (160)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xb0  (176)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xc0  (192)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xd0  (208)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xe0  (224)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xf0  (240)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+] def

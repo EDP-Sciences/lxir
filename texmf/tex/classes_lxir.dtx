@@ -1,0 +1,430 @@
+%% classes_lxir.dtx
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is EDP-Sciences.
+%
+% This work consists of the files classes_lxir.dtx and classes_lxir.ins
+% and the derived file article_lxir.cls, book_lxir.cls and report_lxir.cls.
+% \iffalse meta-comment
+% ----------------------------
+% Copyright EDP Sciences 2007 
+% ----------------------------
+% \fi
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+% \GetFileInfo{classes_lxir.dtx}
+%\newcommand{\LXir}{\textrm{L}\hspace{-0.1em}\raisebox{-0.2\height}{\textsf{X}}\hspace{-0.2em}\textit{ir}}
+% \title{\LXir{} tagging of Standard Classes}
+% \author{Jean-Paul Jorda}
+%
+% \date{Printed \today}
+%
+% \maketitle
+% \section{The documentation driver file}
+%
+% The first bit of code contains the documentation driver file for
+% \TeX{}, i.e., the file that will produce the documentation you are
+% currently reading. It will be extracted from this file by the
+% \texttt{docstrip} program.
+%    \begin{macrocode}
+%<*driver>
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\documentclass{ltxdoc}
+\RecordChanges                  % Gather update information
+
+\CodelineIndex                  % Index code by line number
+
+\begin{document}
+   \DocInput{classes_lxir.dtx}
+\end{document}
+%</driver>
+%    \end{macrocode}
+% \section{Identification}
+%    These document classes can only be used with \LaTeXe, so we make
+%    sure that an appropriate message is displayed when another \TeX{}
+%    format is used.
+%    \begin{macrocode}
+%<article|report|book>\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+%    \end{macrocode}
+% \section{Page layout}
+% To avoid disturbing line breaks, we set the parameters
+% to hight values
+%    \begin{macrocode}
+\setlength\textwidth{.99\maxdimen}
+%    \end{macrocode}
+% \section{Tagging of the \cmd{\maketitle}}
+%    \begin{macrocode}
+\renewcommand\maketitle{%
+  \xBegin{maketitle}%
+  \begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\parindent 1em\noindent
+            \hb@xt@1.8em{%
+                \hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
+            \@maketitle\@thanks
+  \endgroup
+  \xEnd{maketitle}%
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+}
+\def\@maketitle{%
+\@title%
+\@author%
+\@date%
+}
+%    \end{macrocode}
+% \section{Tagging of Commands and Environments}
+% 
+% 
+%    \begin{macrocode}
+\renewenvironment{description}
+               {\xBegin{list}\xEmptyA{params}{listType=description}\list{}{\labelwidth\z@ \itemindent-\leftmargin
+                        \let\makelabel\descriptionlabel}}
+               {\endlist\endlist\xEnd{list}}
+%    \end{macrocode}
+%    \begin{macrocode}
+%<*article|report>
+  \renewenvironment{abstract}{%
+    \xBegin{abstract}%
+      \xBegin{abstractMark}%
+      \abstractname
+      \xEnd{abstractMark}%
+}
+      {\xEnd{abstract}}
+%</article|report>
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewenvironment{verse}
+               {\xBegin{verse}% [LXir] no more  \let\\\@centercr
+                \list{}{\itemsep      \z@
+                        \itemindent   -1.5em%
+                        \listparindent\itemindent
+                        \rightmargin  \leftmargin
+                        \advance\leftmargin 1.5em}%
+                \item\relax}
+               {\endlist\xEnd{verse}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewenvironment{quotation}
+               {\xBegin{quotation}\list{}{\listparindent 1.5em%
+                        \itemindent    \listparindent
+                        \rightmargin   \leftmargin
+                        \parsep        \z@ \@plus\p@}%
+                \item\relax}
+               {\endlist\xEnd{quotation}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewenvironment{quote}
+               {\xBegin{quote}\list{}{\rightmargin\leftmargin}%
+                \item\relax}
+               {\endlist\xEnd{quote}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\if@compatibility
+\newenvironment{titlepage}
+    {%
+      \xBegin{titlePage}
+      \if@twocolumn
+        \@restonecoltrue\onecolumn
+      \else
+        \@restonecolfalse\newpage
+      \fi
+      \thispagestyle{empty}%
+      \setcounter{page}\z@
+    }%
+    {\xEnd{titlePage}\if@restonecol\twocolumn \else \newpage \fi
+
+    }
+\else
+\renewenvironment{titlepage}
+    {%
+      \xBegin{titlePage}
+      \if@twocolumn
+        \@restonecoltrue\onecolumn
+      \else
+        \@restonecolfalse\newpage
+      \fi
+      \thispagestyle{empty}%
+      \setcounter{page}\@ne
+    }%
+    {\xEnd{titlePage}\if@restonecol\twocolumn \else \newpage \fi
+     \if@twoside\else
+        \setcounter{page}\@ne
+     \fi
+    }
+\fi
+%    \end{macrocode}
+%    \begin{macrocode}
+%<*article>
+\renewcommand\appendix{\xEmpty{appendix}\par
+  \setcounter{section}{0}%
+  \setcounter{subsection}{0}%
+  \gdef\thesection{\@Alph\c@section}}
+%</article>
+%    \end{macrocode}
+%    \begin{macrocode}
+%<*report|book>
+\renewcommand\appendix{\xEmpty{appendix}\par
+  \setcounter{chapter}{0}%
+  \setcounter{section}{0}%
+  \gdef\@chapapp{\appendixname}%
+  \gdef\thechapter{\@Alph\c@chapter}}
+%</report|book>
+%    \end{macrocode}
+% \section{Caption tagging}
+% |\@caption| is defined in latex.ltx and tagged in lxir.sty. |\@caption| call
+% |\@makecaption| with already tagged elements. So nothing to do here.
+% \section{Headings}
+% |\section|, |\subsection| and |\subsubsection| are process using |\@sect| in lxir.sty.
+% |\chapter| and  |\part| are defined here. The idea is to get a tag
+% ``section'' with ``secttype'' attribute value to  ``chapter'' and
+% ''part''. so
+% that the postprocess to create hierarchy will be common to sections,
+% chapters and parts.
+% \subsection{Parts}
+% % \begin{macro}{\@part}
+%    \begin{macrocode}
+%<*article>
+\def\@part[#1]#2{%
+  \xBegin{section}\xBegin{sectionHeader}%
+  \xEmptyAA{params}{sectype=part}{level=0}
+    \ifnum \c@secnumdepth >\m@ne
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+    {\parindent \z@ \raggedright
+     \interlinepenalty \@M
+     \normalfont
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+     \ifnum \c@secnumdepth >\m@ne
+       \xBegin{sectionMark}\partname\nobreakspace\thepart\xEnd{sectionMark}%
+     \fi
+     \xBegin{sectionTitle}#2\xEnd{sectionTitle}%
+%    \end{macrocode}
+%    \begin{macrocode}
+     \markboth{}{}\par}%
+    \nobreak
+    \vskip 3ex
+    \@afterheading%
+    \xEnd{sectionHeader}\xEnd{section}%
+}
+%</article>
+%    \end{macrocode}
+%
+%    When \Lcount{secnumdepth} is larger than $-2$ for the
+%    document class report and book, we have a numbered
+%    part, otherwise it is unnumbered.
+%    \begin{macrocode}
+%<*report|book>
+\def\@part[#1]#2{%
+  \xBegin{section}\xBegin{sectionHeader}%
+  \xEmptyAA{params}{sectype=part}{level=-1}
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+%    \end{macrocode}
+%    \begin{macrocode}
+    \markboth{}{}%
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+%    \end{macrocode}
+%    \begin{macrocode}
+     \ifnum \c@secnumdepth >-2\relax
+       \xBegin{sectionMark}\partname\nobreakspace\thepart\xEnd{sectionMark}
+%    \end{macrocode}
+%    \begin{macrocode}
+       \vskip 20\p@
+     \fi
+     \xBegin{sectionTitle}#2\xEnd{sectionTitle}}%
+    \@endpart%
+\xEnd{sectionHeader}\xEnd{section}%
+}
+%</report|book>
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Chapters}
+% For |\chapter| (resp. |\chapter*|),  the headers are defined in
+% |\@makechapterhead| (resp. |\@makeschapterhead|). 
+%    \begin{macrocode}
+%<*report|book>
+\def\@makechapterhead#1{%
+  \xBegin{section}\xBegin{sectionHeader}\xEmptyAA{params}{sectype=chapter}{level=0}%
+  \ifnum \c@secnumdepth >\m@ne
+%<book>      \if@mainmatter
+        \xBegin{sectionMark}\@chapapp\space \thechapter\xEnd{sectionMark}%
+%<book>      \fi
+  \fi
+  \xBegin{sectionTitle}#1\xEnd{sectionTitle}%
+\xEnd{sectionHeader}\xEnd{section}}
+\def\@makeschapterhead#1{%
+ \xBegin{section}\xBegin{sectionHeader}\xEmptyAA{params}{sectype=chapter}{level=0}%
+\xBegin{sectionTitle}#1\xEnd{sectionTitle}\xEnd{sectionHeader}\xEnd{section}%
+}
+%</report|book>
+%    \end{macrocode}
+% \section{Generated list tagging (toc, list of figures, ...)}
+%    \begin{macrocode}
+\renewcommand\tableofcontents{%
+\xBegin{tableofcontents}
+%<*report|book>
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+%    \end{macrocode}
+%    \begin{macrocode}
+    \chapter*{\contentsname
+%</report|book>
+%<article>    \section*{\contentsname
+        \@mkboth{%
+           \MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
+%    \end{macrocode}
+%    The the actual tableof contents is made by calling
+%    |\@starttoc{toc}|. After that we restore twocolumn mode if
+%    necessary.
+%    \begin{macrocode}
+    \@starttoc{toc}%
+%<!article>    \if@restonecol\twocolumn\fi
+\xEnd{tableofcontents}
+    }
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewcommand\listoffigures{%
+\xBegin{listoffigures}
+%<*report|book>
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\listfigurename}%
+%</report|book>
+%<article>    \section*{\listfigurename}%
+      \@mkboth{\MakeUppercase\listfigurename}%
+              {\MakeUppercase\listfigurename}%
+    \@starttoc{lof}%
+%<report|book>    \if@restonecol\twocolumn\fi
+\xEnd{listoffigures}
+    }
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewcommand\listoftables{%
+\xBegin{listoftables}
+%<*report|book>
+    \if@twocolumn
+      \@restonecoltrue\onecolumn
+    \else
+      \@restonecolfalse
+    \fi
+    \chapter*{\listtablename}%
+%</report|book>
+%<article>    \section*{\listtablename}%
+      \@mkboth{%
+          \MakeUppercase\listtablename}%
+         {\MakeUppercase\listtablename}%
+    \@starttoc{lot}%
+%<report|book>    \if@restonecol\twocolumn\fi
+ \xEnd{listoftables}
+    }
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewenvironment{thebibliography}[1]
+%<*article>
+     {\xBegin{thebibliography}\xBegin{thebibliographyMark}\section*{\refname}\xEnd{thebibliographyMark}%
+%    \end{macrocode}
+%    \begin{macrocode}
+      \@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}%
+%</article>
+%<*!article>
+     {\xBegin{thebibliopraphy}\xBegin{thebibliographyMark}\chapter*{\bibname}\xEnd{thebibliographyMark}%
+      \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}%
+%</!article>
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+%    \end{macrocode}
+%    \begin{macrocode}
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist\xEnd{thebibliography}}
+%    \end{macrocode}
+%    \begin{macrocode}
+\renewenvironment{theindex}
+               {\xBegin{theindex}\if@twocolumn
+                  \@restonecolfalse
+                \else
+                  \@restonecoltrue
+                \fi
+%<article>                \twocolumn[\section*{\indexname}]%
+%<!article>                \twocolumn[\@makeschapterhead{\indexname}]%
+                \@mkboth{\MakeUppercase\indexname}%
+                        {\MakeUppercase\indexname}%
+                \thispagestyle{plain}\parindent\z@
+%    \end{macrocode}
+    \begin{macrocode}
+                \parskip\z@ \@plus .3\p@\relax
+                \columnseprule \z@
+                \columnsep 35\p@
+                \let\item\@idxitem}
+%    \end{macrocode}
+%    \begin{macrocode}
+               {\if@restonecol\onecolumn\else\clearpage\fi\xEnd{theindex}}
+%    \end{macrocode}

@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+%% transformations.xml
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Xavier Trochu.
+%
+% This work consists of the files transformations.xml.
+-->
+<transformations>
+	<stack type="text">
+		<!-- la transformation "remove_page_nodes" retire simplement
+			les nodes "page" de l'arbre -->
+		<transformation name="remove_page_nodes" />
+		<!-- la transformation "remove_bop_nodes" retire simplement
+			les nodes "bop" de l'arbre -->
+		<transformation name="remove_bop_nodes" report="1" />
+		
+		<transformation name="transform_large_accent_pattern" report="1" />
+		<transformation name="remove_control_nodes" report="1" />
+		
+		<!-- Cette transformation (mal nommée) remplace les tags <xxx> par des tags
+			<node> en créant la hiérarchie correspondante -->
+		<transformation name="replace_xxx_nodes" report="1" />
+		
+		<!-- Cette transformation cherche les tags spécifiques aux environements (hermes specifique) -->
+		<transformation name="replace_env_nodes" />
+		
+		<!-- Cette transformation traite les node ayant un nom du type (hermes specifique) -->
+		<transformation name="fix_special_nodes" />
+		
+		<!-- Cette transformation supprime les tags <text> à l'interieur du mode mathématique -->
+		<transformation name="mathmode_drop_text" />
+		
+		<!-- Cette transformation effectue l'opération suivante :
+		Transform : 
+			<text>{...}</text><node name="textaccent" /><text>{...}</text>
+		into :
+			<text>{...}<node name="textaccent" />{...}</text>
+		-->
+		<transformation name="merge_accent_tags1" />
+		<!-- Cette transformation effectue l'opération suivante :
+		Transform :
+			<node name="textaccent" /><text>{...}</text>
+		into :
+			<text><node name="textaccent" />{...}</text>
+		-->
+		<transformation name="merge_accent_tags2" />
+		<!-- Cette transformation retire les node textaccent et les remplace par le caractère
+			accentué s'il est disponible. S'il n'est pas disponible, indique une erreur
+			et fait : <node name="textaccent" letter="{letter}" accent="{accent}" />
+		-->
+		<transformation name="transform_accent_tags" />
+		
+		<!-- Cette transformation remplace :
+			<text>{content1}</text><text>{content2}</text>
+		par
+			<text>{content1} {content2}</text>
+		-->
+		<transformation name="merge_adjacent_text_nodes" />
+		
+		<!-- Cette transformation s'occupe de remplacer les entités déclarées par
+			leur équivalent en xml :
+				[entity!copyright!] devient &copyright;
+		-->
+		<transformation name="replace_entities_in_text" />
+		<transformation name="replace_tabular_math_entities" report="1"/>
+		<transformation name="replace_math_entities" />
+
+		<!-- Cette serie de transformations XSLT permet d'obtenir un XML 
+		     plus simple et plus facilement manipulable :
+		-->
+		<transformation name="dump_tree" param="temp-plain.xml" />
+		<!-- remplacement de <node type="{nom}"> par <{nom}> -->
+		<transformation name="xslt_proc" param="node2element.xsl"/>
+		<transformation name="dump_tree" param="temp-xsl-01-node2element.xml" />
+		<!-- ajout dans <{nom}> des attributs du noeud <params> qui suit -->
+		<transformation name="xslt_proc" param="params.xsl"/>
+		<transformation name="dump_tree" param="temp-xsl-02-params.xml" />
+		<!-- suppression des "scories" du balisage -->
+		<transformation name="xslt_proc" param="clean.xsl"/>
+		<transformation name="dump_tree" param="temp-xsl-03-clean.xml" />		
+		<!-- post-traitement des footnotes -->
+		<transformation name="xslt_proc" param="footnote.xsl"/>
+		<transformation name="dump_tree" param="temp-xsl-04-footnote.xml" />				
+		<!-- traitement des informations sur les fontes (fontdetails.xsl+fonttext.xsl)
+		       de façon à ajouter aux noeuds <text> des attributs contenant des informations
+		       sur la fonte -->
+		<transformation name="xslt_proc" param="fontdetails.xsl"/>
+		<transformation name="xslt_proc" param="fonttext.xsl"/>
+		<!-- transformation des <rule> en <vline> ou <hline> dans <tabular> et <multicolumn>.
+		     C'est une préparation au traitement des tableaux.-->
+		<transformation name="xslt_proc" param="linetab.xsl"/>
+		<!-- transformation des formules  mathml de type @single="1" en éléments <sup> et <sub> --> 
+		<transformation name="xslt_proc" param="pseudomath.xsl"/>
+		<!-- ajoute le namespace au MathML -->
+		<transformation name="xslt_proc" param="mathns.xsl"/>
+		<!-- 
+			<transformation name="dump_tree" param="path/to/output.xml" />
+			<transformation name="xslt_proc" param="path/to/stylesheet.xslt" />
+		-->
+		<transformation name="rebuild_all_lists" />
+		<transformation name="rebuild_bibliography" />
+		<transformation name="rebuild_paragraphs" />
+		<transformation name="rebuild_sections" />
+		<transformation name="rebuild_tabulars" />
+		<transformation name="xslt_proc" param="xlatex2xhtml.xsl" />
+	</stack>
+	<stack type="math">
+		<transformation name="transform_inline_math" />
+		<transformation name="transform_left_and_right_pattern" />
+		<transformation name="transform_underscript_pattern" />
+		<transformation name="transform_overscript_pattern" />
+		<transformation name="transform_underoverscript_pattern" />
+		<transformation name="transform_over_pattern" />
+		<transformation name="transform_subsup_pattern" />
+		<transformation name="transform_sub_or_sup_pattern" />
+		<transformation name="transform_simple_sub_or_sup_pattern" />
+		<transformation name="transform_underline_pattern" />
+		<transformation name="transform_overline_pattern" report="1" />
+		<transformation name="transform_mathsym_patterns" report="1" />
+		<transformation name="transform_array_pattern" report="1"/>
+		<transformation name="replace_entities_in_text" report="1"/>
+		<transformation name="drop_remaining_tex_nodes" />
+		<transformation name="transform_string_patterns" />
+		<transformation name="transform_mrow_pattern" />
+		<transformation name="drop_empty_mrows" />
+		<transformation name="drop_empty_vbox" />
+		<transformation name="transform_sqrt_pattern" />
+		<transformation name="transform_mtable_pattern" />
+	</stack>
+</transformations>

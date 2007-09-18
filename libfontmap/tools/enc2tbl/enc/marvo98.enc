@@ -1,0 +1,256 @@
+%The encoding of the marvosym ("Martin Vogels Symbole") font released 1998.
+%A later version has a substantially different encoding. 
+%
+/Marvosym1998Encoding [
+% 0x00
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x10
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x20
+/.notdef
+/.notavail %/stopsign
+/.notavail %/beam
+/.notavail %/bearing
+
+/.notavail %/loosebearing
+/.notavail %/fixedbearing
+/$lefttorque
+/$righttorque
+
+/arrowdown
+/.notavail %/lineload
+/$snowflake
+/$maltesecross
+
+/.notdef
+/.notdef
+/.notavail %/circles
+/.notdef
+
+% 0x30
+/zero
+/one
+/two
+/three
+
+/four
+/five
+/six
+/seven
+
+/eight
+/nine
+/.notdef
+/.notdef
+
+/.notdef
+/$corresponds
+/$dingbatarrow2794
+/.notdef
+
+% 0x40
+/at
+/$answerphone
+/$envelope
+/.notavail %/CEsign
+
+/.notdef
+/$zigzagarrowdown
+/.notavail %/FHBOlogo
+/.notdef
+
+/.notavail %/mobilefone
+/.notavail %/industry
+/.notdef
+/.notavail %/coffeecup
+
+/.notdef
+/$yinyang
+/.notdef
+/.notdef %something here, a box? undocumented.
+
+% 0x50
+/$vector
+/$scissors
+/.notavail %/kutline
+/.notavail %/leftscissors
+
+/$telephone
+/$watch
+/$checkedbox
+/.notdef
+
+/$crossedbox
+/.notdef
+/$fist
+/.notdef
+
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x60
+/.notdef
+/.notdef
+/$writinghand
+/Euro
+
+/Euro
+/Euro
+/.notavail %/FHBOLOGO
+/.notdef
+
+/.notdef
+/$information
+/.notdef
+/.notdef
+
+/.notdef
+/.notdef
+/.notdef
+/.notavail %/football
+
+% 0x70
+/$vector
+/$scissorsupperblade
+/.notavail %/cutline
+/.notavail %/cutleft
+
+/.notavail %/fax
+/.notavail %/FAX
+/.notavail %/faxmachine
+/.notdef
+
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x80
+/.notdef /.notdef /.notdef /.notdef
+
+/.notdef
+/.notdef
+/$latincross
+/.notavail %/celtcross
+
+/$ankh
+/.notdef
+/.notdef
+/.notdef
+
+/$heartwhite
+/.notdef
+/.notdef
+/.notdef
+
+% 0x90
+/.notdef /.notdef /.notdef /.notdef
+
+/.notdef
+/.notdef
+/.notavail %/flatsteel
+/.notavail %/squarepipe
+
+/.notavail %/rectpipe
+/.notavail %/Lsteel
+/.notavail %/TTsteel
+/.notavail %/circpipe
+
+/.notavail %/Tsteel
+/.notdef
+/.notdef
+/.notdef
+
+% 0xa0
+/.notdef /.notdef /.notdef /.notdef
+
+/Euro
+/.notdef
+/.notdef
+/$frownface
+
+/.notdef
+/smileface
+/.notdef
+/.notdef
+
+/.notdef
+/.notdef
+/.notavail %/bicycle
+/.notdef
+
+% 0xb0
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xc0
+/sun
+/$moonfirstquarter
+/$mercury
+/female
+
+/male
+/$jupiter
+/$saturn
+/$uranus
+
+/$neptune
+/$pluto
+/.notdef
+/.notdef
+
+/.notavail %/womanside
+/.notavail %/manside
+/.notavail %/womanfront
+/.notavail %/manfront
+
+% 0xd0
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xe0
+/$aries
+/$taurus
+/$gemini
+/$cancer
+
+/$leo
+/$virgo
+/$libra
+/$scorpius
+
+/$sagittarius
+/$capricorn
+/$aquarius
+/$pisces
+
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xf0
+/A %very bold
+/p %very bold
+/.notdef
+/.notdef
+
+/.notdef
+/.notdef
+/.notdef
+/$filledboxsmall
+
+/.notdef /.notdef /.notdef /.notdef
+
+/.notdef
+/.notavail %/bat
+/.notavail %/womanface
+/.notavail %/MartinVogel
+
+] def

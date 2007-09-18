@@ -1,0 +1,33 @@
+lxir README
+
+lxir is a very configurable tool to convert LaTeX to XML.
+
+Compilation under Unix:
+
+Use the standard "./configure ; make" command.
+As of now, the --prefix parameter to configure is mandatory.
+
+Compilation under win32:
+
+The prefered method to compile lxir for win32 is to cross-compile from a unix
+environment.
+Compilation under Cygwin or Mingw/MSYS should work, but is untested.
+
+Compilation of the tools is not yet supported for the win32 platform.
+
+How to use lxir:
+
+lxir is a command line tool. Although the mean of the lxir system is to convert
+LaTex to XML, the lxir command line tool purpose is to convert a tagged DVI file
+and log file to the final XML file. Usage is very simple:
+"lxir <file.dvi> > <output.xml>".
+
+How to get a tagged DVI file:
+
+In order to generate a tagged DVI file to feed lxir with, you must compile a
+slightly modified version of your latex source with latex.
+
+The modifications to your source can be as simple as adding at the start the
+following line before the \documentclass entry:
+
+\UsePackage{lxir}

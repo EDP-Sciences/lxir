@@ -1,0 +1,220 @@
+% Encoding of AMS math symbols, group A (MSAM)
+%
+/AMSSymbolsAEncoding [
+% 0x00  (  0)
+/$boxdot
+/$boxplus
+/$boxmultiply
+/$box
+
+/filledbox
+/$filledboxsmall
+/lozenge
+/$filledlozenge
+
+/$arrowclockwise
+/$arrowanticlockwise
+/$harpoonsrightleft
+/$harpoonsleftright
+
+/$boxminus
+/$forces
+/$forcestriplevbar
+/$true
+
+% 0x10  ( 16)
+/$twoheadarrowright
+/$twoheadarrowleft
+/$arrowsleftleft
+/$arrowsrightright
+
+/$arrowsupup
+/$arrowsdowndown
+/$harpoonupbarbright
+/$harpoondownbarbright
+
+/$harpoonupbarbleft
+/$harpoondownbarbleft
+/$tailarrowright
+/$tailarrowleft
+
+/$arrowsleftright
+/$arrowsrightleft
+/$arrowuptipleft
+/$arrowuptipright
+
+% 0x20  ( 32)
+/$squigarrowright
+/.notavail % leftrightsquigarrow
+/$looparrowleft
+/$looparrowright
+
+/$ringequal
+/$followssimilar
+/$greatersimilar
+/$greaterapprox
+
+/$multimap
+/therefore
+/$because
+/$dotequaldot
+
+/$deltaequal
+/$precedessimilar
+/$lesssimilar
+/$lessapprox
+
+% 0x30  ( 48)
+/$equalslantedless
+/$equalslantedgreater
+/$equalprecedes
+/$equalfollows
+
+/$precedesequal
+/$lessequal2
+/$lessequalslanted
+/$lessgreater
+
+/$minutereversed
+/.notavail % dash for shaft of dashed arrows
+/$risingdotsequal
+/$fallingdotsequal
+
+/$followsequal
+/$greaterequal2
+/$greaterequalslanted
+/$greaterless
+
+% 0x40  ( 64)
+/$subsetsq
+/$supersetsq
+/$normalizes
+/$normalin
+
+/$reflexnormalizes
+/$reflexnormalin
+/$star
+/$between
+
+/triagdn
+/$triangleright
+/$triangleleft
+/.notavail % right pointing tip for dashed arrows
+
+/.notavail % left pointing tip for dashed arrows
+/$triagwhiteup
+/triagup
+/$triagwhitedn
+
+% 0x50  ( 80)
+/$ringinequal
+/$lessequalgreater
+/$greaterequalless
+/$lessequalgreaterstacked
+
+/$greaterequallessstacked
+/yen
+/$arrowtripleright
+/$arrowtripleleft
+
+/$checkmark
+/$veebar
+/$barwedge
+/$doublebarwedge
+
+/angle
+/$measuredangle
+/$sphericalangle
+/proportional
+
+% 0x60  ( 96)
+/$smile %smallsmile
+/$frown %smallfrown
+/$subsetdbl
+/$supersetdbl
+
+/$uniondbl
+/$intersectiondbl
+/$curlywedge
+/$curlyvee
+
+/$leftthreetimes
+/$rightthreetimes
+/$subsetequal2
+/$supersetequal2
+
+/$bumpequal
+/$bumpdentequal
+/$lessverymuch
+/$greaterverymuch
+
+% 0x70  (112)
+/$ulcorner
+/$urcorner
+/registered
+/$circleS
+
+/$pitchfork
+/$dotplus
+/$similarreversed
+/$similarequalreversed
+
+/$llcorner
+/$lrcorner
+/$maltesecross
+/$complement
+
+/$intercalate
+/$circlering
+/$circleasterisk
+/$circledash
+
+% 0x80  (128)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x90  (144)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xa0  (160)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xb0  (176)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xc0  (192)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xd0  (208)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xe0  (224)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xf0  (240)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+] def

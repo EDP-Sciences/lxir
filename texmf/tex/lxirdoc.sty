@@ -1,0 +1,101 @@
+%% lxirdoc.sty
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Jean-Paul Jorda.
+%
+% This work consists of the file lxirdoc.sty.
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{lxirdoc}[2007/09/17 Package for lxir documentation - Version 0.1]
+\RequirePackage{lxirtag}
+\RequirePackage{makeidx}
+\RequirePackage{calc}
+\RequirePackage{pifont}
+\RequirePackage{graphicx}
+\newcommand\LblDocVersion{Version de ce document: }
+\newcommand\DocVersion[1]{{\small\textit{\LblDocVersion~#1}}}
+\newcommand{\File}[1]{\hbox{\texttt{#1}}}%
+\newcommand{\Command}[1]{\texttt{#1}\index{\texttt{#1}}}
+\newcommand{\Tool}[1]{\textsf{#1}\index{\textsf{#1}}}
+\newcommand{\Package}[1]{\textsf{#1}}
+\newcommand{\Program}[1]{\textsl{#1}}
+\newcommand{\RA}{\ensuremath{\rightarrow}}
+\def\GPL@itname{it}
+\DeclareRobustCommand{\LXir}{%
+        \@ifstar{\LXirCMR}{\LXirCURR}%
+}
+\DeclareRobustCommand{\LXirCMR}{{%
+\ift@gOn{LXir}\else%
+        \fontfamily{cmr}\selectfont
+        L%
+        \kern-.2em
+        \raisebox{-0.2\height}{X}%
+        \ifx\f@shape\GPL@itname\kern-.1em\else\kern-.15em\fi
+        {\fontfamily{cmtt}\selectfont\itshape i\kern-.1em r}%
+\fi%
+}}
+\DeclareRobustCommand{\LXirCURR}{{%
+\ift@gOn{LXir}\else%
+        L%
+        \kern-.2em
+        \raisebox{-0.2\height}{X}%
+        \ifx\f@shape\GPL@itname\kern-.1em\else\kern-.15em\fi
+        {\ttfamily\itshape i\kern-.1em r}%
+\fi%
+}}
+\newcommand{\rexemple}[1]{{\color{pdcolor4}\ding{'345}}\fbox{\tiny\color{pdcolor4}#1}}
+% Macros pour la génération d'exemple :
+\newenvironment{LXirSample}{\xBegin{LXirSample}}{\xEnd{LXirSample}}
+\newcommand{\LXirSampleTitle}[1]{
+  \xBegin{LXirSampleTitle}%
+  \subsection*{#1}%
+  \addcontentsline{toc}{section}{#1}
+  \xEnd{LXirSampleTitle}%
+}
+%
+\newcommand{\DefinedInClass}[1]{\ift@gOn\xBegin{DefinedInClass}#1\xEnd{DefinedInClass}\else\textit{Defined in the \textbf{class}: }\textsl{#1}\fi}
+\newcommand{\DefinedInPackage}[1]{\ift@gOn\xBegin{DefinedInPackage}#1\xEnd{DefinedInPackage}\else\textit{Defined in the \textbf{package}: }\textsl{#1}\fi}
+\newcommand{\DefinedInLaTeX}{\ift@gOn\xEmpty{DefineInLaTeX}\else\textit{Defined in ``latex.ltx''}\fi}
+\newenvironment{LXirSampleHeader}{\xBegin{lXirSampleHeader}}{\xEnd{lXirSampleHeader}}
+\newenvironment{LXirLaTeXCode}{\xBegin{LXirLaTeXCode}}{\xEnd{LXirLaTeXCode}}
+\newenvironment{LXirComment}{\xBegin{LXirComment}\vspace{1cm}\begingroup\it}{\endgroup\xEnd{LXirComment}}
+% pickup from ltxdoc.cls:
+\def\cmd#1{\xBegin{LaTeXCommand}\cs{\expandafter\cmd@to@cs\string#1}\xEnd{LaTeXCommand}}
+\def\cmd@to@cs#1#2{\char\number`#2\relax}
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
+\newsavebox{\importantbox}
+\newenvironment{Important}{\par%
+  \begin{lrbox}{\importantbox}%
+\begin{minipage}[c]{0.15\linewidth}
+\centering{\LARGE \ding{'53}}%
+\end{minipage}
+\begin{minipage}[c]{0.8\linewidth}\bfseries}
+{\end{minipage}\end{lrbox}\noindent%
+\begin{center}
+  \fbox{\usebox{\importantbox}}%
+\end{center}
+}
+\newsavebox{\Examplebox}
+\newenvironment{Example}{\par%
+  \begin{lrbox}{\Examplebox}%
+\begin{minipage}[c]{0.15\linewidth}
+\centering{ \ding{'344}}%
+\end{minipage}
+\begin{minipage}[c]{0.8\linewidth}%
+}
+{\end{minipage}\end{lrbox}\noindent%
+\begin{center}
+  \fbox{\usebox{\Examplebox}}%
+\end{center}
+}
+\endinput

@@ -1,0 +1,163 @@
+% The encoding of the `blackboard bold math' (bbm) fonts.
+%
+/BlackboardEncoding [
+% 0x00  (  0)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x10  ( 16)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x20  ( 32)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/$parenleftwhite
+/$parenrightwhite
+/.notdef
+/.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x30  ( 48)
+/.notdef
+/$onemathbb
+/$twomathbb
+/.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x40  ( 64)
+/.notdef
+/$Amathbb
+/$Bmathbb
+/$Cdblstruck
+
+/$Dmathbb
+/$Emathbb
+/$Fmathbb
+/$Gmathbb
+
+/$Hdblstruck
+/$Imathbb
+/$Jmathbb
+/$Kmathbb
+
+/$Lmathbb
+/$Mmathbb
+/$Ndblstruck
+/$Omathbb
+
+% 0x50  ( 80)
+/$Pdblstruck
+/$Qdblstruck
+/$Rdblstruck
+/$Smathbb
+
+/$Tmathbb
+/$Umathbb
+/$Vmathbb
+/$Wmathbb
+
+/$Xmathbb
+/$Ymathbb
+/$Zdblstruck
+/$bracketleftwhitemath
+
+/.notdef
+/$bracketrightwhitemath
+/.notdef
+/.notdef
+
+% 0x60  ( 96)
+/.notdef
+/$amathbb
+/$bmathbb
+/$cmathbb
+
+/$dmathbb
+/$emathbb
+/$fmathbb
+/$gmathbb
+
+/$hmathbb
+/$imathbb
+/$jmathbb
+/$kmathbb
+
+/$lmathbb
+/$mmathbb
+/$nmathbb
+/$omathbb
+
+% 0x70  (112)
+/$pmathbb
+/$qmathbb
+/$rmathbb
+/$smathbb
+
+/$tmathbb
+/$umathbb
+/$vmathbb
+/$wmathbb
+
+/$xmathbb
+/$ymathbb
+/$zmathbb
+/.notdef
+
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x80  (128)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x90  (144)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xa0  (160)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xb0  (176)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xc0  (192)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xd0  (208)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xe0  (224)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xf0  (240)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+] def

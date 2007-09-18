@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+%% patterns.xml
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Xavier Trochu.
+%
+% This work consists of the files patterns.xml.
+-->
+<patterns>
+	<!-- pattern matching.
+		Order is important, as the first entry matching encoding and family returns.
+		The parameters `encoding' or `family' default to ".*" if not provided.
+	-->
+	<!-- default, match everything -->
+	<pattern encoding="DefaultLXirEncoding" result="DefaultLXirEncoding" /> 
+
+	<pattern encoding="TEX TEXT" result="OT1Encoding" />
+	<pattern encoding="TeXBase1Encoding" result="TeXBase1Encoding"/>
+	<pattern encoding="TEX TYPEWRITER AND WINDOWS ANSI" result="TeXnANSIEncoding"/>
+	<pattern encoding="TEX AND WINDOWS ANSI" result="TeXnANSIEncoding"/>
+
+	<pattern encoding="TEX TEXT WITHOUT F\-LIGATURES" family="WNCY. V.*\..*" result="DummyEncoding" />
+	<pattern encoding="TEX TEXT WITHOUT F\-LIGATURES" family="WNCY.. V.*\..*" result="DummyEncoding" />
+	<pattern encoding="TEX MATH SYMBOLS" family="MSAM V2\.2" result="AMSSymbolsAEncoding" />
+	<pattern encoding="TEX MATH SYMBOLS" family="MSAM V.*\..*" result="DummyEncoding" />
+	<pattern encoding="TEX MATH SYMBOLS" family="MSBM V2\.2" result="AMSSymbolsBEncoding" />
+	<pattern encoding="TEX MATH SYMBOLS" family="MSBM V.*\..*" result="DummyEncoding" />
+	
+	<pattern encoding="TEX TEXT WITHOUT F\-LIGATURES" result="OT1woflEncoding" />
+	<pattern encoding="EXTENDED TEX FONT ENCODING \- LATIN" result="CorkEncoding" />
+	<pattern encoding="CORK" result="CorkEncoding" />
+	<pattern encoding="TEX MATH ITALIC" result="TeXMathItalicEncoding" />
+	<pattern encoding="TEX MATH SYMBOLS" result="TeXMathSymbolEncoding" />
+	<pattern encoding="TEX MATH EXTENSION" result="TeXMathExtensionEncoding" />
+	<pattern encoding="TEX TYPEWRITER TEXT" result="TeXTypewriterTextEncoding" />
+	<pattern encoding="U" family="EUROSYM" result="EurosymEncoding" />
+	<pattern encoding="TEX TEXT COMPANION SYMBOLS 1\-\-\-TS1" result="TextCompanionEncoding" />
+	<pattern encoding="UNSPECIFIED" family="MARTIN_VOGELS_SYMBO" result="Marvosym1998Encoding" />
+	<pattern encoding="FONTSPECIFIC" family="MARVOSYM" result="Marvosym2000Encoding" />
+	<pattern encoding="FONTSPECIFIC" family="ZAPFDINGBATS" result="ZapfDingbatsEncoding" />
+	<pattern encoding="LATEX SYMBOLS" result="LaTeXSymbolsEncoding" />
+	<pattern encoding="BLACKBOARD" result="BlackboardEncoding" />
+	<pattern encoding="TEX TEXT SUBSET" family="EUF. V2\.2" result="EulerFrakturEncoding" />
+	<pattern encoding="TEX MATH SYMBOLS SUBSET" result="TeXMathSymbolEncoding" />
+	<pattern encoding="TEX MATH ITALIC SUBSET" result="TeXMathItalicEncoding" />
+	<pattern encoding="EULER SUBSTITUTIONS ONLY" result="EulerExtensionEncoding" />
+	<pattern encoding="T2A" result="T2AEncoding"/>
+	<pattern encoding="T2B" result="T2BEncoding"/>
+	<pattern encoding="T2C" result="T2CEncoding"/>
+	<pattern encoding="TS1" result="TS1Encoding"/>
+	<pattern encoding="GREEK" result="CBencoding"/><!-- to be checked -->
+	<pattern encoding="AdobeStandardEncoding" result="StandardEncoding"/> <!-- Adobe standard encoding -->
+	<pattern encoding="T5" result="T5Encoding"/> <!-- to be checked -->
+	<pattern encoding="Vietnamese TeX Font Encoding"  result="T5Encoding"/> <!-- to be checked -->
+	<!-- <pattern encoding="T3S" result="T3SEncoding"/> --> <!-- missing -->
+	<!-- <pattern encoding="T3" result="T3Encoding"/> --><!-- missing -->
+	<pattern encoding="GPKERKIS" result="gpkerkis"/>
+	<pattern encoding="KERKISECSC" result="kerkisecsc"/>
+	<pattern encoding="KERKISEC" result="kerkisec"/>
+	<pattern encoding="KERKIS" result="kerkis"/>
+	<pattern encoding="KMATH" result="kmath"/>
+	<pattern encoding="TIPA"  result="T3"/><!-- to be checked -->
+</patterns>

@@ -1,0 +1,202 @@
+% Encoding of the Euler Fraktur fonts (part of the AMS fonts)
+%
+/EulerFrakturEncoding [
+% 0x00  (  0)
+/$dmathfrak % alternate shape
+/$dmathfrak % alternate shape
+/$fmathfrak % alternate shape
+/$fmathfrak % alternate shape
+
+/$gmathfrak % alternate shape
+/$kmathfrak % alternate shape
+/$tmathfrak % alternate shape
+/$umathfrak % alternate shape
+
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x10  ( 16)
+/.notdef
+/.notdef
+/quoteleft
+/quoteright
+
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x20  ( 32)
+/.notdef
+/exclam
+/.notdef
+/.notdef
+
+/.notdef
+/.notdef
+/ampersand
+/quotesingle
+
+/parenleft
+/parenright
+/asterisk
+/plus
+
+/comma
+/minus
+/period
+/slash
+
+% 0x30  ( 48)
+/zerooldstyle
+/oneoldstyle
+/twooldstyle
+/threeoldstyle
+
+/fouroldstyle
+/fiveoldstyle
+/sixoldstyle
+/sevenoldstyle
+
+/eightoldstyle
+/nineoldstyle
+/colon
+/semicolon
+
+/.notdef
+/equal
+/.notdef
+/question
+
+% 0x40  ( 64)
+/.notdef
+/$Amathfrak
+/$Bmathfrak
+/$Cfraktur
+
+/$Dmathfrak
+/$Emathfrak
+/$Fmathfrak
+/$Gmathfrak
+
+/$Hfraktur
+/Ifraktur
+/$Jmathfrak
+/$Kmathfrak
+
+/$Lmathfrak
+/$Mmathfrak
+/$Nmathfrak
+/$Omathfrak
+
+% 0x50  ( 80)
+/$Pmathfrak
+/$Qmathfrak
+/Rfraktur
+/$Smathfrak
+
+/$Tmathfrak
+/$Umathfrak
+/$Vmathfrak
+/$Wmathfrak
+
+/$Xmathfrak
+/$Ymathfrak
+/$Zfraktur
+/bracketleft
+
+/.notdef
+/bracketright
+/asciicircum
+/.notdef
+
+% 0x60  ( 96)
+/.notdef
+/$amathfrak
+/$bmathfrak
+/$cmathfrak
+
+/$dmathfrak
+/$emathfrak
+/$fmathfrak
+/$gmathfrak
+
+/$hmathfrak
+/$imathfrak
+/$jmathfrak
+/$kmathfrak
+
+/$lmathfrak
+/$mmathfrak
+/$nmathfrak
+/$omathfrak
+
+% 0x70  (112)
+/$pmathfrak
+/$qmathfrak
+/$rmathfrak
+/$smathfrak
+
+/$tmathfrak
+/$umathfrak
+/$vmathfrak
+/$wmathfrak
+
+/$xmathfrak
+/$ymathfrak
+/$zmathfrak
+/.notdef
+
+/.notdef
+/quotedbl
+/.notdef
+/one % alternate shape
+
+% 0x80  (128)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x90  (144)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xa0  (160)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xb0  (176)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xc0  (192)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xd0  (208)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xe0  (224)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xf0  (240)
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+] def

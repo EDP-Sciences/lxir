@@ -1,0 +1,74 @@
+%%
+%% This is file `lxirtag.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% lxir.dtx  (with options: `lxirtag')
+%% 
+%% Copyright (c) 2007 by EDP Sciences
+%% 
+%% Author Jean-Paul Jorda and Xavier Trochu - EDP Sciences
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.2 of this license or (at your option) any later
+%% version. The latest version of this license is in:
+%% 
+%% http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.2 or later is part of all distributions of
+%% LaTeX version 1999/12/01 or later.
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.2 of this license or (at your option) any later
+%% version. The latest version of this license is in:
+%%
+%% http://www.latex-project.org/lppl.txt
+%%
+%% and version 1.2 or later is part of all distributions of
+%% LaTeX version 1999/12/01 or later.
+%%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\NeedsTeXFormat{LaTeX2e}[1994/05/13]
+\ProvidesPackage{lxirtag}[2007/06/06 v0.1b LXir tagging package]
+\newcount\xTagcount
+\xTagcount=0
+\def\xNextTag{\global\advance\xTagcount by 1}
+\newif\ift@gDebug
+\t@gDebugfalse
+\newif\ift@gOn
+\@ifpackageloaded{lxir}{\t@gOntrue}{\t@gOnfalse}
+\def\xBegin#1{\ift@gOn\ift@gDebug\message{BEGIN: #1^^J}\fi\special{::tag lxir begin(#1){id=\the\xTagcount}}\xNextTag\relax\fi}
+\def\xEnd#1{\ift@gOn\ift@gDebug\message{END: #1^^J}\fi\special{::tag lxir end(#1){id=\the\xTagcount}}\xNextTag\relax\fi}
+\def\xEmpty#1{\ift@gOn\ift@gDebug\message{EMPTY: #1^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount}}\xNextTag\relax\fi}
+\def\xEmptyA#1#2{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}}\xNextTag\relax\fi}
+\def\xEmptyAA#1#2#3{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}}\xNextTag\relax\fi}
+\def\xEmptyAAA#1#2#3#4{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}}\xNextTag\relax\fi}
+\def\xEmptyAAAA#1#2#3#4#5{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}{#5}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}{#5}}\xNextTag\relax\fi}
+\def\xEmptyAAAAA#1#2#3#4#5#6{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}{#5}{#6}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}{#5}{#6}}\xNextTag\relax\fi}
+\def\xEmptyAAAAAA#1#2#3#4#5#6#7{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}{#5}{#6}{#7}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}{#5}{#6}{#7}}\xNextTag\relax\fi}
+\def\xAttr#1{\ift@gOn\ift@gDebug\message{ATTR: {#1}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}}\xNextTag\relax\fi}
+\def\xAttrA#1#2{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}}\xNextTag\relax\fi}
+\def\xAttrAA#1#2#3{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}{#3}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}{#3}}\xNextTag\relax\fi}
+\def\xAttrAAA#1#2#3#4{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}{#3}{#4}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}{#3}{#4}}\xNextTag\relax\fi}
+\def\xAttrAAAA#1#2#3#4#5{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}{#3}{#4}{#5}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}{#3}{#4}{#5}}\xNextTag\relax\fi}
+\def\xAttrAAAAA#1#2#3#4#5#6{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}{#3}{#4}{#5}{#6}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}{#3}{#4}{#5}{#6}}\xNextTag\relax\fi}
+\endinput
+%%
+%% End of file `lxirtag.sty'.

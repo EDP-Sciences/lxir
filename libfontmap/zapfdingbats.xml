@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+%% zapfdingbats.xml
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Jean-Paul Jorda.
+%
+% This work consists of the files zapfdingbats.xml.
+-->
+<encodings>
+  <encoding name="ZapfDingbatsEncoding">
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/> <!-- x10 -->
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/><!-- x20 -->
+    <char value="&#x2701;" name="UPPER BLADE SCISSORS"/>
+    <char value="&#x2702;" name="BLACK SCISSORS"/>
+    <char value="&#x2703;" name="LOWER BLADE SCISSORS"/>
+    <char value="&#x2704;" name="WHITE SCISSORS"/>
+    <char value="&#x260E;" name="BLACK TELEPHONE"/>
+    <char value="&#x2706;" name="TELEPHONE LOCATION SIGN"/>
+    <char value="&#x2707;" name="TAPE DRIVE"/>
+    <char value="&#x2708;" name="AIRPLANE"/>
+    <char value="&#x2709;" name="ENVELOPE"/>
+    <char value="&#x261B;" name="BLACK RIGHT POINTING INDEX"/>
+    <char value="&#x261E;" name="WHITE RIGHT POINTING INDEX"/>
+    <char value="&#x270C;" name="VICTORY HAND"/>
+    <char value="&#x270D;" name="WRITING HAND"/>
+    <char value="&#x270E;" name="LOWER RIGHT PENCIL"/>
+    <char value="&#x270F;" name="PENCIL"/>
+    <char value="&#x2710;" name="UPPER RIGHT PENCIL"/> <!-- x30 -->
+    <char value="&#x2711;" name="WHITE NIB"/>
+    <char value="&#x2712;" name="BLACK NIB"/>
+    <char value="&#x2713;" name="CHECK MARK"/>
+    <char value="&#x2714;" name="HEAVY CHECK MARK"/>
+    <char value="&#x2715;" name="MULTIPLICATION X"/>
+    <char value="&#x2716;" name="HEAVY MULTIPLICATION X"/>
+    <char value="&#x2717;" name="BALLOT X"/>
+    <char value="&#x2718;" name="HEAVY BALLOT X"/>
+    <char value="&#x2719;" name="OUTLINED GREEK CROSS"/>
+    <char value="&#x271A;" name="HEAVY GREEK CROSS"/>
+    <char value="&#x271B;" name="OPEN CENTRE CROSS"/>
+    <char value="&#x271C;" name="HEAVY OPEN CENTRE CROSS"/>
+    <char value="&#x271D;" name="LATIN CROSS"/>
+    <char value="&#x271E;" name="SHADOWED WHITE LATIN CROSS"/>
+    <char value="&#x271F;" name="OUTLINED LATIN CROSS"/>
+    <char value="&#x2720;" name="MALTESE CROSS"/>  <!-- x40 -->
+    <char value="&#x2721;" name="STAR OF DAVID"/>
+    <char value="&#x2722;" name="FOUR TEARDROP-SPOKED ASTERISK"/>
+    <char value="&#x2723;" name="FOUR BALLOON-SPOKED ASTERISK"/>
+    <char value="&#x2724;" name="HEAVY FOUR BALLOON-SPOKED ASTERISK"/>
+    <char value="&#x2725;" name="FOUR CLUB-SPOKED ASTERISK"/>
+    <char value="&#x2726;" name="BLACK FOUR POINTED STAR"/>
+    <char value="&#x2727;" name="WHITE FOUR POINTED STAR"/>
+    <char value="&#x2605;" name="BLACK STAR"/>
+    <char value="&#x2729;" name="STRESS OUTLINED WHITE STAR"/>
+    <char value="&#x272A;" name="CIRCLED WHITE STAR"/>
+    <char value="&#x272B;" name="OPEN CENTRE BLACK STAR"/>
+    <char value="&#x272C;" name="BLACK CENTRE WHITE STAR"/>
+    <char value="&#x272D;" name="OUTLINED BLACK STAR"/>
+    <char value="&#x272E;" name="HEAVY OUTLINED BLACK STAR"/>
+    <char value="&#x272F;" name="PINWHEEL STAR"/>
+    <char value="&#x2730;" name="SHADOWED WHITE STAR"/> <!-- x50 -->
+    <char value="&#x2731;" name="HEAVY ASTERISK"/>
+    <char value="&#x2732;" name="OPEN CENTRE ASTERISK"/>
+    <char value="&#x2733;" name="EIGHT SPOKED ASTERISK"/>
+    <char value="&#x2734;" name="EIGHT POINTED BLACK STAR"/>
+    <char value="&#x2735;" name="EIGHT POINTED PINWHEEL STAR"/>
+    <char value="&#x2736;" name="SIX POINTED BLACK STAR"/>
+    <char value="&#x2737;" name="EIGHT POINTED RECTILINEAR BLACK STAR"/>
+    <char value="&#x2738;" name="HEAVY EIGHT POINTED RECTILINEAR BLACK STAR"/>
+    <char value="&#x2739;" name="TWELVE POINTED BLACK STAR"/>
+    <char value="&#x273A;" name="SIXTEEN POINTED ASTERISK"/>
+    <char value="&#x273B;" name="TEARDROP-SPOKED ASTERISK"/>
+    <char value="&#x273C;" name="OPEN CENTRE TEARDROP-SPOKED ASTERISK"/>
+    <char value="&#x273D;" name="HEAVY TEARDROP-SPOKED ASTERISK"/>
+    <char value="&#x273E;" name="SIX PETALLED BLACK AND WHITE FLORETTE"/>
+    <char value="&#x273F;" name="BLACK FLORETTE"/>
+    <char value="&#x2740;" name="WHITE FLORETTE"/> <!-- x60 -->
+    <char value="&#x2741;" name="EIGHT PETALLED OUTLINED BLACK FLORETTE"/>
+    <char value="&#x2742;" name="CIRCLED OPEN CENTRE EIGHT POINTED STAR"/>
+    <char value="&#x2743;" name="HEAVY TEARDROP-SPOKED PINWHEEL ASTERISK"/>
+    <char value="&#x2744;" name="SNOWFLAKE"/>
+    <char value="&#x2745;" name="TIGHT TRIFOLIATE SNOWFLAKE"/>
+    <char value="&#x2746;" name="HEAVY CHEVRON SNOWFLAKE"/>
+    <char value="&#x2747;" name="SPARKLE"/>
+    <char value="&#x2748;" name="HEAVY SPARKLE"/>
+    <char value="&#x2749;" name="BALLOON-SPOKED ASTERISK"/>
+    <char value="&#x274A;" name="EIGHT TEARDROP-SPOKED PROPELLER ASTERISK"/>
+    <char value="&#x274B;" name="HEAVY EIGHT TEARDROP-SPOKED PROPELLER ASTERISK"/>
+    <char value="&#x25CF;" name="BLACK CIRCLE"/>
+    <char value="&#x274D;" name="SHADOWED WHITE CIRCLE"/>
+    <char value="&#x25A0;" name="BLACK CIRCLE"/>
+    <char value="&#x274F;" name="LOWER RIGHT DROP-SHADOWED WHITE SQUARE"/>
+    <char value="&#x2750;" name="UPPER RIGHT DROP-SHADOWED WHITE SQUARE"/><!-- x70 -->
+    <char value="&#x2751;" name="LOWER RIGHT SHADOWED WHITE SQUARE"/>
+    <char value="&#x2752;" name="UPPER RIGHT SHADOWED WHITE SQUARE"/>
+    <char value="&#x25B2;" name="BLACK UP-POINTING TRIANGLE"/>
+    <char value="&#x25BC;" name="BLACK DOWN-POINTING TRIANGLE"/>
+    <char value="&#x25C6;" name="BLACK DIAMOND"/>
+    <char value="&#x2756;" name="BLACK DIAMOND MINUS WHITE X"/>
+    <char value="&#x25D7;" name="RIGHT HALF BLACK CIRCLE"/>
+    <char value="&#x2758;" name="LIGHT VERTICAL BAR"/>
+    <char value="&#x2759;" name="MEDIUM VERTICAL BAR"/>
+    <char value="&#x275A;" name="HEAVY VERTICAL BAR"/>
+    <char value="&#x275B;" name="HEAVY SINGLE TURNED COMMA QUOTATION MARK ORNAMENT"/>
+    <char value="&#x275C;" name="HEAVY SINGLE COMMA QUOTATION MARK ORNAMENT"/>
+    <char value="&#x275D;" name="HEAVY DOUBLE TURNED COMMA QUOTATION MARK ORNAMENT"/>
+    <char value="&#x275E;" name="HEAVY DOUBLE COMMA QUOTATION MARK ORNAMENT"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/> <!-- x80 -->
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/> <!-- x90 -->
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/>
+    <char value="?" name=".notdef"/> <!-- xA0 -->
+    <char value="&#x2761;" name="CURVED STEM PARAGRAPH SIGN ORNAMENT"/>
+    <char value="&#x2762;" name="HEAVY EXCLAMATION MARK ORNAMENT"/>
+    <char value="&#x2763;" name="HEAVY HEART EXCLAMATION MARK ORNAMENT"/>
+    <char value="&#x2764;" name="HEAVY BLACK HEART"/>
+    <char value="&#x2765;" name="ROTATED HEAVY BLACK HEART BULLET"/>
+    <char value="&#x2766;" name="FLORAL HEART"/>
+    <char value="&#x2767;" name="ROTATED FLORAL HEART BULLET"/>
+    <char value="&#x2768;" name="MEDIUM LEFT PARENTHESIS ORNAMENT"/>
+    <char value="&#x2769;" name="MEDIUM RIGHT PARENTHESIS ORNAMENT"/>
+    <char value="&#x276A;" name="MEDIUM FLATTENED LEFT PARENTHESIS ORNAMENT"/>
+    <char value="&#x276B;" name="MEDIUM FLATTENED RIGHT PARENTHESIS ORNAMENT"/>
+    <char value="&#x276C;" name="MEDIUM LEFT-POINTING ANGLE BRACKET ORNAMENT"/>
+    <char value="&#x276D;" name="MEDIUM RIGHT-POINTING ANGLE BRACKET ORNAMENT"/>
+    <char value="&#x276E;" name="HEAVY LEFT-POINTING ANGLE QUOTATION MARK ORNAMENT"/>
+    <char value="&#x276F;" name="HEAVY RIGHT-POINTING ANGLE QUOTATION MARK ORNAMENT"/>
+    <char value="&#x2770;" name="HEAVY LEFT-POINTING ANGLE BRACKET ORNAMENT"/> <!-- xB0 -->
+    <char value="&#x2771;" name="HEAVY RIGHT-POINTING ANGLE BRACKET ORNAMENT"/>
+    <char value="&#x2772;" name="LIGHT LEFT TORTOISE SHELL BRACKET ORNAMENT"/>
+    <char value="&#x2773;" name="LIGHT RIGHT TORTOISE SHELL BRACKET ORNAMENT"/>
+    <char value="&#x2774;" name="MEDIUM LEFT CURLY BRACKET ORNAMENT"/>
+    <char value="&#x2775;" name="MEDIUM RIGHT CURLY BRACKET ORNAMENT"/>
+    <char value="&#x2776;" name="DINGBAT NEGATIVE CIRCLED DIGIT ONE"/>
+    <char value="&#x2777;" name="DINGBAT NEGATIVE CIRCLED DIGIT TWO"/>
+    <char value="&#x2778;" name="DINGBAT NEGATIVE CIRCLED DIGIT THREE"/>
+    <char value="&#x2779;" name="DINGBAT NEGATIVE CIRCLED DIGIT FOUR"/>
+    <char value="&#x277A;" name="DINGBAT NEGATIVE CIRCLED DIGIT FIVE"/>
+    <char value="&#x277B;" name="DINGBAT NEGATIVE CIRCLED DIGIT SIX"/>
+    <char value="&#x277C;" name="DINGBAT NEGATIVE CIRCLED DIGIT SEVEN"/>
+    <char value="&#x277D;" name="DINGBAT NEGATIVE CIRCLED DIGIT EIGHT"/>
+    <char value="&#x277E;" name="DINGBAT NEGATIVE CIRCLED DIGIT NINE"/>
+    <char value="&#x277F;" name="DINGBAT NEGATIVE CIRCLED NUMBER TEN"/>
+    <char value="&#x2780;" name="DINGBAT CIRCLED SANS-SERIF DIGIT ONE"/><!-- xB0 -->
+    <char value="&#x2781;" name="DINGBAT CIRCLED SANS-SERIF DIGIT TWO"/>
+    <char value="&#x2782;" name="DINGBAT CIRCLED SANS-SERIF DIGIT THREE"/>
+    <char value="&#x2783;" name="DINGBAT CIRCLED SANS-SERIF DIGIT FOUR"/>
+    <char value="&#x2784;" name="DINGBAT CIRCLED SANS-SERIF DIGIT FIVE"/>
+    <char value="&#x2785;" name="DINGBAT CIRCLED SANS-SERIF DIGIT SIX"/>
+    <char value="&#x2786;" name="DINGBAT CIRCLED SANS-SERIF DIGIT SEVEN"/>
+    <char value="&#x2787;" name="DINGBAT CIRCLED SANS-SERIF DIGIT EIGHT"/>
+    <char value="&#x2788;" name="DINGBAT CIRCLED SANS-SERIF DIGIT NINE"/>
+    <char value="&#x2789;" name="DINGBAT CIRCLED SANS-SERIF NUMBER TEN"/>
+    <char value="&#x278A;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT ONE"/>
+    <char value="&#x278B;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT TWO"/>
+    <char value="&#x278C;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT THREE"/>
+    <char value="&#x278D;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT FOUR"/>
+    <char value="&#x278E;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT FIVE"/>
+    <char value="&#x278F;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT SIX"/>
+    <char value="&#x2790;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT SEVEN"/><!-- xC0 -->
+    <char value="&#x2791;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT EIGHT"/>
+    <char value="&#x2792;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF DIGIT NINE"/>
+    <char value="&#x2793;" name="DINGBAT NEGATIVE CIRCLED SANS-SERIF NUMBER TEN"/>
+    <char value="&#x2794;" name="HEAVY WIDE-HEADED RIGHTWARDS ARROW"/>
+    <char value="&#x2192;" name="RIGHTWARDS ARROW"/>
+    <char value="&#x2194;" name="LEFT RIGHT ARROW"/>
+    <char value="&#x2195;" name="UP DOWN ARROW"/>
+    <char value="&#x2798;" name="HEAVY SOUTH EAST ARROW"/>
+    <char value="&#x2799;" name="HEAVY RIGHTWARDS ARROW"/>
+    <char value="&#x279A;" name="HEAVY NORTH EAST ARROW"/>
+    <char value="&#x279B;" name="DRAFTING POINT RIGHTWARDS ARROW"/>
+    <char value="&#x279C;" name="HEAVY ROUND-TIPPED RIGHTWARDS ARROW"/>
+    <char value="&#x279D;" name="TRIANGLE-HEADED RIGHTWARDS ARROW"/>
+    <char value="&#x279E;" name="HEAVY TRIANGLE-HEADED RIGHTWARDS ARROW"/>
+    <char value="&#x279F;" name="DASHED TRIANGLE-HEADED RIGHTWARDS ARROW"/>
+    <char value="&#x27A0;" name="HEAVY DASHED TRIANGLE-HEADED RIGHTWARDS ARROW"/><!-- xD0 -->
+    <char value="&#x27A1;" name="BLACK RIGHTWARDS ARROW"/>
+    <char value="&#x27A2;" name="THREE-D TOP-LIGHTED RIGHTWARDS ARROWHEAD"/>
+    <char value="&#x27A3;" name="THREE-D BOTTOM-LIGHTED RIGHTWARDS ARROWHEAD"/>
+    <char value="&#x27A4;" name="BLACK RIGHTWARDS ARROWHEAD"/>
+    <char value="&#x27A5;" name="HEAVY BLACK CURVED DOWNWARDS AND RIGHTWARDS ARROW"/>
+    <char value="&#x27A6;" name="HEAVY BLACK CURVED UPWARDS AND RIGHTWARDS ARROW"/>
+    <char value="&#x27A7;" name="SQUAT BLACK RIGHTWARDS ARROW"/>
+    <char value="&#x27A8;" name="HEAVY CONCAVE-POINTED BLACK RIGHTWARDS ARROW"/>
+    <char value="&#x27A9;" name="RIGHT-SHADED WHITE RIGHTWARDS ARROW"/>
+    <char value="&#x27AA;" name="LEFT-SHADED WHITE RIGHTWARDS ARROW"/>
+    <char value="&#x27AB;" name="BACK-TILTED SHADOWED WHITE RIGHTWARDS ARROW"/>
+    <char value="&#x27AC;" name="FRONT-TILTED SHADOWED WHITE RIGHTWARDS ARROW"/>
+    <char value="&#x27AD;" name="HEAVY LOWER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW"/>
+    <char value="&#x27AE;" name="HEAVY UPPER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW"/>
+    <char value="&#x27AF;" name="NOTCHED LOWER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW"/>
+    <char value="?" name=".notdef"/><!-- xE0 -->
+    <char value="&#x27B1;" name="NOTCHED UPPER RIGHT-SHADOWED WHITE RIGHTWARDS ARROW"/>
+    <char value="&#x27B2;" name="CIRCLED HEAVY WHITE RIGHTWARDS ARROW"/>
+    <char value="&#x27B3;" name="WHITE-FEATHERED RIGHTWARDS ARROW"/>
+    <char value="&#x27B4;" name="BLACK-FEATHERED SOUTH EAST ARROW"/>
+    <char value="&#x27B5;" name="BLACK-FEATHERED RIGHTWARDS ARROW"/>
+    <char value="&#x27B6;" name="BLACK-FEATHERED NORTH EAST ARROW"/>
+    <char value="&#x27B7;" name="HEAVY BLACK-FEATHERED SOUTH EAST ARROW"/>
+    <char value="&#x27B8;" name="HEAVY BLACK-FEATHERED RIGHTWARDS ARROW"/>
+    <char value="&#x27B9;" name="HEAVY BLACK-FEATHERED NORTH EAST ARROW"/>
+    <char value="&#x27BA;" name="TEARDROP-BARBED RIGHTWARDS ARROW"/>
+    <char value="&#x27BB;" name="HEAVY TEARDROP-SHANKED RIGHTWARDS ARROW"/>
+    <char value="&#x27BC;" name="WEDGE-TAILED RIGHTWARDS ARROW"/>
+    <char value="&#x27BD;" name="HEAVY WEDGE-TAILED RIGHTWARDS ARROW"/>
+    <char value="&#x27BE;" name="OPEN-OUTLINED RIGHTWARDS ARROW"/>
+    <char value="?" name=".notdef"/>
+  </encoding>
+  <font name="pzdr" encoding="ZapfDingbatsEncoding"/>
+  <font name="rpzdr" encoding="ZapfDingbatsEncoding"/> 
+</encodings>

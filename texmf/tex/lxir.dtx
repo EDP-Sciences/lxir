@@ -1,0 +1,1137 @@
+% \iffalse meta-comment
+%% lxir.dtx
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is EDP-Sciences.
+%
+% This work consists of the files lxir.dtx, lxir.ins and the
+% derived files lxir.sty and lxirtag.sty.
+%
+% Part of this file has been pickup from or inspired by
+% Hermes macro definitions for (AMS)LaTEX version 0.9.10, 2006-07-27
+% author Romeo Anghelache http://romeo.roua.org
+% Other parts come from latex.ltx (LaTeX3 project) distributed with TeXLive 2007
+%
+% modifs a mettre dans svn : 
+% -------------------------
+% 
+% \fi
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+% \GetFileInfo{lxir.dtx}
+% \title{\Package{lxir} and \Package{lxirtag}: Tagging of \LaTeX{} for \LXir{}}
+% \author{Jean-Paul Jorda \and Xavier Trochu (EDP Sciences)}
+% \maketitle
+%    \begin{macrocode}
+%<*driver>
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\documentclass{ltxdoc}
+\usepackage{lxirdoc}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+\DocInput{lxir.dtx}
+\end{document}
+%</driver>
+%    \end{macrocode}
+% \section{How to use these packages ?}
+%
+%\subsection{The \LXir{} project}
+% The packages \Package{lxir} and \Package{lxirtag} are part of \LXir{}, a \LaTeX{}\RA XML converter.
+% You don't need them if you don't intent to use \LXir{}.
+% Please refert to the documentation of the \LXir{} project on \verb|www.latex-lxir.org|.
+% \subsection{Using of \Package{lxir} for \LaTeX{}\RA XML conversion with \LXir{}}
+% The package \Package{lxir} is must be loaded \emph{before} the class call:
+% \begin{verbatim}
+% \RequirePackage{lxir}
+% \documentclass{article}
+% ...
+% \end{verbatim}
+% You can then run \Program{latex}, then \Program{lxir} to got an XML file:
+% \begin{verbatim}
+% $> latex mydoc.tex
+% $> lxir mydoc.dvi
+% \end{verbatim}
+% The package \Package{lxir} loads \Package{lxirtag}, which define a set of commands whose purpose is to tag the dvi 
+% with ``\cs{special}'' instructions. The content of these instructions are recognised by the \File{lxir}
+% program and transformed to  XML tags. 
+% The package \Package{lxir}  also aims to:
+% \begin{itemize}
+% \item set some \TeX{} parameters for word and paragraph tagging;
+% \item overload the commands and environments defined in \File{latex.ltx}
+% \end{itemize}
+% One of the effect of the \File{latex.ltx} command overload is to enable a 
+% mechanism for classes and packages tagging.
+% \subsection{Using of \Package{lxirtag} to write ``\LXir{} compliant'' classes or a packages}
+% If you want to write a class or a package ready to use with \LXir{}, you can include \Module{lxirtag}
+% and use the macros provided for tagging:
+% \begin{verbatim}
+% \RequirePackage{lxirtag}
+% \end{verbatim}
+%
+%    \begin{macrocode}
+\NeedsTeXFormat{LaTeX2e}[1994/05/13]
+%<lxir>\ProvidesPackage{lxir}[2007/06/06 v0.1b LXir tagging package]
+%<lxir>\RequirePackage{lxirtag}[2007/06/06]
+%<lxirtag>\ProvidesPackage{lxirtag}[2007/06/06 v0.1b LXir tagging package]
+%    \end{macrocode}
+% \section{\TeX{} Parameters Setting}
+% Several \TeX{} parameters are set to ease to tagging and 
+% to prevent hyphenation. A potential problem is that
+% these parameters may be reset in packages. 
+% \subsection{Word,Page, Paragraph, hyphenation}
+% The spaces between words are tagged to 1sp so that word  breaks can be
+% clearly identified in the DVI:
+%    \begin{macrocode}
+%<*lxir>
+%\parindent=1sp
+\AtBeginDocument{\spaceskip=1sp\xspaceskip=1sp}
+%    \end{macrocode}
+% and we prevent hyphenation: 
+%    \begin{macrocode}
+\AtBeginDocument{\pretolerance=10000}
+%    \end{macrocode}
+% 
+% The italic correction is set to null,  to preserved the 1sp space between words:
+%    \begin{macrocode}
+\AtBeginDocument{\let\@@italiccorr=\relax}
+%    \end{macrocode}
+% We also want to forbid line break breaks in math:
+%    \begin{macrocode}
+\AtBeginDocument{\binoppenalty=10000\relpenalty=10000}
+%    \end{macrocode}
+% Paragraph width is set to almost the maximum: 
+%    \begin{macrocode}
+\AtBeginDocument{\hsize=0.99\maxdimen}
+\setlength\textwidth{0.99\maxdimen} % need to be set again to this value in classes?
+%    \end{macrocode}
+% Page height is set to almost the maximum: 
+%    \begin{macrocode}
+\AtBeginDocument{\vsize=0.99\maxdimen}
+%    \end{macrocode}
+% We ``neutralize'' the previously used commands and dimensions.  
+%    \begin{macrocode}
+\AtBeginDocument{%
+\newskip\junkskip
+\let\spaceskip=\junkskip
+\let\xspaceskip=\junkskip
+\newdimen\junkdim
+\let\vsize=\junkdim
+\let\hsize=\junkdim
+}
+%    \end{macrocode}
+% And we set the pagestyle to empty, in order to avoid page numbers and so on.
+% Then we prevent savagely the use of \cmd{\pagestyle} and \cmd{\thispagestyle}.
+%    \begin{macrocode}
+\AtBeginDocument{\pagestyle{empty}\def\pagestyle#1{\relax}\def\thispagestyle#1{\relax}}
+%    \begin{macrocode}
+% \section{Outputing information}
+%    \begin{macrocode}
+\newcommand{\LXir@Info}[1]{%
+  \GenericWarning{}{[LXir]   #1}
+}
+%    \end{macrocode}
+% \section{Macros Used for the Tagging}
+% \label{tagging}
+%\subsection{``\cmd{\special}'' tagging  for \Program{lxir}}
+% We use |\special{}| for the tagging of commands and environments in order
+% to produce element nodes in the resulting XML. Both empty and non empty elements can 
+% be generate.
+%
+%\subsubsection{Non Empty nodes}
+%\label{sec:nonemptynode}
+% \begin{verbatim}
+% \special{:: tag lxir begin(command){attr1=val1}{attr2=val2}}{...}
+% some text
+% \special{:: tag lxir end(command){attr1=val1}{attr2=val2}}{...}
+% \end{verbatim}
+% will result in a node:
+% \begin{verbatim}
+% <node type="command" attr1="val1" attr2="val2">
+%   <text font="14" h="7488848" v="6121060">some text</text>
+% </node>
+% \end{verbatim}
+%\subsubsection{Empty nodes}
+%\label{sec:emptynode}
+% \begin{verbatim}
+% \special{:: tag lxir empty(command){attr1=val1}{attr2=val2}}{...}
+% \end{verbatim}
+% will result in an empty node:
+% \begin{verbatim}
+% <node type="command" attr1="val1" attr2="val2"/>
+% \end{verbatim}
+% \subsubsection{Entities}
+% In most cases \LXir{} can generate unicode characters
+% by reading and interpreting fonts information in the dvi. In some case
+% case, this information in not present  and
+% must be tagged. This is not done by a special but by inserting 
+% a string of the form [entity!\#xN!] where N is the hexadecimal unicode number.
+% (e.g. [entity!\#5F!] for underscore).
+%\subsection{Macros defined for the tagging}
+% A set of macros are defined to ease the tagging and to provide an unique 
+% id attribute for each node:
+% \pagebreak
+% The macro |\xBegin|, together with |\xEnd|,  are used to  create a node 
+% containing other nodes:
+% \begin{verbatim}
+% \xBegin{myTag}something\xEnd{myTag}
+% \end{verbatim}
+% will be output as
+% \begin{verbatim}
+% <node type="myTag" id="0">
+%   <text font="14" h="7488848" v="6121060">something</text>
+% </node>
+% \end{verbatim}
+% in the XML.
+% These commands are used to produce empty nodes, with attributes: \\ 
+% |\xEmpty{myTag}| will be output  |<node type="myTag" id="0">|, \\
+% |\xEmptyA{myTag}{myatrr=a}| will be output  |<node type="myTag" id="0" myatrr="a">|,\\ 
+% |\xEmptyA{myTag}{myatrr1=a}{myatrr2=b}| will be output \\ |<node type="myTag" id="0" myatrr1="a" myatrr2="b">|,\\
+% and so on .
+% \par
+% |\xT| is used to tag the accented and ``special'' characters.
+%    \begin{macrocode}
+%</lxir>
+%<*lxirtag>
+\newcount\xTagcount
+\xTagcount=0
+\def\xNextTag{\global\advance\xTagcount by 1}
+\newif\ift@gDebug
+\t@gDebugfalse
+\newif\ift@gOn
+\@ifpackageloaded{lxir}{\t@gOntrue}{\t@gOnfalse}
+\def\xBegin#1{\ift@gOn\ift@gDebug\message{BEGIN: #1^^J}\fi\special{::tag lxir begin(#1){id=\the\xTagcount}}\xNextTag\relax\fi}
+\def\xEnd#1{\ift@gOn\ift@gDebug\message{END: #1^^J}\fi\special{::tag lxir end(#1){id=\the\xTagcount}}\xNextTag\relax\fi}
+\def\xEmpty#1{\ift@gOn\ift@gDebug\message{EMPTY: #1^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount}}\xNextTag\relax\fi}
+\def\xEmptyA#1#2{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}}\xNextTag\relax\fi}
+\def\xEmptyAA#1#2#3{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}}\xNextTag\relax\fi}
+\def\xEmptyAAA#1#2#3#4{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}}\xNextTag\relax\fi}
+\def\xEmptyAAAA#1#2#3#4#5{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}{#5}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}{#5}}\xNextTag\relax\fi}
+\def\xEmptyAAAAA#1#2#3#4#5#6{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}{#5}{#6}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}{#5}{#6}}\xNextTag\relax\fi}
+\def\xEmptyAAAAAA#1#2#3#4#5#6#7{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}{#5}{#6}{#7}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}{#5}{#6}{#7}}\xNextTag\relax\fi}
+%    \end{macrocode}
+% Element attribute key="value" in the output XML will be add if |\xEmptyA...{params}{key=value}...| follow the element. The following 
+% commands are short cuts for the feature. By example : 
+% \begin{verbatim}
+% \xBegin{myCommand}\xAttrA{myKey1=value1}{myKey2=value2}%
+%  ...
+% \xEnd{myCommand}%
+% \end{verbatim}
+% will be merged by lxir as 
+% \begin{verbatim}
+% <span class="myCommand" myKey1="value1" myKey2="value2">
+% ...
+% </span>
+% \end{verbatim}
+%    \begin{macrocode}
+\def\xAttr#1{\ift@gOn\ift@gDebug\message{ATTR: {#1}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}}\xNextTag\relax\fi}
+\def\xAttrA#1#2{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}}\xNextTag\relax\fi}
+\def\xAttrAA#1#2#3{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}{#3}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}{#3}}\xNextTag\relax\fi}
+\def\xAttrAAA#1#2#3#4{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}{#3}{#4}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}{#3}{#4}}\xNextTag\relax\fi}
+\def\xAttrAAAA#1#2#3#4#5{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}{#3}{#4}{#5}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}{#3}{#4}{#5}}\xNextTag\relax\fi}
+\def\xAttrAAAAA#1#2#3#4#5#6{\ift@gOn\ift@gDebug\message{ATTR: {#1}{#2}{#3}{#4}{#5}{#6}^^J}\fi\special{::tag lxir empty(params){id=\the\xTagcount} {#1}{#2}{#3}{#4}{#5}{#6}}\xNextTag\relax\fi}
+%</lxirtag>
+%<*lxir>\t@gOntrue
+%    \end{macrocode}
+%\section{Accents and miscaneleous tagging}
+%\label{sec:accent}
+%\subsection{Miscaleneous}
+%    \begin{macrocode}
+\def\TeX{\xEmpty{TeX}}
+\let\t@gdoubleantislash=\\
+\def\\{\xEmpty{br}\t@gdoubleantislash}
+%  \LaTeX
+\def\LaTeXe\xEmpty{LaTeXe}
+\def\LaTeX{\xEmpty{LaTeX}}
+%    \end{macrocode}
+% Paragraph separation: 
+%    \begin{macrocode}
+\let\t@gpar=\par
+\def\par{\xEmpty{parsep}\t@gpar}
+%    \end{macrocode}
+% MATH
+\def\mathopt@g#1{\xEmptyAA{#1}{mathtype=op}{mathcontent=#1}}
+\def\log{\mathop{\mathopt@g{log}}\nolimits}
+\def\lg{\mathop{\mathopt@g{lg}}\nolimits}
+\def\ln{\mathop{\mathopt@g{ln}}\nolimits}
+\def\lim{\mathop{\mathopt@g{lim}}}
+\def\limsup{\mathop{\mathopt@g{limsup}}}
+\def\liminf{\mathop{\mathopt@g{liminf}}}
+\def\sin{\mathop{\mathopt@g{sin}}\nolimits}
+\def\arcsin{\mathop{\mathopt@g{arcsin}}\nolimits}
+\def\sinh{\mathop{\mathopt@g{sinh}}\nolimits}
+\def\cos{\mathop{\mathopt@g{cos}}\nolimits}
+\def\arccos{\mathop{\mathopt@g{arccos}}\nolimits}
+\def\cosh{\mathop{\mathopt@g{cosh}}\nolimits}
+\def\tan{\mathop{\mathopt@g{tan}}\nolimits}
+\def\arctan{\mathop{\mathopt@g{arctan}}\nolimits}
+\def\tanh{\mathop{\mathopt@g{tanh}}\nolimits}
+\def\cot{\mathop{\mathopt@g{cot}}\nolimits}
+\def\coth{\mathop{\mathopt@g{coth}}\nolimits}
+\def\sec{\mathop{\mathopt@g{sec}}\nolimits}
+\def\csc{\mathop{\mathopt@g{csc}}\nolimits}
+\def\max{\mathop{\mathopt@g{max}}}
+\def\min{\mathop{\mathopt@g{min}}}
+\def\sup{\mathop{\mathopt@g{sup}}}
+\def\inf{\mathop{\mathopt@g{inf}}}
+\def\arg{\mathop{\mathopt@g{arg}}\nolimits}
+\def\ker{\mathop{\mathopt@g{ker}}\nolimits}
+\def\dim{\mathop{\mathopt@g{dim}}\nolimits}
+\def\hom{\mathop{\mathopt@g{hom}}\nolimits}
+\def\det{\mathop{\mathopt@g{det}}}
+\def\exp{\mathop{\mathopt@g{exp}}\nolimits}
+\def\Pr{\mathop{\mathopt@g{Pr}}}
+\def\gcd{\mathop{\mathopt@g{gcd}}}
+\def\deg{\mathop{\mathopt@g{deg}}\nolimits}
+\def\sum{\mathop{\xEmptyAA{sum}{mathtype=op}{mathchar=2211}}}
+\def\hbar{\mathord{\xEmptyAA{hbar}{mathtype=ord}{mathchar=0127}}}
+\def\angle{\mathord{\xEmptyAA{angle}{mathtype=ord}{mathchar=2220}}}
+\def\cong{\mathrel{\xEmptyAA{cong}{mathtype=rel}{mathchar=2245}}}
+\def\bowtie{\mathrel{\xEmptyAA{bowtie}{mathtype=rel}{mathchar=22c8}}}
+\def\models{\mathrel{\xEmptyAA{models}{mathtype=rel}{mathchar=22a8}}}
+\def\doteq{\mathrel{\xEmptyAA{doteq}{mathtype=rel}{mathchar=2250}}}
+\def\not<{\mathrel{\xEmptyAA{notinf}{mathtype=rel}{mathchar=226e}}}
+\def\not>{\mathrel{\xEmptyAA{notsup}{mathtype=rel}{mathchar=226f}}}
+\def\not={\mathrel{\xEmptyAA{noteq}{mathtype=rel}{mathchar=2260}}}
+\def\not\leq{\mathrel{\xEmptyAA{notleq}{mathtype=rel}{mathchar=2270}}}
+\def\not\geq{\mathrel{\xEmptyAA{notgeq}{mathtype=rel}{mathchar=2271}}}
+\def\not\equiv{\mathrel{\xEmptyAA{notequiv}{mathtype=rel}{mathchar=2262}}}
+\def\not\prec{\mathrel{\xEmptyAA{notprec}{mathtype=rel}{mathchar=2280}}}
+\def\not\succ{\mathrel{\xEmptyAA{notsucc}{mathtype=rel}{mathchar=2281}}}
+\def\not\sim{\mathrel{\xEmptyAA{notsim}{mathtype=rel}{mathchar=2241}}}
+\def\not\preceq{\mathrel{\xEmptyAA{notpreceq}{mathtype=rel}{mathchar=22e0}}}
+\def\not\succeq{\mathrel{\xEmptyAA{notsucceq}{mathtype=rel}{mathchar=22e1}}}
+\def\not\simeq{\mathrel{\xEmptyAA{notsimeq}{mathtype=rel}{mathchar=2244}}}
+\def\not\subset{\mathrel{\xEmptyAA{notsubset}{mathtype=rel}{mathchar=2284}}}
+\def\not\supset{\mathrel{\xEmptyAA{notsupset}{mathtype=rel}{mathchar=2285}}}
+\def\not\approx{\mathrel{\xEmptyAA{notapprox}{mathtype=rel}{mathchar=2249}}}
+\def\not\subseteq{\mathrel{\xEmptyAA{notsubseteq}{mathtype=rel}{mathchar=2288}}}
+\def\not\supseteq{\mathrel{\xEmptyAA{notsupseteq}{mathtype=rel}{mathchar=2289}}}
+\def\not\cong{\mathrel{\xEmptyAA{notcong}{mathtype=rel}{mathchar=2247}}}
+\def\not\sqsubseteq{\mathrel{\xEmptyAA{notsqsubseteq}{mathtype=rel}{mathchar=22E2}}}
+\def\not\sqsupseteq{\mathrel{\xEmptyAA{notsqsupseteq}{mathtype=rel}{mathchar=22E3}}}
+\def\not\asymp{\mathrel{\xEmptyAA{notasymp}{mathtype=rel}{mathchar=226d}}}
+\def\notin{\mathrel{\xEmptyAA{notin}{mathtype=rel}{mathchar=2209}}}
+% we convert the "long" arrows to not long ones, as there is no unicode equivalent
+\def\longleftarrow{\leftarrow}
+\def\Longleftarrow{\Leftarrow}
+\def\longrightarrow{\rightarrow}
+\def\Longrightarrow{\Rightarrow}
+\def\longleftrightarrow{\leftrightarrow}
+\def\Longleftrightarrow{\Leftrightarrow}
+\def\mapsto{\mathrel{\xEmptyAA{mapsto}{mathtype=rel}{mathchar=21a6}}}
+\def\longmapsto{\mapsto}
+\def\hookleftarrow{\mathrel{\xEmptyAA{hookleftarrow}{mathtype=rel}{mathchar=21a9}}}
+\def\hookrightarrow{\mathrel{\xEmptyAA{hookleftarrow}{mathtype=rel}{mathchar=21aa}}}
+\def\rightleftharpoons{\mathrel{\xEmptyAA{rightleftharpoons}{mathtype=rel}{mathchar=21cc}}}
+\def\colon{\mathpunct{\xEmptyAA{colon}{mathtype=punct}{mathchar=3a}}}
+%\subsection{Redefinition of accents}
+% 
+%    \begin{macrocode}
+%
+%accents
+\let\oldaccent=\accent
+\def\accent{\xEmpty{textaccent}\oldaccent}
+\let\oldmathaccent=\mathaccent
+\def\mathaccent{\xEmpty{mathaccent}\oldmathaccent }
+%plainTeX accents as characters, e.g. \~{}
+\csname h@test\endcsname
+\csname h@testa\endcsname
+\def\`#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"12 }\else{\ifmmode\mathaccent\else\accent\fi"12 #1}\fi}}
+\def\'#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"13 }\else{\ifmmode\mathaccent\else\accent\fi"13 #1}\fi}}
+\def\v#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"14 }\else{\ifmmode\mathaccent\else\accent\fi"14 #1}\fi}}
+\def\u#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"15 }\else{\ifmmode\mathaccent\else\accent\fi"15 #1}\fi}}
+\def\=#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"16 }\else{\ifmmode\mathaccent\else\accent\fi"16 #1}\fi}}
+\def\^#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"5E }\else{\ifmmode\mathaccent\else\accent\fi"5E #1}\fi}}
+\def\.#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"5F }\else{\ifmmode\mathaccent\else\accent\fi"5F #1}\fi}}
+\def\H#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7D }\else{\ifmmode\mathaccent\else\accent\fi"7D #1}\fi}}
+\def\~#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7E }\else{\ifmmode\mathaccent\else\accent\fi"7E #1}\fi}}
+\def\"#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7F }\else{\ifmmode\mathaccent\else\accent\fi"7F #1}\fi}}
+\let\oldcopyright=\copyright
+\def\copyright{{\xEmpty{textaccent}\oldcopyright}}%    
+%    \end{macrocode}
+%\subsection{Entities for some special characters}
+% 
+% Redefinition of some LICR commands as entities.
+% \label{sec:entities}
+% \emph{PARTIE \`A REVOIR}
+%    \begin{macrocode}
+%%% From File: ltoutenc.dtx 1565
+% \textunderscore (build as a rule in OT1)
+% \copyright (a circle c)
+% \trademark
+\DeclareTextSymbolDefault{\textbackslash}{T1}
+%\def\textcopyright{[entity!\#xA9!]} no more need
+%\def\textasciicircum{[entity!\#x!]} no need
+%\def\textasciitilde{[entity!\#x!]}  no need
+%\def\textcompwordmark{[entity!\#x!]} what's that ??
+\def\textunderscore{[entity!\#x5F!]} 
+\def\textvisiblespace{[entity!\#x2423!]}
+\def\textellipsis{\ifmmode\mathord{\xEmptyAA{textellipsis}{mathtype=ord}{mathchar=2026}}\else[entity!\#x2026!]\fi}
+\def\textregistered{[entity!\#xAE!]}
+\def\texttrademark {[entity!\#x2122!]}
+%\def\SS{[entity!\#x!]} no need
+\def\textordfeminine{[entity!\#xAA!]}
+\def\textordmasculine{[entity!\#xBA!]}
+\def\textquotedblright{\xEmpty{RQUOTE}}
+%    \end{macrocode}
+%\subsection{Commands for spacing}
+%\label{sec:spacing}
+%    \begin{macrocode}
+\def\thinspace{[entity!\#x2009!]}
+\def\enspace{[entity!\#x2002!]}
+\def\enskip{[entity!\#x2002!]}
+\def\quad{[entity!\#x2001!]} % quad = 1 em
+\def\qquad{[entity!\#x2001!][entity!\#x2001!]} % qquad = 2 em
+%    \end{macrocode}
+% \section{Tagging of font attributes (family, series \& shapes) and sizes}
+% \label{sec:fonts}
+%  The idea is to introduce a tag containing the font name (as it appear in the dvi) together with
+%  the font attribute each time a font is loaded. The tags are stored in a global box and write at 
+% the end of the document.
+%    \begin{macrocode}
+\newsavebox{\XX@font@list}
+\newcommand{\addFontTo@list}[6]{%
+\sbox\XX@font@list{\unhbox\XX@font@list\protect\xEmptyAAAAAA{fontDescription}{encoding=#1}{family=#2}{series=#3}{shape=#4}{size=#5}{name=#6}%
+}}
+\newcommand{\FontMatchList}{\usebox{\XX@font@list}}
+\def\extract@font{%
+   \get@external@font%
+   \newbox{\XX@font}%
+   \sbox{\XX@font}{\font@name\external@font}%
+   \global\expandafter\font\font@name\external@font\relax%
+ \global\addFontTo@list{\f@encoding}{\f@family}{\f@series}{\f@shape}{\f@size}{\external@font}%
+    \font@name \relax%
+    \csname \f@encoding+\f@family\endcsname%
+    \csname\curr@fontshape\endcsname%
+    \relax%
+  }
+\AtEndDocument{\protect\xBegin{fontList}\usebox\XX@font@list\protect\xEnd{fontList}}
+%    \end{macrocode}
+% %\section{Cross Reference}
+% \label{sec:cr}
+%    \begin{macrocode}
+%%% From File: ltxref.dtx L3845
+% Reference and label
+\let\t@gref=\ref
+\def\ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}\xBegin{refMark}{\t@gref{#1}}\xEnd{refMark}\xEnd{ref}}
+\let\t@gpageref=\pageref
+\def\pageref#1{\xBegin{pageref}\xEmptyA{params}{idref=#1}\xBegin{pagerefMark}{\t@gpageref{#1}}\xEnd{pagerefMark}\xEnd{pageref}}
+\let\t@glabel=\label
+\def\label#1{\xEmptyA{label}{idlabel=#1}\t@glabel{#1}}
+%    \end{macrocode}
+%
+%\section{Flushing, Centering, Verbatim}
+% \label{sec:ltmiscen}
+% \subsection{Flushing}
+%    \begin{macrocode}
+%%% From File: ltmiscen.dtx L3880
+% \centering
+% \flush*
+% \ragg*
+% verbatim
+% Centering/flush (L3956)
+% raggleft = flushright env
+% raggright = flushleft env
+\let\t@gcentering=\centering
+\let\t@gflushleft=\flushleft
+\let\t@gendflushleft=\endflushleft
+\let\t@graggedright=\raggedright
+\let\t@gflushright=\flushright
+\let\t@gendflushright=\endflushright
+\def\endt@gcentering{\xEnd{center}}
+\let\t@gcenting=\centering
+\def\centering{\xEmpty{centering}\t@gcentering}
+\def\endt@gflushleft{\xEnd{flushleft}}
+\let\t@graggedright=\raggedright
+\def\raggedright{\xBegin{flushleft}\t@graggedright\aftergroup\endt@gflushleft}
+\def\endt@gflushright{\xEnd{flushright}}
+\let\t@graggedleft=\raggedleft
+\def\raggedleft{\xBegin{flushright}\t@graggedleft\aftergroup\endt@gflushright}
+%    \end{macrocode}
+%
+%\subsection{Verbatim}
+%\label{sec:verbatim}
+% In verbatim environment, spaces and line breaks must be kept.
+% In the other hand, lxir require special treatement of spacing to 
+% rebuild words. A solution would be to have a ``verbatim mode'' in lxir
+% to change this behaviour. Here we redefined the space in order to add an 
+% empty tag \verb|\xEmpty{verbatimSpace}|. We also add a tag for line break in the
+% \verb|\par| redefined macro.
+%    \begin{macrocode}
+% Verbatim
+% with \verb 
+\let\t@gverb@egroup=\verb@egroup
+\def\verb@egroup{\xEnd{verb}\t@gverb@egroup} 
+\let\t@gverb=\verb
+\def\verb{\xBegin{verb}\def\t@gspace{\xEmpty{verbatimSpace}}\t@gverb} 
+% with verbatim environment:
+{\catcode`\ =\active%
+\gdef\@vobeyspaces{\catcode`\ \active\def {\t@gspace}}}
+\begingroup \catcode `|=0 \catcode `[= 1
+\catcode`]=2 \catcode `\{=12 \catcode `\}=12
+\catcode`\\=12 |gdef|@xverbatim#1\end{verbatim}[#1|end[verbatim]]
+|gdef|@sxverbatim#1\end{verbatim*}[#1|end[verbatim*]]
+|endgroup
+\def\@verbatim{\trivlist \item\relax
+  \if@minipage\else\vskip\parskip\fi
+  \leftskip\@totalleftmargin\rightskip\z@skip
+  \parindent\z@\parfillskip\@flushglue\parskip\z@skip
+  \@@par
+  \@tempswafalse
+  \def\t@gspace{\xEmpty{verbatimSpace}}%
+  \def\par{%
+    \xEmpty{verbatimLineBreak}%
+    \if@tempswa
+      \leavevmode \null \@@par\penalty\interlinepenalty
+    \else
+      \@tempswatrue
+      \ifhmode\@@par\penalty\interlinepenalty\fi
+    \fi}%
+  \let\do\@makeother \dospecials
+  \obeylines \verbatim@font \@noligs
+  \hyphenchar\font\m@ne
+  \everypar \expandafter{\the\everypar \unpenalty}%
+}
+\let\t@gverbatim=\verbatim
+\def\verbatim{\xBegin{verbatim}\t@gverbatim}
+\let\t@gendverbatim=\endverbatim
+\def\endverbatim{\t@gendverbatim\xEnd{verbatim}}
+%    \end{macrocode}
+% \subsection{Math}
+% \emph{A FAIRE}
+%    \begin{macrocode}
+%%% From File: ltmath.dtx L4033
+% math
+\input lxir_math
+%    \end{macrocode}
+% \subsection{Lists: Enumerate and Itemize}
+% Other list-like environments (description, ...) are defined in classes.
+% Lists environment are to be post-process so as to introduce a little bit
+% of hierarchy...
+% \cmd{\item} is generically tagged, but each list environnement should
+% be tagged. 
+%    \begin{macrocode}
+% Lists (L4314) 
+% enumerate L4534
+\let\t@genumerate=\enumerate
+\def\enumerate{\t@genumerate\xBegin{list}\xEmptyA{params}{listType=enumerate}}
+\let\t@gendenumerate=\endenumerate
+\def\endenumerate{\xEnd{list}\xEmptyA{params}{listType=enumerate}\t@gendenumerate}
+% itemize L4545
+\let\t@gitemize=\itemize
+\def\itemize{\t@gitemize\xBegin{list}\xEmptyA{params}{listType=itemize}\xEmptyA{width}{w=\the\linewidth}}
+\let\t@genditemize=\enditemize
+\def\enditemize{\xEnd{list}\xEmptyA{params}{listType=itemize}\t@genditemize}
+%    \end{macrocode}
+% In the case of list of list,
+% LaTeX build a box containing more than one  label.
+% This behaviour is ennoying for lxir because it
+% doen't allow to keep the hierachical structure.
+%    \begin{macrocode}
+\def\@item[#1]{%
+	\xEmpty{item}
+  \if@noparitem
+    \@donoparitem
+  \else
+    \if@inlabel
+      \indent \par
+    \fi
+    \ifhmode
+      \unskip\unskip \par
+    \fi
+    \if@newlist
+      \if@nobreak
+        \@nbitem
+      \else
+        \addpenalty\@beginparpenalty
+        \addvspace\@topsep
+        \addvspace{-\parskip}%
+      \fi
+    \else
+      \addpenalty\@itempenalty
+      \addvspace\itemsep
+    \fi
+    \global\@inlabeltrue
+  \fi
+  \everypar{%
+    \@minipagefalse
+    \global\@newlistfalse
+    \if@inlabel
+      \global\@inlabelfalse
+      {\setbox\z@\lastbox
+       \ifvoid\z@
+         \kern-\itemindent
+       \fi}%
+      \box\@labels
+      \penalty\z@
+    \fi
+    \if@nobreak
+      \@nobreakfalse
+      \clubpenalty \@M
+    \else
+      \clubpenalty \@clubpenalty
+      \everypar{}%
+    \fi}%
+  \if@noitemarg
+    \@noitemargfalse
+    \if@nmbrlist
+      \refstepcounter\@listctr
+    \fi
+  \fi
+% lxir : we don't accumulate the item labels     
+\xBegin{itemMark}#1\xEnd{itemMark}
+%\sbox\@tempboxa{#1}}%
+% \global\setbox\@labels\hbox{%
+%    \unhbox\@labels
+%    \hskip \itemindent
+%    \hskip -\labelwidth
+%    \hskip -\labelsep
+%    \ifdim \wd\@tempboxa >\labelwidth
+%      \box\@tempboxa
+%    \else
+%      \hbox to\labelwidth {\unhbox\@tempboxa}%
+%    \fi
+%    \hskip \labelsep}%
+  \ignorespaces}
+% description: see classes_x_.dtx
+%    \end{macrocode}
+%
+%\section{Boxes}
+%\label{sec:boxes}
+% \emph{TO  BE DONE: TAGGING OF \oarg{height} and \oarg{inner-pos} see TLC 2 p. 866}
+%    \begin{macrocode}
+%%% From File: ltboxes.dtx
+% DONE: minipage
+% DONE: \fbox
+% DONE: \mbox
+% DONE: \framebox[width][pos]{text}
+% DONE: \parbox
+% DONE: \makebox[width][pos]{text}
+% WARNING: \makebox(){} NOT PROCESSED!
+\let\t@gmbox=\mbox
+\def\mbox#1{\xBegin{mbox}\t@gmbox{#1}\xEnd{mbox}}
+\let\t@gfbox=\fbox
+\def\fbox#1{\xBegin{fbox}\t@gfbox{#1}\xEnd{fbox}}
+% makebox:
+\let\t@g@imakebox=\@imakebox
+\def\@imakebox[#1][#2]#3{\setlength\@tempdima{#1}\xBegin{makebox}\xEmptyAA{params}{width=\the\@tempdima}{pos=#2}\t@g@imakebox[#1][#2]{#3}\xEnd{makebox}}
+% framebox:
+\let\t@g@iframebox=\@iframebox
+\def\@iframebox[#1][#2]#3{\setlength\@tempdima{#1}\xBegin{framebox}\xEmptyAA{params}{width=\the\@tempdima}{pos=#2}\t@g@iframebox[#1][#2]{#3}\xEnd{framebox}}
+%minipage:
+\let\t@g@iiiminipage=\@iiiminipage
+\def\@iiiminipage#1#2[#3]#4{\setlength\@tempdima{#4}\xBegin{minipage}\xEmptyAA{params}{pos=#1}{width=\the\@tempdima}\t@g@iiiminipage{#1}{#2}[#3]{#4}}
+\let\t@gendminipage=\endminipage
+\def\endminipage{\t@gendminipage\xEnd{minipage}}
+% parbox
+%    \end{macrocode}
+% parbox use math mode, I don't know why. To avoid any problem, the strategy for tagging is more radical here.
+%    \begin{macrocode}
+\renewcommand\parbox[3][c]{\setlength\@tempdima{#2}%
+  \xBegin{parbox}\xEmptyAA{params}{pos=#1}{width=\the\@tempdima}{#3}\xEnd{parbox}}
+%    \end{macrocode}
+% \section{Tabbing}
+% Relevant macros  are \@startfield, \@stopfield, \@startline and \@stopline
+%    \begin{macrocode}
+\let\t@gtabbing=\tabbing
+\gdef\tabbing{\xBegin{tabbing}\t@gtabbing}
+\let\t@gendtabbing=\endtabbing
+\gdef\endtabbing{\t@gendtabbing\xEnd{tabbing}}
+\gdef\@startline{%
+     \ifnum \@nxttabmar >\@hightab
+       \@badtab
+       \global\@nxttabmar \@hightab
+     \fi
+     \global\@curtabmar \@nxttabmar
+     \global\@curtab \@curtabmar
+     \global\setbox\@curline \hbox {\xBegin{tabLine}}%
+     \@startfield
+     \strut}
+\gdef\@stopline{%
+  \unskip
+  \@stopfield
+  \if@rjfield
+    \global\@rjfieldfalse
+    \@tempdima\@totalleftmargin
+    \advance\@tempdima\linewidth
+    \hb@xt@\@tempdima{%
+      \@itemfudge\hskip\dimen\@curtabmar
+      \box\@curline
+      \hfil
+      \box\@curfield}%
+  \else
+    \@addfield
+    \hbox{\@itemfudge\hskip\dimen\@curtabmar\box\@curline}%
+  \fi\xEnd{tabLine}}
+\gdef\@startfield{%
+  \global\setbox\@curfield\hbox\bgroup\color@begingroup\xBegin{tabField}}
+\gdef\@stopfield{%
+  \xEnd{tabField}\color@endgroup\egroup}
+% \@rtab:  \>      The \> command causes LaTeX to advance to the next tab stop.
+% \@ltab:  \<      The \< command allows you to put something to the left of the local margin without changing the margin. This command can only be used at the start of the line.
+% \@settab: \=   The \= command sets a tab stop at the current position.
+% \@tabplus: \+  The \+ command moves the left margin of the next and all the following commands one tab stop to the right.
+% \@tabminus: \- The \- command moves the left margin of the next and all the following commands one tab stop to the left.
+% \@tabrj: \` The `\` command allows you to put text flushed right against any tab stop, including tab stop 0. 
+% \section{Tabulation}
+% Because tabular material is processed in math mode, a "math" node child is add 
+% and should be suppressed in the post-process.\par\noindent
+% The \cmd{\hrule} and \cmd{\vrule} are not tagged, as it's tend to have strange side effects
+% too hard  to understand...
+% They appear in the XML as "rule" nodes, and the a and b dimensions are sufficient to determine
+% wether it's a horizontal or vertical line.
+% \par\noindent
+% End of Line tagging is done by redefining  \cmd{\@tabularcr} and \cmd{\@arraycr}. The resulting tag 
+% is in the last ``cell'' unless a \cmd{\multicolumn} is the last element of the line: in the case, the eol 
+% tag is after the multicolumn node.  
+% To tag the table columns description, we create and use a  \cmd{\t@g@coldesc} box.
+% Array should have the same structure...
+% \emph{BUG : spaces are dropped in column separators.}\\ 
+%    \begin{macrocode}
+%%% From File: lttab.dtx
+% Tabutation L4849
+% NOT DONE : \extracolsep
+\newif\if@multicol
+%    \end{macrocode}
+%    \begin{macrocode}
+\newsavebox{\t@g@coldesc}
+\let\t@garray=\array
+\def\array{\xBegin{array}\t@garray}
+\def\tabular{\xBegin{tabular}\let\@halignto\@empty\@tabular}
+\def\endarray{\crcr\egroup\egroup\xEnd{array}} 
+\def\endtabular{\crcr\egroup\egroup $\egroup\xEnd{tabular}} %$ for emacs
+\def\@arraycr{%
+  \xEmpty{eol}${\ifnum0=`}\fi\@ifstar\@xarraycr\@xarraycr} % $
+\def\@tabularcr{%
+  \xEmpty{eol}{\ifnum0=`}\fi\@ifstar\@xtabularcr\@xtabularcr}
+\def\@array[#1]#2{%
+        % pickup position:
+        \xEmptyA{params}{pos=#1}
+        % columns model tagging is done below
+  \if #1t\vtop \else \if#1b\vbox \else \vcenter \fi\fi
+  \bgroup
+  \setbox\@arstrutbox\hbox{%
+    \vrule \@height\arraystretch\ht\strutbox
+           \@depth\arraystretch \dp\strutbox
+           \@width\z@}%
+  \@mkpream{#2}%
+  \hbox{\usebox{\t@g@coldesc}}%
+ \edef\@preamble{%
+    \ialign \noexpand\@halignto
+       \bgroup \@arstrut \@preamble \tabskip\z@skip \cr}%
+  \let\@startpbox\@@startpbox \let\@endpbox\@@endpbox
+  \let\tabularnewline\\%
+    \let\par\@empty
+    \let\@sharp##%
+    \set@typeset@protect
+    \lineskip\z@skip\baselineskip\z@skip
+    \ifhmode \@preamerr\z@ \@@par\fi
+    \@preamble}
+\long\def\multicolumn#1#2#3{\multispan{#1}\begingroup
+  \@multicoltrue\@mkpream{#2}\@multicolfalse%
+  \def\@sharp{#3}\set@typeset@protect
+  \let\@startpbox\@@startpbox\let\@endpbox\@@endpbox
+  \@arstrut \xBegin{multicolumn}\xEmptyA{params}{span=#1}%
+\usebox{\t@g@coldesc}\@preamble\xEnd{multicolumn}\hbox{}\endgroup\ignorespaces}
+\def\@cline#1-#2\@nil{%
+  \omit
+  \xEmptyAA{cline}{from=#1}{to=#2}
+  \@multicnt#1%
+  \advance\@multispan\m@ne
+  \ifnum\@multicnt=\@ne\@firstofone{&\omit}\fi
+  \@multicnt#2%
+  \advance\@multicnt-#1%
+  \advance\@multispan\@ne
+  \leaders\hrule\@height\arrayrulewidth\hfill
+  \cr\noalign{\vskip-\arrayrulewidth}}
+\def\@addtocoldesc#1{\sbox{\t@g@coldesc}{\ignorespaces\usebox{\t@g@coldesc}#1}}
+\def\@mkpream#1{\sbox{\t@g@coldesc}{}\@addtocoldesc{\xBegin{columnsModel}}%
+\@addtocoldesc{\xEmptyAAAAA{params}{arraycolsep=\the\arraycolsep}{tabcolsep=\the\tabcolsep}{arrayrulewidth=\the\arrayrulewidth}{doublerulesep=\the\doublerulesep}{arraystretch=\arraystretch}}%
+\@firstamptrue\@lastchclass6
+  \let\@preamble\@empty
+  \let\protect\@unexpandable@protect
+  \let\@sharp\relax
+  \let\@startpbox\relax\let\@endpbox\relax
+  \@expast{#1}%
+  \expandafter\@tfor \expandafter
+    \@nextchar \expandafter:\expandafter=\reserved@a\do
+       {\@testpach\@nextchar
+    \ifcase \@chclass \@classz \or \@classi \or \@classii \or \@classiii
+      \or \@classiv \or\@classv \fi\@lastchclass\@chclass}%
+  \ifcase \@lastchclass \@acol
+      \or \or \@preamerr \@ne\or \@preamerr \tw@\or \or \@acol \fi\@addtocoldesc{\xEnd{columnsModel}}%
+}
+% tagging of colums: 
+%    Character     Class       Number
+%    ---------     -----       ------
+%        c           0           0
+%        l           0           1
+%        r           0           2
+%
+%        |           1           -
+%        @           2           -
+%        p           3           -
+%      {@-exp}       4           -
+%      {p-arg}       5           -
+\let\t@g@tabclassz=\@tabclassz
+\def\@tabclassz{\ifcase \@chnum \@addtocoldesc{\xEmptyA{col}{align=center}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=left}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=right}\fi\t@g@tabclassz}}
+\def\@tabclassz{%
+%    \end{macrocode}
+%  For the column definition:
+%    \begin{macrocode}
+\ifcase \@chnum \@addtocoldesc{\xEmptyA{col}{align=center}}
+                     \or\@addtocoldesc{ \xEmptyA{col}{align=left}} 
+                     \or \@addtocoldesc{\xEmptyA{col}{align=right}}\fi
+%    \end{macrocode}
+%  and the preamble is modified in order to tag  the cells:
+%    \begin{macrocode}
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \protect\xBegin{cell}%
+       \ifcase\@chnum
+        \hfil\ignorespaces\@sharp\unskip\hfil
+      \or
+        \hskip1sp\ignorespaces\@sharp\unskip\hfil
+      \or
+        \hfil\hskip1sp\ignorespaces\@sharp\unskip
+      \fi\protect\xEnd{cell}}}}
+\def\@arrayclassz{
+\ifcase \@chnum \@addtocoldesc{\xEmptyA{col}{align=center}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=left}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=right}}\fi
+\ifcase \@lastchclass \@acolampacol \or \@ampacol \or
+   \or \or \@addamp \or
+   \@acolampacol \or \@firstampfalse \@acol \fi
+\edef\@preamble{\@preamble
+\protect\xBegin{cell}
+  \ifcase \@chnum
+     \hfil$\relax\@sharp$\hfil \or $\relax\@sharp$\hfil
+    \or \hfil$\relax\@sharp$\fi\protect\xEnd{cell}}}
+\let\t@g@classi=\@classi
+\def\@classi{\@addtocoldesc{\xEmpty{vline}}\t@g@classi}
+% @{content}: the content appears in the array,
+% but the padding is modified...
+% So we tag it. 
+%\let\t@g@classii=\@classii
+%\def\@classii{\t@g@classii}
+\def\@tabclassiv{\@addtocoldesc{\xBegin{intercolumnDef}\@nextchar\xEnd{intercolumnDef}}\@addtopreamble{\protect\xBegin{intercolumn}\@nextchar\protect\xEnd{intercolumn}}}
+\def\@arrayclassiv{\@addtocoldesc{\xBegin{intercolumnDef}$\@nextchar$\xEnd{intercolumnDef}}\@addtopreamble{\protect\xBegin{intercolumn}$\@nextchar$\protect\xEnd{intercolumn}}}
+% p{width}
+%\let\t@g@classii=\@classii
+%\def\@classii{\t@g@classii}
+\def\@classv{\@addtocoldesc{\xEmptyA{par}{width=\@nextchar}}\@addtopreamble{\protect\xBegin{cell}\@startpbox{\@nextchar}\ignorespaces
+\@sharp\@endpbox\protect\xEnd{cell}}}
+%    \end{macrocode}
+% \section{Theorems}
+% \label{sec:theorem}
+%    \begin{macrocode}
+%%% From File: ltthm.dtx 5557
+%% Is it enought ?
+\def\@begintheorem#1#2{\xBegin{theorem}\trivlist
+   \xBegin{theoremMark}\item[\hskip \labelsep{\bfseries \xBegin{theoremType}#1\xEnd{theoremType}\ \xBegin{theoremCount}{#2}\xEnd{theoremCount}}]\xEnd{theoremMark}\itshape}
+\def\@endtheorem{\endtrivlist\xEnd{theorem}}
+%    \end{macrocode}
+% \section{Sectionning and \cmd{\maketitle}'s Elements}
+% \label{sec:section}
+% The macro \cmd{\tableofcontents} is defined in classes, but the general 
+% mecanism of list of someting (toc, list of figures, ...) is provided here.
+%    \begin{macrocode}
+%%% From File: ltsect.dtx l5597
+% title, sectioning and so on L5596
+\def\title#1{\gdef\@title{\xBegin{title}#1\xEnd{title}}}
+\def\author#1{\gdef\@author{\xBegin{author}#1\xEnd{author}}}
+\def\date#1{\gdef\@date{\xBegin{date}#1\xEnd{date}}}
+\def\thanks#1{\xBegin{thanks}\xBegin{thanksMark}\footnotemark\xEnd{thanksMark}
+  \xBegin{thanksText}{#1}\xEnd{thanksText}\xEnd{thanks}}
+\let\t@gand=\and
+\def\and{\xEmpty{and}}
+%    \end{macrocode}
+% For sectioning: redefinition of \@sect is fine. See dlt.tex from Hermes, slighly modified.
+%    \begin{macrocode}
+\def\@sect#1#2#3#4#5#6[#7]#8{%
+   \xBegin{section}%
+   \xBegin{sectionHeader}\xEmptyAA{params}{sectype=#1}{level=#2}%
+   \ifnum #2>\c@secnumdepth
+    \let\@svsec\@empty
+  \else
+    \refstepcounter{#1}%
+    \protected@edef\@svsec{\@seccntformat{#1}\relax}%
+  \fi
+  \@tempskipa #5\relax
+  \ifdim \@tempskipa>\z@
+    \begingroup
+      #6{%
+        \@hangfrom{\xBegin{sectionMark}\hskip #3\relax\@svsec\xEnd{sectionMark}}%
+          \interlinepenalty \@M \xBegin{sectionTitle}#8\xEnd{sectionTitle}\@@par}%
+    \endgroup
+    \csname #1mark\endcsname{#7}%
+    \addcontentsline{toc}{#1}{%
+      \ifnum #2>\c@secnumdepth \else
+        \protect\numberline{\csname the#1\endcsname}%
+      \fi
+      #7}%
+  \else
+    \def\@svsechd{%
+      #6{\xBegin{sectionMark}\hskip #3
+      \relax%
+      \@svsec\xEnd{sectionMark} \xBegin{sectionTitle}#8\xEnd{sectionTitle}}%
+      \csname #1mark\endcsname{#7}%
+      \addcontentsline{toc}{#1}{%
+        \ifnum #2>\c@secnumdepth \else
+          \protect\numberline{\csname the#1\endcsname}%
+        \fi
+        #7}}%
+  \fi
+  \@xsect{#5}\xEnd{sectionHeader}\xEnd{section}}
+% TOC and other lists: see also the classes
+\def\endt@gtoc{\xEnd{listOf}}
+\let\t@g@starttoc=\@starttoc
+\def\@starttoc#1{\xBegin{listOf}\xEmptyA{typeList}{listType=#1}\t@g@starttoc{#1}\xEnd{listOf}}
+%    \end{macrocode}
+% The dots in lists are in math mode! We suppress them. 
+%    \begin{macrocode}
+\def\dotfill{}
+\def\@dottedtocline#1#2#3#4#5{}
+%    \end{macrocode}
+% \section{Floats}
+% \label{sec:floats}
+% \emph{\cmd{\@makecaption} must be defined in the classes.
+% Therefore the "captionMark" and "captionText" tags must be   
+% tagged in classes as well. This is done in standard classes: article, report and book.}
+%
+% We don't try to distinguish float on one or two columns because we
+% don't care about layout.
+%    \begin{macrocode}
+%%% From File: ltfloat.dtx
+% caption, footnote, marginpar
+%
+\long\def\@caption#1[#2]#3{%
+  \par\xBegin{caption}
+  \addcontentsline{\csname ext@#1\endcsname}{#1}%
+    {\protect\numberline{\csname the#1\endcsname}{\ignorespaces #2}}%
+  \begingroup
+    \@parboxrestore
+    \if@minipage
+      \@setminipage
+    \fi
+    \normalsize
+    \@makecaption{\xBegin{captionMark}\csname fnum@#1\endcsname\xEnd{captionMark}}{\ignorespaces \xBegin{captionText}#3\xEnd{captionText}}\par
+  \endgroup\xEnd{caption}}
+% float
+\def\end@float{\xEnd{float}}
+\def\end@dblfloat{\xEnd{float}}
+\def\@xfloat #1[#2]{\xBegin{float}\xEmptyA{params}{floatType=#1}\def\@captype{#1}}
+% \marginpar
+\let\t@gmarginpar=\marginpar
+\def\marginpar#1{\xBegin{marginpar}{#1}\xEnd{marginpar}} 
+% footnote: 
+% \footnote, \footnotemark{}, \footnotetext{} (to insert in a minipage a mark related to the next \footnote{} OUTSIDE the minipage : see Latex Companion 2nd edition p.110
+\def\@textsuperscript#1{%
+  {\xBegin{superscript}#1\xEnd{superscript}}}
+\let\t@gfootnote=\footnote
+\renewcommand{\footnote}[2][]{\xBegin{footnoteCall}\if!#1!%
+\xEmptyA{params}{page=\thepage}\t@gfootnote{#2}\else\xEmptyAA{params}{page=\thepage}{deffnmark=#1}\t@gfootnote[#1]{#2}\fi%
+\xBegin{footnoteText}#2\xEnd{footnoteText}\xEnd{footnoteCall}}%
+\let\t@g@footnotetext=\@footnotetext
+\let\t@g@footnotemark=\@footnotemark
+%
+\let\t@g@makefnmark=\@makefnmark
+\def\@makefnmark{\xBegin{footnoteMark}\xEmptyA{params}{page=\thepage}{\t@g@makefnmark}\xEnd{footnoteMark}}
+% use to build the text of the footnote at the bottom of the page
+\long\def\@footnotetext#1{\insert\footins{%
+    \xBegin{footnote}
+    \xEmptyA{params}{page=\thepage}
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces\xBegin{footnoteText}#1\xEnd{footnoteText}\@finalstrut\strutbox}%
+    \color@endgroup\xEnd{footnote}}}%
+% for footnotes inside minipages
+\long\def\@mpfootnotetext#1{%       
+  \global\setbox\@mpfootins\vbox{%
+\xBegin{mpfootnote}
+\xEmptyA{params}{page=\thepage}
+    \unvbox\@mpfootins
+    %\reset@font\footnotesize
+    \hsize\columnwidth
+    \@parboxrestore
+    \protected@edef\@currentlabel
+         {\csname p@mpfootnote\endcsname\@thefnmark}%    
+    \color@begingroup
+      \@makefntext{%
+      \xBegin{footnoteText}%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox\xEnd{footnoteText}}%
+    \color@endgroup\xEnd{mpfootnote}}}
+%    \end{macrocode}
+% \section{Index}
+% \label{sec:index}
+% \emph{NOT YET CODED}\\
+%    \begin{macrocode}
+% Index L6062
+%%% From File: ltidxglo.dtx
+% TODO
+%    \end{macrocode}
+% \section{Bibliography}
+% \label{sec:biblio}
+% End tagging of "bibitem" must be done in post-processing. 
+%    \begin{macrocode}
+% partialy processed in class
+\let\t@g@bibitem=\@bibitem
+% probably useless:
+\def\@bibitem#1{\xBegin{bibitem}\t@g@bibitem{#1}\xEnd{bibitem}}
+% probably usefull:
+\let\t@g@lbibitem=\@lbibitem
+\def\@lbibitem[#1]#2{\xBegin{bibitem}\xEmptyA{params}{key=#2}%
+        \xBegin{bibitemMark}\item[\@biblabel{#1}\hfill]\xEnd{bibitemMark}\xEnd{bibitem}\if@filesw
+        {\let\protect\noexpand
+        \immediate
+        \write\@auxout{\string\bibcite{#2}{#1}}}\fi\ignorespaces}
+%\let\t@gbibliography=\bibliography
+%\def\bibliography#1{\xBegin{bibliography}\t@gbibliography{#1}\xEnd{bibliography}}
+%    \end{macrocode}
+% For the |\cite| tagging, we keep the loop and tag each of the citations. 
+%    \begin{macrocode}
+% \cite tagging:
+\def\@citex[#1]#2{\leavevmode
+  \xBegin{citation}
+  \let\@citea\@empty
+  \@cite{\@for\@citeb:=#2\do
+    {\@citea\def\@citea{,\penalty\@m\ }%
+     \edef\@citeb{\expandafter\@firstofone\@citeb\@empty}%
+     \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
+     \@ifundefined{b@\@citeb}{\hbox{\reset@font\bfseries ?}%
+       \G@refundefinedtrue
+       \@latex@warning
+         {Citation `\@citeb' on page \thepage \space undefined}}%
+       {\xBegin{cite}\xEmptyA{params}{key=\@citeb}%
+    \@cite@ofmt{\csname b@\@citeb\endcsname}\xEnd{cite}}}}{#1}\xEnd{citation}}
+%    \end{macrocode}
+% \section{Classe and Packages Loading}
+% \label{sec:class}
+% We implement a mechanism to tag the class and package by overloading the macros in an additional file
+% \textit{package}\texttt{\_lxir.sty} or \textit{class}\texttt{\_lxir.cls}.
+% If such a file exists, it will be added at the end of the class or package. 
+% \par
+% We also tag the name of the class and packages used in the document.
+%    \begin{macrocode}
+\newsavebox{\lxir@pckg@list}
+\def\add@toLXirList#1{%
+  \global\sbox{\lxir@pckg@list}{\unhbox\lxir@pckg@list\xEmptyA{TaggedWith}{name=#1}}%
+  \LXir@Info{add to list: #1}
+}
+\def\add@toPkg@Cls@List#1{%
+  \global\sbox{\lxir@pckg@list}{\unhbox\lxir@pckg@list\xEmptyA{ClassOrPackageUsed}{name=#1}}%
+}
+%%% From File: ltclass.dtx
+\def\@onefilewithoptions#1[#2][#3]#4{%
+  \@pushfilename
+  \xdef\@currname{#1}%
+  \global\let\@currext#4%
+  \expandafter\let\csname\@currname.\@currext-h@@k\endcsname\@empty
+  \let\CurrentOption\@empty
+  \@reset@ptions
+  \makeatletter
+  \def\reserved@a{%
+    \@ifl@aded\@currext{#1}%
+      {\@if@ptions\@currext{#1}{#2}{}%
+        {\@latex@error
+            {Option clash for \@cls@pkg\space #1}%
+            {The package #1 has already been loaded
+             with options:\MessageBreak
+             \space\space[\@ptionlist{#1.\@currext}]\MessageBreak
+             There has now been an attempt to load it
+              with options\MessageBreak
+             \space\space[#2]\MessageBreak
+             Adding the global options:\MessageBreak
+             \space\space
+                  \@ptionlist{#1.\@currext},#2\MessageBreak
+             to your \noexpand\documentclass declaration may fix this.%
+             \MessageBreak
+             Try typing \space <return> \space to proceed.}}}%
+      {\@pass@ptions\@currext{#2}{#1}%
+       \global\expandafter
+       \let\csname ver@\@currname.\@currext\endcsname\@empty
+       \InputIfFileExists
+         {\@currname.\@currext}%
+% We tag class and package
+         {\add@toPkg@Cls@List{\@currname.\@currext}}%
+% end of We tag class and package
+         {\@missingfileerror\@currname\@currext}%
+% lxir mechanism for tagging
+       \def\LXir@tag@file{\@currname_lxir.\@currext}
+       \InputIfFileExists
+         {\LXir@tag@file}%
+         {\LXir@Info{`\LXir@tag@file' loaded for tagging of `\@currname'}%
+           \add@toLXirList{\LXir@tag@file}}%
+         {\LXir@Info{No file `\LXir@tag@file' found for tagging of `\@currname'}}%
+% end of lxir mechanism for tagging
+    \let\@unprocessedoptions\@@unprocessedoptions
+    \csname\@currname.\@currext-h@@k\endcsname
+    \expandafter\let\csname\@currname.\@currext-h@@k\endcsname
+              \@undefined
+    \@unprocessedoptions}
+    \@ifl@ter\@currext{#1}{#3}{}%
+      {\@latex@warning@no@line
+         {You have requested,\on@line,
+          version\MessageBreak
+            `#3' of \@cls@pkg\space #1,\MessageBreak
+          but only version\MessageBreak
+           `\csname ver@#1.\@currext\endcsname'\MessageBreak
+          is available}}%
+    \ifx\@currext\@clsextension\let\LoadClass\@twoloadclasserror\fi
+    \@popfilename
+    \@reset@ptions}%
+  \reserved@a}
+%    \end{macrocode}
+%    \begin{macrocode}
+\AtBeginDocument{\usebox{\lxir@pckg@list}}
+%    \end{macrocode}
+%</lxir>

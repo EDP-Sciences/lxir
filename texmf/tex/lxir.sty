@@ -1,0 +1,688 @@
+%%
+%% This is file `lxir.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% lxir.dtx  (with options: `lxir')
+%% 
+%% Copyright (c) 2007 by EDP Sciences
+%% 
+%% Author Jean-Paul Jorda and Xavier Trochu - EDP Sciences
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.2 of this license or (at your option) any later
+%% version. The latest version of this license is in:
+%% 
+%% http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.2 or later is part of all distributions of
+%% LaTeX version 1999/12/01 or later.
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.2 of this license or (at your option) any later
+%% version. The latest version of this license is in:
+%%
+%% http://www.latex-project.org/lppl.txt
+%%
+%% and version 1.2 or later is part of all distributions of
+%% LaTeX version 1999/12/01 or later.
+%%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\NeedsTeXFormat{LaTeX2e}[1994/05/13]
+\ProvidesPackage{lxir}[2007/06/06 v0.1b LXir tagging package]
+\RequirePackage{lxirtag}[2007/06/06]
+\AtBeginDocument{\spaceskip=1sp\xspaceskip=1sp}
+\AtBeginDocument{\pretolerance=10000}
+\AtBeginDocument{\let\@@italiccorr=\relax}
+\AtBeginDocument{\binoppenalty=10000\relpenalty=10000}
+\AtBeginDocument{\hsize=0.99\maxdimen}
+\setlength\textwidth{0.99\maxdimen} % need to be set again to this value in classes?
+\AtBeginDocument{\vsize=0.99\maxdimen}
+\AtBeginDocument{%
+\newskip\junkskip
+\let\spaceskip=\junkskip
+\let\xspaceskip=\junkskip
+\newdimen\junkdim
+\let\vsize=\junkdim
+\let\hsize=\junkdim
+}
+\AtBeginDocument{\pagestyle{empty}\def\pagestyle#1{\relax}\def\thispagestyle#1{\relax}}
+\newcommand{\LXir@Info}[1]{%
+  \GenericWarning{}{[LXir]   #1}
+}
+\def\TeX{\xEmpty{TeX}}
+\let\t@gdoubleantislash=\\
+\def\\{\xEmpty{br}\t@gdoubleantislash}
+\def\LaTeXe\xEmpty{LaTeXe}
+\def\LaTeX{\xEmpty{LaTeX}}
+\let\t@gpar=\par
+\def\par{\xEmpty{parsep}\t@gpar}
+\def\mathopt@g#1{\xEmptyAA{#1}{mathtype=op}{mathcontent=#1}}
+\def\log{\mathop{\mathopt@g{log}}\nolimits}
+\def\lg{\mathop{\mathopt@g{lg}}\nolimits}
+\def\ln{\mathop{\mathopt@g{ln}}\nolimits}
+\def\lim{\mathop{\mathopt@g{lim}}}
+\def\limsup{\mathop{\mathopt@g{limsup}}}
+\def\liminf{\mathop{\mathopt@g{liminf}}}
+\def\sin{\mathop{\mathopt@g{sin}}\nolimits}
+\def\arcsin{\mathop{\mathopt@g{arcsin}}\nolimits}
+\def\sinh{\mathop{\mathopt@g{sinh}}\nolimits}
+\def\cos{\mathop{\mathopt@g{cos}}\nolimits}
+\def\arccos{\mathop{\mathopt@g{arccos}}\nolimits}
+\def\cosh{\mathop{\mathopt@g{cosh}}\nolimits}
+\def\tan{\mathop{\mathopt@g{tan}}\nolimits}
+\def\arctan{\mathop{\mathopt@g{arctan}}\nolimits}
+\def\tanh{\mathop{\mathopt@g{tanh}}\nolimits}
+\def\cot{\mathop{\mathopt@g{cot}}\nolimits}
+\def\coth{\mathop{\mathopt@g{coth}}\nolimits}
+\def\sec{\mathop{\mathopt@g{sec}}\nolimits}
+\def\csc{\mathop{\mathopt@g{csc}}\nolimits}
+\def\max{\mathop{\mathopt@g{max}}}
+\def\min{\mathop{\mathopt@g{min}}}
+\def\sup{\mathop{\mathopt@g{sup}}}
+\def\inf{\mathop{\mathopt@g{inf}}}
+\def\arg{\mathop{\mathopt@g{arg}}\nolimits}
+\def\ker{\mathop{\mathopt@g{ker}}\nolimits}
+\def\dim{\mathop{\mathopt@g{dim}}\nolimits}
+\def\hom{\mathop{\mathopt@g{hom}}\nolimits}
+\def\det{\mathop{\mathopt@g{det}}}
+\def\exp{\mathop{\mathopt@g{exp}}\nolimits}
+\def\Pr{\mathop{\mathopt@g{Pr}}}
+\def\gcd{\mathop{\mathopt@g{gcd}}}
+\def\deg{\mathop{\mathopt@g{deg}}\nolimits}
+\def\sum{\mathop{\xEmptyAA{sum}{mathtype=op}{mathchar=2211}}}
+\def\hbar{\mathord{\xEmptyAA{hbar}{mathtype=ord}{mathchar=0127}}}
+\def\angle{\mathord{\xEmptyAA{angle}{mathtype=ord}{mathchar=2220}}}
+\def\cong{\mathrel{\xEmptyAA{cong}{mathtype=rel}{mathchar=2245}}}
+\def\bowtie{\mathrel{\xEmptyAA{bowtie}{mathtype=rel}{mathchar=22c8}}}
+\def\models{\mathrel{\xEmptyAA{models}{mathtype=rel}{mathchar=22a8}}}
+\def\doteq{\mathrel{\xEmptyAA{doteq}{mathtype=rel}{mathchar=2250}}}
+\def\not<{\mathrel{\xEmptyAA{notinf}{mathtype=rel}{mathchar=226e}}}
+\def\not>{\mathrel{\xEmptyAA{notsup}{mathtype=rel}{mathchar=226f}}}
+\def\not={\mathrel{\xEmptyAA{noteq}{mathtype=rel}{mathchar=2260}}}
+\def\not\leq{\mathrel{\xEmptyAA{notleq}{mathtype=rel}{mathchar=2270}}}
+\def\not\geq{\mathrel{\xEmptyAA{notgeq}{mathtype=rel}{mathchar=2271}}}
+\def\not\equiv{\mathrel{\xEmptyAA{notequiv}{mathtype=rel}{mathchar=2262}}}
+\def\not\prec{\mathrel{\xEmptyAA{notprec}{mathtype=rel}{mathchar=2280}}}
+\def\not\succ{\mathrel{\xEmptyAA{notsucc}{mathtype=rel}{mathchar=2281}}}
+\def\not\sim{\mathrel{\xEmptyAA{notsim}{mathtype=rel}{mathchar=2241}}}
+\def\not\preceq{\mathrel{\xEmptyAA{notpreceq}{mathtype=rel}{mathchar=22e0}}}
+\def\not\succeq{\mathrel{\xEmptyAA{notsucceq}{mathtype=rel}{mathchar=22e1}}}
+\def\not\simeq{\mathrel{\xEmptyAA{notsimeq}{mathtype=rel}{mathchar=2244}}}
+\def\not\subset{\mathrel{\xEmptyAA{notsubset}{mathtype=rel}{mathchar=2284}}}
+\def\not\supset{\mathrel{\xEmptyAA{notsupset}{mathtype=rel}{mathchar=2285}}}
+\def\not\approx{\mathrel{\xEmptyAA{notapprox}{mathtype=rel}{mathchar=2249}}}
+\def\not\subseteq{\mathrel{\xEmptyAA{notsubseteq}{mathtype=rel}{mathchar=2288}}}
+\def\not\supseteq{\mathrel{\xEmptyAA{notsupseteq}{mathtype=rel}{mathchar=2289}}}
+\def\not\cong{\mathrel{\xEmptyAA{notcong}{mathtype=rel}{mathchar=2247}}}
+\def\not\sqsubseteq{\mathrel{\xEmptyAA{notsqsubseteq}{mathtype=rel}{mathchar=22E2}}}
+\def\not\sqsupseteq{\mathrel{\xEmptyAA{notsqsupseteq}{mathtype=rel}{mathchar=22E3}}}
+\def\not\asymp{\mathrel{\xEmptyAA{notasymp}{mathtype=rel}{mathchar=226d}}}
+\def\notin{\mathrel{\xEmptyAA{notin}{mathtype=rel}{mathchar=2209}}}
+\def\longleftarrow{\leftarrow}
+\def\Longleftarrow{\Leftarrow}
+\def\longrightarrow{\rightarrow}
+\def\Longrightarrow{\Rightarrow}
+\def\longleftrightarrow{\leftrightarrow}
+\def\Longleftrightarrow{\Leftrightarrow}
+\def\mapsto{\mathrel{\xEmptyAA{mapsto}{mathtype=rel}{mathchar=21a6}}}
+\def\longmapsto{\mapsto}
+\def\hookleftarrow{\mathrel{\xEmptyAA{hookleftarrow}{mathtype=rel}{mathchar=21a9}}}
+\def\hookrightarrow{\mathrel{\xEmptyAA{hookleftarrow}{mathtype=rel}{mathchar=21aa}}}
+\def\rightleftharpoons{\mathrel{\xEmptyAA{rightleftharpoons}{mathtype=rel}{mathchar=21cc}}}
+\def\colon{\mathpunct{\xEmptyAA{colon}{mathtype=punct}{mathchar=3a}}}
+\let\oldaccent=\accent
+\def\accent{\xEmpty{textaccent}\oldaccent}
+\let\oldmathaccent=\mathaccent
+\def\mathaccent{\xEmpty{mathaccent}\oldmathaccent }
+\csname h@test\endcsname
+\csname h@testa\endcsname
+\def\`#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"12 }\else{\ifmmode\mathaccent\else\accent\fi"12 #1}\fi}}
+\def\'#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"13 }\else{\ifmmode\mathaccent\else\accent\fi"13 #1}\fi}}
+\def\v#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"14 }\else{\ifmmode\mathaccent\else\accent\fi"14 #1}\fi}}
+\def\u#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"15 }\else{\ifmmode\mathaccent\else\accent\fi"15 #1}\fi}}
+\def\=#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"16 }\else{\ifmmode\mathaccent\else\accent\fi"16 #1}\fi}}
+\def\^#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"5E }\else{\ifmmode\mathaccent\else\accent\fi"5E #1}\fi}}
+\def\.#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"5F }\else{\ifmmode\mathaccent\else\accent\fi"5F #1}\fi}}
+\def\H#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7D }\else{\ifmmode\mathaccent\else\accent\fi"7D #1}\fi}}
+\def\~#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7E }\else{\ifmmode\mathaccent\else\accent\fi"7E #1}\fi}}
+\def\"#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7F }\else{\ifmmode\mathaccent\else\accent\fi"7F #1}\fi}}
+\let\oldcopyright=\copyright
+\def\copyright{{\xEmpty{textaccent}\oldcopyright}}%
+%%% From File: ltoutenc.dtx 1565
+\DeclareTextSymbolDefault{\textbackslash}{T1}
+\def\textunderscore{[entity!\#x5F!]}
+\def\textvisiblespace{[entity!\#x2423!]}
+\def\textellipsis{\ifmmode\mathord{\xEmptyAA{textellipsis}{mathtype=ord}{mathchar=2026}}\else[entity!\#x2026!]\fi}
+\def\textregistered{[entity!\#xAE!]}
+\def\texttrademark {[entity!\#x2122!]}
+\def\textordfeminine{[entity!\#xAA!]}
+\def\textordmasculine{[entity!\#xBA!]}
+\def\textquotedblright{\xEmpty{RQUOTE}}
+\def\thinspace{[entity!\#x2009!]}
+\def\enspace{[entity!\#x2002!]}
+\def\enskip{[entity!\#x2002!]}
+\def\quad{[entity!\#x2001!]} % quad = 1 em
+\def\qquad{[entity!\#x2001!][entity!\#x2001!]} % qquad = 2 em
+\newsavebox{\XX@font@list}
+\newcommand{\addFontTo@list}[6]{%
+\sbox\XX@font@list{\unhbox\XX@font@list\protect\xEmptyAAAAAA{fontDescription}{encoding=#1}{family=#2}{series=#3}{shape=#4}{size=#5}{name=#6}%
+}}
+\newcommand{\FontMatchList}{\usebox{\XX@font@list}}
+\def\extract@font{%
+   \get@external@font%
+   \newbox{\XX@font}%
+   \sbox{\XX@font}{\font@name\external@font}%
+   \global\expandafter\font\font@name\external@font\relax%
+ \global\addFontTo@list{\f@encoding}{\f@family}{\f@series}{\f@shape}{\f@size}{\external@font}%
+    \font@name \relax%
+    \csname \f@encoding+\f@family\endcsname%
+    \csname\curr@fontshape\endcsname%
+    \relax%
+  }
+\AtEndDocument{\protect\xBegin{fontList}\usebox\XX@font@list\protect\xEnd{fontList}}
+%%% From File: ltxref.dtx L3845
+\let\t@gref=\ref
+\def\ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}\xBegin{refMark}{\t@gref{#1}}\xEnd{refMark}\xEnd{ref}}
+\let\t@gpageref=\pageref
+\def\pageref#1{\xBegin{pageref}\xEmptyA{params}{idref=#1}\xBegin{pagerefMark}{\t@gpageref{#1}}\xEnd{pagerefMark}\xEnd{pageref}}
+\let\t@glabel=\label
+\def\label#1{\xEmptyA{label}{idlabel=#1}\t@glabel{#1}}
+%%% From File: ltmiscen.dtx L3880
+\let\t@gcentering=\centering
+\let\t@gflushleft=\flushleft
+\let\t@gendflushleft=\endflushleft
+\let\t@graggedright=\raggedright
+\let\t@gflushright=\flushright
+\let\t@gendflushright=\endflushright
+\def\endt@gcentering{\xEnd{center}}
+\let\t@gcenting=\centering
+\def\centering{\xEmpty{centering}\t@gcentering}
+\def\endt@gflushleft{\xEnd{flushleft}}
+\let\t@graggedright=\raggedright
+\def\raggedright{\xBegin{flushleft}\t@graggedright\aftergroup\endt@gflushleft}
+\def\endt@gflushright{\xEnd{flushright}}
+\let\t@graggedleft=\raggedleft
+\def\raggedleft{\xBegin{flushright}\t@graggedleft\aftergroup\endt@gflushright}
+\let\t@gverb@egroup=\verb@egroup
+\def\verb@egroup{\xEnd{verb}\t@gverb@egroup}
+\let\t@gverb=\verb
+\def\verb{\xBegin{verb}\def\t@gspace{\xEmpty{verbatimSpace}}\t@gverb}
+{\catcode`\ =\active%
+\gdef\@vobeyspaces{\catcode`\ \active\def {\t@gspace}}}
+\begingroup \catcode `|=0 \catcode `[= 1
+\catcode`]=2 \catcode `\{=12 \catcode `\}=12
+\catcode`\\=12 |gdef|@xverbatim#1\end{verbatim}[#1|end[verbatim]]
+|gdef|@sxverbatim#1\end{verbatim*}[#1|end[verbatim*]]
+|endgroup
+\def\@verbatim{\trivlist \item\relax
+  \if@minipage\else\vskip\parskip\fi
+  \leftskip\@totalleftmargin\rightskip\z@skip
+  \parindent\z@\parfillskip\@flushglue\parskip\z@skip
+  \@@par
+  \@tempswafalse
+  \def\t@gspace{\xEmpty{verbatimSpace}}%
+  \def\par{%
+    \xEmpty{verbatimLineBreak}%
+    \if@tempswa
+      \leavevmode \null \@@par\penalty\interlinepenalty
+    \else
+      \@tempswatrue
+      \ifhmode\@@par\penalty\interlinepenalty\fi
+    \fi}%
+  \let\do\@makeother \dospecials
+  \obeylines \verbatim@font \@noligs
+  \hyphenchar\font\m@ne
+  \everypar \expandafter{\the\everypar \unpenalty}%
+}
+\let\t@gverbatim=\verbatim
+\def\verbatim{\xBegin{verbatim}\t@gverbatim}
+\let\t@gendverbatim=\endverbatim
+\def\endverbatim{\t@gendverbatim\xEnd{verbatim}}
+%%% From File: ltmath.dtx L4033
+\input lxir_math
+\let\t@genumerate=\enumerate
+\def\enumerate{\t@genumerate\xBegin{list}\xEmptyA{params}{listType=enumerate}}
+\let\t@gendenumerate=\endenumerate
+\def\endenumerate{\xEnd{list}\xEmptyA{params}{listType=enumerate}\t@gendenumerate}
+\let\t@gitemize=\itemize
+\def\itemize{\t@gitemize\xBegin{list}\xEmptyA{params}{listType=itemize}\xEmptyA{width}{w=\the\linewidth}}
+\let\t@genditemize=\enditemize
+\def\enditemize{\xEnd{list}\xEmptyA{params}{listType=itemize}\t@genditemize}
+\def\@item[#1]{%
+\xEmpty{item}
+  \if@noparitem
+    \@donoparitem
+  \else
+    \if@inlabel
+      \indent \par
+    \fi
+    \ifhmode
+      \unskip\unskip \par
+    \fi
+    \if@newlist
+      \if@nobreak
+        \@nbitem
+      \else
+        \addpenalty\@beginparpenalty
+        \addvspace\@topsep
+        \addvspace{-\parskip}%
+      \fi
+    \else
+      \addpenalty\@itempenalty
+      \addvspace\itemsep
+    \fi
+    \global\@inlabeltrue
+  \fi
+  \everypar{%
+    \@minipagefalse
+    \global\@newlistfalse
+    \if@inlabel
+      \global\@inlabelfalse
+      {\setbox\z@\lastbox
+       \ifvoid\z@
+         \kern-\itemindent
+       \fi}%
+      \box\@labels
+      \penalty\z@
+    \fi
+    \if@nobreak
+      \@nobreakfalse
+      \clubpenalty \@M
+    \else
+      \clubpenalty \@clubpenalty
+      \everypar{}%
+    \fi}%
+  \if@noitemarg
+    \@noitemargfalse
+    \if@nmbrlist
+      \refstepcounter\@listctr
+    \fi
+  \fi
+\xBegin{itemMark}#1\xEnd{itemMark}
+  \ignorespaces}
+%%% From File: ltboxes.dtx
+\let\t@gmbox=\mbox
+\def\mbox#1{\xBegin{mbox}\t@gmbox{#1}\xEnd{mbox}}
+\let\t@gfbox=\fbox
+\def\fbox#1{\xBegin{fbox}\t@gfbox{#1}\xEnd{fbox}}
+\let\t@g@imakebox=\@imakebox
+\def\@imakebox[#1][#2]#3{\setlength\@tempdima{#1}\xBegin{makebox}\xEmptyAA{params}{width=\the\@tempdima}{pos=#2}\t@g@imakebox[#1][#2]{#3}\xEnd{makebox}}
+\let\t@g@iframebox=\@iframebox
+\def\@iframebox[#1][#2]#3{\setlength\@tempdima{#1}\xBegin{framebox}\xEmptyAA{params}{width=\the\@tempdima}{pos=#2}\t@g@iframebox[#1][#2]{#3}\xEnd{framebox}}
+\let\t@g@iiiminipage=\@iiiminipage
+\def\@iiiminipage#1#2[#3]#4{\setlength\@tempdima{#4}\xBegin{minipage}\xEmptyAA{params}{pos=#1}{width=\the\@tempdima}\t@g@iiiminipage{#1}{#2}[#3]{#4}}
+\let\t@gendminipage=\endminipage
+\def\endminipage{\t@gendminipage\xEnd{minipage}}
+\renewcommand\parbox[3][c]{\setlength\@tempdima{#2}%
+  \xBegin{parbox}\xEmptyAA{params}{pos=#1}{width=\the\@tempdima}{#3}\xEnd{parbox}}
+\let\t@gtabbing=\tabbing
+\gdef\tabbing{\xBegin{tabbing}\t@gtabbing}
+\let\t@gendtabbing=\endtabbing
+\gdef\endtabbing{\t@gendtabbing\xEnd{tabbing}}
+\gdef\@startline{%
+     \ifnum \@nxttabmar >\@hightab
+       \@badtab
+       \global\@nxttabmar \@hightab
+     \fi
+     \global\@curtabmar \@nxttabmar
+     \global\@curtab \@curtabmar
+     \global\setbox\@curline \hbox {\xBegin{tabLine}}%
+     \@startfield
+     \strut}
+\gdef\@stopline{%
+  \unskip
+  \@stopfield
+  \if@rjfield
+    \global\@rjfieldfalse
+    \@tempdima\@totalleftmargin
+    \advance\@tempdima\linewidth
+    \hb@xt@\@tempdima{%
+      \@itemfudge\hskip\dimen\@curtabmar
+      \box\@curline
+      \hfil
+      \box\@curfield}%
+  \else
+    \@addfield
+    \hbox{\@itemfudge\hskip\dimen\@curtabmar\box\@curline}%
+  \fi\xEnd{tabLine}}
+\gdef\@startfield{%
+  \global\setbox\@curfield\hbox\bgroup\color@begingroup\xBegin{tabField}}
+\gdef\@stopfield{%
+  \xEnd{tabField}\color@endgroup\egroup}
+%%% From File: lttab.dtx
+\newif\if@multicol
+\newsavebox{\t@g@coldesc}
+\let\t@garray=\array
+\def\array{\xBegin{array}\t@garray}
+\def\tabular{\xBegin{tabular}\let\@halignto\@empty\@tabular}
+\def\endarray{\crcr\egroup\egroup\xEnd{array}}
+\def\endtabular{\crcr\egroup\egroup $\egroup\xEnd{tabular}} %$ for emacs
+\def\@arraycr{%
+  \xEmpty{eol}${\ifnum0=`}\fi\@ifstar\@xarraycr\@xarraycr} % $
+\def\@tabularcr{%
+  \xEmpty{eol}{\ifnum0=`}\fi\@ifstar\@xtabularcr\@xtabularcr}
+\def\@array[#1]#2{%
+        % pickup position:
+        \xEmptyA{params}{pos=#1}
+        % columns model tagging is done below
+  \if #1t\vtop \else \if#1b\vbox \else \vcenter \fi\fi
+  \bgroup
+  \setbox\@arstrutbox\hbox{%
+    \vrule \@height\arraystretch\ht\strutbox
+           \@depth\arraystretch \dp\strutbox
+           \@width\z@}%
+  \@mkpream{#2}%
+  \hbox{\usebox{\t@g@coldesc}}%
+ \edef\@preamble{%
+    \ialign \noexpand\@halignto
+       \bgroup \@arstrut \@preamble \tabskip\z@skip \cr}%
+  \let\@startpbox\@@startpbox \let\@endpbox\@@endpbox
+  \let\tabularnewline\\%
+    \let\par\@empty
+    \let\@sharp##%
+    \set@typeset@protect
+    \lineskip\z@skip\baselineskip\z@skip
+    \ifhmode \@preamerr\z@ \@@par\fi
+    \@preamble}
+\long\def\multicolumn#1#2#3{\multispan{#1}\begingroup
+  \@multicoltrue\@mkpream{#2}\@multicolfalse%
+  \def\@sharp{#3}\set@typeset@protect
+  \let\@startpbox\@@startpbox\let\@endpbox\@@endpbox
+  \@arstrut \xBegin{multicolumn}\xEmptyA{params}{span=#1}%
+\usebox{\t@g@coldesc}\@preamble\xEnd{multicolumn}\hbox{}\endgroup\ignorespaces}
+\def\@cline#1-#2\@nil{%
+  \omit
+  \xEmptyAA{cline}{from=#1}{to=#2}
+  \@multicnt#1%
+  \advance\@multispan\m@ne
+  \ifnum\@multicnt=\@ne\@firstofone{&\omit}\fi
+  \@multicnt#2%
+  \advance\@multicnt-#1%
+  \advance\@multispan\@ne
+  \leaders\hrule\@height\arrayrulewidth\hfill
+  \cr\noalign{\vskip-\arrayrulewidth}}
+\def\@addtocoldesc#1{\sbox{\t@g@coldesc}{\ignorespaces\usebox{\t@g@coldesc}#1}}
+\def\@mkpream#1{\sbox{\t@g@coldesc}{}\@addtocoldesc{\xBegin{columnsModel}}%
+\@addtocoldesc{\xEmptyAAAAA{params}{arraycolsep=\the\arraycolsep}{tabcolsep=\the\tabcolsep}{arrayrulewidth=\the\arrayrulewidth}{doublerulesep=\the\doublerulesep}{arraystretch=\arraystretch}}%
+\@firstamptrue\@lastchclass6
+  \let\@preamble\@empty
+  \let\protect\@unexpandable@protect
+  \let\@sharp\relax
+  \let\@startpbox\relax\let\@endpbox\relax
+  \@expast{#1}%
+  \expandafter\@tfor \expandafter
+    \@nextchar \expandafter:\expandafter=\reserved@a\do
+       {\@testpach\@nextchar
+    \ifcase \@chclass \@classz \or \@classi \or \@classii \or \@classiii
+      \or \@classiv \or\@classv \fi\@lastchclass\@chclass}%
+  \ifcase \@lastchclass \@acol
+      \or \or \@preamerr \@ne\or \@preamerr \tw@\or \or \@acol \fi\@addtocoldesc{\xEnd{columnsModel}}%
+}
+\let\t@g@tabclassz=\@tabclassz
+\def\@tabclassz{\ifcase \@chnum \@addtocoldesc{\xEmptyA{col}{align=center}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=left}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=right}\fi\t@g@tabclassz}}
+\def\@tabclassz{%
+\ifcase \@chnum \@addtocoldesc{\xEmptyA{col}{align=center}}
+                     \or\@addtocoldesc{ \xEmptyA{col}{align=left}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=right}}\fi
+  \ifcase\@lastchclass
+    \@acolampacol
+  \or
+    \@ampacol
+  \or
+  \or
+  \or
+    \@addamp
+  \or
+    \@acolampacol
+  \or
+    \@firstampfalse\@acol
+  \fi
+  \edef\@preamble{%
+    \@preamble{%
+      \protect\xBegin{cell}%
+       \ifcase\@chnum
+        \hfil\ignorespaces\@sharp\unskip\hfil
+      \or
+        \hskip1sp\ignorespaces\@sharp\unskip\hfil
+      \or
+        \hfil\hskip1sp\ignorespaces\@sharp\unskip
+      \fi\protect\xEnd{cell}}}}
+\def\@arrayclassz{
+\ifcase \@chnum \@addtocoldesc{\xEmptyA{col}{align=center}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=left}}
+                     \or \@addtocoldesc{\xEmptyA{col}{align=right}}\fi
+\ifcase \@lastchclass \@acolampacol \or \@ampacol \or
+   \or \or \@addamp \or
+   \@acolampacol \or \@firstampfalse \@acol \fi
+\edef\@preamble{\@preamble
+\protect\xBegin{cell}
+  \ifcase \@chnum
+     \hfil$\relax\@sharp$\hfil \or $\relax\@sharp$\hfil
+    \or \hfil$\relax\@sharp$\fi\protect\xEnd{cell}}}
+\let\t@g@classi=\@classi
+\def\@classi{\@addtocoldesc{\xEmpty{vline}}\t@g@classi}
+\def\@tabclassiv{\@addtocoldesc{\xBegin{intercolumnDef}\@nextchar\xEnd{intercolumnDef}}\@addtopreamble{\protect\xBegin{intercolumn}\@nextchar\protect\xEnd{intercolumn}}}
+\def\@arrayclassiv{\@addtocoldesc{\xBegin{intercolumnDef}$\@nextchar$\xEnd{intercolumnDef}}\@addtopreamble{\protect\xBegin{intercolumn}$\@nextchar$\protect\xEnd{intercolumn}}}
+\def\@classv{\@addtocoldesc{\xEmptyA{par}{width=\@nextchar}}\@addtopreamble{\protect\xBegin{cell}\@startpbox{\@nextchar}\ignorespaces
+\@sharp\@endpbox\protect\xEnd{cell}}}
+%%% From File: ltthm.dtx 5557
+%% Is it enought ?
+\def\@begintheorem#1#2{\xBegin{theorem}\trivlist
+   \xBegin{theoremMark}\item[\hskip \labelsep{\bfseries \xBegin{theoremType}#1\xEnd{theoremType}\ \xBegin{theoremCount}{#2}\xEnd{theoremCount}}]\xEnd{theoremMark}\itshape}
+\def\@endtheorem{\endtrivlist\xEnd{theorem}}
+%%% From File: ltsect.dtx l5597
+\def\title#1{\gdef\@title{\xBegin{title}#1\xEnd{title}}}
+\def\author#1{\gdef\@author{\xBegin{author}#1\xEnd{author}}}
+\def\date#1{\gdef\@date{\xBegin{date}#1\xEnd{date}}}
+\def\thanks#1{\xBegin{thanks}\xBegin{thanksMark}\footnotemark\xEnd{thanksMark}
+  \xBegin{thanksText}{#1}\xEnd{thanksText}\xEnd{thanks}}
+\let\t@gand=\and
+\def\and{\xEmpty{and}}
+\def\@sect#1#2#3#4#5#6[#7]#8{%
+   \xBegin{section}%
+   \xBegin{sectionHeader}\xEmptyAA{params}{sectype=#1}{level=#2}%
+   \ifnum #2>\c@secnumdepth
+    \let\@svsec\@empty
+  \else
+    \refstepcounter{#1}%
+    \protected@edef\@svsec{\@seccntformat{#1}\relax}%
+  \fi
+  \@tempskipa #5\relax
+  \ifdim \@tempskipa>\z@
+    \begingroup
+      #6{%
+        \@hangfrom{\xBegin{sectionMark}\hskip #3\relax\@svsec\xEnd{sectionMark}}%
+          \interlinepenalty \@M \xBegin{sectionTitle}#8\xEnd{sectionTitle}\@@par}%
+    \endgroup
+    \csname #1mark\endcsname{#7}%
+    \addcontentsline{toc}{#1}{%
+      \ifnum #2>\c@secnumdepth \else
+        \protect\numberline{\csname the#1\endcsname}%
+      \fi
+      #7}%
+  \else
+    \def\@svsechd{%
+      #6{\xBegin{sectionMark}\hskip #3
+      \relax%
+      \@svsec\xEnd{sectionMark} \xBegin{sectionTitle}#8\xEnd{sectionTitle}}%
+      \csname #1mark\endcsname{#7}%
+      \addcontentsline{toc}{#1}{%
+        \ifnum #2>\c@secnumdepth \else
+          \protect\numberline{\csname the#1\endcsname}%
+        \fi
+        #7}}%
+  \fi
+  \@xsect{#5}\xEnd{sectionHeader}\xEnd{section}}
+\def\endt@gtoc{\xEnd{listOf}}
+\let\t@g@starttoc=\@starttoc
+\def\@starttoc#1{\xBegin{listOf}\xEmptyA{typeList}{listType=#1}\t@g@starttoc{#1}\xEnd{listOf}}
+\def\dotfill{}
+\def\@dottedtocline#1#2#3#4#5{}
+%%% From File: ltfloat.dtx
+\long\def\@caption#1[#2]#3{%
+  \par\xBegin{caption}
+  \addcontentsline{\csname ext@#1\endcsname}{#1}%
+    {\protect\numberline{\csname the#1\endcsname}{\ignorespaces #2}}%
+  \begingroup
+    \@parboxrestore
+    \if@minipage
+      \@setminipage
+    \fi
+    \normalsize
+    \@makecaption{\xBegin{captionMark}\csname fnum@#1\endcsname\xEnd{captionMark}}{\ignorespaces \xBegin{captionText}#3\xEnd{captionText}}\par
+  \endgroup\xEnd{caption}}
+\def\end@float{\xEnd{float}}
+\def\end@dblfloat{\xEnd{float}}
+\def\@xfloat #1[#2]{\xBegin{float}\xEmptyA{params}{floatType=#1}\def\@captype{#1}}
+\let\t@gmarginpar=\marginpar
+\def\marginpar#1{\xBegin{marginpar}{#1}\xEnd{marginpar}}
+\def\@textsuperscript#1{%
+  {\xBegin{superscript}#1\xEnd{superscript}}}
+\let\t@gfootnote=\footnote
+\renewcommand{\footnote}[2][]{\xBegin{footnoteCall}\if!#1!%
+\xEmptyA{params}{page=\thepage}\t@gfootnote{#2}\else\xEmptyAA{params}{page=\thepage}{deffnmark=#1}\t@gfootnote[#1]{#2}\fi%
+\xBegin{footnoteText}#2\xEnd{footnoteText}\xEnd{footnoteCall}}%
+\let\t@g@footnotetext=\@footnotetext
+\let\t@g@footnotemark=\@footnotemark
+\let\t@g@makefnmark=\@makefnmark
+\def\@makefnmark{\xBegin{footnoteMark}\xEmptyA{params}{page=\thepage}{\t@g@makefnmark}\xEnd{footnoteMark}}
+\long\def\@footnotetext#1{\insert\footins{%
+    \xBegin{footnote}
+    \xEmptyA{params}{page=\thepage}
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces\xBegin{footnoteText}#1\xEnd{footnoteText}\@finalstrut\strutbox}%
+    \color@endgroup\xEnd{footnote}}}%
+\long\def\@mpfootnotetext#1{%
+  \global\setbox\@mpfootins\vbox{%
+\xBegin{mpfootnote}
+\xEmptyA{params}{page=\thepage}
+    \unvbox\@mpfootins
+    %\reset@font\footnotesize
+    \hsize\columnwidth
+    \@parboxrestore
+    \protected@edef\@currentlabel
+         {\csname p@mpfootnote\endcsname\@thefnmark}%
+    \color@begingroup
+      \@makefntext{%
+      \xBegin{footnoteText}%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox\xEnd{footnoteText}}%
+    \color@endgroup\xEnd{mpfootnote}}}
+%%% From File: ltidxglo.dtx
+\let\t@g@bibitem=\@bibitem
+\def\@bibitem#1{\xBegin{bibitem}\t@g@bibitem{#1}\xEnd{bibitem}}
+\let\t@g@lbibitem=\@lbibitem
+\def\@lbibitem[#1]#2{\xBegin{bibitem}\xEmptyA{params}{key=#2}%
+        \xBegin{bibitemMark}\item[\@biblabel{#1}\hfill]\xEnd{bibitemMark}\xEnd{bibitem}\if@filesw
+        {\let\protect\noexpand
+        \immediate
+        \write\@auxout{\string\bibcite{#2}{#1}}}\fi\ignorespaces}
+\def\@citex[#1]#2{\leavevmode
+  \xBegin{citation}
+  \let\@citea\@empty
+  \@cite{\@for\@citeb:=#2\do
+    {\@citea\def\@citea{,\penalty\@m\ }%
+     \edef\@citeb{\expandafter\@firstofone\@citeb\@empty}%
+     \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
+     \@ifundefined{b@\@citeb}{\hbox{\reset@font\bfseries ?}%
+       \G@refundefinedtrue
+       \@latex@warning
+         {Citation `\@citeb' on page \thepage \space undefined}}%
+       {\xBegin{cite}\xEmptyA{params}{key=\@citeb}%
+    \@cite@ofmt{\csname b@\@citeb\endcsname}\xEnd{cite}}}}{#1}\xEnd{citation}}
+\newsavebox{\lxir@pckg@list}
+\def\add@toLXirList#1{%
+  \global\sbox{\lxir@pckg@list}{\unhbox\lxir@pckg@list\xEmptyA{TaggedWith}{name=#1}}%
+  \LXir@Info{add to list: #1}
+}
+\def\add@toPkg@Cls@List#1{%
+  \global\sbox{\lxir@pckg@list}{\unhbox\lxir@pckg@list\xEmptyA{ClassOrPackageUsed}{name=#1}}%
+}
+%%% From File: ltclass.dtx
+\def\@onefilewithoptions#1[#2][#3]#4{%
+  \@pushfilename
+  \xdef\@currname{#1}%
+  \global\let\@currext#4%
+  \expandafter\let\csname\@currname.\@currext-h@@k\endcsname\@empty
+  \let\CurrentOption\@empty
+  \@reset@ptions
+  \makeatletter
+  \def\reserved@a{%
+    \@ifl@aded\@currext{#1}%
+      {\@if@ptions\@currext{#1}{#2}{}%
+        {\@latex@error
+            {Option clash for \@cls@pkg\space #1}%
+            {The package #1 has already been loaded
+             with options:\MessageBreak
+             \space\space[\@ptionlist{#1.\@currext}]\MessageBreak
+             There has now been an attempt to load it
+              with options\MessageBreak
+             \space\space[#2]\MessageBreak
+             Adding the global options:\MessageBreak
+             \space\space
+                  \@ptionlist{#1.\@currext},#2\MessageBreak
+             to your \noexpand\documentclass declaration may fix this.%
+             \MessageBreak
+             Try typing \space <return> \space to proceed.}}}%
+      {\@pass@ptions\@currext{#2}{#1}%
+       \global\expandafter
+       \let\csname ver@\@currname.\@currext\endcsname\@empty
+       \InputIfFileExists
+         {\@currname.\@currext}%
+         {\add@toPkg@Cls@List{\@currname.\@currext}}%
+         {\@missingfileerror\@currname\@currext}%
+       \def\LXir@tag@file{\@currname_lxir.\@currext}
+       \InputIfFileExists
+         {\LXir@tag@file}%
+         {\LXir@Info{`\LXir@tag@file' loaded for tagging of `\@currname'}%
+           \add@toLXirList{\LXir@tag@file}}%
+         {\LXir@Info{No file `\LXir@tag@file' found for tagging of `\@currname'}}%
+    \let\@unprocessedoptions\@@unprocessedoptions
+    \csname\@currname.\@currext-h@@k\endcsname
+    \expandafter\let\csname\@currname.\@currext-h@@k\endcsname
+              \@undefined
+    \@unprocessedoptions}
+    \@ifl@ter\@currext{#1}{#3}{}%
+      {\@latex@warning@no@line
+         {You have requested,\on@line,
+          version\MessageBreak
+            `#3' of \@cls@pkg\space #1,\MessageBreak
+          but only version\MessageBreak
+           `\csname ver@#1.\@currext\endcsname'\MessageBreak
+          is available}}%
+    \ifx\@currext\@clsextension\let\LoadClass\@twoloadclasserror\fi
+    \@popfilename
+    \@reset@ptions}%
+  \reserved@a}
+\AtBeginDocument{\usebox{\lxir@pckg@list}}
+\endinput
+%%
+%% End of file `lxir.sty'.

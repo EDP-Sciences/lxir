@@ -1,0 +1,57 @@
+%% color_lxir.sty
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is EDP-Sciences.
+%
+% This work consists of the files color_lxir.sty.
+% redefinition of:
+% \set@color
+%\reset@color
+%
+% Output may be driver dependent. To avoid this problem, we force the driver to 
+% dvips, which output easily parsable color scheme: 
+%  
+% low level color macros, based on those of dvips.def
+% For web publishing, cmyk color have to be converted to an approximated RGB equivalent during
+% post-processing
+\input dvips.def
+% Redefined low level macros
+%\let\t@gset@color=\set@color
+\def\set@color{\xEmptyA{setcolor}{color=\current@color}\aftergroup\reset@color}
+%\let\t@greset@color=\reset@color
+\def\reset@color{\xEmptyA{setcolor}{color=\current@color}}%
+%
+% Page color switch
+\let\t@gset@page@color=\set@page@color
+\def\set@page@color{\t@gset@page@color\xEmptyA{pagecolor}{\current@color}}
+%
+% Coloured box: we drop the rule making, we just keep color information
+\renewcommand{\colorbox}[3][\empty]{\xBegin{colorbox}%
+  \xBegin{bgcolor}%
+  \ifx#1\empty%
+  \@declaredcolor{#2}%
+  \else
+  \@undeclaredcolor[#1]{#2}%
+  \fi
+  \xEnd{bgcolor}
+  \begingroup#3\endgroup\xEnd{colorbox}}
+\renewcommand{\fcolorbox}[4][\empty]{\xBegin{fcolorbox}
+  \ifx#1\empty
+  \xBegin{framecolor}\@declaredcolor{#2}\xEnd{framecolor}%
+  \xBegin{bgcolor}\@declaredcolor{#3}\xEnd{bgcolor}%
+  \else%
+  \xBegin{framecolor}\@undeclaredcolor[#1]{#2}\xEnd{framecolor}%
+  \xBegin{bgcolor}\@undeclaredcolor[#1]{#3}\xEnd{bgcolor}%
+   \fi
+  \begingroup#4\endgroup\xEnd{fcolorbox}}

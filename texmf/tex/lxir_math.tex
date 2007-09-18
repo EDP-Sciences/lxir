@@ -1,0 +1,180 @@
+%% lxir_math.tex
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is EDP-Sciences.
+%
+% This work consists of the files lxir_math.tex.
+% 
+% Begin/end math tagging
+% 
+%% Logging is required for math support.
+\showboxbreadth=10000
+\showboxdepth=10000
+\binoppenalty=10000
+\relpenalty=10000
+\tracingoutput=1% so that output is written in the log file
+\let\old@outputpage=\@outputpage
+\def\@outputpage{% 
+\message{^^J***T@GS START OUTPUTING BOX TO LOG***^^J}
+%\showbox\@outputbox % Output the "page" box in the log
+\old@outputpage
+\message{^^J***T@GS END OF OUTPUT***^^J}
+}
+% 
+% 
+% From Hermes (& TeXBook p. 179 & latex.ltx p. 2131)
+% 
+\def\Xendmath{\xEnd{math}}
+\def\Xbeginmath{\xBegin{math}}
+% 
+\def\Xenddisplay{\xEnd{display}}
+\def\Xbegindisplay{\xBegin{display}}
+% 
+\frozen@everymath = {\Xbeginmath\check@mathfonts% 
+                     \the\everymath\aftergroup\Xendmath}% 
+% 
+\frozen@everydisplay = {\Xbegindisplay\check@mathfonts% 
+                        \the\everydisplay\aftergroup\Xenddisplay}% 
+% 
+\def\equation{\xBegin{equation}$$\refstepcounter{equation}}
+\def\endequation{$$\xEmptyA{eqnnum}{value=\theequation}\xEnd{equation}\@ignoretrue}
+% 
+\def\eqnarray{%
+   \xBegin{eqnarray}%
+   \stepcounter{equation}%
+   \def\@currentlabel{\p@equation\theequation}%
+   \global\@eqnswtrue
+   \m@th
+   \global\@eqcnt\z@
+   \tabskip\@centering
+   \let\\\@eqncr
+   \t@gOnfalse
+   $$\t@gOntrue\everycr{}\halign to\displaywidth\bgroup
+       \hskip\@centering$\displaystyle\tabskip\z@skip{##}$\@eqnsel
+      &\global\@eqcnt\@ne\hskip \tw@\arraycolsep \hfil${##}$\hfil
+      &\global\@eqcnt\tw@ \hskip \tw@\arraycolsep
+         $\displaystyle{##}$\hfil\tabskip\@centering
+      &\global\@eqcnt\thr@@ \hb@xt@\z@\bgroup\hss##\egroup
+         \tabskip\z@skip
+      \cr
+}
+\def\endeqnarray{%
+      \@@eqncr
+      \egroup
+      \global\advance\c@equation\m@ne
+   $$\t@gOntrue\xEnd{eqnarray}\@ignoretrue
+}
+
+%% TAGGING
+\def\Xmo#1{\xBegin{mathop}#1\xEnd{mathop}} % LaTeX math operator
+\def\Xmf#1{\xBegin{mathfrac}#1\xEnd{mathfrac}} % LaTeX math ``generalized'' fraction
+\def\Xmcom#1{\xBegin{mathcommand}#1\xEnd{mathcommand}} % LaTeX math command other than operator and...
+% 
+%%% From File: ltmath.dtx
+% \message{math definitions,}
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+%\def\operator@font\relax
+% 
+% 
+% MATH
+\def\mathopt@g#1{\xEmptyAA{#1}{mathtype=op}{mathcontent=#1}}
+\def\log{\mathop{\mathopt@g{log}}\nolimits}
+\def\lg{\mathop{\mathopt@g{lg}}\nolimits}
+\def\ln{\mathop{\mathopt@g{ln}}\nolimits}
+\def\lim{\mathop{\mathopt@g{lim}}}
+\def\limsup{\mathop{\mathopt@g{limsup}}}
+\def\liminf{\mathop{\mathopt@g{liminf}}}
+\def\sin{\mathop{\mathopt@g{sin}}\nolimits}
+\def\arcsin{\mathop{\mathopt@g{arcsin}}\nolimits}
+\def\sinh{\mathop{\mathopt@g{sinh}}\nolimits}
+\def\cos{\mathop{\mathopt@g{cos}}\nolimits}
+\def\arccos{\mathop{\mathopt@g{arccos}}\nolimits}
+\def\cosh{\mathop{\mathopt@g{cosh}}\nolimits}
+\def\tan{\mathop{\mathopt@g{tan}}\nolimits}
+\def\arctan{\mathop{\mathopt@g{arctan}}\nolimits}
+\def\tanh{\mathop{\mathopt@g{tanh}}\nolimits}
+\def\cot{\mathop{\mathopt@g{cot}}\nolimits}
+\def\coth{\mathop{\mathopt@g{coth}}\nolimits}
+\def\sec{\mathop{\mathopt@g{sec}}\nolimits}
+\def\csc{\mathop{\mathopt@g{csc}}\nolimits}
+\def\max{\mathop{\mathopt@g{max}}}
+\def\min{\mathop{\mathopt@g{min}}}
+\def\sup{\mathop{\mathopt@g{sup}}}
+\def\inf{\mathop{\mathopt@g{inf}}}
+\def\arg{\mathop{\mathopt@g{arg}}\nolimits}
+\def\ker{\mathop{\mathopt@g{ker}}\nolimits}
+\def\dim{\mathop{\mathopt@g{dim}}\nolimits}
+\def\hom{\mathop{\mathopt@g{hom}}\nolimits}
+\def\det{\mathop{\mathopt@g{det}}}
+\def\exp{\mathop{\mathopt@g{exp}}\nolimits}
+\def\Pr{\mathop{\mathopt@g{Pr}}}
+\def\gcd{\mathop{\mathopt@g{gcd}}}
+\def\deg{\mathop{\mathopt@g{deg}}\nolimits}
+\def\sum{\mathop{\xEmptyAA{sum}{mathtype=op}{mathchar=2211}}}
+\def\hbar{\mathord{\xEmptyAA{hbar}{mathtype=ord}{mathchar=0127}}}
+\def\angle{\mathord{\xEmptyAA{angle}{mathtype=ord}{mathchar=2220}}}
+\def\cong{\mathrel{\xEmptyAA{cong}{mathtype=rel}{mathchar=2245}}}
+\def\bowtie{\mathrel{\xEmptyAA{bowtie}{mathtype=rel}{mathchar=22c8}}}
+\def\models{\mathrel{\xEmptyAA{models}{mathtype=rel}{mathchar=22a8}}}
+\def\doteq{\mathrel{\xEmptyAA{doteq}{mathtype=rel}{mathchar=2250}}}
+\def\not<{\mathrel{\xEmptyAA{notinf}{mathtype=rel}{mathchar=226e}}}
+\def\not>{\mathrel{\xEmptyAA{notsup}{mathtype=rel}{mathchar=226f}}}
+\def\not={\mathrel{\xEmptyAA{noteq}{mathtype=rel}{mathchar=2260}}}
+\def\not\leq{\mathrel{\xEmptyAA{notleq}{mathtype=rel}{mathchar=2270}}}
+\def\not\geq{\mathrel{\xEmptyAA{notgeq}{mathtype=rel}{mathchar=2271}}}
+\def\not\equiv{\mathrel{\xEmptyAA{notequiv}{mathtype=rel}{mathchar=2262}}}
+\def\not\prec{\mathrel{\xEmptyAA{notprec}{mathtype=rel}{mathchar=2280}}}
+\def\not\succ{\mathrel{\xEmptyAA{notsucc}{mathtype=rel}{mathchar=2281}}}
+\def\not\sim{\mathrel{\xEmptyAA{notsim}{mathtype=rel}{mathchar=2241}}}
+\def\not\preceq{\mathrel{\xEmptyAA{notpreceq}{mathtype=rel}{mathchar=22e0}}}
+\def\not\succeq{\mathrel{\xEmptyAA{notsucceq}{mathtype=rel}{mathchar=22e1}}}
+\def\not\simeq{\mathrel{\xEmptyAA{notsimeq}{mathtype=rel}{mathchar=2244}}}
+\def\not\subset{\mathrel{\xEmptyAA{notsubset}{mathtype=rel}{mathchar=2284}}}
+\def\not\supset{\mathrel{\xEmptyAA{notsupset}{mathtype=rel}{mathchar=2285}}}
+\def\not\approx{\mathrel{\xEmptyAA{notapprox}{mathtype=rel}{mathchar=2249}}}
+\def\not\subseteq{\mathrel{\xEmptyAA{notsubseteq}{mathtype=rel}{mathchar=2288}}}
+\def\not\supseteq{\mathrel{\xEmptyAA{notsupseteq}{mathtype=rel}{mathchar=2289}}}
+\def\not\cong{\mathrel{\xEmptyAA{notcong}{mathtype=rel}{mathchar=2247}}}
+\def\not\sqsubseteq{\mathrel{\xEmptyAA{notsqsubseteq}{mathtype=rel}{mathchar=22E2}}}
+\def\not\sqsupseteq{\mathrel{\xEmptyAA{notsqsupseteq}{mathtype=rel}{mathchar=22E3}}}
+\def\not\asymp{\mathrel{\xEmptyAA{notasymp}{mathtype=rel}{mathchar=226d}}}
+\def\notin{\mathrel{\xEmptyAA{notin}{mathtype=rel}{mathchar=2209}}}
+% we convert the "long" arrows to not long ones, as there is no unicode equivalent
+\def\longleftarrow{\leftarrow}
+\def\Longleftarrow{\Leftarrow}
+\def\longrightarrow{\rightarrow}
+\def\Longrightarrow{\Rightarrow}
+\def\longleftrightarrow{\leftrightarrow}
+\def\Longleftrightarrow{\Leftrightarrow}
+\def\mapsto{\mathrel{\xEmptyAA{mapsto}{mathtype=rel}{mathchar=21a6}}}
+\def\longmapsto{\mapsto}
+\def\hookleftarrow{\mathrel{\xEmptyAA{hookleftarrow}{mathtype=rel}{mathchar=21a9}}}
+\def\hookrightarrow{\mathrel{\xEmptyAA{hookleftarrow}{mathtype=rel}{mathchar=21aa}}}
+\def\rightleftharpoons{\mathrel{\xEmptyAA{rightleftharpoons}{mathtype=rel}{mathchar=21cc}}}
+\def\colon{\mathpunct{\xEmptyAA{colon}{mathtype=punct}{mathchar=3a}}}

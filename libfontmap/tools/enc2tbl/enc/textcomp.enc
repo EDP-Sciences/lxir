@@ -1,0 +1,154 @@
+%The TeX text companion (TS1) encoding.
+%
+/TextCompanionEncoding [
+% 0x00
+/grave /acute /circumflex /tilde
+/dieresis /hungarumlaut /ring /caron
+/breve /$macron /dotaccent /cedilla
+/ogonek
+/.notavail % quotestraightbase, not in Unicode 3.2
+/.notdef
+/.notdef
+
+% 0x10
+/.notdef
+/.notdef
+/.notavail % quotestraightdblbase, not in Unicode 3.2
+/.notdef
+
+/.notdef
+/.notavail % twelveudash (a 2/3 em dash), not in Unicode 3.2
+/threequartersemdash
+/$ZWNJ
+
+/arrowleft /arrowright /$tie /$tie
+
+/$tie /$tie /.notdef /$ZWNJ
+
+% 0x20
+/$blank /.notdef /.notdef /.notdef
+/dollar /.notdef /.notdef /quotesingle
+/.notdef /.notdef /$asterisklow /.notdef
+/comma
+/$hyphen % Actually a double hyphen (similar to an equals sign), but this
+         % is not present in Unicode (or considered a typographic variant).
+    	 % This one is "hanging", the other one below normal ?
+/period
+/$fractionslash
+
+% 0x30
+/zerooldstyle /oneoldstyle /twooldstyle /threeoldstyle
+/fouroldstyle /fiveoldstyle /sixoldstyle /sevenoldstyle
+/eightoldstyle /nineoldstyle /.notdef /.notdef
+/angleleft /minus /angleright /.notdef
+
+% 0x40
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /$Mho /.notdef /$circlelarge
+
+% 0x50
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /$Ohm
+/.notdef /.notdef /.notdef /$bracketleftwhite
+/.notdef /$bracketrightwhite /arrowup /arrowdown
+
+% 0x60
+/grave % perhaps /$minutereversed ?
+/.notdef
+/$star
+/.notavail % divorced, not in Unicode 3.2
+
+/$latincross /.notdef /.notdef /.notdef
+
+/.notdef /.notdef /.notdef /.notdef
+
+/.notavail % leaf, not in Unicode 3.2
+/.notavail % married, not in Unicode 3.2
+/musicalnote
+/.notdef
+
+% 0x70
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef
+/.notdef
+/asciitilde
+/$hyphen % Actually a double hyphen (similar to an equals sign), but this
+         % is not present in Unicode (or considered a typographic variant).
+
+% 0x80
+/breve /caron /second /$secondreversed
+/dagger /daggerdbl /$bardbl /perthousand
+/bullet /$celsius /dollaroldstyle /centoldstyle
+/florin /colonmonetary /$won /$naira
+
+% 0x90
+/.notavail % guarani (a currency sign), not in Unicode 3.2
+/$peso
+/lira
+/prescription
+
+/$interrobang
+/.notavail % interrobangdown, not in Unicode 3.2
+/dong
+/trademark
+
+/$pertenthousand
+/paragraph % typographic variant with single stem, not distinguished in Unicode
+/$baht
+/$numero
+
+/$discount /estimated /openbullet /$servicemark
+
+% 0xa0
+/$quillbracketleft /$quillbracketright /cent /sterling
+/currency /yen /brokenbar /section
+/dieresis
+/copyright
+/ordfeminine
+/.notavail % copyleft (inverted copyright), not in Unicode 3.2
+/logicalnot /$phonorecord /registered /$macron
+
+% 0xb0
+/degree /plusminus /twosuperior /threesuperior
+
+/acute % perhaps /minute ?
+/$micro
+/paragraph
+/$periodcentered
+
+/$referencemark
+/onesuperior
+/ordmasculine
+/radical % This is NOT hanging like the math font radicals!
+
+/onequarter /onehalf /threequarters /Euro
+
+% 0xc0
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xd0
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /multiply /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xe0
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xf0
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /divide /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+] def

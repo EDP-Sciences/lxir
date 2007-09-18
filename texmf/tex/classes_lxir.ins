@@ -1,0 +1,63 @@
+%% classes_lxir.ins
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is EDP-Sciences.
+%
+% This work consists of the files classes_lxir.dtx and classes_lxir.ins
+% and the derived file article_lxir.cls, book_lxir.cls and report_lxir.cls.
+%%  
+%% --------------- start of docstrip commands ------------------
+%%
+
+\input docstrip
+
+\preamble
+
+This is a generated file.
+
+Copyright EDP Sciences 2007
+
+This file was generated from file(s) of the lxir  system.
+--------------------------------------------------------------
+
+\endpreamble
+
+\keepsilent
+\askforoverwritefalse
+\usedir{.}
+
+\generate{\file{article_lxir.cls}{\from{classes_lxir.dtx}{article}}
+          \file{report_lxir.cls}{\from{classes_lxir.dtx}{report}}
+          \file{book_lxir.cls}{\from{classes_lxir.dtx}{book}}
+          }
+
+\ifToplevel{
+\Msg{***********************************************************}
+\Msg{*}
+\Msg{* To finish the installation you have to move the following}
+\Msg{* files into a directory searched by TeX:}
+\Msg{*}
+\Msg{* \space\space article_lxir.cls}
+\Msg{* \space\space report_lxir.cls}
+\Msg{* \space\space book_lxir.cls}
+\Msg{*}
+\Msg{* To produce the documentation run the files ending with}
+\Msg{* `.dtx' through LaTeX.}
+\Msg{*}
+\Msg{* Happy TeXing}
+\Msg{***********************************************************}
+}
+
+\endbatchfile
+

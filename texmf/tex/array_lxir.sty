@@ -1,0 +1,170 @@
+%% array_lxir.sty
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is EDP-Sciences.
+%
+% This work consists of the files array_lxir.sty.
+%% NOT YET DONE: definition of user column specifier
+% Modified macros:
+% ---------------
+% \@mkpream#1
+% \@classz
+% \@classv
+% \@classi
+% \@array[#1]#2
+% \tabular
+% \endtabular
+%% \def\@mkpream#1{\global\sbox{\t@g@coldesc}{}\global\@addtocoldesc{\xBegin{columnsModel}}%
+%% \@addtocoldesc{\xEmptyAAAAA{params}{arraycolsep=\the\arraycolsep}{tabcolsep=\the\tabcolsep}{arrayrulewidth=\the\arrayrulewidth}{doublerulesep=\the\doublerulesep}{arraystretch=\arraystretch}}%
+%%   \gdef\@preamble{}\@lastchclass 4 \@firstamptrue
+%%    \let\@sharp\relax \let\@startpbox\relax \let\@endpbox\relax
+%%    \@xexpast #1*0x\@@
+%%    \count@\m@ne
+%%    \let\the@toks\relax
+%%    \prepnext@tok
+%%    \expandafter \@tfor \expandafter \@nextchar
+%%     \expandafter :\expandafter =\@tempa \do
+%%    {\@testpach
+%%    \ifcase \@chclass \@classz \or \@classi \or \@classii
+%%      \or \save@decl \or \or \@classv \or \@classvi
+%%      \or \@classvii \or \@classviii  \or \@classix
+%%      \or \@classx \fi
+%%    \@lastchclass\@chclass}%
+%%    \ifcase\@lastchclass
+%%    \@acol \or
+%%    \or
+%%    \@acol \or
+%%    \@preamerr \thr@@ \or
+%%    \@preamerr \tw@ \@addtopreamble\@sharp \or
+%%    \or
+%%    \else  \@preamerr \@ne \fi
+%%    \def\the@toks{\the\toks}\@addtocoldesc{\xEnd{columnsModel}}}
+%% 
+%
+\def\@classz{
+% beg add column description in \t@g@coldesc
+\ifcase \@chnum%
+\@addtocoldesc{\xEmptyA{col}{align=center}}
+\or\@addtocoldesc{\xEmptyA{col}{align=left}} 
+\or \@addtocoldesc{\xEmptyA{col}{align=right}}
+\or \@addtocoldesc{\xEmptyAA{par}{width=\@nextchar}{valign=center}}%3: opt. m
+\or \@addtocoldesc{\xEmptyAA{par}{width=\@nextchar}{valign=top}}%4: opt. p
+\or \@addtocoldesc{\xEmptyAA{par}{width=\@nextchar}{valign=bottom}}%5: opt. t
+\fi
+  \def\c@ldesct@g{%
+  \ifcase \@chnum {\xEmptyA{col}{align=center}}
+  \or { \xEmptyAA{params}{columnType=col}{align=left}}
+  \or { \xEmptyAA{params}{columnType=col}{align=right}}
+  \or {\xEmptyAAA{params}{columnType=par}{width=\@nextchar}{valign=center}}%3: opt. m
+  \or {\xEmptyAAA{params}{columnType=par}{width=\@nextchar}{valign=top}}%4: opt. p
+  \or {\xEmptyAAA{params}{columnType=par}{width=\@nextchar}{valign=bottom}}%5: opt. t
+  \fi
+   }
+% end add column description in \t@g@coldesc
+  \@classx
+   \@tempcnta \count@
+   \prepnext@tok
+   \@addtopreamble{\xBegin{cell}\c@ldesct@g\ifcase \@chnum
+      \hfil
+      \d@llarbegin
+      \insert@column
+      \d@llarend \hfil \or
+      \hskip1sp\d@llarbegin \insert@column \d@llarend \hfil \or
+      \hfil\hskip1sp\d@llarbegin \insert@column \d@llarend \or
+% well, $ is not a good idea, as it cause LXir to switch to math mode and therefore
+% to produce a mathml formula...
+\vbox \@startpbox{\@nextchar}\insert@column\@endpbox\or% LXir
+   %$\vcenter
+   %\@startpbox{\@nextchar}\insert@column \@endpbox $\or
+   \vtop \@startpbox{\@nextchar}\insert@column \@endpbox \or
+   \vbox \@startpbox{\@nextchar}\insert@column \@endpbox
+  \fi\xEnd{cell}}\prepnext@tok}
+%
+\def\@classv{\save@decl
+   \@addtopreamble{\@addtocoldesc{\xBegin{intercolumnDef}\@nextchar\xEnd{intercolumnDef}}\xBegin{intercolumn}\d@llarbegin\the@toks\the\count@\relax\d@llarend\xEnd{intercolumn}}%
+   \prepnext@tok}
+\def\@classi{\@classvi
+   \ifcase \@chnum%
+%   \@addtocoldesc{\xEmpty{vline}}%
+    \@addtocoldesc{\xEmpty{vline}}
+   \@arrayrule \or
+      \@classv \fi}
+
+\let\t@g@@array=\@@array
+\def\@@array[#1]#2{\xEmptyA{params}{position=#1}%
+        \t@g@@array[#1]{#2}}
+%%
+% Tagging of the begin/end of the environments:
+% 
+\newif\if@tagarray
+\@tagarrayfalse
+\def\array{\@tagarraytrue\xBegin{array}\col@sep\arraycolsep
+  \def\d@llarbegin{$}\let\d@llarend\d@llarbegin\gdef\@halignto{}% %$ for emacs 
+  \@tabarray}
+\def\tabular{\xBegin{tabular}\gdef\@halignto{}\@tabular} 
+\expandafter\def\csname tabular*\endcsname#1{%
+       \setlength\dimen@{#1}%
+       \xdef\@halignto{to\the\dimen@}\@tabular}
+\def\@tabular{%
+  \leavevmode
+  \hbox \bgroup $\col@sep\tabcolsep \let\d@llarbegin\begingroup
+                                    \let\d@llarend\endgroup
+  \@tabarray}
+%% \def\endtabular{\crcr \egroup \egroup \gdef\@preamble{} $\egroup\xEnd{tabular}}%$ for emacs
+\def\endtabular{\endarray $\egroup\xEnd{tabular}}%$ for emacs
+\def\endarray{\crcr \egroup \egroup \gdef\@preamble{}\@tagarrayfalse}
+%%%%%%%%%% \@mkpream
+\def\@mkpream#1{\sbox{\t@g@coldesc}{}%
+        \@addtocoldesc{\xBegin{columnsModel}}%
+%        \xEmptyA{params}{model=#1}%
+    \gdef\@preamble{}\@lastchclass 4 \@firstamptrue
+   \let\@sharp\relax \let\@startpbox\relax \let\@endpbox\relax
+   \@temptokena{#1}\@tempswatrue
+   \@whilesw\if@tempswa\fi{\@tempswafalse\the\NC@list}%
+   \count@\m@ne
+   \let\the@toks\relax
+   \prepnext@tok
+   \expandafter \@tfor \expandafter \@nextchar
+    \expandafter :\expandafter =\the\@temptokena \do
+   {\@testpach
+   \ifcase \@chclass \@classz \or \@classi \or \@classii
+     \or \save@decl \or \or \@classv \or \@classvi
+     \or \@classvii \or \@classviii
+     \or \@classx
+     \or \@classx \fi
+   \@lastchclass\@chclass}%
+   \ifcase\@lastchclass
+   \@acol \or
+   \or
+   \@acol \or
+   \@preamerr \thr@@ \or
+   \@preamerr \tw@ \@addtopreamble\@sharp \or
+   \or
+   \else  \@preamerr \@ne \fi
+   \def\the@toks{\the\toks}\@addtocoldesc{\xEnd{columnsModel}}\if@tagarray\else\usebox{\t@g@coldesc}\fi}
+%%%%%%%%%% end of \@mkpream
+% multicolumn
+\long\def\multicolumn#1#2#3{%
+   \multispan{#1}\begingroup
+   \def\@addamp{\if@firstamp \@firstampfalse \else
+                \@preamerr 5\fi}%
+   \@mkpream{#2}\@addtopreamble\@empty
+   \endgroup
+   \def\@sharp{#3}%
+   \@arstrut \xBegin{multicolumn}\xEmptyA{params}{span=#1}
+   \usebox{\t@g@coldesc}\@preamble\xEnd{multicolumn}
+   \null
+   \ignorespaces}
+\def\@arraycr{\xEmpty{eol}\relax\iffalse{\fi\ifnum 0=`}\fi
+  \@ifstar \@xarraycr \@xarraycr}

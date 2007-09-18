@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+%% mathfonts.xml
+%% part of lxir - a tool to convert latex documents to xml.
+%% Copyright 2007 EDP-Sciences
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Xavier Trochu.
+%
+% This work consists of the files mathfonts.xml.
+-->
+<encodings>
+  <!-- plain TeX fonts -->
+  <mathfont name="tenrm" encoding="OT1Encoding"/>
+  <mathfont name="sevenrm" encoding="OT1Encoding"/>
+  <mathfont name="fiverm" encoding="OT1Encoding"/>
+  
+  <mathfont name="teni" encoding="TeXMathItalicEncoding"/>
+  <mathfont name="seveni" encoding="TeXMathItalicEncoding"/>
+  <mathfont name="fivei" encoding="TeXMathItalicEncoding"/>
+  
+  <mathfont name="tensy" encoding="TeXMathSymbolEncoding"/>
+  <mathfont name="sevensy" encoding="TeXMathSymbolEncoding"/>
+  <mathfont name="fivesy" encoding="TeXMathSymbolEncoding"/>
+  
+  <mathfont name="tenex" encoding="TeXMathExtensionEncoding"/>
+  
+  <mathfont name="tenbf" encoding="OT1Encoding"/>
+  <mathfont name="sevenbf" encoding="OT1Encoding"/>
+  <mathfont name="fivebf" encoding="OT1Encoding"/>
+  
+  <mathfont name="tensl" encoding="OT1Encoding"/>
+  <mathfont name="tentt" encoding="TeXTypewriterTextEncoding"/>
+  <mathfont name="tenit" encoding="OT1Encoding"/>
+  <!-- latex math font -->
+  <mathfont name="OT1" encoding="OT1Encoding"/>
+  <mathfont name="OML" encoding="TeXMathItalicEncoding"/>
+  <mathfont name="OMX" encoding="TeXMathExtensionEncoding"/>
+  <mathfont name="T1" encoding="CorkEncoding"/>
+  <mathfont name="OMS" encoding="TeXMathSymbolEncoding"/>
+</encodings>

@@ -1,0 +1,305 @@
+%The encoding of the marvosym ("Martin Vogels Symbole") font released 2000.
+%An earlier version had a substantially different encoding. 
+%
+/Marvosym2000Encoding [
+% 0x00
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x10
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+/.notdef /.notdef /.notdef /.notdef
+
+% 0x20
+/.notdef
+/.notavail %/stopsign
+/.notavail %/beam
+/.notavail %/bearing
+
+/.notavail %/loosebearing
+/.notavail %/fixedbearing
+/$lefttorque
+/$righttorque
+
+/parenleft
+/parenright
+/multiply
+/plus
+
+/comma
+/$hyphen
+/period
+/slash
+
+% 0x30
+/zero
+/one
+/two
+/three
+
+/four
+/five
+/six
+/seven
+
+/eight
+/nine
+/$dingbatarrow2794
+/arrowdblright
+
+/lessequal
+/$corresponds
+/greaterequal
+/arrowdblboth
+
+% 0x40
+/at
+/$answerphone
+/$envelope
+/.notavail %/CEsign
+
+/Euro
+/$zigzagarrowdown
+/.notavail %/FHBOlogo
+/.notdef
+
+/.notavail %/mobilefone
+/.notavail %/industry
+/.notavail %/electrostatic
+/.notavail %/coffeecup
+
+/.notavail %/lineload
+/.notdef
+/.notdef %something here, a box? undocumented.
+/.notdef %something here, a box? undocumented.
+
+% 0x50
+/$vector
+/$scissors
+/.notavail %/kutline
+/.notavail %/leftscissors
+
+/$telephone
+/$watch
+/$checkedbox
+/$sphericalangle
+
+/$crossedbox
+/$yinyang
+/$fist
+/$fractionslash
+
+/$dividesnot
+/equivalence
+/$notequivalent
+/$negationslash
+
+% 0x60
+/.notavail %/explosionsafe
+/.notavail %/laserbeam
+/$writinghand
+/Euro
+
+/Euro
+/Euro
+/.notavail %/FHBOLOGO
+/$macron
+
+/$biohazard
+/$information
+/$radioactive
+/.notavail %/email
+
+/arrowdown
+/.notavail %/mundus
+/.notavail %/bsefree
+/.notavail %/football
+
+% 0x70
+/$vector
+/$scissorsupperblade
+/.notavail %/cutline
+/.notavail %/cutleft
+
+/.notavail %/fax
+/.notavail %/FAX
+/.notavail %/faxmachine
+/.notavail %/wheelchair
+
+/.notavail %/gentsroom
+/.notavail %/ladiesroom
+/.notavail %/emailct
+/circle %neutral
+
+/male
+/.notavail %/hermaphrodite
+/female
+/.notdef % something here; a copy of MALE?
+
+% 0x80
+/.notavail %/HERMAPHRODITE
+/.notavail %/FEMALE
+/.notavail %/MALE
+/.notavail %/malemale
+
+/.notavail %/femalefemale
+/.notavail %/femalemale
+/$latincross
+/.notavail %/celtcross
+
+/$ankh
+/.notavail %/WashCotton
+/.notavail %/WashSynthetics
+/.notavail %/WashWool
+
+/$heartwhite
+/.notavail %/Ecommerce
+/.notavail %/FullFHBO
+/.notavail %/Tumbler
+
+% 0x90
+/.notavail %/NoTumbler
+/.notavail %/Octosteel
+/.notavail %/Hexasteel
+/filledbox %/Squaresteel
+
+/.notavail %/Rectsteel
+/$filledcircle %/Circsteel
+/.notavail %/flatsteel
+/.notavail %/squarepipe
+
+/.notavail %/rectpipe
+/.notavail %/Lsteel
+/.notavail %/TTsteel
+/.notavail %/circpipe
+
+/.notavail %/Tsteel
+/.notavail %/RoundedTsteel
+/.notavail %/RoundedTTsteel
+/.notavail %/RoundedLsteel
+
+% 0xa0
+/.notdef %something here, undocumented
+/.notavail %/Shilling
+/$pfennig
+/$pounds
+
+/Euro
+/.notavail %/Bouquet
+/dollar
+/$frownface
+
+/.notavail %/NoChemicalCleaning
+/smileface
+/.notavail %marvosym.sty calls this \CircledA, but it's the anarchist symbol.
+/$circleA %/CleaningA
+
+/$circleP %/CleaningP
+/.notavail %/CleaningPP
+/.notavail %/bicycle
+/.notavail %/IroningI
+
+% 0xb0
+/.notavail %/IroningII
+/.notavail %/IroningIII
+/.notavail %/NoIroning
+/.notdef
+
+/.notavail %/RewindToIndex
+/.notavail %/RewindToStart
+/triaglf %/Rewind
+/triagrt %/Forward
+
+/.notavail %/ForwardToEnd
+/.notavail %/ForwardToIndex
+/triagup %/MoveUp
+/triagdn %/MoveDown
+
+/.notavail %/ToTop
+/.notavail %/ToBottom
+/$circleF %/CleaningF
+/.notavail %/CleaningFF
+
+% 0xc0
+/sun
+/$moonfirstquarter
+/$mercury
+/female
+
+/male
+/$jupiter
+/$saturn
+/$uranus
+
+/$neptune
+/$pluto
+/$earth
+/$triagwhiteup %/Bleech
+
+/.notavail %/NoBleech
+/.notavail %/ComputerMouse
+/.notavail %/SerialInterface
+/$keyboard
+
+% 0xd0
+/.notavail %/SerialPort
+/.notavail %/ParallelPort
+/.notavail %/Printer
+/.notavail %/AtNinetyFive
+
+/.notavail %/ShortNinetyFive
+/.notavail %/AtSixty
+/.notavail %/ShortSixty
+/.notavail %/ShortFifty
+
+/.notavail %/AtForty
+/.notavail %/ShortForty
+/.notavail %/SpecialForty
+/.notavail %/ShortThirty
+
+/.notavail %/Handwash
+/.notavail %/Dontwash
+/.notdef
+/.notdef
+
+% 0xe0
+/$aries
+/$taurus
+/$gemini
+/$cancer
+
+/$leo
+/$virgo
+/$libra
+/$scorpius
+
+/$sagittarius
+/$capricorn
+/$aquarius
+/$pisces
+
+/.notdef /.notdef /.notdef /.notdef
+
+% 0xf0
+/A %very bold
+/p %very bold
+/.notdef
+/.notdef
+
+/.notdef
+/.notdef
+/.notdef
+/$filledboxsmall %squaredot
+
+/.notdef /.notdef /.notdef /.notdef
+
+/.notdef
+/.notavail %/bat
+/.notavail %/womanface
+/.notavail %/MartinVogel
+
+] def
