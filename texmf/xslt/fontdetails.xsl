@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 %% fontdetails.xsl
 %% part of lxir - a tool to convert latex documents to xml.
@@ -17,7 +18,6 @@
 %
 % This work consists of the files fontdetails.xsl.
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" 
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns:lxir="http://www.latex-lxir.org">

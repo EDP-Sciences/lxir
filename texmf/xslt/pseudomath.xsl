@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 %% pseudomath.xsl
 %% part of lxir - a tool to convert latex documents to xml.
@@ -17,7 +18,6 @@
 %
 % This work consists of the files pseudomath.xsl.
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="xml" indent="no"/>
   <xsl:strip-space elements="math msup msub"/>

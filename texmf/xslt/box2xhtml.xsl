@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 %% box2xhtml.xsl
 %% part of lxir - a tool to convert latex documents to xml.
@@ -17,7 +18,6 @@
 %
 % This work consists of the files box2xhtml.xsl.
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
 		xmlns="http://www.w3.org/1999/xhtml"
 		xmlns:mm="http://www.w3.org/1998/Math/MathML">
