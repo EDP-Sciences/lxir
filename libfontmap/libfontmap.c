@@ -69,6 +69,15 @@ struct doc_s {
 	xmlDocPtr doc;
 };
 
+static
+xmlNodePtr find_first_element_node(xmlDocPtr doc) {
+	xmlNodePtr node = doc->children;
+	while (node && node->type != XML_ELEMENT_NODE)
+		node = node->next;
+	if (node) return node->children;
+	else return 0;
+}
+
 static struct doc_s * read_config() {
 	xmlDocPtr doc;
 	xmlNodePtr node;
@@ -81,8 +90,8 @@ static struct doc_s * read_config() {
 #endif
 		doc = xmlReadFile(TEXMF_XML_DIR "/config.xml", NULL, 0);
 	if(!doc) return 0;
-	node = doc->children;
-	if (node->type != XML_ELEMENT_NODE || strcmp((const char *)node->name, "lfm-config") != 0)
+	node = find_first_element_node(doc);
+	if (strcmp((const char *)node->name, "lfm-config") != 0)
 		return 0;
 	node = node->children;
 	while (node) {
@@ -127,15 +136,6 @@ static struct doc_s * read_config() {
 	}
 	xmlFreeDoc(doc);
 	return docs;
-}
-
-static
-xmlNodePtr find_first_element_node(xmlDocPtr doc) {
-	xmlNodePtr node = doc->children;
-	while (node && node->type != XML_ELEMENT_NODE)
-		node = node->next;
-	if (node) return node->children;
-	else return 0;
 }
 
 static int read_ligature_docs(xmlDocPtr doc) {
