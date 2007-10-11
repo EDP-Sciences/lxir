@@ -70,9 +70,9 @@ struct doc_s {
 };
 
 static
-xmlNodePtr find_first_element_node(xmlDocPtr doc) {
+xmlNodePtr find_first_element_node(xmlDocPtr doc, const char * name) {
 	xmlNodePtr node = doc->children;
-	while (node && node->type != XML_ELEMENT_NODE)
+	while (node && node->type != XML_ELEMENT_NODE && strcmp((const char *)node->name, name))
 		node = node->next;
 	if (node) return node->children;
 	else return 0;
@@ -90,10 +90,7 @@ static struct doc_s * read_config() {
 #endif
 		doc = xmlReadFile(TEXMF_XML_DIR "/config.xml", NULL, 0);
 	if(!doc) return 0;
-	node = find_first_element_node(doc);
-	if (strcmp((const char *)node->name, "lfm-config") != 0)
-		return 0;
-	node = node->children;
+	node = find_first_element_node(doc, "lfm-config");
 	while (node) {
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *)node->name, "file") == 0) {
 			const char * path = (const char *)xmlGetProp(node, BAD_CAST "path");
@@ -141,7 +138,7 @@ static struct doc_s * read_config() {
 static int read_ligature_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
 	
-	node = find_first_element_node(doc);
+	node = find_first_element_node(doc, "encodings");
 	while (node) {
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "ligature") == 0) {
 			xmlChar * src, * dst;
@@ -175,7 +172,7 @@ static char * find_ligature(char * src) {
 static int read_encoding_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
 	
-	node = find_first_element_node(doc);
+	node = find_first_element_node(doc, "encodings");
 	while (node) {
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "encoding") == 0) {
 			xmlChar * prop;
@@ -219,7 +216,7 @@ static struct fontmap_s * find_encoding(const char * name) {
 static int read_font_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
 	
-	node = find_first_element_node(doc);
+	node = find_first_element_node(doc, "encodings");
 	while (node) {
 		
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "font") == 0) {
@@ -251,7 +248,7 @@ static int read_font_docs(xmlDocPtr doc) {
 static int read_mathfont_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
 	
-	node = find_first_element_node(doc);
+	node = find_first_element_node(doc, "encodings");
 	while (node) {
 		
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "mathfont") == 0) {
@@ -282,7 +279,7 @@ static int read_mathfont_docs(xmlDocPtr doc) {
 static int read_accent_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
 	
-	node = find_first_element_node(doc);
+	node = find_first_element_node(doc, "encodings");
 	while (node) {
 		
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "accent") == 0) {

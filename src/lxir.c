@@ -219,6 +219,7 @@ xmlChar * is_valid_accent(xmlNodePtr text1, xmlNodePtr text2) {
 	while (*p2 == ' ') ++p2;
 	
 	accent = xmlMalloc(32);
+	*accent = 0;
 	
 	r = lfm_get_accent(p1, p2, accent) || lfm_get_accent(p2, p1, accent);
 	
@@ -231,6 +232,19 @@ xmlChar * is_valid_accent(xmlNodePtr text1, xmlNodePtr text2) {
 	}
 	return accent;
 }
+
+/*
+
+A refaire:
+	<push />
+	<right />
+	<down />
+	<text /> (accent)
+	<pop />
+		...
+	<text /> (first char)
+
+*/
 
 void transform_large_accent_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
