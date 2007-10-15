@@ -382,7 +382,15 @@ int is_valid_tag_name(const char * content, xmlChar ** pname, int * popen) {
 	if(strncmp(content, "::tag lxir ", 11) != 0) return 0;
 	content += 11;
 	s = strchr(content, '(') + 1;
-	e = strrchr(content, ')');
+	if not (s) {
+		fprintf(stderr, "Invalid tag content, unable to find opening parenthesis in \"%s\"\n", content);
+		return 0;
+	}
+	e = strchr(s + 1, ')');
+	if not (e) {
+		fprintf(stderr, "Invalid tag content, unable to find closing parenthesis in \"%s\"\n", content);
+		return 0;
+	}
 	len = e - s;
 	name = malloc(len + 1);
 	memcpy(name, s, len);
