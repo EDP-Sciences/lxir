@@ -382,12 +382,12 @@ int is_valid_tag_name(const char * content, xmlChar ** pname, int * popen) {
 	if(strncmp(content, "::tag lxir ", 11) != 0) return 0;
 	content += 11;
 	s = strchr(content, '(') + 1;
-	if not (s) {
+	if (!s) {
 		fprintf(stderr, "Invalid tag content, unable to find opening parenthesis in \"%s\"\n", content);
 		return 0;
 	}
 	e = strchr(s + 1, ')');
-	if not (e) {
+	if (!e) {
 		fprintf(stderr, "Invalid tag content, unable to find closing parenthesis in \"%s\"\n", content);
 		return 0;
 	}
@@ -412,29 +412,46 @@ int is_valid_tag_name(const char * content, xmlChar ** pname, int * popen) {
 }
 
 void fill_attributes(const char * content, xmlNodePtr attr) {
-	const char * popen, *pequal, * pclose;
+	int len = strlen(content);
+	int pos = 0;
+	int state = 0;
+	int stack = 0;
+	char * name = 0;
+	char * value = 0;
+	int start_pos;
 
-	while(NULL != (popen = strchr(content, '{'))) {
-		char * name, * value;
-		int len;
-		if(!(pequal = strchr(popen, '='))) break;
-		if(!(pclose = strchr(pequal, '}'))) break;
-		content = pclose + 1;
-		
-		++popen; --pclose;
-		len = (pequal - popen);
-		name = malloc(len + 1);
-		if(!name) break;
-		memcpy(name, popen, len);
-		name[len] = 0;
-		len = (pclose - pequal);
-		value = malloc(len + 1);
-		if(!value) break;
-		memcpy(value, pequal + 1, len);
-		value[len] = 0;
-		xmlNewProp(attr, BAD_CAST name, BAD_CAST value);
-		free(name);
-		free(value);
+	/* a simple finite state machine. */
+	while (pos < len) {
+		int c = content[pos++];
+		if (state == 0 && c == '{') {
+			state = 1;
+			start_pos = pos;
+		} else if (state == 1 && c == '=') {
+			state = 2;
+			int len = pos - start_pos - 1;
+			name = malloc(len + 1);
+			memcpy(name, content + start_pos, len);
+			name[len] = 0;
+			start_pos = pos;
+			stack = 0;
+		} else if (state == 2 && c == '{') {
+			++stack;
+		} else if (state == 2 && c == '}') {
+			if (stack-- == 0) {
+				int len = pos - start_pos - 1;
+				value = malloc(len + 1);
+				memcpy(value, content + start_pos, len);
+				value[len] = 0;
+				xmlNewProp(attr, BAD_CAST name, BAD_CAST value);
+				free(name);
+				free(value);
+				state = 0;
+			}
+		}
+	}
+	if (state != 0) {
+		fprintf(stderr, "Error decoding attributes from \"%s\" (%d)\n", content, state);
+		if (state == 1) free(name);
 	}
 }
 
