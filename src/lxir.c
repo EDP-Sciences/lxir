@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "transformations.h"
 #include "utf8string.h"
 #include "log2xml.h"
+#include "entities.h"
 
 #define REPORT_ALL 0
 
@@ -1260,10 +1261,6 @@ void replace_math_entities(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
-extern void start_entities();
-extern void stop_entities();
-extern char * replace_entities(const char *);
-
 void replace_entities_in_text(xmlNodePtr root, xmlTransformationEntry * param) {
 	/* find "[entity!(.*)!]" in text and replace by "&#(.*);" */
 	xmlNodePtr node = root->children;
@@ -1271,16 +1268,8 @@ void replace_entities_in_text(xmlNodePtr root, xmlTransformationEntry * param) {
 		xmlNodePtr next = node->next;
 		if (node->type == XML_ELEMENT_NODE) {
 			xmlTransformationPush(node, replace_entities_in_text, param);
-		} else if (xmlNodeIsText(node) && node->content) {
-			char * content = replace_entities((const char *) node->content);
-			if (content) {
-				xmlNodePtr p = xmlNewChild(node->parent, NULL, BAD_CAST "temp", BAD_CAST content);
-				xmlReplaceNode(node, p->children);
-				free(content);
-				xmlUnlinkNode(p);
-				xmlFreeNode(p);
-				xmlFreeNode(node);
-			}
+		} else if (xmlNodeIsText(node)) {
+			xmlReplaceEntities(node);
 		}
 		node = next;
 	}
@@ -1376,6 +1365,7 @@ int main(int argc, char * argv[]) {
 		dvifile = argv[3];
 	} else {
 		flags = DVI_SKIP_SPACE_SMALL;
+		do_not_add_space = 1;
 		dvifile = argv[1];
 	}
 		

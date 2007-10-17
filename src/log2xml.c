@@ -1696,7 +1696,7 @@ void transform_string_patterns(xmlNodePtr root, xmlTransformationEntry * param) 
 	xmlNodePtr node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
-		if (is_node_valid(node, "other", 0, 0)) {
+		if (is_node_valid(node, "other", 0, 0) && node->children && node->children->children && node->children->children->content) {
 			struct translation_info trans;
 			char * type, * slash;
 			int len;
