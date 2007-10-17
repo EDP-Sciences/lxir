@@ -24,5 +24,6 @@
 	<file path="fonts.xml" />
 	<file path="mathfonts.xml" optional="1" />
 	<file path="encodings.xml" />
+	<file path="zapfdingbats.xml" />
 	<file path="user.xml" optional="1" />
 </lfm-config>
