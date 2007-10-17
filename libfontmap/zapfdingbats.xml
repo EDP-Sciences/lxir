@@ -277,6 +277,4 @@
     <char value="&#x27BE;" name="OPEN-OUTLINED RIGHTWARDS ARROW"/>
     <char value="?" name=".notdef"/>
   </encoding>
-  <font name="pzdr" encoding="ZapfDingbatsEncoding"/>
-  <font name="rpzdr" encoding="ZapfDingbatsEncoding"/> 
 </encodings>

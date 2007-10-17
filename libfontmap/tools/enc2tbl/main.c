@@ -159,7 +159,16 @@ struct ident_list * make_ident_list(struct ident_list * list, const char * name)
 }
 
 void register_enc(const char * name, struct ident_list * list) {
-	struct enc_list * enc = (struct enc_list *) malloc(sizeof(struct enc_list));
+	struct enc_list * enc = encodings;
+	while (enc) {
+		if (strcmp(enc->name, name) == 0) {
+			fprintf(stderr, "Warning: encoding \"%s\" registered more than once !\n", name);
+			break;
+		}
+		enc = enc->next;
+	}
+
+	enc = (struct enc_list *) malloc(sizeof(struct enc_list));
 	
 	enc->next = encodings;
 	enc->name = strdup(name);
@@ -259,6 +268,7 @@ void yyerror(const char * error) {
 
 extern FILE * yyin;
 int handle_enc(const char * filename) {
+	if (strstr(filename, "/kmsym.enc") || strstr(filename, "/kmex.enc")) return 0;
 	fprintf(stderr, "Reading file \"%s\"\n", filename);
 	yyin = fopen(filename, "rb");
 	yyparse();

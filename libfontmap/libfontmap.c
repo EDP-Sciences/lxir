@@ -158,7 +158,7 @@ static int read_ligature_docs(xmlDocPtr doc) {
 	return 0;
 }
 
-static char * find_ligature(char * src) {
+static const char * find_ligature(const char * src) {
 	struct ligature_s * lig = ligatures;
 	
 	while (lig) {
@@ -175,26 +175,31 @@ static int read_encoding_docs(xmlDocPtr doc) {
 	node = find_first_element_node(doc, "encodings");
 	while (node) {
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "encoding") == 0) {
-			xmlChar * prop;
-			xmlNodePtr chr;
+			xmlNodePtr children = node->children;
+			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
 			
-			chr = node->children;
-			prop = xmlGetProp(node, BAD_CAST "name");
-			
-			if (prop && chr) {
-				struct fontmap_s * map = (struct fontmap_s *) malloc(sizeof(struct fontmap_s));
+			if (name && children) {
+				struct fontmap_s * map = fontmaps;
+				while (map) {
+					if (strcmp(map->name, name) == 0) {
+						fprintf(stderr, "Warning: encoding \"%s\" registered more than once !\n", name);
+						break;
+					}
+					map = map->next;
+				}
+				map = (struct fontmap_s *) malloc(sizeof(struct fontmap_s));
 				map->next = fontmaps;
 				fontmaps = map;
-				map->name = strdup((const char *)prop);
+				map->name = strdup(name);
 				map->info.map = malloc(256*sizeof(char*));
 				map->info.size = 0;
-				while(chr) {
-					if (chr->type == XML_ELEMENT_NODE) {
-						char * src = (char *) xmlGetProp(chr, BAD_CAST "value"); 
+				while(children) {
+					if (children->type == XML_ELEMENT_NODE) {
+						const char * src = (const char *) xmlGetProp(children, BAD_CAST "value"); 
 						src = find_ligature(src);
 						map->info.map[map->info.size++] = strdup(src);
 					}
-					chr = chr->next;
+					children = children->next;
 				}
 			}
 		}
@@ -220,23 +225,32 @@ static int read_font_docs(xmlDocPtr doc) {
 	while (node) {
 		
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "font") == 0) {
-			xmlChar * name, * encoding;
-			struct fontmap_s * map;
+			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
+			const char * encoding = (const char *)xmlGetProp(node, BAD_CAST "encoding");
 			
-			name = xmlGetProp(node, BAD_CAST "name");
-			encoding = xmlGetProp(node, BAD_CAST "encoding");
-			map = find_encoding((const char *) encoding);
-			assert (name);
-			if (map) {
-				struct fontenc_s * font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
-				
-				font->next = fontencs;
-				fontencs = font;
-				font->name = strdup((const char *)name);
-				font->map = map;
-				// fprintf(stderr, "Associated font \"%s\" with map \"%s\"\n", name, map->name);
+			if (name && encoding) {
+				struct fontmap_s * map = find_encoding(encoding);
+				if (map) {
+					struct fontenc_s * font = fontencs;
+					while (font) {
+						if (strcmp(font->name, name) == 0) {
+							fprintf(stderr, "Warning: font \"%s\" declared more than once !\n", name);
+							break;
+						}
+						font = font->next;
+					}
+					
+					font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
+					font->next = fontencs;
+					fontencs = font;
+					font->name = strdup((const char *)name);
+					font->map = map;
+				} else {
+					fprintf(stderr, "Unknown encoding in font declaration %s : \"%s\"\n", name, encoding);
+				}
 			} else {
-				fprintf(stderr, "Unknown encoding in font declaration %s : \"%s\"\n", name, encoding);
+				fprintf(stderr, "Invalid font declaration, no name or no encoding found (%s, %s)\n", 
+					name ? name : "", encoding ? encoding : "");
 			}
 		}
 		
@@ -252,22 +266,32 @@ static int read_mathfont_docs(xmlDocPtr doc) {
 	while (node) {
 		
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "mathfont") == 0) {
-			xmlChar * name, * encoding;
-			struct fontmap_s * map;
+			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
+			const char * encoding = (const char *)xmlGetProp(node, BAD_CAST "encoding");
 			
-			name = xmlGetProp(node, BAD_CAST "name");
-			encoding = xmlGetProp(node, BAD_CAST "encoding");
-			map = find_encoding((const char *) encoding);
-			assert(name);
-			if (map) {
-				struct fontenc_s * font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
-				
-				font->next = mathfontencs;
-				mathfontencs = font;
-				font->name = strdup((const char *)name);
-				font->map = map;
+			if (name && encoding) {
+				struct fontmap_s * map = find_encoding(encoding);
+				if (map) {
+					struct fontenc_s * font = mathfontencs;
+					while (font) {
+						if (strcmp(font->name, name) == 0) {
+							fprintf(stderr, "Warning: mathfont \"%s\" declared more than once !\n", name);
+							break;
+						}
+						font = font->next;
+					}
+					
+					font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
+					font->next = mathfontencs;
+					mathfontencs = font;
+					font->name = strdup((const char *)name);
+					font->map = map;
+				} else {
+					fprintf(stderr, "Unknown encoding in mathfont declaration %s : \"%s\"\n", name, encoding);
+				}
 			} else {
-				fprintf(stderr, "Unknown encoding in math font declaration %s : \"%s\"\n", name, encoding);
+				fprintf(stderr, "Invalid mathfont declaration, no name or no encoding found (%s, %s)\n", 
+					name ? name : "", encoding ? encoding : "");
 			}
 		}
 		
