@@ -174,7 +174,7 @@ int is_valid_node(xmlNodePtr node, const char * name) {
 
 static is_valid_control_node(xmlNodePtr node, const char * type) {
 	return is_valid_node(node, "control") && 
-		strcmp((const char *)xmlGetProp(node, "type"), type) == 0;
+		(!type || strcmp((const char *)xmlGetProp(node, "type"), type) == 0);
 }
 
 void remove_page_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
@@ -212,87 +212,153 @@ void remove_bop_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
 }
 
 static
-xmlChar * is_valid_accent(xmlNodePtr text1, xmlNodePtr text2) {
-	xmlChar * c1 = xmlNodeGetContent(text1), * c2 = xmlNodeGetContent(text2);
-	char * accent, * p1 = (char *) c1, * p2 = (char *) c2;
+xmlChar * utf8_trim(const xmlChar * src) {
+	xmlChar * result;
+	int size, len = xmlUTF8Strlen(src);
+	while(*src == ' ') { ++src; --len; }
+	while(*xmlUTF8Strpos(src, len-1) == ' ') { --len; }
+	size = xmlUTF8Strsize(src, len);
+	result = xmlMalloc(size + 1);
+	memcpy(result, src, size);
+	result[size] = 0;
+	return result;
+}
+
+static
+xmlChar * check_accent(xmlChar * a, xmlChar * b) {
 	int r;
-	while (*p1 == ' ') ++p1;
-	while (*p2 == ' ') ++p2;
-	
-	accent = xmlMalloc(32);
+	char * accent = xmlMalloc(32);
 	*accent = 0;
 	
-	r = lfm_get_accent(p1, p2, accent) || lfm_get_accent(p2, p1, accent);
-	
-	xmlFree(c1);
-	xmlFree(c2);
-	
-	if (!r) {
+	r = lfm_get_accent(b, a, accent);
+	if(r) {
 		xmlFree(accent);
 		return 0;
 	}
 	return accent;
 }
 
+static
+void remove_xxx_node_before(xmlNodePtr base, const xmlChar * match) {
+	xmlNodePtr node = base->prev;
+	while (node) {
+		if (!is_valid_control_node(node, 0)) {
+			if (is_valid_node(node, "xxx")) {
+				xmlChar * content = xmlNodeGetContent(node);
+				if (xmlStrstr(content, match)) {
+					xmlUnlinkNode(node);
+					xmlFreeNode(node);
+					xmlFree(content);
+					return;
+				}
+				xmlFree(content);
+			}
+		}
+		node = node->prev;
+	}
+}
+
+static
+void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
+	xmlChar * text1content, * text2content;
+	
+	text1content = xmlNodeGetContent(text1);
+	text2content = xmlNodeGetContent(text2);
+	if (text1content && text2content) {
+		xmlChar * t1, * t2, * accent;
+		t1 = utf8_trim(text1content);
+		t2 = utf8_trim(text2content);
+		fprintf(stderr, "Checking accentuated character between \"%s\" and \"%s\"", t1, t2);
+		
+		if (xmlUTF8Strlen(t1) == 1 && (accent = check_accent(t1, t2))) {
+			/* transform here */
+			const xmlChar * base = xmlUTF8Strpos(t2, 1);
+			int size1 = xmlStrlen(accent), size2 = xmlStrlen(base);
+			xmlChar * result = xmlMalloc(size1 + size2 + 1);
+			fprintf(stderr, " success : \"%s\"\n", accent);
+			
+			memcpy(result, accent, size1);
+			memcpy(result + size1, base, size2);
+			result[size1 + size2] = 0;
+			xmlFree(accent);
+			xmlUnlinkNode(text1);
+			xmlFreeNode(text1);
+			while(text2->children) {
+				xmlNodePtr c = text2->children;
+				xmlUnlinkNode(c);
+				xmlFreeNode(c);
+			}
+			xmlAddChild(text2, xmlNewText(result));
+			xmlFree(result);
+			remove_xxx_node_before(text2, "textaccent");
+		}  else if (xmlUTF8Strlen(t2) == 1 && (accent = check_accent(t2, t1))) {
+			/* transform here */
+			const xmlChar * base = xmlUTF8Strpos(t1, 1);
+			int size1 = xmlStrlen(accent), size2 = xmlStrlen(base);
+			xmlChar * result = xmlMalloc(size1 + size2 + 1);
+			fprintf(stderr, " success : \"%s\"\n", accent);
+
+			memcpy(result, accent, size1);
+			memcpy(result + size1, base, size2);
+			result[size1 + size2] = 0;
+			xmlFree(accent);
+			xmlUnlinkNode(text1);
+			xmlFreeNode(text1);
+			while(text2->children) {
+				xmlNodePtr c = text2->children;
+				xmlUnlinkNode(c);
+				xmlFreeNode(c);
+			}
+			xmlAddChild(text2, xmlNewText(result));
+			xmlFree(result);
+			remove_xxx_node_before(text2, "textaccent");
+		} else {
+			fprintf(stderr, " failed\n");
+		}
+		
+		xmlFree(t1);
+		xmlFree(t2);
+	}
+	if (text1content) xmlFree(text1content);
+	if (text2content) xmlFree(text2content);
+}
+
 /*
 
-A refaire:
 	<push />
-	<right />
-	<down />
+		...
 	<text /> (accent)
+		...
 	<pop />
 		...
 	<text /> (first char)
-
 */
-
 void transform_large_accent_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
+	xmlNodePtr start, text1, text2;
+	int state = 0;
 	while(node) {
-		xmlNodePtr next = node->next, text1, text2, last, tmp;
-		xmlChar * accent;
-		
-		if (
-			is_valid_control_node(node, "push") &&
-			(tmp = node->next) && is_valid_control_node(tmp, "push") &&
-			(tmp = tmp->next) && is_valid_control_node(tmp, "push") &&
-			(tmp = tmp->next) && ((
-				is_valid_control_node(tmp, "right") &&
-				(text1 = tmp->next) && is_valid_node(text1, "text")
-			) || (
-				(text1 = tmp) && is_valid_node(text1, "text")
-			)) &&
-			(tmp = text1->next) && is_valid_control_node(tmp, "pop") &&
-			(tmp = tmp->next) && is_valid_control_node(tmp, "pop") &&
-			(tmp = tmp->next) && is_valid_control_node(tmp, "push") &&
-			(tmp = tmp->next) && is_valid_control_node(tmp, "push") &&
-			(tmp = tmp->next) && is_valid_control_node(tmp, "right") &&
-			(text2 = tmp->next) && is_valid_node(text2, "text") &&
-			(tmp = text2->next) && is_valid_control_node(tmp, "pop") &&
-			(tmp = tmp->next) && is_valid_control_node(tmp, "pop") &&
-			(tmp = tmp->next) && is_valid_control_node(tmp, "pop") &&
-			(last = tmp->next) && is_valid_control_node(last, "right") &&
-			(accent = is_valid_accent(text1, text2))
-		) {
-			/* insert the accent */
-			xmlUnlinkNode(text1);
-			xmlAddPrevSibling(node, text1);
-			xmlNodeSetContentLen(text1, 0, 0);
-			xmlNodeAddContent(text1, accent);
-			xmlFree(accent);
-			
-			next = last->next;
-			do {
-				xmlNodePtr n = node->next;
-				xmlUnlinkNode(node);
-				xmlFreeNode(node);
-				node = n;
-			} while (node != last);
-		} else {
-			xmlTransformationPush(node, transform_large_accent_pattern, param);
+		/* a simple finite state machine. */
+		xmlNodePtr next = node->next;
+		if (state == 0 && is_valid_control_node(node, "push")) {
+			start = node;
+			state = 1;
+		} else if (state == 1 && is_valid_node(node, "text")) {
+			text1 = node;
+			state = 2;
+		} else if (state == 1 && !is_valid_control_node(node, 0)) {
+			state = 0; node = start->next;
+		} else if (state == 2 && is_valid_control_node(node, "pop")) {
+			state = 3;
+		} else if (state == 2 && !is_valid_control_node(node, 0)) {
+			state = 0; node = start->next;
+		} else if (state == 3 && is_valid_node(node, "text")) {
+			text2 = node;
+			make_accent(text1, text2);
+			state = 0; node = start->next;
+		} else if (state == 3 && !is_valid_control_node(node, 0)) {
+			state = 0; node = start->next;
 		}
-		
 		node = next;
 	}
 }
