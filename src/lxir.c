@@ -43,6 +43,7 @@ int do_not_add_space = 0;
 
 static char pbuffer[128];
 
+static
 void print_font(xmlNodePtr root, dvifont_t * font) {
 	xmlNodePtr node, size;
 	
@@ -64,6 +65,7 @@ void print_font(xmlNodePtr root, dvifont_t * font) {
 	}
 }
 
+static
 void make_header(xmlNodePtr root, dvifile_t * dvi) {
 	int i;
 	xmlNodePtr header, size;
@@ -84,6 +86,7 @@ void make_header(xmlNodePtr root, dvifile_t * dvi) {
 			print_font(header, &dvi->fonts[i]);
 }
 
+static
 void make_node(xmlNodePtr root, dvinode_header_t * node) {
 	switch(node->type) {
 		case DVINODE_BOP: {
@@ -153,6 +156,7 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 	}
 }
 
+static
 void make_content(xmlNodePtr root, dvifile_t * dvi) {
 	int i;
 	dvinode_header_t * node;
@@ -172,7 +176,8 @@ int is_valid_node(xmlNodePtr node, const char * name) {
 		strcmp((const char *)node->name, name) == 0;
 }
 
-static is_valid_control_node(xmlNodePtr node, const char * type) {
+static 
+int is_valid_control_node(xmlNodePtr node, const char * type) {
 	return is_valid_node(node, "control") && 
 		(!type || strcmp((const char *)xmlGetProp(node, "type"), type) == 0);
 }
@@ -215,8 +220,8 @@ static
 xmlChar * utf8_trim(const xmlChar * src) {
 	xmlChar * result;
 	int size, len = xmlUTF8Strlen(src);
-	while(*src == ' ') { ++src; --len; }
-	while(*xmlUTF8Strpos(src, len-1) == ' ') { --len; }
+	while(len > 0 && *src == ' ') { ++src; --len; }
+	while(len > 0 && *xmlUTF8Strpos(src, len-1) == ' ') { --len; }
 	size = xmlUTF8Strsize(src, len);
 	result = xmlMalloc(size + 1);
 	memcpy(result, src, size);
