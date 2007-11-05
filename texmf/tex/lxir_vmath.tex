@@ -1,0 +1,105 @@
+\@ifundefined{vrb@catcodes}%
+  {\def\vrb@catcodes{%
+     \catcode`\!12\catcode`\[12\catcode`\]12}}{}
+\def\@makeother#1{\catcode`#112\relax}
+\begingroup
+ \catcode`\ =\active%
+ \def\x{\def\@vobeyspaces{\catcode`\ \active\let \@xobeysp}}
+ \expandafter\endgroup\x
+\def\@xobeysp{\leavevmode\penalty\@M\ } % check this
+\newtoks\formule@line
+\def\formule@startline{\formule@line{}}
+\def\formule@addtoline#1{%
+  \formule@line\expandafter{\the\formule@line#1}}
+\def\formule@processline{\the\formule@line\par}
+\def\formule@finish{\ifcat$\the\formule@line$\else
+  \formule@processline\fi}
+\def\formule@font{\normalfont\ttfamily
+                   \hyphenchar\font\m@ne
+                   \@noligs}
+\def\@formule{
+  \obeylines
+  \let\do\@makeother \dospecials
+  \formule@font
+  \everypar \expandafter{\the\everypar \unpenalty}}
+\def\formule{\begingroup\@formule \frenchspacing\@vobeyspaces
+              \formule@start}
+\def\endformule{\endgroup\xEnd{formula}}
+\begingroup
+ \vrb@catcodes
+ \lccode`\!=`\\ \lccode`\[=`\{ \lccode`\]=`\}
+ \catcode`\~=\active \lccode`\~=`\^^M
+ \lccode`\C=`\C
+ \lowercase{\endgroup
+    \def\formule@start#1{%
+	  \xBegin{formula}%
+      \formule@startline
+      \if\noexpand#1\noexpand~%
+        \let\next\formule@
+      \else \def\next{\formule@#1}\fi
+      \next}%
+    \def\formule@#1~{\formule@@#1!end\@nil}%
+    \def\formule@@#1!end{%
+       \formule@addtoline{#1}%
+       \futurelet\next\formule@@@}%
+    \def\formule@@@#1\@nil{%
+       \ifx\next\@nil
+         \formule@processline
+         \formule@startline
+         \let\next\formule@
+       \else
+         \def\@tempa##1!end\@nil{##1}%
+         \@temptokena{!end}%
+         \def\next{\expandafter\formule@test\@tempa#1\@nil~}%
+       \fi \next}%
+    \def\formule@test#1{%
+           \let\next\formule@test
+           \if\noexpand#1\noexpand~%
+             \expandafter\formule@addtoline
+               \expandafter{\the\@temptokena}%
+             \formule@processline
+             \formule@startline
+             \let\next\formule@
+           \else \if\noexpand#1
+             \@temptokena\expandafter{\the\@temptokena#1}%
+           \else \if\noexpand#1\noexpand[%
+             \let\@tempc\@empty
+             \let\next\formule@testend
+           \else
+             \expandafter\formule@addtoline
+               \expandafter{\the\@temptokena}%
+             \def\next{\formule@#1}%
+           \fi\fi\fi
+           \next}%
+    \def\formule@testend#1{%
+         \if\noexpand#1\noexpand~%
+           \expandafter\formule@addtoline
+             \expandafter{\the\@temptokena[}%
+           \expandafter\formule@addtoline
+             \expandafter{\@tempc}%
+           \formule@processline
+           \formule@startline
+           \let\next\formule@
+         \else\if\noexpand#1\noexpand]%
+           \let\next\formule@@testend
+         \else\if\noexpand#1\noexpand!%
+           \expandafter\formule@addtoline
+             \expandafter{\the\@temptokena[}%
+           \expandafter\formule@addtoline
+             \expandafter{\@tempc}%
+           \def\next{\formule@!}%
+         \else \expandafter\def\expandafter\@tempc\expandafter
+           {\@tempc#1}\fi\fi\fi
+         \next}%
+    \def\formule@@testend{%
+       \ifx\@tempc\@currenvir
+         \formule@finish
+         \edef\next{\noexpand\end{\@currenvir}}%
+       \else
+         \expandafter\formule@addtoline
+           \expandafter{\the\@temptokena[}%
+           \expandafter\formule@addtoline
+             \expandafter{\@tempc]}%
+         \let\next\formule@
+       \fi
+       \next}}
