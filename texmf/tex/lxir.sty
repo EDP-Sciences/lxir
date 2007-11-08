@@ -40,6 +40,11 @@
 %%   Right brace   \}     Tilde         \~}
 \NeedsTeXFormat{LaTeX2e}[1994/05/13]
 \ProvidesPackage{lxir}[2007/06/06 v0.1b LXir tagging package]
+\newif\ifverbatimmath
+\verbatimmathfalse
+\DeclareOption{verbatimmath}{\verbatimmathtrue}
+\ExecuteOptions{}
+\ProcessOptions
 \RequirePackage{lxirtag}[2007/06/06]
 \AtBeginDocument{\spaceskip=1sp\xspaceskip=1sp}
 \AtBeginDocument{\pretolerance=10000}
@@ -251,7 +256,16 @@
 \def\endverbatim{\t@gendverbatim\xEnd{verbatim}}
 %%% From File: ltmath.dtx L4033
 \input lxir_math
+\ifverbatimmath
 \input lxir_vmath
+\fi
+\AtBeginDocument{
+\ifverbatimmath
+\xEmptyA{verbatimmath}{value=true}
+\else
+\xEmptyA{verbatimmath}{value=false}
+\fi
+}
 \let\t@genumerate=\enumerate
 \def\enumerate{\t@genumerate\xBegin{list}\xEmptyA{params}{listType=enumerate}}
 \let\t@gendenumerate=\endenumerate

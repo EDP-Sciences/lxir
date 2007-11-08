@@ -96,8 +96,15 @@
 %
 %    \begin{macrocode}
 \NeedsTeXFormat{LaTeX2e}[1994/05/13]
-%<lxir>\ProvidesPackage{lxir}[2007/06/06 v0.1b LXir tagging package]
-%<lxir>\RequirePackage{lxirtag}[2007/06/06]
+%<*lxir>
+\ProvidesPackage{lxir}[2007/06/06 v0.1b LXir tagging package]
+\newif\ifverbatimmath
+\verbatimmathfalse
+\DeclareOption{verbatimmath}{\verbatimmathtrue}
+\ExecuteOptions{}
+\ProcessOptions
+\RequirePackage{lxirtag}[2007/06/06]
+%</lxir>
 %<lxirtag>\ProvidesPackage{lxirtag}[2007/06/06 v0.1b LXir tagging package]
 %    \end{macrocode}
 % \section{\TeX{} Parameters Setting}
@@ -529,7 +536,16 @@
 %%% From File: ltmath.dtx L4033
 % math
 \input lxir_math
-\input lxir_vmath
+\ifverbatimmath
+	\input lxir_vmath
+\fi
+\AtBeginDocument{
+\ifverbatimmath
+	\xEmptyA{verbatimmath}{value=true}
+\else
+	\xEmptyA{verbatimmath}{value=false}
+\fi
+}
 %    \end{macrocode}
 % \subsection{Lists: Enumerate and Itemize}
 % Other list-like environments (description, ...) are defined in classes.

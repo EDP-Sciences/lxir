@@ -14,6 +14,7 @@ CORE = \
 	lxir.ins \
 	lxir.sty \
 	lxir_math.tex \
+	lxir_vmath.tex \
 	lxirtag.sty \
 	classes_lxir.dtx \
 	classes_lxir.ins \

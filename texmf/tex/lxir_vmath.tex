@@ -22,9 +22,9 @@
   \let\do\@makeother \dospecials
   \formule@font
   \everypar \expandafter{\the\everypar \unpenalty}}
-\def\formule{\begingroup\@formule \frenchspacing\@vobeyspaces
+\def\formule{\xBegin{formule}\begingroup\@formule \frenchspacing\@vobeyspaces
               \formule@start}
-\def\endformule{\endgroup\xEnd{formula}}
+\def\endformule{\endgroup\xEnd{formule}}
 \begingroup
  \vrb@catcodes
  \lccode`\!=`\\ \lccode`\[=`\{ \lccode`\]=`\}
@@ -32,7 +32,6 @@
  \lccode`\C=`\C
  \lowercase{\endgroup
     \def\formule@start#1{%
-	  \xBegin{formula}%
       \formule@startline
       \if\noexpand#1\noexpand~%
         \let\next\formule@
@@ -103,3 +102,15 @@
          \let\next\formule@
        \fi
        \next}}
+
+\def\equation{\xBegin{equation}\refstepcounter{equation}\begingroup\@formule \frenchspacing\@vobeyspaces
+              \formule@start}
+\def\endequation{\endgroup\xEmptyA{eqnnum}{value=\theequation}\xEnd{equation}}
+\def\eqnarray{%
+   \xBegin{eqnarray}%
+   \stepcounter{equation}%
+   \begingroup\@formule \frenchspacing\@vobeyspaces
+              \formule@start}
+\def\endeqnarray{%
+      \endgroup\t@gOntrue\xEnd{eqnarray}}
+
