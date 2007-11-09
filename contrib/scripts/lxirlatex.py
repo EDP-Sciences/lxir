@@ -24,10 +24,11 @@ def temp_source_filename(source):
 def make_lxir_source(source):
 	source = find_source(source)
 	temp = temp_source_filename(source)
-	s = open(source, "rb")
-	d = open(temp, "wb")
+	s = open(source, "r")
+	d = open(temp, "w")
 	has_requirepackage = False
 	has_documentclass = False
+	math_type = 0
 	rp = re.compile("\\\\RequirePackage(\[.*\])?{lxir}")
 	dc = re.compile("\\\\documentclass(\[.*\])?{.*}")
 	for line in s:
@@ -39,9 +40,39 @@ def make_lxir_source(source):
 				if not has_requirepackage:
 					d.write("\\RequirePackage[verbatimmath]{lxir}\n")
 					#~ d.write("\\RequirePackage{lxir}\n")
+			d.write(line)
 		else:
-			pass
-		d.write(line)
+			index = 0
+			while index >= 0:
+				p1 = line.find("$", index)
+				p2 = line.find("$$", index)
+				if p2 >= 0 and (p1 < 0 or p2 <= p1):
+					if p2 > index:
+						d.write(line[index:p2])
+					if math_type == 0:
+						d.write("\n\\begin{formule}\n$$")
+						math_type = 2
+					elif math_type == 2:
+						d.write("$$\n\\end{formule}\n")
+						math_type = 0
+					else:
+						raise Exception("Invalid math transition")
+					index = p2 + 2
+				elif p1 >= 0:
+					if p1 > index:
+						d.write(line[index:p1])
+					if math_type == 0:
+						d.write("\n\\begin{formule}\n$")
+						math_type = 1
+					elif math_type == 1:
+						d.write("$\n\\end{formule}\n")
+						math_type = 0
+					else:
+						raise Exception("Invalid math transition")
+					index = p1 + 1
+				else:
+					d.write(line[index:])
+					index = -1
 	s.close()
 	d.close()
 	return temp
