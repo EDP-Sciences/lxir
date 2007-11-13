@@ -1,6 +1,8 @@
 #!/bin/env python
 import os, sys, re
 
+translation_map = {}
+
 def find_source(name):
 	if os.path.exists(name):
 		return name
@@ -18,28 +20,41 @@ def temp_source_filename(source):
 		ext = '.tex'
 	filename = name + "_lxir" + ext
 	if os.path.exists(filename):
-		raise Exception("Temporary file \"%s\" already exists" % filename)
+		# raise Exception("Temporary file \"%s\" already exists" % filename)
+		os.unlink(filename)
 	return filename
 
 def make_lxir_source(source):
-	source = find_source(source)
-	temp = temp_source_filename(source)
-	s = open(source, "r")
+	global translation_map
+	if translation_map.has_key(source):
+		return translation_map[source]
+	real_source = find_source(source)
+	temp = temp_source_filename(real_source)
+	translation_map[source] = temp
+	s = open(real_source, "r")
 	d = open(temp, "w")
 	has_requirepackage = False
 	has_documentclass = False
 	math_type = 0
 	rp = re.compile("\\\\RequirePackage(\[.*\])?{lxir}")
 	dc = re.compile("\\\\documentclass(\[.*\])?{.*}")
+	it = re.compile("\\\\input ([a-zA-Z@]+)")
 	for line in s:
-		if not has_documentclass:
-			if not has_requirepackage and rp.match(line):
-				has_requirepackage = True
-			if dc.match(line):
-				has_documentclass = True
-				if not has_requirepackage:
-					d.write("\\RequirePackage[verbatimmath]{lxir}\n")
-					#~ d.write("\\RequirePackage{lxir}\n")
+		m = it.match(line)
+		if m:
+			start, stop = m.span()
+			trans = make_lxir_source(m.group(1))
+			base, ext = os.path.splitext(trans)
+			if ext != '.tex':
+				raise Exception("Invalid translation filename generated \"%s\"" % trans)
+			d.write(line[:start] + "\\input " + base + line[stop:])
+		elif not has_requirepackage and rp.match(line):
+			has_requirepackage = True
+			d.write(line)
+		elif dc.match(line):
+			has_documentclass = True
+			if not has_requirepackage:
+				d.write("\\RequirePackage[verbatimmath]{lxir}\n")
 			d.write(line)
 		else:
 			index = 0
@@ -52,12 +67,16 @@ def make_lxir_source(source):
 					if math_type == 0:
 						d.write("\n\\begin{formule}\n$$")
 						math_type = 2
+						index = p2 + 2
 					elif math_type == 2:
-						d.write("$$\n\\end{formule}\n")
+						d.write("$$\n\\end{formule}")
 						math_type = 0
+						index = p2 + 2
+					elif math_type == 1:
+						d.write("$$")
+						index = p2 + 2
 					else:
 						raise Exception("Invalid math transition")
-					index = p2 + 2
 				elif p1 >= 0:
 					if p1 > index:
 						d.write(line[index:p1])
@@ -97,9 +116,8 @@ def main():
 		source = make_lxir_source(sys.argv[1])
 		dvi = compile_latex_source(source)
 		xml = compile_lxir_source(dvi)
-		os.unlink(source)
 	except Exception, e:
-		sys.stderr.write(str(e) + "\n")
+		sys.stderr.write("Error: " + str(e) + "\n")
 		sys.exit(1)
 
 if __name__ == '__main__':
