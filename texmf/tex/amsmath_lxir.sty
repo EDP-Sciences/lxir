@@ -16,6 +16,29 @@
 %
 % This work consists of the files amsmath_lxir.sty.
 % amsmath redefinie cette macro
+\ifverbatimmath
+
+\def\lxiramsenv#1{\xBegin{#1}\refstepcounter{equation}\begingroup\@formule \frenchspacing\@vobeyspaces
+              \formule@start}
+\def\endlxiramsenv#1{\endgroup\xEmptyA{eqnnum}{value=\theequation}\xEnd{#1}}
+\def\lxiramsenvstar#1{\xBegin{#1}\begingroup\@formule \frenchspacing\@vobeyspaces
+              \formule@start}
+\def\endlxiramsenvstar#1{\endgroup\xEnd{#1}}
+
+\renewenvironment{equation}{\lxiramsenv{equation}}{\endlxiramsenv{equation}}
+\renewenvironment{equation*}{\lxiramsenvstar{equation-star}}{\endlxiramsenvstar{equation-star}}
+\renewenvironment{multline}{\lxiramsenv{multline}}{\endlxiramsenv{multline}}
+\renewenvironment{multline*}{\lxiramsenvstar{multline-star}}{\endlxiramsenvstar{multline-star}}
+\renewenvironment{gather}{\lxiramsenv{gather}}{\endlxiramsenv{gather}}
+\renewenvironment{gather*}{\lxiramsenvstar{gather-star}}{\endlxiramsenvstar{gather-star}}
+\renewenvironment{align}{\lxiramsenv{align}}{\endlxiramsenv{align}}
+\renewenvironment{align*}{\lxiramsenvstar{align-star}}{\endlxiramsenvstar{align-star}}
+\renewenvironment{flalign}{\lxiramsenv{flalign}}{\endlxiramsenv{flalign}}
+\renewenvironment{flalign*}{\lxiramsenvstar{flalign-star}}{\endlxiramsenvstar{flalign-star}}
+\renewenvironment{split}{\lxiramsenv{split}}{\endlxiramsenv{split}}
+\renewenvironment{gathered}{\lxiramsenv{gathered}}{\endlxiramsenv{gathered}}
+\renewenvironment{aligned}{\lxiramsenv{aligned}}{\endlxiramsenv{aligned}}
+\else
 \def\@eqnnum{\xEmptyA{equationumber}{value=\theequation}}
 \renewenvironment{equation}{%
   \incr@eqnum
@@ -30,3 +53,4 @@
   \ignorespacesafterend
 }
 \let\endmathdisplay@a=\relax
+\fi
