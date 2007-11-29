@@ -523,7 +523,7 @@ void fill_attributes(const char * content, xmlNodePtr attr) {
 	}
 	if (state != 0) {
 		fprintf(stderr, "Error decoding attributes from \"%s\" (%d)\n", content, state);
-		if (state == 1) free(name);
+		if (state == 2) free(name);
 	}
 }
 
