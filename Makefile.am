@@ -14,3 +14,9 @@ endif
 
 SUBDIRS = $(KPSE_PATH) libfontmap libdvi src texmf
 EXTRA_DIST = lppl.txt gpl-3.0.txt
+
+if USE_KPSE
+MKTEXLSR = `which mktexlsr`
+install-data-hook:
+	$(MKTEXLSR) $(TEXMF_DEST_DIR)
+endif

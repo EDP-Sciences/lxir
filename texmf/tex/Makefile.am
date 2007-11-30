@@ -25,4 +25,3 @@ CORE = \
 
 dist_tex_DATA = $(CORE) $(PACKAGES)
 
-
