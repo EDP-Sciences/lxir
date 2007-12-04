@@ -21,6 +21,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
 		xmlns="http://www.w3.org/1999/xhtml"
 		xmlns:mm="http://www.w3.org/1998/Math/MathML"
+                xmlns:lxir="http://www.latex-lxir.org"
 		>
   <xsl:template match="mm:math">
     <span class="math">
@@ -31,7 +32,7 @@
   <xsl:template match="equation">
     <div class="{name()}">
       <xsl:attribute name="eqNum">
-	<xsl:value-of select="eqNum/@num"/>
+	<xsl:value-of select="eqnnum/@lxir:value"/>
       </xsl:attribute>
       <xsl:if test="label">
 	<xsl:attribute name="eqLabel">
@@ -39,10 +40,7 @@
 	</xsl:attribute>
 	<xsl:apply-templates select="label"/>
       </xsl:if>
-      <xsl:apply-templates select="mm:math"/>
-      <span class="eqNum">
-	<xsl:value-of select="eqNum/@num"/>
-      </span>
+      <xsl:apply-templates />
     </div>
   </xsl:template>
 

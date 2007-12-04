@@ -103,14 +103,13 @@
        \fi
        \next}}
 
-\def\equation{\xBegin{equation}\refstepcounter{equation}\begingroup\@formule \frenchspacing\@vobeyspaces
+\def\lxirvmathenv#1{\xBegin{#1}\refstepcounter{equation}\begingroup\@formule \frenchspacing\@vobeyspaces
               \formule@start}
-\def\endequation{\endgroup\xEmptyA{eqnnum}{value=\theequation}\xEnd{equation}}
-\def\eqnarray{%
-   \xBegin{eqnarray}%
-   \stepcounter{equation}%
-   \begingroup\@formule \frenchspacing\@vobeyspaces
+\def\endlxirvmathenv#1{\endgroup\xEmptyA{eqnnum}{value=\theequation}\xEnd{#1}}
+\def\lxirvmathenvstar#1{\xBegin{#1}\begingroup\@formule \frenchspacing\@vobeyspaces
               \formule@start}
-\def\endeqnarray{%
-      \endgroup\t@gOntrue\xEnd{eqnarray}}
+\def\endlxirvmathenvstar#1{\endgroup\xEnd{#1}}
+
+\renewenvironment{equation}{\lxirvmathenv{equation}}{\endlxirvmathenv{equation}}
+\renewenvironment{eqnarray}{\lxirvmathenv{eqnarray}}{\endlxirvmathenv{eqnarray}}
 
