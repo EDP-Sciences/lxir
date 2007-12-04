@@ -29,8 +29,10 @@
       <xsl:apply-templates select="//maketitle"/>	
       <xsl:apply-templates select="//doi"/>	
       <xsl:apply-templates select="//idline"/>	
+      <xsl:apply-templates select="//title"/>	
       <xsl:apply-templates select="//subtitle"/>	
       <xsl:apply-templates select="//authors"/>	
+      <xsl:apply-templates select="//author"/>	
       <xsl:apply-templates select="//author[parent::. != 'authors']"/>	
       <xsl:apply-templates select="//institutes"/>	
       <xsl:apply-templates select="//abstract"/>
