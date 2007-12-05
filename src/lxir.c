@@ -451,7 +451,10 @@ int is_valid_tag_name(const char * content, xmlChar ** pname, int * popen) {
 	char * name;
 	int len;
 	
-	if(strncmp(content, "::tag lxir ", 11) != 0) return 0;
+	if(strncmp(content, "::tag lxir ", 11) != 0) {
+		fprintf(stderr, "Unrecognized tag prefix in \"%s\"\n", content);
+		return 0;
+	}
 	content += 11;
 	s = strchr(content, '(') + 1;
 	if (!s) {
