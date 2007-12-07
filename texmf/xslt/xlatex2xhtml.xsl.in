@@ -72,21 +72,8 @@
 	<!-- -->
 	<span class="body">
 	  <xsl:apply-templates select="text()|*[
-				       name()!= 'title' 
-				       and name()!= 'subtitle' 
-				       and name()!= 'maketitle' 
-				       and name()!='titlePage' 
-				       and name()!='author' 
-				       and name()!='abstract'
-				       and name()!='doi'
-				       and name()!='DOI'
-				       and name()!='headnote'
-				       and name()!='keywords'
-				       and name()!='idline'
-				       and name()!='authors'
-				       and name()!='LaTeXClass'
-				       and name()!='institutes'
-				       ] "/> 
+				      (not(@lxir:header) or @lxir:header != 'yes')
+                                       				       ] "/> 
 	</span>
       </body>
     </html>

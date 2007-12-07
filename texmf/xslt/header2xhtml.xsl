@@ -19,29 +19,23 @@
 % This work consists of the files header2xhtml.xsl.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+		xmlns:lxir="http://www.latex-lxir.org"
 		xmlns="http://www.w3.org/1999/xhtml" >
   <xsl:output method="xml" indent="no"/>
   <xsl:template name="header">
     <a name="top"/>
     <div class="header">
+      <xsl:apply-templates select="//*[@lxir:header='yes']"/>
       <xsl:apply-templates select="//LaTeXClass"/>	
-      <xsl:apply-templates select="//DOI"/>	
       <xsl:apply-templates select="//maketitle"/>	
-      <xsl:apply-templates select="//doi"/>	
-      <xsl:apply-templates select="//idline"/>	
-      <xsl:apply-templates select="//title"/>	
-      <xsl:apply-templates select="//subtitle"/>	
-      <xsl:apply-templates select="//authors"/>	
-      <xsl:apply-templates select="//author"/>	
-      <xsl:apply-templates select="//author[parent::. != 'authors']"/>	
-      <xsl:apply-templates select="//institutes"/>	
-      <xsl:apply-templates select="//abstract"/>
-      <xsl:apply-templates select="//keywords"/>
-    </div>
+         </div>
   </xsl:template>
 
-<xsl:template match="title|subtitle|author|date|abstract">
+<xsl:template match="title|subtitle|author|date|abstract|resume">
   <div class="{name(.)}">
+    <xsl:attribute name="lxir:header">
+      <xsl:value-of select="@lxir:header"/>
+    </xsl:attribute>
     <xsl:apply-templates/>
   </div>
 </xsl:template>

@@ -19,24 +19,13 @@
 % This work consists of the files par2xhtml.xsl.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-		xmlns="http://www.w3.org/1999/xhtml" >
+		xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns:lxir="http://www.latex-lxir.org">
   <xsl:template match="par">
     <div class="{name()}">
       <xsl:apply-templates select="text()|*[
-				     name()!= 'title' 
-				     and name()!= 'subtitle' 
-				     and name()!= 'maketitle' 
-				     and name()!='titlePage' 
-				     and name()!='authors' 
-				     and name()!='date' 
-				     and name()!='authors'
-				     and name()!='doi'
-				     and name()!='DOI'
-				     and name()!='idline'
-				     and name()!='keywords'
-				     and name()!='institutes'
-				     and name()!='abstract'
-				     and name()!='author'] "/>
+				     (not(@lxir:header) or @lxir:header != 'yes') 
+                                     ] "/>
     </div>
     <!-- line break for better debug -->
     <xsl:text>&#xa;</xsl:text>

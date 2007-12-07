@@ -77,7 +77,13 @@ div { border: 1px dotted #F7E205;
            border: 3px solid #F7E205; 		
            font-weight: normal;
            }
-
+.resume:before{content: '-- RESUME -- ' ; }
+.resume{ text-align: justify;
+           margin: 10px;
+           padding: 5px; 
+           border: 3px solid #F7E205; 		
+           font-weight: normal;
+           }
 /* par */
 
 .par { text-align: justify;
@@ -187,7 +193,10 @@ div { border: 1px dotted #F7E205;
              border: 1px solid #F7E205; 		
              padding:1em;
              padding:0.5em;}
-.institute{ background-color: #FFFFFF;}
+.institute > .text{ background-color: #FFFFFF;
+		text-align: left;
+  		display: block;
+}
 
 .authors{  text-align: left;
           margin-left: 10px;}
@@ -207,7 +216,6 @@ div { border: 1px dotted #F7E205;
 .DOI{ text-align: left; 
       background-color: #FFFFFF;
       color: #00008b;}
-
 .keywords:before{ content: "Key Words: " }
 .keywords{text-align: left; } 
 ._aa_AASection:before{ content: "Section number: " ; }
@@ -239,6 +247,10 @@ div { border: 1px dotted #F7E205;
 
 .math{ color: #FF0000; }
 
+/* math verbatim */
+.formule { color: #FF0000; }
+.eqnarray { color: #FF0000; }
+.equation { color: #FF0000; }
 /* verbatim */
 
 .verbatim{ color: #2C2F85;
