@@ -323,6 +323,8 @@ xmlNodePtr create_line_groups(xmlNodePtr tab) {
 			c += atoi((const char *) xmlGetProp(node, "span"));
 		} else if (is_node_element(node, "eol")) {
 			tageol = 1;
+		} else if (is_node_element(node, "setcolor")) {
+			/* nothing here */
 		} else if (is_node_element_not(node,"text")) {
 			fprintf(stderr, "Unknown node in tabular, %s (id: %s)\n", (const char *)node->name, (const char *)xmlGetProp(node, BAD_CAST "id"));
 		}
