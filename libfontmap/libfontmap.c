@@ -436,7 +436,11 @@ int lfm_get_translation_map(const char * fontname, struct translation_info * pin
 		font = font->next;
 	}
 	fprintf(stderr, "Unknown font : %s\n", fontname);
-	return lfm_get_translation_map("cmr10", pinfo);
+	if (strcmp(fontname, "cmr10")) {
+		return lfm_get_translation_map("cmr10", pinfo);
+	} else {
+		exit(-1);
+	}
 }
 
 int lfm_get_math_encoding_map(const char * mathfont, struct translation_info * pinfo) {
