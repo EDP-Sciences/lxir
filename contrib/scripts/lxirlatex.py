@@ -38,15 +38,11 @@ def first_special_char(line, index):
 
 def escape_math(expr):
 	expr = expr.replace("!", "!!")
-	expr = expr.replace("[", "![")
-	expr = expr.replace("]", "!]")
-	expr = expr.replace("*", "!*")
-	expr = expr.replace("-", "!-")
-	expr = expr.replace("{", "[")
-	expr = expr.replace("}", "]")
-	expr = expr.replace("^", "*")
-	expr = expr.replace("_", "-")
-	expr = expr.replace("\\", "!")
+	expr = expr.replace("{", "![")
+	expr = expr.replace("}", "!]")
+	expr = expr.replace("^", "!*")
+	expr = expr.replace("_", "!-")
+	expr = expr.replace("\\", "!/")
 	return expr
 
 def make_lxir_source(source):

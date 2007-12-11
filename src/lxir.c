@@ -182,6 +182,12 @@ int is_valid_control_node(xmlNodePtr node, const char * type) {
 		(!type || strcmp((const char *)xmlGetProp(node, "type"), type) == 0);
 }
 
+static inline
+int is_valid_node_type(xmlNodePtr node, const char * type) {
+	return is_valid_node(node, "node") && 
+		(strcmp((const char *)xmlGetProp(node, "type"), type) == 0);
+}
+
 void remove_page_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
 	/* this function takes page nodes out of the document */
 	xmlNodePtr node = root->children;
@@ -1285,10 +1291,7 @@ void relink_label(xmlNodePtr src, xmlNodePtr dst) {
 	xmlNodePtr node = src->children;
 	while (node) {
 		xmlChar * type;
-		if (is_valid_node(node, "node") &&
-			(type = xmlGetProp(node, BAD_CAST "type")) &&
-			strcmp((const char *)type, "label") == 0
-		) {
+		if (is_valid_node_type(node, "label")) {
 			xmlUnlinkNode(node);
 			xmlAddPrevSibling(dst, node);
 			return ;
@@ -1349,6 +1352,64 @@ void replace_entities_in_text(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
+static
+void transform_content(char * content, const char * needle, const char * replacement) {
+	char * found;
+	while ((found = strstr(content, needle))) {
+		int nlen = strlen(needle);
+		int rlen = strlen(replacement);
+		int flen = strlen(found) - nlen + 1;
+		memcpy(found, replacement, rlen);
+		memmove(found + rlen, found + nlen, flen);
+	}
+}
+
+static
+void transform_formula_content(xmlNodePtr node, xmlChar * content) {
+	char * temp = strdup((const char *)content);
+	transform_content(temp, "!/", "\\");
+	transform_content(temp, "!-", "_");
+	transform_content(temp, "!*", "^");
+	transform_content(temp, "![", "{");
+	transform_content(temp, "!]", "}");
+	transform_content(temp, "!!", "!");
+	xmlNewChild(node, NULL, BAD_CAST "text", BAD_CAST temp);
+	free(temp);
+}
+
+static
+void transform_verbatim_formula(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children;
+	
+	while (node) {
+		xmlNodePtr next = node->next;
+		if (is_valid_node_type(node, "formule")) {
+			xmlChar * content = xmlGetProp(node, BAD_CAST "content");
+			if (content) {
+				transform_formula_content(node, content);
+				xmlUnsetProp(node, BAD_CAST "content");
+			} else {
+				xmlNodePtr child = node->children;
+				while (child) {
+					xmlNodePtr next = child->next;
+					if (is_valid_node_type(child, "parsep") && child->next && !is_valid_node_type(child->next, "eqnnum")) {
+						xmlNodePtr prev = child->prev;
+						if (prev && is_valid_node(prev, "text")) {
+							xmlAddChild(prev, xmlNewText(BAD_CAST "\n"));
+							xmlUnlinkNode(child);
+							xmlFreeNode(child);
+						}
+					}
+					child = next;
+				}
+			}
+		} else {
+			xmlTransformationPush(node, transform_verbatim_formula, param);
+		}
+		node = next;
+	}
+}
+
 void xmlRegisterTextTransformations() {
 #define DEF(x) xmlTransformationRegister("text", #x, x, 0);
 	DEF(remove_page_nodes)
@@ -1366,6 +1427,7 @@ void xmlRegisterTextTransformations() {
 	DEF(replace_entities_in_text)
 	DEF(replace_tabular_math_entities)
 	DEF(replace_math_entities)
+	DEF(transform_verbatim_formula)
 #undef DEF
 #define DEF(x) xmlTransformationRegister("math", #x, x, 0);
 	DEF(replace_entities_in_text)

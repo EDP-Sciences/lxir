@@ -77,6 +77,7 @@
 		<transformation name="replace_entities_in_text" />
 		<transformation name="replace_tabular_math_entities" report="1"/>
 		<transformation name="replace_math_entities" />
+		<transformation name="transform_verbatim_formula" />
 
 		<!-- Cette serie de transformations XSLT permet d'obtenir un XML 
 		     plus simple et plus facilement manipulable :
