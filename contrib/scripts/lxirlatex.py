@@ -33,7 +33,8 @@ def first_special_char(line, index):
 	for char in ["$", "{", "}", "%"]:
 		m = line.find(char, index)
 		if m > -1 and (n == -1 or m < n):
-			n = m
+			if char != "%" or m <= 0 or line[m-1] != "\\":
+				n = m
 	return n
 
 def escape_math(expr):
@@ -59,6 +60,7 @@ def make_lxir_source(source):
 	has_requirepackage = False
 	has_documentclass = False
 	math_type = 0
+	bracket_level = 0
 	rp = re.compile("\\\\RequirePackage(\[.*\])?{lxir}")
 	dc = re.compile("\\\\documentclass(\[.*\])?{.*}")
 	it = re.compile("\\\\input ([a-zA-Z@]+)")
@@ -82,27 +84,26 @@ def make_lxir_source(source):
 				else:
 					d.write("\\RequirePackage[verbatimmath]{lxir}\n")
 			d.write(line)
+			bracket_level = 0
 		elif not has_documentclass or not options.verbmath:
 			d.write(line)
 		else:
 			index = 0
-			bracket_level = 0
+			d.write("%d\t" % bracket_level)
 			while index >= 0:
 				nindex = first_special_char(line, index)
 				if nindex > -1:
 					c = line[nindex]
 					if c == "{":
-						if math_type == 0:
-							bracket_level += 1
-							d.write(line[index:nindex + 1])
-							index = nindex + 1
+						bracket_level += 1
+						d.write(line[index:nindex + 1])
+						index = nindex + 1
 					elif c == "}":
-						if math_type == 0:
-							bracket_level -= 1
-							if bracket_level < 0:
-								raise Exception("Error in input, too many closing brackets")
-							d.write(line[index:nindex + 1])
-							index = nindex + 1
+						bracket_level -= 1
+						if bracket_level < 0:
+							raise Exception("Error in input, too many closing brackets")
+						d.write(line[index:nindex + 1])
+						index = nindex + 1
 					elif c == "%":
 						d.write(line[index:]) # keep comments (not in math ?)
 						index = -1
