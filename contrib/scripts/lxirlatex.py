@@ -89,7 +89,6 @@ def make_lxir_source(source):
 			d.write(line)
 		else:
 			index = 0
-			d.write("%d\t" % bracket_level)
 			while index >= 0:
 				nindex = first_special_char(line, index)
 				if nindex > -1:
@@ -109,7 +108,7 @@ def make_lxir_source(source):
 						index = -1
 					elif c == "$":
 						if math_type == 0:
-							if line[nindex:nindex+1] == "$$":
+							if line[nindex:nindex+2] == "$$":
 								if bracket_level != 0:
 									raise Exception("Error in input, $$ inside brackets")
 								math_type = 2
@@ -131,7 +130,7 @@ def make_lxir_source(source):
 								math_type = 0
 								index = nindex + 1
 						elif math_type == 2:
-							if line[nindex:nindex+1] == "$$":
+							if line[nindex:nindex+2] == "$$":
 								d.write(line[index:nindex] + "$$\n\\end{formule}\n")
 								math_type = 0
 								index = nindex + 2
