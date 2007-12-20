@@ -33,7 +33,7 @@ def first_special_char(line, index):
 	for char in ["$", "{", "}", "%"]:
 		m = line.find(char, index)
 		if m > -1 and (n == -1 or m < n):
-			if char != "%" or m <= 0 or line[m-1] != "\\":
+			if (char != "%" and char != "$") or m <= 0 or line[m-1] != "\\":
 				n = m
 	return n
 
