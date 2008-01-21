@@ -46,6 +46,13 @@ def escape_math(expr):
 	expr = expr.replace("\\", "!/")
 	return expr
 
+def fix_tex_line(line):
+	line = line.replace("\\[", "$$")
+	line = line.replace("\\]", "$$")
+	line = line.replace("\\(", "$$")
+	line = line.replace("\\)", "$$")
+	return line
+
 def make_lxir_source(source):
 	if options.verbose:
 		print("processing file :%s" % source)
@@ -66,7 +73,7 @@ def make_lxir_source(source):
 	it = re.compile("\\\\input ([a-zA-Z@]+)")
 	line_count = 0
 	for line in s:
-		line = line.replace("\\[", "$$").replace("\\]", "$$")
+		line = fix_tex_line(line)
 		line_count += 1
 		m = it.match(line)
 		if m:
