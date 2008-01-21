@@ -64,7 +64,10 @@ def make_lxir_source(source):
 	rp = re.compile("\\\\RequirePackage(\[.*\])?{lxir}")
 	dc = re.compile("\\\\documentclass(\[.*\])?{.*}")
 	it = re.compile("\\\\input ([a-zA-Z@]+)")
+	line_count = 0
 	for line in s:
+		line = line.replace("\\[", "$$").replace("\\]", "$$")
+		line_count += 1
 		m = it.match(line)
 		if m:
 			start, stop = m.span()
@@ -100,7 +103,7 @@ def make_lxir_source(source):
 					elif c == "}":
 						bracket_level -= 1
 						if bracket_level < 0:
-							raise Exception("Error in input, too many closing brackets")
+							raise Exception("too many closing brackets")
 						d.write(line[index:nindex + 1])
 						index = nindex + 1
 					elif c == "%":
@@ -110,7 +113,7 @@ def make_lxir_source(source):
 						if math_type == 0:
 							if line[nindex:nindex+2] == "$$":
 								if bracket_level != 0:
-									raise Exception("Error in input, $$ inside brackets")
+									raise Exception("Blockmode math ($$) inside brackets")
 								math_type = 2
 								d.write(line[index:nindex] + "\n\\begin{formule}\n$$")
 								index = nindex + 2
@@ -122,7 +125,7 @@ def make_lxir_source(source):
 								else:
 									findex = line.find("$", nindex + 1)
 									if findex == -1:
-										raise Exception("Error in input, multiline math expression inside brackets")
+										raise Exception("Multiline math expression inside brackets at line %d" % line_count)
 									d.write(line[index:nindex] + "\\verbatimmathformule{%s}" % escape_math(line[nindex + 1:findex]))
 									index = findex + 1
 						elif math_type == 1:
