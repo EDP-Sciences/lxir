@@ -191,7 +191,8 @@ PACKAGES = \
 	color_lxir.sty \
 	graphicx_lxir.sty \
 	natbib_lxir.sty \
-	tabularx_lxir.sty
+	tabularx_lxir.sty \
+	hyperref_lxir.sty
 
 CORE = \
 	lxir.dtx \
