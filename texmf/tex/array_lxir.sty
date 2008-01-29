@@ -122,8 +122,9 @@
                                     \let\d@llarend\endgroup
   \@tabarray}
 %% \def\endtabular{\crcr \egroup \egroup \gdef\@preamble{} $\egroup\xEnd{tabular}}%$ for emacs
-\def\endtabular{\endarray $\egroup\xEnd{tabular}}%$ for emacs
-\def\endarray{\crcr \egroup \egroup \gdef\@preamble{}\@tagarrayfalse}
+\def\endtabular{\@endarray $\egroup\xEnd{tabular}}%$ for emacs
+\def\@endarray{\crcr \egroup \egroup \gdef\@preamble{}\@tagarrayfalse}
+\def\endarray{\@endarray\xEnd{array}}
 %%%%%%%%%% \@mkpream
 \def\@mkpream#1{\sbox{\t@g@coldesc}{}%
         \@addtocoldesc{\xBegin{columnsModel}}%
