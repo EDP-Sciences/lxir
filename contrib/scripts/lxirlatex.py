@@ -30,7 +30,7 @@ def temp_source_filename(source):
 
 def first_special_char(line, index):
 	n = -1
-	for char in ["$", "{", "}", "%"]:
+	for char in ["$", "{", "}", "%", "[", "]"]:
 		m = line.find(char, index)
 		if m > -1 and (n == -1 or m < n):
 			if (char != "%" and char != "$") or m <= 0 or line[m-1] != "\\":
@@ -103,11 +103,11 @@ def make_lxir_source(source):
 				nindex = first_special_char(line, index)
 				if nindex > -1:
 					c = line[nindex]
-					if c == "{":
+					if c == "{" or c == "[":
 						bracket_level += 1
 						d.write(line[index:nindex + 1])
 						index = nindex + 1
-					elif c == "}":
+					elif c == "}" or c == "]":
 						bracket_level -= 1
 						if bracket_level < 0:
 							raise Exception("too many closing brackets")
