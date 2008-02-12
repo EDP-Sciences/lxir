@@ -1366,7 +1366,13 @@ void transform_content(char * content, const char * needle, const char * replace
 
 static
 void transform_formula_content(xmlNodePtr node, xmlChar * content) {
-	char * temp = strdup((const char *)content);
+	size_t len = strlen((const char *) content);
+	char * temp = malloc(len + 3);
+	temp[0] = '$';
+	memcpy(temp + 1, content, len);
+	temp[len + 1] = '$';
+	temp[len + 2] = 0;
+	
 	transform_content(temp, "!/", "\\");
 	transform_content(temp, "!-", "_");
 	transform_content(temp, "!*", "^");
