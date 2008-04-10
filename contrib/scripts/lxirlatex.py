@@ -44,6 +44,7 @@ def escape_math(expr):
 	expr = expr.replace("^", "!*")
 	expr = expr.replace("_", "!-")
 	expr = expr.replace("\\", "!/")
+	expr = expr.replace("\n", "!n")
 	return expr
 
 def fix_tex_line(line):
@@ -53,7 +54,56 @@ def fix_tex_line(line):
 	line = line.replace("\\)", "$$")
 	return line
 
-def make_lxir_source(source):
+def find_end_of_macro(content, start):
+	pos = start
+	count = 1
+	opened = content.find("{", pos)
+	closed = content.find("}", pos)
+	while count > 0 and opened > 0 and closed > 0:
+		if opened < closed:
+			count += 1
+			pos = opened + 1
+			opened = content.find("{", pos)
+		else:
+			count -= 1
+			pos = closed + 1
+			closed = content.find("}", pos)
+	return pos
+
+def extract_macros(source):
+	macros = []
+	s = open(find_source(source), "r")
+	content = s.read()
+	s.close()
+
+	rdef = re.compile("\\\\def[^{]*{")
+	rcmd = re.compile("\\\\newcommand\\s*{[^}]*}\\s*{")
+	rrcmd = re.compile("\\\\renewcommand\\s*{[^}]*}\\s*{")
+	
+	while content:
+		start, stop = len(content), -1
+		m = rdef.search(content)
+		if m:
+			start, stop = m.span()
+		m = rcmd.search(content)
+		if m:
+			ostart, ostop = m.span()
+			if ostart < start:
+				start, stop = ostart, ostop
+		m = rrcmd.search(content)
+		if m:
+			ostart, ostop = m.span()
+			if ostart < start:
+				start, stop = ostart, ostop
+		if stop >= 0:
+			stop = find_end_of_macro(content, stop)
+			macros.append(content[start:stop])
+			content = content[stop+1:]
+		else:
+			content = None
+	return macros
+
+def make_lxir_source(source, macros):
 	if options.verbose:
 		print("processing file :%s" % source)
 	global translation_map
@@ -66,6 +116,7 @@ def make_lxir_source(source):
 	d = open(temp, "w")
 	has_requirepackage = False
 	has_documentclass = False
+	has_inserted_macros = False
 	math_type = 0
 	bracket_level = 0
 	rp = re.compile("\\\\RequirePackage(\[.*\])?{lxir}")
@@ -98,6 +149,10 @@ def make_lxir_source(source):
 		elif not has_documentclass or not options.verbmath:
 			d.write(line)
 		else:
+			if not has_inserted_macros:
+				for macro in macros:
+					d.write("\\verbatimmacro{%s}\n" % escape_math(macro))
+				has_inserted_macros = True
 			index = 0
 			while index >= 0:
 				nindex = first_special_char(line, index)
@@ -188,7 +243,8 @@ if __name__ == '__main__':
 			if len(args) < 1:
 				parser.error("Need at least one source file")
 			for arg in args:
-				source = make_lxir_source(arg)
+				macros = extract_macros(arg)
+				source = make_lxir_source(arg, macros)
 				dvi = compile_latex_source(source)
 				xml = compile_lxir_source(dvi)
 				if options.delete_temp:

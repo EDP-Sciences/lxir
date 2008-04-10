@@ -1365,20 +1365,36 @@ void transform_content(char * content, const char * needle, const char * replace
 }
 
 static
-void transform_formula_content(xmlNodePtr node, xmlChar * content) {
-	size_t len = strlen((const char *) content);
-	char * temp = malloc(len + 3);
-	temp[0] = '$';
-	memcpy(temp + 1, content, len);
-	temp[len + 1] = '$';
-	temp[len + 2] = 0;
-	
+char * transform_verbatim_content(xmlChar * content) {
+	char * temp = strdup((const char *) content);
+	transform_content(temp, "!n", "\n");
 	transform_content(temp, "!/", "\\");
 	transform_content(temp, "!-", "_");
 	transform_content(temp, "!*", "^");
 	transform_content(temp, "![", "{");
 	transform_content(temp, "!]", "}");
 	transform_content(temp, "!!", "!");
+	
+	return temp;
+}
+
+static
+void transform_formula_content(xmlNodePtr node, xmlChar * content) {
+	char * temp = transform_verbatim_content(content);
+	int len = strlen(temp);
+	char * ftemp = malloc(len + 3);
+	memcpy(ftemp + 1 , temp, len);
+	free(temp);
+	ftemp[0] = '$';
+	ftemp[len + 1] = '$';
+	ftemp[len + 2] = 0;
+	xmlNewChild(node, NULL, BAD_CAST "text", BAD_CAST ftemp);
+	free(ftemp);
+}
+
+static
+void transform_macro_content(xmlNodePtr node, xmlChar * content) {
+	char * temp = transform_verbatim_content(content);
 	xmlNewChild(node, NULL, BAD_CAST "text", BAD_CAST temp);
 	free(temp);
 }
@@ -1416,6 +1432,25 @@ void transform_verbatim_formula(xmlNodePtr root, xmlTransformationEntry * param)
 	}
 }
 
+static
+void transform_verbatim_macro(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children;
+	
+	while (node) {
+		xmlNodePtr next = node->next;
+		if (is_valid_node_type(node, "macro")) {
+			xmlChar * content = xmlGetProp(node, BAD_CAST "content");
+			if (content) {
+				transform_macro_content(node, content);
+				xmlUnsetProp(node, BAD_CAST "content");
+			} 
+		} else {
+			xmlTransformationPush(node, transform_verbatim_macro, param);
+		}
+		node = next;
+	}
+}
+
 void xmlRegisterTextTransformations() {
 #define DEF(x) xmlTransformationRegister("text", #x, x, 0);
 	DEF(remove_page_nodes)
@@ -1434,6 +1469,7 @@ void xmlRegisterTextTransformations() {
 	DEF(replace_tabular_math_entities)
 	DEF(replace_math_entities)
 	DEF(transform_verbatim_formula)
+	DEF(transform_verbatim_macro)
 #undef DEF
 #define DEF(x) xmlTransformationRegister("math", #x, x, 0);
 	DEF(replace_entities_in_text)
