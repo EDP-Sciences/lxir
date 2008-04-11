@@ -35,7 +35,7 @@ def find_source(name):
 	raise Exception("Source file \"%s\" not found" % name)
 
 def remove(name, istemp):
-	global tempfiles
+	global tempfiles, options
 	if not os.path.exists(name):
 		return
 	if not options.overwrite:
@@ -62,6 +62,7 @@ class ImageGenerator:
 		o.write("\\end{document}\n")
 		o.close()
 	def makeImage(self, formula):
+		global options
 		prefix = os.path.join(self.base_path, "img" + str(self.index))
 		self.index += 1
 
@@ -78,7 +79,7 @@ class ImageGenerator:
 		os.system("latex " + prefix + ".tex")
 		os.system("dvips -o " + prefix + ".ps " + prefix + ".dvi")
 		os.system("ps2epsi " + prefix + ".ps " + prefix + ".epsi")
-		os.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r92 -sDEVICE=pngalpha -sOutputFile=" + prefix + ".png " + prefix + ".epsi")
+		os.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r" + str(options.resolution) + " -sDEVICE=pngalpha -sOutputFile=" + prefix + ".png " + prefix + ".epsi")
 		
 		return prefix + ".png"
 
@@ -135,7 +136,8 @@ if __name__ == '__main__':
 		parser.add_option("-O", "--not-overwrite", help="Do not overwrite temporary files", action="store_false", dest="overwrite")
 		parser.add_option("-d", "--delete-temp", help="Delete temporary files", action="store_true")
 		parser.add_option("-D", "--not-delete-temp", help="Do not delete temporary files", action="store_false", dest="delete_temp")
-		parser.set_defaults(overwrite = True, verbmath = True, verbose = False)
+		parser.add_option("-r", "--resolution", help="Resolution of the generated images", action="store", type="int")
+		parser.set_defaults(overwrite = True, verbmath = True, verbose = False, resolution=92)
 		try:
 			options, args = parser.parse_args(args = args)
 			if len(args) < 1:
