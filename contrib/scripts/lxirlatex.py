@@ -1,7 +1,7 @@
 #!/bin/env python
 import os, sys, re
 
-VERSION = "0.2"
+VERSION = "0.3"
 
 translation_map = {}
 
@@ -68,6 +68,7 @@ def find_end_of_macro(content, start):
 			count -= 1
 			pos = closed + 1
 			closed = content.find("}", pos)
+	assert count == 0, "Error: unable to find matching brackets in macro : "+content[:start]
 	return pos
 
 def extract_macros(source):
@@ -77,8 +78,8 @@ def extract_macros(source):
 	s.close()
 
 	rdef = re.compile("\\\\def[^{]*{")
-	rcmd = re.compile("\\\\newcommand\\s*{[^}]*}\\s*{")
-	rrcmd = re.compile("\\\\renewcommand\\s*{[^}]*}\\s*{")
+	rcmd = re.compile("\\\\newcommand\\s*{[^}]*}\\s*(\\[[^]]+\\])?\\s*{")
+	rrcmd = re.compile("\\\\renewcommand\\s*{[^}]*}\\s*(\\[[^]]+\\])?\\s*{")
 	
 	while content:
 		start, stop = len(content), -1
