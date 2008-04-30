@@ -69,7 +69,8 @@ class ImageGenerator:
 	def genLaTeXSource(self, formula, file):
 		o = open(file, "w")
 		o.write("\\documentclass" + self.className + "\n")
-		o.write("\\usepackage[varg]{txfonts}\n")
+		if self.className == "[vr]{edpsjour}":
+			o.write("\\usepackage[varg]{txfonts}\n")
 		o.write("\\pagestyle{empty}\n")
 		o.write("\\begin{document}\n")
 		for macro in self.macros:
