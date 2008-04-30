@@ -1,5 +1,5 @@
 #!/bin/env python
-import os, sys, re
+import os, sys, re, subprocess
 
 VERSION = "0.3"
 
@@ -166,7 +166,8 @@ def make_lxir_source(source, macros):
 					elif c == "}" or c == "]":
 						bracket_level -= 1
 						if bracket_level < 0:
-							raise Exception("too many closing brackets")
+							# raise Exception("too many closing brackets at line %d" % line_count)
+							bracket_level = 0
 						d.write(line[index:nindex + 1])
 						index = nindex + 1
 					elif c == "%":
@@ -210,17 +211,25 @@ def make_lxir_source(source, macros):
 	d.close()
 	return temp
 
-def compile_latex_source(filename):
+def system(cmd, result, log):
+	log.write(">>>>>>>>>>>>>>>> Executing %s\n" % cmd)
+	log.flush()
+	o = subprocess.Popen(cmd, shell=True, stdout=log, stderr=subprocess.STDOUT)
+	errcode = o.wait()
+	log.write("<<<<<<<<<<<<<<<< Result : %d, %s is %s \n" % (errcode, result, os.path.exists(result)))
+	assert os.path.exists(result)
+	return errcode
+
+def compile_latex_source(filename, log):
 	if options.verbose:
 		print("Compiling latex source :%s" % filename)
-	result = os.system("latex -interaction=batchmode %s" % filename)
-	if result != 0:
-		raise Exception("latex compilation failed (%d)" % result)
-	return os.path.splitext(filename)[0] + '.dvi'
+	output = os.path.splitext(filename)[0] + '.dvi'
+	system("latex -interaction=batchmode %s" % filename, output, log)
+	return output
 
-def compile_lxir_source(dvi):
+def compile_lxir_source(dvi, log):
 	xml = os.path.splitext(dvi)[0] + '.xhtml'
-	result = os.system("lxir %s > %s" % (dvi, xml))
+	result = system("lxir %s > %s" % (dvi, xml), xml, log)
 	if result != 0:
 		raise Exception("lxir translation failed (%d)" % result)
 	return xml
@@ -244,14 +253,16 @@ if __name__ == '__main__':
 			if len(args) < 1:
 				parser.error("Need at least one source file")
 			for arg in args:
+				log = open(arg + ".lxir-log", "w")
 				macros = extract_macros(arg)
 				source = make_lxir_source(arg, macros)
-				dvi = compile_latex_source(source)
-				xml = compile_lxir_source(dvi)
+				dvi = compile_latex_source(source, log)
+				xml = compile_lxir_source(dvi, log)
+				log.close()
 				if options.delete_temp:
 					os.unlink(source)
 					os.unlink(dvi)
 		except Exception, e:
 			sys.stderr.write("Error: " + str(e) + "\n")
-			sys.exit(1)
+			raise
 	main()

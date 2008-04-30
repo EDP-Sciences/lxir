@@ -1,10 +1,11 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
-import os, sys
+import os, sys, subprocess
 from Ft.Xml.XPath.Context import Context
 from Ft.Xml.XPath import Evaluate
 from Ft.Xml.Domlette import NonvalidatingReader, Print
 from Ft.Xml import EMPTY_NAMESPACE, XHTML_NAMESPACE
+
 
 NSS = {
 	u'xhtml': XHTML_NAMESPACE,
@@ -15,7 +16,9 @@ NSS = {
 VERSION = "0.1"
 
 latexClasses = {
-	u'article.cls': "article",
+	u'article.cls': "{article}",
+	u'aa.cls': "{aa}",
+	u'edpsjour.cls': "[vr]{edpsjour}", # FIXME: il faut déterminer la sous-classe. Cette information n'est pour le moment pas taggée.
 }
 
 tempfiles = []
@@ -46,14 +49,27 @@ def remove(name, istemp):
 
 class ImageGenerator:
 	def __init__(self, file, className, macros):
-		self.base_path = os.path.split(file)[0]
+		self.base_path, self.filename = os.path.split(file)
 		self.className = className
 		self.macros = macros
 		self.index = 1
+		self.images = {}
+		remove(file + ".images-log", True)
+		self.log = open(file + ".images-log", "w")
+		
+	def system(self, cmd, result):
+		self.log.write(">>>>>>>>>>>>>>>> Executing %s\n" % cmd)
+		self.log.flush()
+		o = subprocess.Popen(cmd, shell=True, stdout=self.log, stderr=subprocess.STDOUT)
+		errcode = o.wait()
+		self.log.write("<<<<<<<<<<<<<<<< Result : %d, %s is %s \n" % (errcode, result, os.path.exists(result)))
+		if errcode != 0 or not os.path.exists(result):
+			raise Exception("Image %d of %s failed (while executing '%s' process)" % (self.index, selffilename, cmd))
 	
 	def genLaTeXSource(self, formula, file):
 		o = open(file, "w")
-		o.write("\\documentclass{" + self.className + "}\n")
+		o.write("\\documentclass" + self.className + "\n")
+		o.write("\\usepackage[varg]{txfonts}\n")
 		o.write("\\pagestyle{empty}\n")
 		o.write("\\begin{document}\n")
 		for macro in self.macros:
@@ -61,7 +77,7 @@ class ImageGenerator:
 		o.write(formula + "\n")
 		o.write("\\end{document}\n")
 		o.close()
-	def makeImage(self, formula):
+	def _makeImage(self, formula):
 		global options
 		prefix = os.path.join(self.base_path, "img" + str(self.index))
 		self.index += 1
@@ -76,12 +92,16 @@ class ImageGenerator:
 
 		self.genLaTeXSource(formula, prefix + ".tex")
 
-		os.system("latex " + prefix + ".tex")
-		os.system("dvips -o " + prefix + ".ps " + prefix + ".dvi")
-		os.system("ps2epsi " + prefix + ".ps " + prefix + ".epsi")
-		os.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r" + str(options.resolution) + " -sDEVICE=pngalpha -sOutputFile=" + prefix + ".png " + prefix + ".epsi")
+		self.system("latex -interaction=batchmode " + prefix + ".tex", prefix + ".dvi")
+		self.system("dvips -o " + prefix + ".ps " + prefix + ".dvi", prefix + ".ps")
+		self.system("ps2ps " + prefix + ".ps " + prefix + ".epsi", prefix + ".epsi")
+		self.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r" + str(options.resolution) + " -sDEVICE=pngalpha -sOutputFile=" + prefix + ".png " + prefix + ".epsi", prefix + ".png")
 		
 		return prefix + ".png"
+	def makeImage(self, formula):
+		if not self.images.has_key(formula):
+			self.images[formula] = self._makeImage(formula)
+		return self.images[formula]
 
 def insert_math_images(file):
 	file = os.path.abspath(file)
@@ -94,16 +114,18 @@ def insert_math_images(file):
 	assert(verbatimmath == u'true', "Need verbatim math mode for math conversion")
 	
 	# Check that the document class is known
+	latexClass = None
 	for node in Evaluate("//xhtml:span[@class='ClassOrPackageUsed']/@lxir:name", context=ctxt):
-		latexClass = node.value
-	assert(latexClasses[latexClass], "Unknown document class used")
+		if latexClasses.has_key(node.value):
+			latexClass = latexClasses[node.value]
+	assert(latexClass, "Unknown document class used")
 	
 	# Get All macro text
 	macros = []
 	for node in Evaluate("//xhtml:span[@class='macro']//text()", context=ctxt):
 		macros.append(node.nodeValue)
 	
-	gen = ImageGenerator(file, latexClasses[latexClass], macros)
+	gen = ImageGenerator(file, latexClass, macros)
 	
 	# Convert All math images
 	for node in Evaluate("//xhtml:span[@class='formule']", context=ctxt):
@@ -112,7 +134,7 @@ def insert_math_images(file):
 		for t in Evaluate(".//xhtml:span[@class='text']//text()", context=c):
 			formula += t.nodeValue
 			t.parentNode.removeChild(t)
-		image = gen.makeImage(formula.replace(u'\u02c6', '^').encode('ascii', 'replace'))
+		image = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
 		
 		img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
 		img.setAttributeNS(XHTML_NAMESPACE, "src", image)
@@ -147,7 +169,7 @@ if __name__ == '__main__':
 				insert_math_images(file)
 		except Exception, e:
 			sys.stderr.write("Error: " + str(e) + "\n")
-			sys.exit(1)
+			raise
 		if options.delete_temp:
 			for file in tempfiles:
 				os.unlink(file)
