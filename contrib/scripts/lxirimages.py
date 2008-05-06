@@ -96,7 +96,10 @@ class ImageGenerator:
 		self.system("latex -interaction=batchmode " + prefix + ".tex", prefix + ".dvi")
 		self.system("dvips -o " + prefix + ".ps " + prefix + ".dvi", prefix + ".ps")
 		self.system("ps2ps " + prefix + ".ps " + prefix + ".epsi", prefix + ".epsi")
-		self.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r" + str(options.resolution) + " -sDEVICE=pngalpha -sOutputFile=" + prefix + ".png " + prefix + ".epsi", prefix + ".png")
+		if options.ghostscript:
+			self.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r" + str(options.resolution) + " -sDEVICE=pngalpha -sOutputFile=" + prefix + ".png " + prefix + ".epsi", prefix + ".png")
+		else:
+			self.system("convert -density 600 " + prefix + ".epsi -resample " + str(options.resolution) + " -trim +repage " + prefix + ".png", prefix + ".png")
 		
 		return prefix + ".png"
 	def makeImage(self, formula):
@@ -160,7 +163,8 @@ if __name__ == '__main__':
 		parser.add_option("-d", "--delete-temp", help="Delete temporary files", action="store_true")
 		parser.add_option("-D", "--not-delete-temp", help="Do not delete temporary files", action="store_false", dest="delete_temp")
 		parser.add_option("-r", "--resolution", help="Resolution of the generated images", action="store", type="int")
-		parser.set_defaults(overwrite = True, verbmath = True, verbose = False, resolution=92)
+		parser.add_option("-g", "--ghostscript", help="Use ghostscript instead of imagemagick to convert postscript", action="store_true")
+		parser.set_defaults(overwrite = True, verbmath = True, verbose = False, resolution = 92, ghostscript = False)
 		try:
 			options, args = parser.parse_args(args = args)
 			if len(args) < 1:
