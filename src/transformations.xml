@@ -25,14 +25,14 @@
 		<transformation name="remove_page_nodes" />
 		<!-- la transformation "remove_bop_nodes" retire simplement
 			les nodes "bop" de l'arbre -->
-		<transformation name="remove_bop_nodes" report="1" />
+		<transformation name="remove_bop_nodes" />
 		
-		<transformation name="transform_large_accent_pattern" report="1" />
-		<transformation name="remove_control_nodes" report="1" />
+		<transformation name="transform_large_accent_pattern" />
+		<transformation name="remove_control_nodes" />
 		
 		<!-- Cette transformation (mal nommée) remplace les tags <xxx> par des tags
 			<node> en créant la hiérarchie correspondante -->
-		<transformation name="replace_xxx_nodes" report="1" />
+		<transformation name="replace_xxx_nodes" />
 		
 		<!-- Cette transformation cherche les tags spécifiques aux environements (hermes specifique) -->
 		<transformation name="replace_env_nodes" />
@@ -75,27 +75,26 @@
 				[entity!copyright!] devient &copyright;
 		-->
 		<transformation name="replace_entities_in_text" />
-		<transformation name="replace_tabular_math_entities" report="1"/>
+		<transformation name="replace_tabular_math_entities"/>
 		<transformation name="replace_math_entities" />
 		<transformation name="transform_verbatim_formula" />
 		<transformation name="transform_verbatim_macro" />
 
+		<!-- 
+			<transformation name="dump_tree" param="path/to/output.xml" />
+			<transformation name="xslt_proc" param="path/to/stylesheet.xslt" />
+		-->
 		<!-- Cette serie de transformations XSLT permet d'obtenir un XML 
 		     plus simple et plus facilement manipulable :
 		-->
-		<transformation name="dump_tree" param="temp-plain.xml" />
 		<!-- remplacement de <node type="{nom}"> par <{nom}> -->
 		<transformation name="xslt_proc" param="node2element.xsl"/>
-		<transformation name="dump_tree" param="temp-xsl-01-node2element.xml" />
 		<!-- ajout dans <{nom}> des attributs du noeud <params> qui suit -->
 		<transformation name="xslt_proc" param="params.xsl"/>
-		<transformation name="dump_tree" param="temp-xsl-02-params.xml" />
 		<!-- suppression des "scories" du balisage -->
 		<transformation name="xslt_proc" param="clean.xsl"/>
-		<transformation name="dump_tree" param="temp-xsl-03-clean.xml" />		
 		<!-- post-traitement des footnotes -->
 		<transformation name="xslt_proc" param="footnote.xsl"/>
-		<transformation name="dump_tree" param="temp-xsl-04-footnote.xml" />				
 		<!-- traitement des informations sur les fontes (fontdetails.xsl+fonttext.xsl)
 		       de façon à ajouter aux noeuds <text> des attributs contenant des informations
 		       sur la fonte -->
@@ -108,10 +107,6 @@
 		<transformation name="xslt_proc" param="pseudomath.xsl"/>
 		<!-- ajoute le namespace au MathML -->
 		<transformation name="xslt_proc" param="mathns.xsl"/>
-		<!-- 
-			<transformation name="dump_tree" param="path/to/output.xml" />
-			<transformation name="xslt_proc" param="path/to/stylesheet.xslt" />
-		-->
 		<transformation name="rebuild_all_lists" />
 		<transformation name="rebuild_bibliography" />
 		<transformation name="rebuild_paragraphs" />
@@ -128,12 +123,12 @@
 		<transformation name="transform_over_pattern" />
 		<transformation name="transform_subsup_pattern" />
 		<transformation name="transform_sub_or_sup_pattern" />
-		<transformation name="transform_simple_sub_or_sup_pattern" />
+		<!-- <transformation name="transform_simple_sub_or_sup_pattern" /> -->
 		<transformation name="transform_underline_pattern" />
-		<transformation name="transform_overline_pattern" report="1" />
-		<transformation name="transform_mathsym_patterns" report="1" />
-		<transformation name="transform_array_pattern" report="1"/>
-		<transformation name="replace_entities_in_text" report="1"/>
+		<transformation name="transform_overline_pattern" />
+		<transformation name="transform_mathsym_patterns" />
+		<transformation name="transform_array_pattern"/>
+		<transformation name="replace_entities_in_text"/>
 		<transformation name="drop_remaining_tex_nodes" />
 		<transformation name="transform_string_patterns" />
 		<transformation name="transform_mrow_pattern" />

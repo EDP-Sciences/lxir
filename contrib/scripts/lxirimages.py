@@ -6,7 +6,6 @@ from Ft.Xml.XPath import Evaluate
 from Ft.Xml.Domlette import NonvalidatingReader, Print
 from Ft.Xml import EMPTY_NAMESPACE, XHTML_NAMESPACE
 
-
 NSS = {
 	u'xhtml': XHTML_NAMESPACE,
 	u'mm': u'http://www.w3.org/1998/Math/MathML',
@@ -54,6 +53,7 @@ class ImageGenerator:
 		self.macros = macros
 		self.index = 1
 		self.images = {}
+		self.mathml = {}
 		remove(file + ".images-log", True)
 		self.log = open(file + ".images-log", "w")
 		
@@ -66,11 +66,14 @@ class ImageGenerator:
 		if errcode != 0 or not os.path.exists(result):
 			raise Exception("Image %d of %s failed (while executing '%s' process)" % (self.index, self.filename, cmd))
 	
-	def genLaTeXSource(self, formula, file):
+	def genLaTeXSource(self, formula, file, lxir):
 		o = open(file, "w")
+		if lxir:
+			o.write("\\RequirePackage{lxir}")
 		o.write("\\documentclass" + self.className + "\n")
+		o.write("\\usepackage{amsmath}\n")
 		if self.className == "[vr]{edpsjour}":
-			o.write("\\usepackage[varg]{txfonts}\n")
+			o.write("\\usepackage{txfonts}\n")
 		o.write("\\pagestyle{empty}\n")
 		o.write("\\begin{document}\n")
 		for macro in self.macros:
@@ -81,7 +84,6 @@ class ImageGenerator:
 	def _makeImage(self, formula):
 		global options
 		prefix = os.path.join(self.base_path, "img" + str(self.index))
-		self.index += 1
 
 		remove(prefix + ".tex", True)
 		remove(prefix + ".aux", True)
@@ -91,7 +93,7 @@ class ImageGenerator:
 		remove(prefix + ".epsi", True)
 		remove(prefix + ".png", False)
 
-		self.genLaTeXSource(formula, prefix + ".tex")
+		self.genLaTeXSource(formula, prefix + ".tex", False)
 
 		self.system("latex -interaction=batchmode " + prefix + ".tex", prefix + ".dvi")
 		self.system("dvips -o " + prefix + ".ps " + prefix + ".dvi", prefix + ".ps")
@@ -102,10 +104,31 @@ class ImageGenerator:
 			self.system("convert -density 600 " + prefix + ".epsi -resample " + str(options.resolution) + " -trim +repage " + prefix + ".png", prefix + ".png")
 		
 		return prefix + ".png"
+	def _makeMathML(self, formula):
+		prefix = os.path.join(self.base_path, "img" + str(self.index) + "_lxir")
+		remove(prefix + ".tex", True)
+		remove(prefix + ".aux", True)
+		remove(prefix + ".log", True)
+		remove(prefix + ".dvi", True)
+		remove(prefix + ".xhtml", True)
+		self.genLaTeXSource(formula, prefix + ".tex", True)
+		self.system("latex -interaction=batchmode " + prefix + ".tex", prefix + ".dvi")
+		self.system("lxir " + prefix + ".dvi > " + prefix + ".xhtml", prefix + ".xhtml")
+		doc = NonvalidatingReader.parseUri(prefix + ".xhtml")
+		ctxt = Context(doc, processorNss=NSS)
+		nodes = Evaluate("//mm:math", context=ctxt)
+		if len(nodes) == 1:
+			formula = nodes[0]
+			if formula:
+				return formula
+		else:
+			print "Generation of MathML for formula '%s' produced no output (%d, %d)" % (formula, self.index, len(nodes))
 	def makeImage(self, formula):
 		if not self.images.has_key(formula):
 			self.images[formula] = self._makeImage(formula)
-		return self.images[formula]
+			self.mathml[formula] = self._makeMathML(formula)
+			self.index += 1
+		return self.images[formula], self.mathml[formula]
 
 def insert_math_images(file):
 	file = os.path.abspath(file)
@@ -138,12 +161,19 @@ def insert_math_images(file):
 		for t in Evaluate(".//xhtml:span[@class='text']//text()", context=c):
 			formula += t.nodeValue
 			t.parentNode.removeChild(t)
-		image = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
+		formula = formula.replace(u'\u02c6', '^').strip()
+		image, mathml = gen.makeImage(formula)
+		# remove the empty text node(s)
+		for t in Evaluate(".//xhtml:span[@class='text']", context=c):
+			t.parentNode.removeChild(t)
 		
 		img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
 		img.setAttributeNS(XHTML_NAMESPACE, "src", image)
 		img.setAttributeNS(XHTML_NAMESPACE, "alt", formula)
 		node.appendChild(img)
+		
+		if mathml:
+			node.appendChild(node.ownerDocument.importNode(mathml, True))
 	
 	base, ext = os.path.splitext(file)
 	output = base + "_images" + ext

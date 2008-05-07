@@ -1367,6 +1367,7 @@ void transform_content(char * content, const char * needle, const char * replace
 static
 char * transform_verbatim_content(xmlChar * content) {
 	char * temp = strdup((const char *) content);
+	transform_content(temp, "!s", "#");
 	transform_content(temp, "!p", "%");
 	transform_content(temp, "!n", "\n");
 	transform_content(temp, "!/", "\\");
