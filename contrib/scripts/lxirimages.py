@@ -64,7 +64,7 @@ class ImageGenerator:
 		errcode = o.wait()
 		self.log.write("<<<<<<<<<<<<<<<< Result : %d, %s is %s \n" % (errcode, result, os.path.exists(result)))
 		if errcode != 0 or not os.path.exists(result):
-			raise Exception("Image %d of %s failed (while executing '%s' process)" % (self.index, selffilename, cmd))
+			raise Exception("Image %d of %s failed (while executing '%s' process)" % (self.index, self.filename, cmd))
 	
 	def genLaTeXSource(self, formula, file):
 		o = open(file, "w")
