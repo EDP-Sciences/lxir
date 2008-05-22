@@ -20,6 +20,12 @@ latexClasses = {
 	u'edpsjour.cls': "[vr]{edpsjour}", # FIXME: il faut déterminer la sous-classe. Cette information n'est pour le moment pas taggée.
 }
 
+symbolPackages = [
+	u'amsmath.sty',
+	u'amssymb.sty',
+	u'txfonts.sty',
+]
+
 tempfiles = []
 
 def find_source(name):
@@ -47,10 +53,11 @@ def remove(name, istemp):
 		tempfiles.append(name)
 
 class ImageGenerator:
-	def __init__(self, file, className, macros):
+	def __init__(self, file, className, macros, symbols):
 		self.base_path, self.filename = os.path.split(file)
 		self.className = className
 		self.macros = macros
+		self.symbols = symbols
 		self.index = 1
 		self.images = {}
 		self.mathml = {}
@@ -71,9 +78,8 @@ class ImageGenerator:
 		if lxir:
 			o.write("\\RequirePackage{lxir}")
 		o.write("\\documentclass" + self.className + "\n")
-		o.write("\\usepackage{amsmath}\n")
-		if self.className == "[vr]{edpsjour}":
-			o.write("\\usepackage{txfonts}\n")
+		for symbol in self.symbols:
+			o.write("\\usepackage{" + symbol + "}\n")
 		o.write("\\pagestyle{empty}\n")
 		o.write("\\begin{document}\n")
 		for macro in self.macros:
@@ -142,9 +148,12 @@ def insert_math_images(file):
 	
 	# Check that the document class is known
 	latexClass = None
+	symbols = []
 	for node in Evaluate("//xhtml:span[@class='ClassOrPackageUsed']/@lxir:name", context=ctxt):
 		if latexClasses.has_key(node.value):
 			latexClass = latexClasses[node.value]
+		elif node.value in symbolPackages:
+			symbols.append(node.value[:-4])
 	assert(latexClass, "Unknown document class used")
 	
 	# Get All macro text
@@ -152,8 +161,28 @@ def insert_math_images(file):
 	for node in Evaluate("//xhtml:span[@class='macro']//text()", context=ctxt):
 		macros.append(node.nodeValue)
 	
-	gen = ImageGenerator(file, latexClass, macros)
-	
+	gen = ImageGenerator(file, latexClass, macros, symbols)
+
+	for node in Evaluate("//xhtml:div[@class='equation']", context=ctxt):
+		c = Context(node, processorNss=NSS)
+		formula = "\\begin{equation}\n"
+		for t in Evaluate(".//xhtml:span[@class='formule']//text()", context=c):
+			formula += t.nodeValue
+			t.parentNode.removeChild(t)
+		formula = (formula + "\n\\end{equation}").replace(u'\u02c6', '^').strip()
+		image, mathml = gen.makeImage(formula)
+		# remove the empty text node(s)
+		for t in Evaluate(".//xhtml:span[@class='formule']", context=c):
+			t.parentNode.removeChild(t)
+		
+		img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
+		img.setAttributeNS(XHTML_NAMESPACE, "src", image)
+		img.setAttributeNS(XHTML_NAMESPACE, "alt", formula)
+		node.appendChild(img)
+		
+		if mathml:
+			node.appendChild(node.ownerDocument.importNode(mathml, True))
+
 	# Convert All math images
 	for node in Evaluate("//xhtml:span[@class='formule']", context=ctxt):
 		c = Context(node, processorNss=NSS)
