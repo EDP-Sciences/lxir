@@ -30,4 +30,4 @@ slightly modified version of your latex source with latex.
 The modifications to your source can be as simple as adding at the start the
 following line before the \documentclass entry:
 
-\UsePackage{lxir}
+\RequirePackage{lxir}
