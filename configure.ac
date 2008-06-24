@@ -149,6 +149,7 @@ AC_CONFIG_FILES([
 	libfontmap/tools/enc2tbl/Makefile
 	libfontmap/tools/accents/Makefile
 	libdvi/Makefile
+	libtfm/Makefile
 	src/Makefile
 	texmf/Makefile
 	texmf/default/Makefile

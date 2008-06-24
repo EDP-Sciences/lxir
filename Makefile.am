@@ -12,7 +12,7 @@ if USE_KPSE
 KPSE_PATH = libkpathsea
 endif
 
-SUBDIRS = $(KPSE_PATH) libfontmap libdvi src texmf
+SUBDIRS = $(KPSE_PATH) libfontmap libdvi libtfm src texmf
 EXTRA_DIST = lppl.txt gpl-3.0.txt
 
 if USE_KPSE

@@ -1151,4 +1151,8 @@
 %    \begin{macrocode}
 \AtBeginDocument{\usebox{\lxir@pckg@list}}
 %    \end{macrocode}
+%    \begin{macrocode}
+\let\lxir@font=\font
+\def\font#1#2{\global\def#1{\xEmptyA{switch-font}{#1}}}
+%    \end{macrocode}
 %</lxir>

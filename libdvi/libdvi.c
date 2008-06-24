@@ -120,7 +120,7 @@ typedef struct dvifilestate_s {
 	dvifile_t * file;
 	int current_font;
 	dvifont_t * font;
-	
+
 	dvinode_header_t * current_node;
 	dvistack_t * stack;
 	int buffer_size;
@@ -155,24 +155,24 @@ int is_space_skip(dvifilestate_t * s, int a) {
 
 int dvi_push(dvifilestate_t * s) {
 	dvistack_t * new_state = (dvistack_t *) malloc(sizeof(dvistack_t));
-	
+
 	if (!new_state) return DVIERR_NOMEM;
-	
+
 	new_state->state = s->stack->state;
 	new_state->next = s->stack;
 	s->stack = new_state;
-	
+
 	return 0;
 }
 
 int dvi_pop(dvifilestate_t * s) {
 	dvistack_t * state = s->stack;
-	
+
 	if (!state->next) return DVIERR_INVALID_POP;
-	
+
 	s->stack = state->next;
 	free(state);
-	
+
 	return 0;
 }
 
@@ -189,13 +189,13 @@ int dvi_stack_size(dvifilestate_t * s) {
 int dvi_append_node(dvifilestate_t * s, dvinode_header_t * node) {
 	s->current_node->next = node;
 	s->current_node = node;
-	
+
 	return 0;
 }
 
 int dvi_append_text_node(dvifilestate_t * s) {
 	dvinode_text_t * node = (dvinode_text_t *) malloc(sizeof(dvinode_text_t)); /* fixme */
-	
+
 	if (!node) return DVIERR_NOMEM;
 
 	node->header.type = DVINODE_TEXT;
@@ -205,38 +205,38 @@ int dvi_append_text_node(dvifilestate_t * s) {
 	node->v = s->stack->state.v;
 	node->size = 0;
 	node->content = 0;
-	
+
 	return dvi_append_node(s, &node->header);
 }
 
 int dvi_close_text_node(dvifilestate_t * s) {
 	dvinode_text_t * c = (dvinode_text_t *) s->current_node;
-	
+
 	if (!c || c->header.type != DVINODE_TEXT || c->content) return 0;
-	
+
 	if((s->flags & DVI_SKIP_SPACE_NORMAL) == 1 && s->size > 0 && s->buffer[s->size - 1] == ' ') s->size--;
-	
+
 	// fixme : what if size == 0 ?
-	
+
 	c->content = malloc(s->size + 1);
-	
+
 	if (!c->content) return DVIERR_NOMEM;
-	
+
 	memcpy(c->content, s->buffer, s->size);
 	c->content[s->size]  = 0;
 	// DUMP("TEXT : \"%s\"\n", c->content);
 	c->size = s->size;
 	s->size = 0;
-	
+
 	return 0;
 }
 
 int dvi_append_rule_node(dvifilestate_t * s, int a, int b) {
 	int err = dvi_close_text_node(s);
 	if (err) return err;
-		
+
 	dvinode_rule_t * node = (dvinode_rule_t *) malloc(sizeof(dvinode_rule_t));
-	
+
 	if (!node) return DVIERR_NOMEM;
 
 	node->header.type = DVINODE_RULE;
@@ -245,51 +245,51 @@ int dvi_append_rule_node(dvifilestate_t * s, int a, int b) {
 	node->v = s->stack->state.v;
 	node->a = a;
 	node->b = b;
-	
+
 	return dvi_append_node(s, &node->header);
 }
 
 int dvi_append_xxx_node(dvifilestate_t * s, char * xxx) {
 	int err = dvi_close_text_node(s);
 	if (err) return err;
-	
+
 	dvinode_xxx_t * node = (dvinode_xxx_t *) malloc(sizeof(dvinode_xxx_t));
-	
+
 	if (!node) return DVIERR_NOMEM;
 
 	node->header.type = DVINODE_XXX;
 	node->header.next = 0;
 	node->size = strlen(xxx);
 	node->content = xxx;
-	
+
 	return dvi_append_node(s, &node->header);
 }
 
 int dvi_append_control_node(dvifilestate_t * s, int type, int param) {
 	int err = dvi_close_text_node(s);
 	if (err) return err;
-		
+
 	dvinode_control_t * node = (dvinode_control_t *) malloc(sizeof(dvinode_control_t));
-	
+
 	if (!node) return DVIERR_NOMEM;
 
 	node->header.type = DVINODE_CONTROL;
 	node->header.next = 0;
 	node->type = type;
 	node->param = param;
-	
+
 	return dvi_append_node(s, &node->header);
 }
 
 int dvi_extend_buffer(dvifilestate_t * s, int new_size) {
 	char * new_buffer = malloc(new_size);
 	if(!new_buffer) return DVIERR_NOMEM;
-	
+
 	memcpy(new_buffer, s->buffer, s->size);
 	free(s->buffer);
 	s->buffer = new_buffer;
 	s->buffer_size = new_size;
-	
+
 	return 0;
 }
 
@@ -306,7 +306,7 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 		if(ch < 0 || ch >= s->font->mapsize) {
 			return DVIERR_INVALID_CHAR;
 		}
-		
+
 		chr = s->font->map[ch];
 		l = strlen(chr);
 		size = s->size + l;
@@ -314,7 +314,7 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 			int err = dvi_extend_buffer(s, MAX(size, s->buffer_size * 2));
 			if (err) return err;
 		}
-		
+
 		memcpy(s->buffer + s->size, chr, l);
 		s->size += l;
 	} else {
@@ -326,7 +326,7 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 		s->buffer[s->size] = ch;
 		s->size += 1;
 	}
-	
+
 	return 0;
 }
 
@@ -351,7 +351,7 @@ int dvi_append_space(dvifilestate_t * s) {
 int dvi_new_fp(dvifilestate_t ** ps, FILE * fp, int close) {
 	dvifilestate_t * s = malloc(sizeof(dvifilestate_t));
 	if(!s) return DVIERR_NOMEM;
-	
+
 	s->flags = 0;
 	s->fp = fp;
 	s->close_fp = close;
@@ -359,7 +359,7 @@ int dvi_new_fp(dvifilestate_t ** ps, FILE * fp, int close) {
 		free(s);
 		return DVIERR_INVALID_FILEP;
 	}
-	
+
 	s->file = malloc(sizeof(dvifile_t));
 	if(!s->file) {
 		if(s->close_fp) fclose(s->fp);
@@ -371,7 +371,7 @@ int dvi_new_fp(dvifilestate_t ** ps, FILE * fp, int close) {
 	s->file->fonts = 0;
 	s->file->nbpages = 0;
 	s->file->pages = 0;
-	
+
 	s->current_node = 0;
 	s->stack = 0;
 	s->size = 0;
@@ -383,7 +383,7 @@ int dvi_new_fp(dvifilestate_t ** ps, FILE * fp, int close) {
 		free(s);
 		return DVIERR_NOMEM;
 	}
-	
+
 	*ps = s;
 	return 0;
 }
@@ -395,12 +395,12 @@ int dvi_new(dvifilestate_t ** ps, const char * filename) {
 int dvi_close(dvifilestate_t * s, dvifile_t ** pf) {
 	if(s->close_fp) fclose(s->fp);
 	dvi_close_text_node(s);
-	
+
 	*pf = s->file;
 
 	free(s->buffer);
 	free(s);
-	
+
 	return 0;
 }
 
@@ -413,12 +413,12 @@ int dvi_read_number_1(dvifilestate_t *s, int * pn) {
 	union {
 		signed char number;
 		unsigned char byte;
-	} v;	
+	} v;
 	int c = fgetc(s->fp);
 	if (c == EOF) return DVIERR_UNEXPECTED_EOF;
 	v.byte = c;
 	*pn = v.number;
-	
+
 	return 0;
 }
 
@@ -436,8 +436,8 @@ int dvi_read_number_2(dvifilestate_t *s, int * pn) {
 
 	//~ DUMP("0x%2.2x%2.2x => %d\n", v.bytes[0], v.bytes[1], v.number);
 	*pn = v.number;
-	
-	return 0;	
+
+	return 0;
 }
 
 int dvi_read_number_3(dvifilestate_t *s, int * pn) {
@@ -452,12 +452,12 @@ int dvi_read_number_3(dvifilestate_t *s, int * pn) {
 		v.bytes[2 - i] = c;
 	}
 	v.bytes[3] = v.bytes[2] & 0x80 ? 0xFF : 0;
-	
+
 	//~ DUMP("0x%2.2x%2.2x%2.2x%2.2x => %d\n", v.bytes[0], v.bytes[1], v.bytes[2], v.bytes[3], v.number);
 
 	*pn = v.number;
-	
-	return 0;	
+
+	return 0;
 }
 
 int dvi_read_number_4(dvifilestate_t *s, int * pn) {
@@ -474,8 +474,8 @@ int dvi_read_number_4(dvifilestate_t *s, int * pn) {
 	//~ DUMP("0x%2.2x%2.2x%2.2x%2.2x => %d\n", v.bytes[0], v.bytes[1], v.bytes[2], v.bytes[3], v.number);
 
 	*pn = v.number;
-	
-	return 0;	
+
+	return 0;
 }
 
 int dvi_read_number(dvifilestate_t *s, int size, int * pn) {
@@ -492,12 +492,12 @@ int dvi_read_number_1_u(dvifilestate_t *s, unsigned int * pn) {
 	union {
 		unsigned char number;
 		unsigned char byte;
-	} v;	
+	} v;
 	int c = fgetc(s->fp);
 	if (c == EOF) return DVIERR_UNEXPECTED_EOF;
 	v.byte = c;
 	*pn = v.number;
-	
+
 	return 0;
 }
 
@@ -515,8 +515,8 @@ int dvi_read_number_2_u(dvifilestate_t *s, unsigned int * pn) {
 
 	//~ DUMP("0x%2.2x%2.2x => %d\n", v.bytes[0], v.bytes[1], v.number);
 	*pn = v.number;
-	
-	return 0;	
+
+	return 0;
 }
 
 int dvi_read_number_3_u(dvifilestate_t *s, unsigned int * pn) {
@@ -531,12 +531,12 @@ int dvi_read_number_3_u(dvifilestate_t *s, unsigned int * pn) {
 		v.bytes[2 - i] = c;
 	}
 	v.bytes[3] = 0;
-	
+
 	//~ DUMP("0x%2.2x%2.2x%2.2x%2.2x => %d\n", v.bytes[0], v.bytes[1], v.bytes[2], v.bytes[3], v.number);
 
 	*pn = v.number;
-	
-	return 0;	
+
+	return 0;
 }
 
 int dvi_read_number_4_u(dvifilestate_t *s, unsigned int * pn) {
@@ -553,8 +553,8 @@ int dvi_read_number_4_u(dvifilestate_t *s, unsigned int * pn) {
 	//~ DUMP("0x%2.2x%2.2x%2.2x%2.2x => %d\n", v.bytes[0], v.bytes[1], v.bytes[2], v.bytes[3], v.number);
 
 	*pn = v.number;
-	
-	return 0;	
+
+	return 0;
 }
 
 int dvi_read_number_u(dvifilestate_t *s, int size, unsigned int * pn) {
@@ -570,26 +570,26 @@ int dvi_read_number_u(dvifilestate_t *s, int size, unsigned int * pn) {
 int dvi_get_postamble_offset(dvifilestate_t * s, long * po) {
 	int i, o, err;
 	long offset;
-	
+
 	unsigned char buffer[POSTAMBLE_MAX_SIZE];
-	
+
 	err = fseek(s->fp, -POSTAMBLE_MAX_SIZE, SEEK_END);
 	if (err) return DVIERR_INVALID_FSEEK;
-		
+
 	err = fread(buffer, 1, POSTAMBLE_MAX_SIZE, s->fp);
 	if (err != POSTAMBLE_MAX_SIZE) return DVIERR_INVALID_READ;
-	
+
 	for (i = POSTAMBLE_MAX_SIZE-1; i >= 0 && buffer[i] == POSTAMBLE_CHAR; --i) ;
-	
+
 	if (i < 6 || buffer[i] != DVI_VERSION_CHAR || buffer[i-5] != OPCODE_POST_POST)
 		return DVIERR_INVALID_POSTAMBLE;
-	
+
 	offset = 0;
 	for (o = i-4; o < i; ++o)
 		offset = (offset << 8) | buffer[o];
-	
+
 	*po = offset;
-	
+
 	return 0;
 }
 
@@ -597,16 +597,16 @@ int dvi_read_nbpages(dvifilestate_t * s) {
 	int n, err;
 	dvinode_header_t ** pages;
 
-	err = dvi_read_number(s, 2, &n); 
+	err = dvi_read_number(s, 2, &n);
 	if (err) return err;
-	
+
 	pages = malloc(sizeof(dvinode_header_t *)*n);
 	if(!pages) return DVIERR_NOMEM;
 	memset(pages, 0, sizeof(dvinode_header_t *)*n);
-	
+
 	s->file->nbpages = n;
 	s->file->pages = pages;
-	
+
 	return 0;
 }
 
@@ -618,20 +618,20 @@ int dvi_read_postamble(dvifilestate_t * s) {
 		dvifont_t current;
 		struct font_list_s * next;
 	} * list = 0;
-	
+
 	err = dvi_get_postamble_offset(s, &offset);
 	if (err) return err;
-	
+
 	err = fseek(s->fp, offset, SEEK_SET);
 	if (err != 0) return DVIERR_INVALID_FSEEK;
-		
+
 	c = fgetc(s->fp);
 	if (c != OPCODE_POST) return DVIERR_INVALID_POSTAMBLE;
-	
+
 	/* read postamble and fill fonts */
 	err = dvi_read_number(s, 4, &c); /* c = offset to last bop */
 	if (err) return err;
-	
+
 	err = dvi_read_number(s, 4, &(s->file->num));
 	if (err) return err;
 	err = dvi_read_number(s, 4, &(s->file->den));
@@ -646,7 +646,7 @@ int dvi_read_postamble(dvifilestate_t * s) {
 	if (err) return err;
 	err = dvi_read_nbpages(s);
 	if (err) return err;
-	
+
 	while (1) {
 		c = fgetc(s->fp);
 		if (c == OPCODE_POST_POST) {
@@ -654,12 +654,12 @@ int dvi_read_postamble(dvifilestate_t * s) {
 		} else if (c >= OPCODE_FONT_DEF1 && c <= OPCODE_FONT_DEF4) {
 			int a, l;
 			struct font_list_s * pfont;
-				
+
 			++nfont;
-			
+
 			pfont = malloc(sizeof(struct font_list_s));
 			if (!pfont) return -1; /* fixme : more cleanup is necessary */
-			
+
 			err = dvi_read_number(s, c - OPCODE_FONT_DEF1 + 1, &pfont->current.index);
 			if (err) return err;
 			err = dvi_read_number(s, 4, &pfont->current.checksum);
@@ -668,11 +668,11 @@ int dvi_read_postamble(dvifilestate_t * s) {
 			if (err) return err;
 			err = dvi_read_number(s, 4, &pfont->current.design_size);
 			if (err) return err;
-			a = fgetc(s->fp); 
+			a = fgetc(s->fp);
 			if (a == EOF) return DVIERR_UNEXPECTED_EOF;
 			l = fgetc(s->fp);
 			if (l == EOF) return DVIERR_UNEXPECTED_EOF;
-			
+
 			if (a == 0) {
 				pfont->current.area = 0;
 			} else {
@@ -690,56 +690,56 @@ int dvi_read_postamble(dvifilestate_t * s) {
 				err = dvi_read_bytes(s, l, pfont->current.name);
 				pfont->current.name[l] = 0;
 			}
-			
+
 			if (!(s->flags & DVI_NO_FONT_TRANSLATION)) {
 				struct translation_info ti;
 				err = lfm_get_translation_map(pfont->current.name ? pfont->current.name : "cmr10", &ti);
 				if (err) return DVIERR_NOTRANSLATION_MAP;
-				
+
 				pfont->current.map = ti.map;
 				pfont->current.mapsize = ti.size;
 			}
-				
+
 			pfont->next = list;
 			list = pfont;
-			
+
 		} else if (c != OPCODE_NOP) {
 			fprintf(stderr, "Invalid opcode \"%d\" between POST and POST_POST\n", c);
 			return DVIERR_INVALID_OPCODE;
 		}
 	}
-	
+
 	s->file->nbfonts = nfont;
 	s->file->fonts = malloc(sizeof(dvifont_t) * nfont);
 	c = 0;
 	while(list) {
 		struct font_list_s * next = list->next;
-		
+
 		memcpy(&s->file->fonts[c++], &list->current, sizeof(dvifont_t));
-		
+
 		free(list);
-			
+
 		list = next;
 	}
-	
+
 	assert (c == nfont);
-	
+
 	return 0;
 }
 
 int dvi_read_preamble(dvifilestate_t * s) {
 	int c, err;
-	
+
 	err = fseek(s->fp, 0, SEEK_SET);
 	if (err != 0) return DVIERR_INVALID_FSEEK;
-		
+
 	c = fgetc(s->fp);
-	
+
 	if (c != OPCODE_PRE) {
 		fprintf(stderr, "Invalid Preamble code \"%d\"", c);
 		return DVIERR_INVALID_OPCODE;
 	}
-	
+
 	c = fgetc(s->fp);
 	if (c != DVI_VERSION_CHAR) {
 		fprintf(stderr, "unknown DVI version\n");
@@ -930,28 +930,28 @@ int dvi_read_page_opcodes(dvifilestate_t * s) {
 			char * buffer;
 			err = dvi_read_number_u(s, c - OPCODE_XXX1 + 1, &a);
 			if (err) return err;
-			
+
 			buffer = malloc(a+1);
 			if (!buffer) return -1;
 			err = dvi_read_bytes(s, a, buffer);
 			if (err) return err;
 			buffer[a] = 0;
-			
+
 			DUMP("OPCODE : %d : XXX (%s)\n", c, buffer);
 			err = dvi_append_xxx_node(s, buffer);
 			if (err) return err;
-			
+
 		} else if (c >= OPCODE_FONT_DEF1 && c <= OPCODE_FONT_DEF4) {
 			int b, l;
 			err = dvi_read_number(s, c - OPCODE_FONT_DEF1 + 1, &a);
 			if (err) return err;
 			fseek(s->fp, 12, SEEK_CUR); /* get in decl */
-			b = fgetc(s->fp); 
+			b = fgetc(s->fp);
 			if (b == EOF) return DVIERR_UNEXPECTED_EOF;
 			l = fgetc(s->fp);
 			if (l == EOF) return DVIERR_UNEXPECTED_EOF;
 			fseek(s->fp, b+l, SEEK_CUR);
-			
+
 			DUMP("OPCODE : %d : FONT_DEF (%d)\n", c, a);
 		/* } else if (c == OPCODE_PRE) { */
 		/* } else if (c == OPCODE_POST) { */
@@ -971,35 +971,35 @@ int dvi_read_page(dvifilestate_t * s, int npage) {
 	if(!s->stack) return DVIERR_NOMEM;
 	memset(&s->stack->state, 0, sizeof(dvistate_t));
 	s->stack->next = 0;
-	
+
 	c = malloc(sizeof(dvinode_bop_t));
 	if(!c) return DVIERR_NOMEM;
-	
+
 	c->header.type = DVINODE_BOP;
 	c->header.next = 0;
 	s->current_node = &c->header;
-	
+
 	for (i=0; i < 10; ++i) {
 		err = dvi_read_number(s, 4, &c->counts[i]);
 		if (err) return err;
 	}
-	
+
 	err = dvi_read_number(s, 4, &i);
 	if (err) return err;
 
 	s->file->pages[npage] = s->current_node;
-	
+
 	/* read opcodes */
 	err = dvi_read_page_opcodes(s);
 	if (err) return err;
-	
+
 	/* fixme, check empty stack */
-	
+
 	if (s->stack->next) {
 		fprintf(stderr, "Invalid stack state at the end of a page !\n");
 		return DVIERR_INVALID_STACK;
 	}
-	
+
 	return 0;
 }
 
@@ -1029,25 +1029,25 @@ int dvi_read_pages(dvifilestate_t * s) {
 int dvi_read(dvifile_t ** pf, const char * filename, int flags) {
 	int err;
 	dvifilestate_t * s;
-	
+
 	if( (flags & (DVI_SKIP_SPACE_SMALL|DVI_SKIP_SPACE_NORMAL)) == 0) {
 		return DVIERR_INVALID_FLAGS;
 	}
-	
+
 	err = dvi_new(&s, filename);
 	if (err) return err;
-	
+
 	s->flags = flags;
-	
+
 	err = dvi_read_postamble(s);
 	if (err) return err;
-	
+
 	err = dvi_read_preamble(s);
 	if (err) return err;
-	
+
 	err = dvi_read_pages(s);
 	if (err) return err;
-	
+
 	err = dvi_close(s, pf);
 	if (err) {
 		dvi_destroy(*pf);
@@ -1059,21 +1059,21 @@ int dvi_read(dvifile_t ** pf, const char * filename, int flags) {
 int dvi_read_fp(dvifile_t ** pf, FILE * fp, int flags) {
 	int err;
 	dvifilestate_t * s;
-	
+
 	err = dvi_new_fp(&s, fp, 0);
 	if (err) return err;
-	
+
 	s->flags = flags;
-	
+
 	err = dvi_read_postamble(s);
 	if (err) return err;
-	
+
 	err = dvi_read_preamble(s);
 	if (err) return err;
-	
+
 	err = dvi_read_pages(s);
 	if (err) return err;
-	
+
 	err = dvi_close(s, pf);
 	if (err) {
 		dvi_destroy(*pf);
@@ -1096,7 +1096,7 @@ int dvi_destroy_nodes(dvinode_header_t * node) {
 		free(node);
 		node = next;
 	}
-	return 0;	
+	return 0;
 }
 
 int dvi_destroy(dvifile_t * f) {
@@ -1105,18 +1105,18 @@ int dvi_destroy(dvifile_t * f) {
 	for (i = 0; i < f->nbpages; ++i) {
 		dvi_destroy_nodes(f->pages[i]);
 	}
-	
+
 	free(f->pages);
 
 	for (i = 0; i < f->nbfonts; ++i) {
 		free(f->fonts[i].area);
 		free(f->fonts[i].name);
 	}
-	
+
 	free(f->fonts);
-	
+
 	free(f->comment);
 	free(f);
-	
+
 	return 0;
 }
