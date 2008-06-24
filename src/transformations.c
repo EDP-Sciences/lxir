@@ -57,7 +57,7 @@ typedef struct xmlTransformationListEntry {
 
 typedef struct xmlTransformationStackEntry {
 	struct xmlTransformationStackEntry * next;
-	
+
 	xmlNodePtr node;
 	xmlTransformation transformation;
 	const char * parameter;
@@ -88,7 +88,7 @@ typedef struct xmlTransformationStack {
 
 typedef struct xmlTransformationInfoEntry {
 	struct xmlTransformationInfoEntry * next;
-	
+
 	const char * type;
 	const char * name;
 	xmlTransformation transformation;
@@ -111,7 +111,7 @@ int xmlTransformationAddToList(const char * type, const char * name, const char 
 		fprintf(stderr, "Unable to find transformation \"%s:%s\"\n", type, name);
 		return 0;
 	}
-	
+
 	while(list) {
 		if (strcmp(type, list->name) == 0) break;
 		list = list->next;
@@ -134,7 +134,7 @@ int xmlTransformationAddToList(const char * type, const char * name, const char 
 		list->first = entry;
 	}
 	list->last = entry;
-	
+
 	return 1;
 }
 
@@ -178,7 +178,7 @@ int xmlTransformationApply(xmlTransformationStack * stack) {
 	(*entry.transformation)(entry.node != ROOT_NODE ? entry.node : stack->document->children, &trans);
 	free((void *)entry.parameter);
 	free(entry);
-	
+
 	return 1;
 }
 
@@ -203,14 +203,14 @@ void xmlTransformationStackClear(xmlTransformationStack * s) {
 	free(s->entries);
 }
 
-static 
+static
 void xmlTransformationStackInit(xmlTransformationStack * s) {
 	s->count = STACK_SIZE;
 	s->pos = 0;
 	s->entries =  (xmlTransformationStackEntry *) malloc(s->count * sizeof(xmlTransformationStackEntry));
 }
 
-static 
+static
 void xmlTransformationStackGrow(xmlTransformationStack * s) {
 	if (s->pos == s->count) {
 		s->count *= 2;
@@ -248,10 +248,10 @@ int xmlTransformationApply(xmlTransformationStack * stack) {
 
 	trans.stack = stack;
 	trans.parameter = entry.parameter;
-	
+
 	(*entry.transformation)(entry.node != ROOT_NODE ? entry.node : stack->document->children, &trans);
 	free((void *)entry.parameter);
-	
+
 	return 1;
 }
 
@@ -262,7 +262,7 @@ int xmlTransformationApplyList(const char * type, xmlDocPtr * pdoc) {
 	xmlTransformationEntry trans;
 	xmlTransformationList * list = lists;
 	xmlTransformationListEntry * entry;
-	
+
 	xmlTransformationStackInit(&stack);
 	stack.document = *pdoc;
 
@@ -282,11 +282,11 @@ int xmlTransformationApplyList(const char * type, xmlDocPtr * pdoc) {
 		entry = entry->next;
 	}
 	while (xmlTransformationApply(&stack)) ;
-	
+
 	xmlTransformationStackClear(&stack);
 
 	*pdoc = stack.document;
-	
+
 	return 1;
 }
 
@@ -315,7 +315,7 @@ void xslt_proc(xmlNodePtr root, xmlTransformationEntry * param) {
 	if (param->parameter) {
 		xmlDocPtr old, result;
 		xsltStylesheetPtr ss;
-		const char * path;
+		char * path;
 		old = param->stack->document;
 
 #if USE_KPSE
@@ -333,7 +333,7 @@ void xslt_proc(xmlNodePtr root, xmlTransformationEntry * param) {
 #endif
 		result = xsltApplyStylesheet(ss, old, 0);
 		xsltFreeStylesheet(ss);
-		
+
 		if (result) {
 			xmlFreeDoc(old);
 			param->stack->document = result;
@@ -365,16 +365,16 @@ void xmlTransformationInit(const char * filename) {
 	xmlNodePtr node;
 	int i = 1;
 
-	
+
 #if USE_KPSE
 	const char * path = kpse_find_file(filename, kpse_xml_format, true);
 	if (path) {
 		trans = xmlReadFile(path, NULL, 0);
 	} else {
 #endif
-		const char * path = malloc(strlen(TEXMF_XML_DIR) + strlen(filename) + 2);
+		char * path = malloc(strlen(TEXMF_XML_DIR) + strlen(filename) + 2);
 		sprintf(path, TEXMF_XML_DIR "/%s", filename);
-		trans = xmlReadFile(path, NULL, 0);	
+		trans = xmlReadFile(path, NULL, 0);
 		free(path);
 #if USE_KPSE
 	}
@@ -384,9 +384,9 @@ void xmlTransformationInit(const char * filename) {
 	}
 #endif
 	node = find_first_element_node(trans);
-	
+
 	xmlRegisterBaseTransformations();
-	
+
 	while(node) {
 		if (node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "stack") == 0) {
 			const char * type = (const char *)xmlGetProp(node, BAD_CAST "type");
@@ -416,11 +416,11 @@ void xmlTransformationInit(const char * filename) {
 int xmlTransformationCallNext(xmlNodePtr node) {
 	xmlTransformationStackEntry * current = top;
 	if (!current) return 0;
-	
+
 	top = current->next;
-	
+
 	(*current->transformation)(node ? node : current->node, current->param);
-	
+
 	free(current);
 	return 1;
 }

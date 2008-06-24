@@ -66,13 +66,13 @@ int to_utf8(unsigned int code, char * buffer, int size) {
 	} u;
 	char * input, * output;
 	size_t src, dst, err;
-	
+
 	u.code = code;
 	src = 4;
 	dst = size;
 	input = u.buffer;
 	output = buffer;
-	
+
 	err = iconv(iconv_state, &input, &src, &output, &dst);
 	if (err == (size_t)-1) {
 		perror("iconv");
@@ -120,7 +120,7 @@ xmlNodePtr new_entity(xmlDocPtr doc, xmlChar * src, size_t len) {
 		}
 		temp = xmlMalloc(5);
 		to_utf8(uchar, temp, 5);
-		result = xmlNewText(temp);
+		result = (xmlEntityPtr) xmlNewText(temp);
 		xmlFree(temp);
 	}
 	return result;
@@ -142,7 +142,7 @@ int xmlReplaceEntities(xmlNodePtr node) {
 		fprintf(stderr, "Error: entities not started before calling replace_entities()\n");
 		return 0;
 	}
-	
+
 	while(1) {
 		regmatch_t match;
 		int status = regexec(&re, content + offset, 1, &match, 0);
@@ -155,7 +155,7 @@ int xmlReplaceEntities(xmlNodePtr node) {
 		} else if (status == REG_NOMATCH) {
 			xmlAddPrevSibling(marker, xmlNewText(content + offset));
 			break;
-		} else 
+		} else
 			exit_regerror(status);
 	}
 	xmlFree(content);

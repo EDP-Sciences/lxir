@@ -51,7 +51,7 @@ am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libtfm_la_DEPENDENCIES =
+libtfm_la_LIBADD =
 am_libtfm_la_OBJECTS = libtfm_la-libtfm.lo libtfm_la-tfm_internal.lo
 libtfm_la_OBJECTS = $(am_libtfm_la_OBJECTS)
 libtfm_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -202,10 +202,10 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+@USE_KPSE_TRUE@KPSE_CFLAGS = -DUSE_KPATHSEA=1 -I$(srcdir)/../libkpathsea/include
 lib_LTLIBRARIES = libtfm.la
 libtfm_la_SOURCES = libtfm.c libtfm.h tfm_internal.h tfm_internal.c
-libtfm_la_LIBADD = @LIBXML2_LIBS@
-libtfm_la_CFLAGS = @LIBXML2_CFLAGS@
+libtfm_la_CFLAGS = $(KPSE_CFLAGS)
 all: all-am
 
 .SUFFIXES:
@@ -498,11 +498,6 @@ uninstall-am: uninstall-libLTLIBRARIES
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-libLTLIBRARIES
 
-@KPSE_x64_TRUE@	KPSE_LIB_PATH = lib64
-@KPSE_x64_FALSE@	KPSE_LIB_PATH = lib
-
-@USE_KPSE_TRUE@	KPSE_CFLAGS = -DUSE_KPATHSEA=1 -I$(srcdir)/../libkpathsea/include
-@USE_KPSE_TRUE@	KPSE_LD_FLAGS = -L$(srcdir)/../libkpathsea/$(KPSE_LIB_PATH) -lkpathsea
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

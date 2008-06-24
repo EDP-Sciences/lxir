@@ -212,6 +212,10 @@ target_os = @target_os@
 target_vendor = @target_vendor@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+@KPSE_x64_FALSE@KPSE_LIB_PATH = lib
+@KPSE_x64_TRUE@KPSE_LIB_PATH = lib64
+@USE_KPSE_TRUE@KPSE_CFLAGS = -DUSE_KPATHSEA=1 -I$(srcdir)/../libkpathsea/include
+@USE_KPSE_TRUE@KPSE_LD_FLAGS = -L$(srcdir)/../libkpathsea/$(KPSE_LIB_PATH) -lkpathsea
 lib_LTLIBRARIES = libdvi.la
 libdvi_la_SOURCES = libdvi.c libdvi.h
 libdvi_la_LIBADD = @LIBXML2_LIBS@
@@ -529,11 +533,6 @@ uninstall-am: uninstall-libLTLIBRARIES
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-libLTLIBRARIES
 
-@KPSE_x64_TRUE@	KPSE_LIB_PATH = lib64
-@KPSE_x64_FALSE@	KPSE_LIB_PATH = lib
-
-@USE_KPSE_TRUE@	KPSE_CFLAGS = -DUSE_KPATHSEA=1 -I$(srcdir)/../libkpathsea/include
-@USE_KPSE_TRUE@	KPSE_LD_FLAGS = -L$(srcdir)/../libkpathsea/$(KPSE_LIB_PATH) -lkpathsea
 
 @BUILD_TOOLS_TRUE@	DVIDUMP = dvidump
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

@@ -1,12 +1,12 @@
 if KPSE_x64
-	KPSE_LIB_PATH = lib64
+KPSE_LIB_PATH = lib64
 else
-	KPSE_LIB_PATH = lib
+KPSE_LIB_PATH = lib
 endif
 
 if USE_KPSE
-	KPSE_CFLAGS = -DUSE_KPATHSEA=1 -I$(srcdir)/../libkpathsea/include
-	KPSE_LD_FLAGS = -L$(srcdir)/../libkpathsea/$(KPSE_LIB_PATH) -lkpathsea
+KPSE_CFLAGS = -DUSE_KPATHSEA=1 -I$(srcdir)/../libkpathsea/include
+KPSE_LD_FLAGS = -L$(srcdir)/../libkpathsea/$(KPSE_LIB_PATH) -lkpathsea
 endif
 
 if BUILD_TOOLS
