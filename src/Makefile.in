@@ -51,7 +51,8 @@ am_lxir_OBJECTS = lxir-lxir.$(OBJEXT) lxir-transformations.$(OBJEXT) \
 	lxir-utf8string.$(OBJEXT) lxir-log2xml.$(OBJEXT) \
 	lxir-entities.$(OBJEXT) lxir-postxml.$(OBJEXT)
 lxir_OBJECTS = $(am_lxir_OBJECTS)
-lxir_DEPENDENCIES = ../libdvi/libdvi.la ../libfontmap/libfontmap.la
+lxir_DEPENDENCIES = ../libdvi/libdvi.la ../libfontmap/libfontmap.la \
+	../libtfm/libtfm.la
 lxir_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(lxir_CFLAGS) $(CFLAGS) $(lxir_LDFLAGS) \
 	$(LDFLAGS) -o $@
@@ -218,8 +219,8 @@ EXTRA_DIST = config.xml ligatures.xml transformations.xml
 lxir_SOURCES = lxir.c transformations.c utf8string.c log2xml.c entities.c postxml.c \
 	utf8string.h log2xml.h transformations.h
 
-lxir_LDADD = ../libdvi/libdvi.la ../libfontmap/libfontmap.la
-lxir_CFLAGS = $(CFLAGS) $(KPSE_CFLAGS) $(LIBXML2_CFLAGS) $(LIBXSLT_CFLAGS) -I$(srcdir)/../libdvi -I$(srcdir)/../libfontmap
+lxir_LDADD = ../libdvi/libdvi.la ../libfontmap/libfontmap.la ../libtfm/libtfm.la
+lxir_CFLAGS = $(CFLAGS) $(KPSE_CFLAGS) $(LIBXML2_CFLAGS) $(LIBXSLT_CFLAGS) -I$(srcdir)/../libdvi -I$(srcdir)/../libfontmap -I$(srcdir)/../libtfm
 lxir_LDFLAGS = $(AM_LDFLAGS) $(KPSE_LD_FLAGS) $(LIBXML2_LIBS) $(LIBXSLT_LIBS)
 all: all-am
 

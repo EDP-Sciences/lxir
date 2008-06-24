@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libdvi.h>
+#include <libtfm.h>
 #include <libfontmap.h>
 
 #if USE_KPSE
@@ -43,20 +44,37 @@ int do_not_add_space = 0;
 
 static char pbuffer[128];
 
+struct tfminfo_s {
+	int index;
+	tfmfile_t * tfm;
+};
+
+static inline
+tfmfile_t * get_tfminfo(struct tfminfo_s * tfminfo, int index) {
+	while(1) {
+		if (tfminfo->index == -1) return 0;
+		if (index == tfminfo->index) return tfminfo->tfm;
+		tfminfo++;
+	}
+}
+
 static
-void print_font(xmlNodePtr root, dvifont_t * font) {
+void print_font(xmlNodePtr root, dvifont_t * font, struct tfminfo_s * tfminfo) {
 	xmlNodePtr node, size;
-	
+	tfmfile_t * tfm = get_tfminfo(tfminfo, font->index);
+
 	node = xmlNewChild(root, NULL, BAD_CAST "font", NULL);
-	
+
 	sprintf(pbuffer, "%d", font->index);	xmlNewProp(node, BAD_CAST "index", BAD_CAST pbuffer);
 	sprintf(pbuffer, "%8.8X", font->checksum);	xmlNewProp(node, BAD_CAST "checksum", BAD_CAST pbuffer);
-	
+
 	size = xmlNewChild(node, NULL, BAD_CAST "size", NULL);
 
 	sprintf(pbuffer, "%d", font->scale);	xmlNewProp(size, BAD_CAST "scale", BAD_CAST pbuffer);
 	sprintf(pbuffer, "%d", font->design_size);	xmlNewProp(size, BAD_CAST "design_size", BAD_CAST pbuffer);
-	
+
+	if (tfm) xmlNewProp(size, BAD_CAST "filename", BAD_CAST tfm->filename);
+
 	if (font->area && *font->area) {
 		xmlNewTextChild(node, NULL, BAD_CAST "area", BAD_CAST font->area);
 	}
@@ -66,34 +84,34 @@ void print_font(xmlNodePtr root, dvifont_t * font) {
 }
 
 static
-void make_header(xmlNodePtr root, dvifile_t * dvi) {
+void make_header(xmlNodePtr root, dvifile_t * dvi, struct tfminfo_s * tfminfo) {
 	int i;
 	xmlNodePtr header, size;
-	
+
 	header = xmlNewChild(root, NULL, BAD_CAST "header", NULL);
-	
+
 	sprintf(pbuffer, "%d", dvi->version); xmlNewTextChild(header, NULL, BAD_CAST "version", BAD_CAST pbuffer);
-	
+
 	size = xmlNewChild(header, NULL, BAD_CAST "size", NULL);
-	
+
 	sprintf(pbuffer, "%d", dvi->num);	xmlNewProp(size, BAD_CAST "num", BAD_CAST pbuffer);
 	sprintf(pbuffer, "%d", dvi->den);	xmlNewProp(size, BAD_CAST "den", BAD_CAST pbuffer);
 	sprintf(pbuffer, "%d", dvi->mag);	xmlNewProp(size, BAD_CAST "mag", BAD_CAST pbuffer);
-	
+
 	xmlNewTextChild(header, NULL, BAD_CAST "comment", BAD_CAST dvi->comment);
-	
+
 	for(i = 0; i < dvi->nbfonts; ++i)
-			print_font(header, &dvi->fonts[i]);
+			print_font(header, &dvi->fonts[i], tfminfo);
 }
 
 static
-void make_node(xmlNodePtr root, dvinode_header_t * node) {
+void make_node(xmlNodePtr root, dvinode_header_t * node, struct tfminfo_s * tfminfo) {
 	switch(node->type) {
 		case DVINODE_BOP: {
 				int i;
 				dvinode_bop_t * bop = (dvinode_bop_t *) node;
 				xmlNodePtr node = xmlNewChild(root, NULL, BAD_CAST "bop", NULL);
-				
+
 				for(i = 0; i < 10; ++i) {
 					sprintf(pbuffer, "n%d", i);
 					sprintf(pbuffer+64, "%d", bop->counts[i]);
@@ -104,13 +122,15 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 				dvinode_text_t * text = (dvinode_text_t *) node;
 				char * content;
 				xmlNodePtr node;
-			
+
 				content = malloc(text->size + 1);
 				memcpy(content, text->content, text->size);
 				content[text->size] = 0;
 
 				node = xmlNewTextChild(root, NULL, BAD_CAST "text", BAD_CAST content);
-			
+
+				node->_private = get_tfminfo(tfminfo, text->font);
+
 				free(content);
 				sprintf(pbuffer, "%d", text->font); xmlNewProp(node, BAD_CAST "font", BAD_CAST pbuffer);
 				sprintf(pbuffer, "%d", text->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
@@ -157,14 +177,14 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 }
 
 static
-void make_content(xmlNodePtr root, dvifile_t * dvi) {
+void make_content(xmlNodePtr root, dvifile_t * dvi, struct tfminfo_s * tfminfo) {
 	int i;
 	dvinode_header_t * node;
 	for(i = 0; i < dvi->nbpages; ++i) {
 		xmlNodePtr page = xmlNewChild(root, NULL, BAD_CAST "page", NULL);
 		node = dvi->pages[i];
 		while(node) {
-			make_node(page, node);
+			make_node(page, node, tfminfo);
 			node = node->next;
 		}
 	}
@@ -172,19 +192,19 @@ void make_content(xmlNodePtr root, dvifile_t * dvi) {
 
 static
 int is_valid_node(xmlNodePtr node, const char * name) {
-	return node && node->type == XML_ELEMENT_NODE && 
+	return node && node->type == XML_ELEMENT_NODE &&
 		strcmp((const char *)node->name, name) == 0;
 }
 
-static 
+static
 int is_valid_control_node(xmlNodePtr node, const char * type) {
-	return is_valid_node(node, "control") && 
+	return is_valid_node(node, "control") &&
 		(!type || strcmp((const char *)xmlGetProp(node, "type"), type) == 0);
 }
 
 static inline
 int is_valid_node_type(xmlNodePtr node, const char * type) {
-	return is_valid_node(node, "node") && 
+	return is_valid_node(node, "node") &&
 		(strcmp((const char *)xmlGetProp(node, "type"), type) == 0);
 }
 
@@ -240,7 +260,7 @@ xmlChar * check_accent(xmlChar * a, xmlChar * b) {
 	int r;
 	char * accent = xmlMalloc(32);
 	*accent = 0;
-	
+
 	r = lfm_get_accent(b, a, accent);
 	if(r) {
 		xmlFree(accent);
@@ -272,7 +292,7 @@ void remove_xxx_node_before(xmlNodePtr base, const xmlChar * match) {
 static
 void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 	xmlChar * text1content, * text2content;
-	
+
 	text1content = xmlNodeGetContent(text1);
 	text2content = xmlNodeGetContent(text2);
 	if (text1content && text2content) {
@@ -280,14 +300,14 @@ void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 		t1 = utf8_trim(text1content);
 		t2 = utf8_trim(text2content);
 		fprintf(stderr, "Checking accentuated character between \"%s\" and \"%s\"", t1, t2);
-		
+
 		if (xmlUTF8Strlen(t1) == 1 && (accent = check_accent(t1, t2))) {
 			/* transform here */
 			const xmlChar * base = xmlUTF8Strpos(t2, 1);
 			int size1 = xmlStrlen(accent), size2 = xmlStrlen(base);
 			xmlChar * result = xmlMalloc(size1 + size2 + 1);
 			fprintf(stderr, " success : \"%s\"\n", accent);
-			
+
 			memcpy(result, accent, size1);
 			memcpy(result + size1, base, size2);
 			result[size1 + size2] = 0;
@@ -326,7 +346,7 @@ void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 		} else {
 			fprintf(stderr, " failed\n");
 		}
-		
+
 		xmlFree(t1);
 		xmlFree(t2);
 	}
@@ -381,19 +401,19 @@ void remove_control_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
 		xmlNodePtr next = node->next;
 		if (is_valid_node(node, "control")) {
 			xmlNodePtr prev, last;
-			
+
 			prev = node->prev;
-			
+
 			last = node;
 			while (is_valid_node(last->next, "control"))
 				last = last->next;
-			
+
 			next = last->next;
-			
+
 			if (is_valid_node(prev, "text") && is_valid_node(next, "text")) {
-				/* 
+				/*
 				We have some text nodes separated by a bunch of control nodes.
-				
+
 				We may need to insert a space depending on the type of control nodes.
 				*/
 				int has_space = 0;
@@ -401,7 +421,7 @@ void remove_control_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
 				do {
 					xmlChar * type = xmlGetProp(current, BAD_CAST "type");
 					xmlChar * param = xmlGetProp(current, BAD_CAST "param");
-					
+
 					if (
 						strcmp((const char *)type, "push") == 0 ||
 						strcmp((const char *)type, "pop") == 0 ||
@@ -411,12 +431,12 @@ void remove_control_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
 					) {
 						has_space = 1;
 					} else if (
-						strcmp((const char *) type, "w") == 0 && 
+						strcmp((const char *) type, "w") == 0 &&
 						strcmp((const char *) param, "1") == 0
 					) {
 						has_space = 1;
 					}
-					
+
 					n = current->next;
 					xmlUnlinkNode(current);
 					xmlFreeNode(current);
@@ -456,7 +476,7 @@ int is_valid_tag_name(const char * content, xmlChar ** pname, int * popen) {
 	char * s, * e;
 	char * name;
 	int len;
-	
+
 	if(strncmp(content, "::tag lxir ", 11) != 0) {
 		fprintf(stderr, "Unrecognized tag prefix in \"%s\"\n", content);
 		return 0;
@@ -477,7 +497,7 @@ int is_valid_tag_name(const char * content, xmlChar ** pname, int * popen) {
 	memcpy(name, s, len);
 	name[len] = 0;
 	*pname = (xmlChar *)name;
-	
+
 	if(strncmp(content, "begin", 5) == 0) {
 		*popen = NODE_TYPE_OPEN;
 		return 1;
@@ -540,21 +560,21 @@ static
 int is_xxx_valid_name(xmlNodePtr node, xmlChar ** pname, int * popen, xmlNodePtr attr) {
 	int len;
 	char * content, * name;
-	
+
 	if(node->type != XML_ELEMENT_NODE) return 0;
-	
+
 	if(!node->children || node->children != node->last) return 0;
-	
+
 	if(!xmlNodeIsText(node->children)) return 0;
-		
+
 	content = (char*)node->children->content;
-	
+
 	if (!content) return 0;
 
 	len = strlen(content);
-	
+
 	if(len < 4) return 0;
-	
+
 	if (content[0] == ' ') { content++; len -= 1; }
 	if (content[len - 1] == ' ') { len -= 1; content[len] = 0; }
 
@@ -578,9 +598,9 @@ static
 int is_node_env_name(xmlNodePtr node, xmlChar ** ptype, int * popen) {
 	int len;
 	char * name, * content = (char *)xmlGetProp(node, BAD_CAST "type");
-	
+
 	if(!content) return 0;
-	
+
 	if(strncmp(content, "Env:@", 5) == 0) {
 		content += 5;
 		len = strlen(content);
@@ -611,17 +631,17 @@ int is_node_special(xmlNodePtr node, xmlChar ** ptype, xmlChar ** pvalue) {
 	int len, has_at;
 	char * ps, * pe;
 	char * name, * content = (char *)xmlGetProp(node, BAD_CAST "type");
-	
+
 	if(!content) return 0;
-	
+
 	ps = strchr(content, ':');
 	pe = strrchr(content, ':');
 	if(!ps || !pe || ps == pe) return 0;
-		
+
 	has_at = (ps[1] == '@' && pe[-1] == '@');
 	if (has_at) {
 		ps += 1; pe -= 1;
-		
+
 		len = ps - content;
 		if(len < 2 || ps[-1] != ':' || pe[1] != ':') return 0;
 		len -= 1;
@@ -630,14 +650,14 @@ int is_node_special(xmlNodePtr node, xmlChar ** ptype, xmlChar ** pvalue) {
 		memcpy(name, content, len);
 		name[len] = 0;
 		*ptype = (xmlChar *)name;
-		
+
 		ps += 1;
 		len = pe - ps;
 		name = malloc(len + 1);
 		memcpy(name, ps, len);
 		name[len] = 0;
 		*pvalue = (xmlChar *)name;
-		
+
 		return 1;
 	} else {
 		len = ps - content;
@@ -647,14 +667,14 @@ int is_node_special(xmlNodePtr node, xmlChar ** ptype, xmlChar ** pvalue) {
 		memcpy(name, content, len);
 		name[len] = 0;
 		*ptype = (xmlChar *)name;
-		
+
 		ps += 1;
 		len = pe - ps;
 		name = malloc(len + 1);
 		memcpy(name, ps, len);
 		name[len] = 0;
 		*pvalue = (xmlChar *)name;
-		
+
 		return 1;
 	}
 }
@@ -674,7 +694,7 @@ struct node_stack_entry {
 	xmlNodePtr attr;
 	int type;
 	xmlChar * name;
-	
+
 	struct node_stack_entry * next;
 	struct node_stack_entry * prev;
 };
@@ -706,9 +726,9 @@ static
 struct node_stack_entry *
 new_node_stack_entry(xmlNodePtr node) {
 	struct node_stack_entry * entry;
-	
+
 	if (!is_valid_node(node, "xxx")) return 0;
-		
+
 	entry = (struct node_stack_entry *) malloc(sizeof(struct node_stack_entry));
 	entry->node = node;
 	entry->attr = xmlNewNode(NULL, BAD_CAST "temp-attribute");
@@ -716,7 +736,7 @@ new_node_stack_entry(xmlNodePtr node) {
 		fprintf(stderr, "Invalid xxx node structure ! it has no name ???\n");
 		exit(-1);
 	}
-	
+
 	if (entry->type == NODE_TYPE_EMPTY) {
 		xmlNodePtr next = node->next;
 		xmlUnlinkNode(node);
@@ -786,10 +806,10 @@ static
 int build_hierarchy_step(struct node_stack * stack) {
 	struct node_stack_entry * entry, * match;
 	xmlNodePtr next, node;
-	
-	entry = stack->first; 
+
+	entry = stack->first;
 	if(!entry) return 0;
-	
+
 	/* find the first CLOSE node */
 	while(entry && entry->type != NODE_TYPE_CLOSE) entry = entry->next;
 	if(!entry) {
@@ -801,7 +821,7 @@ int build_hierarchy_step(struct node_stack * stack) {
 	if(!entry) {
 		entry = stack->first;
 		unlink_node_stack(stack, entry);
-		
+
 		fprintf(stderr, "Invalid xxx hierarchy, closing node \"%s\" found without matching open\nReplacing by an empty node...\n", entry->name);
 		next = entry->node->next;
 		xmlUnlinkNode(entry->node);
@@ -824,10 +844,10 @@ int build_hierarchy_step(struct node_stack * stack) {
 		xmlUnlinkNode(match->node);
 		xmlAddPrevSibling(entry->next->node, match->node);
 	}
-	
+
 	unlink_node_stack(stack, entry);
 	unlink_node_stack(stack, match);
-	
+
 	next = entry->node->next;
 	xmlUnlinkNode(entry->node);
 	xmlFreeNode(entry->node);
@@ -835,7 +855,7 @@ int build_hierarchy_step(struct node_stack * stack) {
 	xmlNewProp(node, BAD_CAST "type", entry->name);
 	copy_props(node, entry->attr, 0); xmlFreeNode(entry->attr);
 	copy_props(node, match->attr, 1); xmlFreeNode(match->attr);
-	
+
 	xmlAddPrevSibling(next, node);
 	while(next && next != match->node) {
 		xmlNodePtr nextnext = next->next;
@@ -933,7 +953,7 @@ int merge_adjacent_text(xmlNodePtr root) {
 		xmlNodePtr next = node->next;
 		if (node->type == XML_ELEMENT_NODE) {
 			count += merge_adjacent_text(node);
-			
+
 			if (next && is_valid_node(node, "text") && is_valid_node(next, "text")) {
 				if(!next->children) {
 					xmlUnlinkNode(next);
@@ -950,7 +970,7 @@ int merge_adjacent_text(xmlNodePtr root) {
 
 					nodeF = atoi((const char *)xmlGetProp(node, BAD_CAST "font"));
 					nextF = atoi((const char *)xmlGetProp(next, BAD_CAST "font"));
-				
+
 					if ( (nodeF == nextF) && (nodeV == nextV || nodeH == nextH ||
 						/* the next one is more experimental. 786432 is the "normal" spacing between lines (this should be detected ?) */
 						( (nextV - nodeV) <= 786432 && (nextH < nodeH) ) ) ) {
@@ -1026,18 +1046,18 @@ void mathmode_drop_text(xmlNodePtr root, xmlTransformationEntry * param) {
 			int search_children = 1;
 			if (is_valid_node(node, "node")) {
 				xmlChar * type = xmlGetProp(node, BAD_CAST "type");
-				
+
 				if (type && is_mathmode_node_name(type)) {
 					xmlTransformationPush(node, mathmode_drop_text_real, param);
 					search_children = 0;
 				}
 			}
-			
+
 			if (search_children) {
 				xmlTransformationPush(node, mathmode_drop_text, param);
 			}
 		}
-		
+
 		node = node->next;
 	}
 }
@@ -1046,17 +1066,17 @@ void mathmode_drop_text(xmlNodePtr root, xmlTransformationEntry * param) {
 static void transform_math_expression_real(xmlNodePtr root) {
 	xmlNsPtr ns;
 	xmlNodePtr result, mrow, node;
-	
+
 	result = xmlNewNode(NULL, "math");
 	ns = xmlNewNs(result, "http://www.w3.org/1998/Math/MathML", NULL);
 	mrow = xmlNewChild(ns, result, "mrow", NULL);
 	node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
-		
+
 		if (xmlNodeIsText(node) {
 			xmlChar * content;
-			
+
 			content = node->content;
 			while(content && *content) {
 				int family, len;
@@ -1072,12 +1092,12 @@ static void transform_math_expression_real(xmlNodePtr root) {
 				}
 				xmlMemFree(element);
 			}
-			
+
 		} else {
 			xmlUnlinkNode(node);
 			xmlAddChild(mrow, node);
 		}
-		
+
 		node = next;
 	}
 	xmlAddPrevSibling(root, result);
@@ -1092,18 +1112,18 @@ void transform_math_expression(xmlNodePtr root) {
 			int search_children = 1;
 			if (strcmp((const char *)node->name, "node") == 0) {
 				xmlChar * type = (const char *)xmlGetProp(node, BAD_CAST "type");
-				
+
 				if (type && is_mathmode_node_name(type)) {
 					transform_math_expression_real(node);
 					search_children = 0;
 				}
 			}
-			
+
 			if (search_children) {
 				transform_math_expression(node);
 			}
 		}
-		
+
 		node = node->next;
 	}
 }
@@ -1114,9 +1134,9 @@ void merge_accent_tags1(xmlNodePtr root, xmlTransformationEntry * param) {
 	while(node) {
 		xmlNodePtr next = node->next;
 		if (node->type == XML_ELEMENT_NODE) {
-			
+
 			if(next && is_valid_node(node, "text") && is_valid_node(next, "node")) {
-				//  Transform : 
+				//  Transform :
 				//		<text>{...}</text><node type="textaccent"/><text>{...}</text>
 				//	into :
 				//		<text>{...}<node type="textaccent" />{...}</text>
@@ -1147,7 +1167,7 @@ void merge_accent_tags2(xmlNodePtr root, xmlTransformationEntry * param) {
 		xmlNodePtr next = node->next;
 		if (node->type == XML_ELEMENT_NODE) {
 			if(next && is_valid_node(node, "node") && is_valid_node(next, "text")) {
-				
+
 				xmlChar * type = xmlGetProp(node, BAD_CAST "type");
 				if (is_accent_node_name(type)) {
 					//	Transform :
@@ -1184,8 +1204,8 @@ int get_char_from_next_text(xmlNodePtr node, xmlChar * text) {
 
 	we want to take one UTF8 char from (*).
 */
-	if (node->parent && 
-			node->parent->next && 
+	if (node->parent &&
+			node->parent->next &&
 			is_valid_node(node->parent->next, "text") &&
 			node->parent->next->children &&
 			xmlNodeIsText(node->parent->next->children)) {
@@ -1199,15 +1219,15 @@ void transform_accent_tags(xmlNodePtr root, xmlTransformationEntry * param) {
 	while(node) {
 		xmlNodePtr next = node->next;
 		if (node->type == XML_ELEMENT_NODE) {
-			
-			if(is_valid_node(node, "node") && 
+
+			if(is_valid_node(node, "node") &&
 					is_accent_node_name(xmlGetProp(node, BAD_CAST "type"))
 					) {
 				xmlChar base[10];
 				xmlChar accent[10];
 				xmlChar conv[10];
 				int err;
-				
+
 				err = get_char_from_next_text(node, accent);
 				if(err) {
 //					fprintf(stderr, "Invalid accent ! unable to find text for accent\n");
@@ -1246,9 +1266,9 @@ void transform_accent_tags(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
-static xmlDocPtr mathdoc;
 static
 xmlNodePtr get_math_node(xmlDocPtr doc, int begin_id, int end_id) {
+	xmlDocPtr mathdoc = (xmlDocPtr) doc->_private;
 	return mathlog_copy_expr(mathdoc, doc, begin_id, end_id);
 }
 
@@ -1315,12 +1335,12 @@ void replace_math_entities(xmlNodePtr root, xmlTransformationEntry * param) {
 			int begin_id, end_id;
 			xmlChar * param;
 			xmlNodePtr math;
-			
+
 			param = xmlGetProp(node, BAD_CAST "id");
 			begin_id = param ? atoi((const char *)param) : -1;
 			param = xmlGetProp(node, BAD_CAST "close-id");
 			end_id = param ? atoi((const char *)param) : -1;
-			
+
 			math = get_math_node(root->doc, begin_id, end_id);
 			if (math) {
 				xmlAddPrevSibling(node, math);
@@ -1376,7 +1396,7 @@ char * transform_verbatim_content(xmlChar * content) {
 	transform_content(temp, "![", "{");
 	transform_content(temp, "!]", "}");
 	transform_content(temp, "!!", "!");
-	
+
 	return temp;
 }
 
@@ -1404,7 +1424,7 @@ void transform_macro_content(xmlNodePtr node, xmlChar * content) {
 static
 void transform_verbatim_formula(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
 		if (is_valid_node_type(node, "formule")) {
@@ -1437,7 +1457,7 @@ void transform_verbatim_formula(xmlNodePtr root, xmlTransformationEntry * param)
 static
 void transform_verbatim_macro(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
 		if (is_valid_node_type(node, "macro")) {
@@ -1445,7 +1465,7 @@ void transform_verbatim_macro(xmlNodePtr root, xmlTransformationEntry * param) {
 			if (content) {
 				transform_macro_content(node, content);
 				xmlUnsetProp(node, BAD_CAST "content");
-			} 
+			}
 		} else {
 			xmlTransformationPush(node, transform_verbatim_macro, param);
 		}
@@ -1503,13 +1523,39 @@ void init_transformations() {
 	xmlTransformationInit("transformations.xml");
 }
 
+static
+struct tfminfo_s * init_tfminfo(dvifile_t * dvi) {
+	int i;
+	struct tfminfo_s * tfminfo = malloc(sizeof(struct tfminfo_s) * dvi->nbfonts + 1);
+
+	if (!tfminfo) {
+		perror("Allocation error in init_tfminfo");
+		return NULL;
+	}
+	tfminfo[dvi->nbfonts].index = -1;
+	for (i = 0; i < dvi->nbfonts; ++i) {
+		tfminfo[i].index = dvi->fonts[i].index;
+		tfminfo[i].tfm = tfm_open(dvi->fonts[i].name, dvi->fonts[i].scale);
+		if (!tfminfo[i].tfm) {
+			fprintf(stderr, "Unable to find font metrics for font %d (%s)\n",
+				dvi->fonts[i].index, dvi->fonts[i].name);
+		} else if (tfminfo[i].tfm->checksum != dvi->fonts[i].checksum) {
+			fprintf(stderr, "WARNING: font %s has a non-matching checksum !\n",
+				dvi->fonts[i].name);
+		}
+	}
+	return tfminfo;
+}
+
 int main(int argc, char * argv[]) {
 	int err;
 	int flags;
 	const char * dvifile;
 
 	dvifile_t * dvi;
+	struct tfminfo_s * tfm;
     xmlDocPtr doc;
+    xmlDocPtr mathdoc;
     xmlNodePtr root;
 
 #if USE_KPSE
@@ -1519,9 +1565,9 @@ int main(int argc, char * argv[]) {
     LIBXML_TEST_VERSION;
 	xmlSubstituteEntitiesDefault(1);
 	xmlLoadExtDtdDefaultValue = 1;
-	
+
 	lfm_init();
-	
+
 	if (argc < 2) {
 		fprintf(stderr, "Usage : %s [-skip {1|sp|all}] <dvi>\n", argv[0]);
 		return -1;
@@ -1548,34 +1594,40 @@ int main(int argc, char * argv[]) {
 		do_not_add_space = 1;
 		dvifile = argv[1];
 	}
-		
+
 	err = dvi_read(&dvi, dvifile, flags);
 	if(err) {
 		fprintf(stderr, "Error (%d) reading DVI file.\n", err);
 		return -1;
 	}
+
+
 	init_transformations();
 	start_entities();
-	
+
 	mathdoc = mathlog_read_file(get_log_filename(dvifile));
 	xmlSaveFormatFileEnc("temp-mathlog.xml", mathdoc, "UTF-8", 1);
-	
+
 	doc = xmlNewDoc(BAD_CAST "1.0");
+	doc->_private = mathdoc;
+
 	root = xmlNewNode(NULL, BAD_CAST "document");
 	xmlDocSetRootElement(doc, root);
-	
 
-	make_header(root, dvi);
-	make_content(root, dvi);
-	
+	tfm = init_tfminfo(dvi);
+
+	make_header(root, dvi, tfm);
+	make_content(root, dvi, tfm);
+
 	dvi_destroy(dvi);
-	
+
 	xmlSaveFormatFileEnc("temp-0-rawdvi.xml", doc, "UTF-8", 1);
-	
+
 	xmlTransformationApplyList("text", &doc);
-	
+
 	xmlSaveFormatFileEnc("-", doc, "UTF-8", 1);
 	xmlFreeDoc(doc);
+	xmlFreeDoc(mathdoc);
 	xmlCleanupParser();
     xmlMemoryDump();
 	lfm_close();

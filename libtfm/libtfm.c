@@ -5,8 +5,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "libtfm.h"
 #include "tfm_internal.h"
+#include "libtfm.h"
 
 static
 int make_tfm_kerning_info(struct tfm_file_s * tfm, struct tfm_internal_file_s * f, int i) {
@@ -48,7 +48,7 @@ int make_tfm_kerning_info(struct tfm_file_s * tfm, struct tfm_internal_file_s * 
 	return 0;
 }
 
-tfm_file_t tfm_open(char const * fontname, int scale) {
+tfmfile_t * tfm_open(char const * fontname, int scale) {
 	struct tfm_file_s * tfm;
 	struct tfm_internal_file_s * f;
 	int i;
@@ -75,6 +75,7 @@ tfm_file_t tfm_open(char const * fontname, int scale) {
 
 	tfm->filename = strdup(kpse_path);
 	tfm->scale = scale;
+	tfm->checksum = f->info_header.checksum;
 
 	tfm->character_offset = f->file_header.bc;
 	tfm->character_count = f->file_header.ec - tfm->character_offset + 1;
@@ -117,7 +118,7 @@ tfm_file_t tfm_open(char const * fontname, int scale) {
 	return tfm;
 }
 
-void tfm_close(tfm_file_t tfm) {
+void tfm_close(tfmfile_t * tfm) {
 	if (!tfm) return;
 
 	if (tfm->characters) {
@@ -132,19 +133,23 @@ void tfm_close(tfm_file_t tfm) {
 	free(tfm);
 }
 
-int tfm_size(tfm_file_t tfm, int first_char, int next_char) {
+int tfm_size(tfmfile_t * tfm, int first_char, int * pnext_char) {
 	int char_index = first_char - tfm->character_offset;
 	if (char_index < 0 || char_index >= tfm->character_count) {
 		fprintf(stderr, "libtfm error: invalid char requested\n");
 		return 0;
 	}
-	if (next_char > 0 && tfm->characters[char_index].kerning_count) {
-		int i;
-		for (i = 0; i < tfm->characters[char_index].kerning_count; ++i) {
-			if (tfm->characters[char_index].kernings[i].next_char == next_char) {
-				return tfm->characters[char_index].width +
-					tfm->characters[char_index].kernings[i].kerning;
+	if (pnext_char) {
+		if (tfm->characters[char_index].kerning_count) {
+			int i;
+			for (i = 0; i < tfm->characters[char_index].kerning_count; ++i) {
+				if (tfm->characters[char_index].kernings[i].next_char == *pnext_char) {
+					*pnext_char = tfm->characters[char_index].kernings[i].kerning;
+					break;
+				}
 			}
+		} else {
+			*pnext_char = 0;
 		}
 	}
 	return tfm->characters[char_index].width;
