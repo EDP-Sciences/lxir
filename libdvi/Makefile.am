@@ -17,7 +17,8 @@ noinst_PROGRAMS = $(DVIDUMP)
 lib_LTLIBRARIES = libdvi.la
 libdvi_la_SOURCES = libdvi.c libdvi.h
 libdvi_la_LIBADD = @LIBXML2_LIBS@
-libdvi_la_CFLAGS = @LIBXML2_CFLAGS@
+libdvi_la_CFLAGS = @LIBXML2_CFLAGS@ -I$(srcdir)/../libfontmap \
+	-I$(srcdir)/../libtfm
 EXTRA_PROGRAMS = dvidump
 
 dvidump_SOURCES = dvidump.c

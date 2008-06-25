@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libdvi.h>
-#include <libtfm.h>
 #include <libfontmap.h>
 
 #if USE_KPSE
@@ -44,24 +43,9 @@ int do_not_add_space = 0;
 
 static char pbuffer[128];
 
-struct tfminfo_s {
-	int index;
-	tfmfile_t * tfm;
-};
-
-static inline
-tfmfile_t * get_tfminfo(struct tfminfo_s * tfminfo, int index) {
-	while(1) {
-		if (tfminfo->index == -1) return 0;
-		if (index == tfminfo->index) return tfminfo->tfm;
-		tfminfo++;
-	}
-}
-
 static
-void print_font(xmlNodePtr root, dvifont_t * font, struct tfminfo_s * tfminfo) {
+void print_font(xmlNodePtr root, dvifont_t * font) {
 	xmlNodePtr node, size;
-	tfmfile_t * tfm = get_tfminfo(tfminfo, font->index);
 
 	node = xmlNewChild(root, NULL, BAD_CAST "font", NULL);
 
@@ -73,8 +57,6 @@ void print_font(xmlNodePtr root, dvifont_t * font, struct tfminfo_s * tfminfo) {
 	sprintf(pbuffer, "%d", font->scale);	xmlNewProp(size, BAD_CAST "scale", BAD_CAST pbuffer);
 	sprintf(pbuffer, "%d", font->design_size);	xmlNewProp(size, BAD_CAST "design_size", BAD_CAST pbuffer);
 
-	if (tfm) xmlNewProp(size, BAD_CAST "filename", BAD_CAST tfm->filename);
-
 	if (font->area && *font->area) {
 		xmlNewTextChild(node, NULL, BAD_CAST "area", BAD_CAST font->area);
 	}
@@ -84,7 +66,7 @@ void print_font(xmlNodePtr root, dvifont_t * font, struct tfminfo_s * tfminfo) {
 }
 
 static
-void make_header(xmlNodePtr root, dvifile_t * dvi, struct tfminfo_s * tfminfo) {
+void make_header(xmlNodePtr root, dvifile_t * dvi) {
 	int i;
 	xmlNodePtr header, size;
 
@@ -101,11 +83,11 @@ void make_header(xmlNodePtr root, dvifile_t * dvi, struct tfminfo_s * tfminfo) {
 	xmlNewTextChild(header, NULL, BAD_CAST "comment", BAD_CAST dvi->comment);
 
 	for(i = 0; i < dvi->nbfonts; ++i)
-			print_font(header, &dvi->fonts[i], tfminfo);
+			print_font(header, &dvi->fonts[i]);
 }
 
 static
-void make_node(xmlNodePtr root, dvinode_header_t * node, struct tfminfo_s * tfminfo) {
+void make_node(xmlNodePtr root, dvinode_header_t * node) {
 	switch(node->type) {
 		case DVINODE_BOP: {
 				int i;
@@ -129,12 +111,13 @@ void make_node(xmlNodePtr root, dvinode_header_t * node, struct tfminfo_s * tfmi
 
 				node = xmlNewTextChild(root, NULL, BAD_CAST "text", BAD_CAST content);
 
-				node->_private = get_tfminfo(tfminfo, text->font);
-
 				free(content);
 				sprintf(pbuffer, "%d", text->font); xmlNewProp(node, BAD_CAST "font", BAD_CAST pbuffer);
 				sprintf(pbuffer, "%d", text->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
 				sprintf(pbuffer, "%d", text->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
+#ifdef USE_KPSE
+				sprintf(pbuffer, "%d", text->width); xmlNewProp(node, BAD_CAST "width", BAD_CAST pbuffer);
+#endif
 			} break;
 		case DVINODE_XXX: {
 				dvinode_xxx_t * xxx = (dvinode_xxx_t *) node;
@@ -177,14 +160,14 @@ void make_node(xmlNodePtr root, dvinode_header_t * node, struct tfminfo_s * tfmi
 }
 
 static
-void make_content(xmlNodePtr root, dvifile_t * dvi, struct tfminfo_s * tfminfo) {
+void make_content(xmlNodePtr root, dvifile_t * dvi) {
 	int i;
 	dvinode_header_t * node;
 	for(i = 0; i < dvi->nbpages; ++i) {
 		xmlNodePtr page = xmlNewChild(root, NULL, BAD_CAST "page", NULL);
 		node = dvi->pages[i];
 		while(node) {
-			make_node(page, node, tfminfo);
+			make_node(page, node);
 			node = node->next;
 		}
 	}
@@ -1523,37 +1506,12 @@ void init_transformations() {
 	xmlTransformationInit("transformations.xml");
 }
 
-static
-struct tfminfo_s * init_tfminfo(dvifile_t * dvi) {
-	int i;
-	struct tfminfo_s * tfminfo = malloc(sizeof(struct tfminfo_s) * dvi->nbfonts + 1);
-
-	if (!tfminfo) {
-		perror("Allocation error in init_tfminfo");
-		return NULL;
-	}
-	tfminfo[dvi->nbfonts].index = -1;
-	for (i = 0; i < dvi->nbfonts; ++i) {
-		tfminfo[i].index = dvi->fonts[i].index;
-		tfminfo[i].tfm = tfm_open(dvi->fonts[i].name, dvi->fonts[i].scale);
-		if (!tfminfo[i].tfm) {
-			fprintf(stderr, "Unable to find font metrics for font %d (%s)\n",
-				dvi->fonts[i].index, dvi->fonts[i].name);
-		} else if (tfminfo[i].tfm->checksum != dvi->fonts[i].checksum) {
-			fprintf(stderr, "WARNING: font %s has a non-matching checksum !\n",
-				dvi->fonts[i].name);
-		}
-	}
-	return tfminfo;
-}
-
 int main(int argc, char * argv[]) {
 	int err;
 	int flags;
 	const char * dvifile;
 
 	dvifile_t * dvi;
-	struct tfminfo_s * tfm;
     xmlDocPtr doc;
     xmlDocPtr mathdoc;
     xmlNodePtr root;
@@ -1614,10 +1572,8 @@ int main(int argc, char * argv[]) {
 	root = xmlNewNode(NULL, BAD_CAST "document");
 	xmlDocSetRootElement(doc, root);
 
-	tfm = init_tfminfo(dvi);
-
-	make_header(root, dvi, tfm);
-	make_content(root, dvi, tfm);
+	make_header(root, dvi);
+	make_content(root, dvi);
 
 	dvi_destroy(dvi);
 

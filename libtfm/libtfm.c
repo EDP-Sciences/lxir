@@ -104,6 +104,9 @@ tfmfile_t * tfm_open(char const * fontname, int scale) {
 		value = fix_word_to_float(f->italic[f->char_info[c].italic_index]);
 		tfm->characters[i].italic = (int) floor(value * scale + .5f);
 
+		tfm->characters[i].kerning_count = 0;
+		tfm->characters[i].kernings = 0;
+
 		if (f->char_info[c].tag == 1) {
 			if (make_tfm_kerning_info(tfm, f, i) < 0) {
 				fprintf(stderr, "libtfm error: allocation error\n");
@@ -111,6 +114,7 @@ tfmfile_t * tfm_open(char const * fontname, int scale) {
 				tfm_close(tfm);
 				return NULL;
 			}
+		} else {
 		}
 	}
 

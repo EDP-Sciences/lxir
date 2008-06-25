@@ -219,7 +219,9 @@ top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libdvi.la
 libdvi_la_SOURCES = libdvi.c libdvi.h
 libdvi_la_LIBADD = @LIBXML2_LIBS@
-libdvi_la_CFLAGS = @LIBXML2_CFLAGS@
+libdvi_la_CFLAGS = @LIBXML2_CFLAGS@ -I$(srcdir)/../libfontmap \
+	-I$(srcdir)/../libtfm
+
 dvidump_SOURCES = dvidump.c
 dvidump_CFLAGS = $(KPSE_CFLAGS)
 dvidump_LDFLAGS = $(AM_LDFLAGS) $(KPSE_LD_FLAGS)

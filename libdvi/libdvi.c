@@ -15,13 +15,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
 
+#include <libfontmap.h>
 #include "libdvi.h"
-#include "../libfontmap/libfontmap.h"
 
 #ifndef MAX
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
@@ -30,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define POSTAMBLE_MAX_SIZE 32
 #define POSTAMBLE_CHAR 223
 #define DVI_VERSION_CHAR 2
-
 
 #define OPCODE_SET_CHAR0	0
 #define OPCODE_SET_CHAR127	127
@@ -205,6 +208,10 @@ int dvi_append_text_node(dvifilestate_t * s) {
 	node->v = s->stack->state.v;
 	node->size = 0;
 	node->content = 0;
+#ifdef USE_KPSE
+	node->width = 0;
+	node->prev_char = -1;
+#endif
 
 	return dvi_append_node(s, &node->header);
 }
@@ -303,10 +310,26 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 	if(!(s->flags & DVI_NO_FONT_TRANSLATION)) {
 		char * chr;
 		int l, size;
+#ifdef USE_KPSE
+		int width;
+		tfmfile_t * tfm;
+#endif
 		if(ch < 0 || ch >= s->font->mapsize) {
 			return DVIERR_INVALID_CHAR;
 		}
 
+#ifdef USE_KPSE
+		tfm = s->font ? s->font->tfm : NULL;
+		if (tfm) {
+			width = tfm_size(tfm, ch, NULL);
+			c->width += width;
+			if (c->prev_char >= 0) {
+				int pn = ch;
+				tfm_size(tfm, c->prev_char, &pn);
+				c->width += pn;
+			}
+		}
+#endif
 		chr = s->font->map[ch];
 		l = strlen(chr);
 		size = s->size + l;
@@ -715,14 +738,18 @@ int dvi_read_postamble(dvifilestate_t * s) {
 	while(list) {
 		struct font_list_s * next = list->next;
 
-		memcpy(&s->file->fonts[c++], &list->current, sizeof(dvifont_t));
-
+		memcpy(&s->file->fonts[c], &list->current, sizeof(dvifont_t));
+#ifdef USE_KPSE
+		s->file->fonts[c].tfm = tfm_open(s->file->fonts[c].name, s->file->fonts[c].scale);
+#endif
 		free(list);
 
 		list = next;
+		c++;
 	}
 
 	assert (c == nfont);
+
 
 	return 0;
 }
@@ -1103,7 +1130,7 @@ int dvi_destroy(dvifile_t * f) {
 	int i;
 
 	for (i = 0; i < f->nbpages; ++i) {
-		dvi_destroy_nodes(f->pages[i]);
+		//~ dvi_destroy_nodes(f->pages[i]);
 	}
 
 	free(f->pages);
@@ -1111,6 +1138,10 @@ int dvi_destroy(dvifile_t * f) {
 	for (i = 0; i < f->nbfonts; ++i) {
 		free(f->fonts[i].area);
 		free(f->fonts[i].name);
+#ifdef USE_KPSE
+		if (f->fonts[i].tfm)
+			tfm_close(f->fonts[i].tfm);
+#endif
 	}
 
 	free(f->fonts);

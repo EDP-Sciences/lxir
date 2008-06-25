@@ -16,5 +16,6 @@ bin_PROGRAMS = lxir
 lxir_SOURCES = lxir.c transformations.c utf8string.c log2xml.c entities.c postxml.c \
 	utf8string.h log2xml.h transformations.h
 lxir_LDADD = ../libdvi/libdvi.la ../libfontmap/libfontmap.la ../libtfm/libtfm.la
-lxir_CFLAGS = $(CFLAGS) $(KPSE_CFLAGS) $(LIBXML2_CFLAGS) $(LIBXSLT_CFLAGS) -I$(srcdir)/../libdvi -I$(srcdir)/../libfontmap -I$(srcdir)/../libtfm
+lxir_CFLAGS = $(CFLAGS) $(KPSE_CFLAGS) $(LIBXML2_CFLAGS) $(LIBXSLT_CFLAGS) \
+	-I$(srcdir)/../libdvi -I$(srcdir)/../libfontmap -I$(srcdir)/../libtfm
 lxir_LDFLAGS = $(AM_LDFLAGS) $(KPSE_LD_FLAGS) $(LIBXML2_LIBS) $(LIBXSLT_LIBS)
