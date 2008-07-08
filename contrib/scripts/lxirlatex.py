@@ -82,7 +82,7 @@ def extract_macros(source):
 	rdef = re.compile("\\\\def[^{]*{")
 	rcmd = re.compile("\\\\newcommand\\s*{[^}]*}\\s*(\\[[^]]+\\])?\\s*{")
 	rrcmd = re.compile("\\\\renewcommand\\s*{[^}]*}\\s*(\\[[^]]+\\])?\\s*{")
-	
+
 	while content:
 		start, stop = len(content), -1
 		m = rdef.search(content)
@@ -198,11 +198,15 @@ def make_lxir_source(source, macros):
 								d.write(line[index:nindex] + "$\n\\end{formule}\n")
 								math_type = 0
 								index = nindex + 1
+								if line[index] == '\n':
+									index = -1
 						elif math_type == 2:
 							if line[nindex:nindex+2] == "$$":
 								d.write(line[index:nindex] + "$$\n\\end{formule}\n")
 								math_type = 0
 								index = nindex + 2
+								if line[index] == '\n':
+									index = -1
 							else:
 								d.write(line[index:nindex+1])
 								index = nindex + 1
