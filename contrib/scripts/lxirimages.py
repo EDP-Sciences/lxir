@@ -26,6 +26,12 @@ symbolPackages = [
 	u'txfonts.sty',
 ]
 
+mathEnvironments = [
+	'equation',
+	'multline',
+	'eqnarray',
+]
+
 tempfiles = []
 
 def find_source(name):
@@ -40,6 +46,8 @@ def find_source(name):
 		texname = name + '.html'
 		if os.path.exists(texname):
 			return texname
+	if len(name) > 5 and name[-5:] != '_lxir':
+		return find_source(name + '_lxir')
 	raise Exception("Source file \"%s\" not found" % name)
 
 def remove(name, istemp):
@@ -63,7 +71,7 @@ class ImageGenerator:
 		self.mathml = {}
 		remove(file + ".images-log", True)
 		self.log = open(file + ".images-log", "w")
-		
+
 	def system(self, cmd, result):
 		self.log.write(">>>>>>>>>>>>>>>> Executing %s\n" % cmd)
 		self.log.flush()
@@ -72,7 +80,7 @@ class ImageGenerator:
 		self.log.write("<<<<<<<<<<<<<<<< Result : %d, %s is %s \n" % (errcode, result, os.path.exists(result)))
 		if errcode != 0 or not os.path.exists(result):
 			raise Exception("Image %d of %s failed (while executing '%s' process)" % (self.index, self.filename, cmd))
-	
+
 	def genLaTeXSource(self, formula, file, lxir):
 		o = open(file, "w")
 		if lxir:
@@ -108,7 +116,7 @@ class ImageGenerator:
 			self.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r" + str(options.resolution) + " -sDEVICE=pngalpha -sOutputFile=" + prefix + ".png " + prefix + ".epsi", prefix + ".png")
 		else:
 			self.system("convert -density 600 " + prefix + ".epsi -resample " + str(options.resolution) + " -trim +repage " + prefix + ".png", prefix + ".png")
-		
+
 		return prefix + ".png"
 	def _makeMathML(self, formula):
 		prefix = os.path.join(self.base_path, "img" + str(self.index) + "_lxir")
@@ -132,7 +140,11 @@ class ImageGenerator:
 	def makeImage(self, formula):
 		if not self.images.has_key(formula):
 			self.images[formula] = self._makeImage(formula)
-			self.mathml[formula] = self._makeMathML(formula)
+			try:
+				self.mathml[formula] = self._makeMathML(formula)
+			except:
+				print "Generation of MathML for formula '%s' failed" % formula
+				self.mathml[formula] = False
 			self.index += 1
 		return self.images[formula], self.mathml[formula]
 
@@ -140,12 +152,12 @@ def insert_math_images(file):
 	file = os.path.abspath(file)
 	doc = NonvalidatingReader.parseUri(file)
 	ctxt = Context(doc, processorNss=NSS)
-	
+
 	# Check that verbatim math is used
 	for node in Evaluate("//xhtml:span[@class='verbatimmath']/@lxir:value", context=ctxt):
 		verbatimmath = node.value
 	assert(verbatimmath == u'true', "Need verbatim math mode for math conversion")
-	
+
 	# Check that the document class is known
 	latexClass = None
 	symbols = []
@@ -155,33 +167,34 @@ def insert_math_images(file):
 		elif node.value in symbolPackages:
 			symbols.append(node.value[:-4])
 	assert(latexClass, "Unknown document class used")
-	
+
 	# Get All macro text
 	macros = []
 	for node in Evaluate("//xhtml:span[@class='macro']//text()", context=ctxt):
 		macros.append(node.nodeValue)
-	
+
 	gen = ImageGenerator(file, latexClass, macros, symbols)
 
-	for node in Evaluate("//xhtml:div[@class='equation']", context=ctxt):
-		c = Context(node, processorNss=NSS)
-		formula = "\\begin{equation}\n"
-		for t in Evaluate(".//xhtml:span[@class='formule']//text()", context=c):
-			formula += t.nodeValue
-			t.parentNode.removeChild(t)
-		formula = (formula + "\n\\end{equation}").replace(u'\u02c6', '^').strip()
-		image, mathml = gen.makeImage(formula)
-		# remove the empty text node(s)
-		for t in Evaluate(".//xhtml:span[@class='formule']", context=c):
-			t.parentNode.removeChild(t)
-		
-		img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
-		img.setAttributeNS(XHTML_NAMESPACE, "src", image)
-		img.setAttributeNS(XHTML_NAMESPACE, "alt", formula)
-		node.appendChild(img)
-		
-		if mathml:
-			node.appendChild(node.ownerDocument.importNode(mathml, True))
+	for env in mathEnvironments:
+		for node in Evaluate("//xhtml:div[@class='" + env + "']", context=ctxt):
+			c = Context(node, processorNss=NSS)
+			formula = "\\begin{" + env + "}\n"
+			for t in Evaluate(".//xhtml:span[@class='formule']//text()", context=c):
+				formula += t.nodeValue
+				t.parentNode.removeChild(t)
+			formula += "\n\\end{" + env + "}"
+			image, mathml = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
+			# remove the empty text node(s)
+			for t in Evaluate(".//xhtml:span[@class='formule']", context=c):
+				t.parentNode.removeChild(t)
+
+			img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
+			img.setAttributeNS(XHTML_NAMESPACE, "src", image)
+			img.setAttributeNS(XHTML_NAMESPACE, "alt", formula)
+			node.appendChild(img)
+
+			if mathml:
+				node.appendChild(node.ownerDocument.importNode(mathml, True))
 
 	# Convert All math images
 	for node in Evaluate("//xhtml:span[@class='formule']", context=ctxt):
@@ -190,20 +203,19 @@ def insert_math_images(file):
 		for t in Evaluate(".//xhtml:span[@class='text']//text()", context=c):
 			formula += t.nodeValue
 			t.parentNode.removeChild(t)
-		formula = formula.replace(u'\u02c6', '^').strip()
-		image, mathml = gen.makeImage(formula)
+		image, mathml = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
 		# remove the empty text node(s)
 		for t in Evaluate(".//xhtml:span[@class='text']", context=c):
 			t.parentNode.removeChild(t)
-		
+
 		img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
 		img.setAttributeNS(XHTML_NAMESPACE, "src", image)
 		img.setAttributeNS(XHTML_NAMESPACE, "alt", formula)
 		node.appendChild(img)
-		
+
 		if mathml:
 			node.appendChild(node.ownerDocument.importNode(mathml, True))
-	
+
 	base, ext = os.path.splitext(file)
 	output = base + "_images" + ext
 	o = open(output, "w")
@@ -237,5 +249,5 @@ if __name__ == '__main__':
 		if options.delete_temp:
 			for file in tempfiles:
 				os.unlink(file)
-	
+
 	main(sys.argv[1:])

@@ -13,7 +13,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is Jean-Paul Jorda.
 %
 % This work consists of the files math2xhtml.xsl.
@@ -29,11 +29,13 @@
     </span>
   </xsl:template>
 
-  <xsl:template match="equation">
+  <xsl:template match="equation | eqnarray | multline">
     <div class="{name()}">
+		<xsl:if test="eqnnum">
       <xsl:attribute name="eqNum">
 	<xsl:value-of select="eqnnum/@lxir:value"/>
       </xsl:attribute>
+      </xsl:if>
       <xsl:if test="label">
 	<xsl:attribute name="eqLabel">
 	  <xsl:value-of select="label/@idlabel"/>
@@ -44,7 +46,7 @@
     </div>
   </xsl:template>
 
-  <!-- pour une raison bizarre, si on ne lui précise pas le ns, 
+  <!-- pour une raison bizarre, si on ne lui précise pas le ns,
   il met parfois (??) un ns vide -->
   <xsl:template match="sup|sub">
     <xsl:element name="{name()}" namespace="http://www.w3.org/1999/xhtml">
