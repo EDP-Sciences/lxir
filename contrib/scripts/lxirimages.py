@@ -60,6 +60,14 @@ def remove(name, istemp):
 	if istemp:
 		tempfiles.append(name)
 
+def relativePath(basePath, fileName):
+	l1, l2 = basePath.split(os.path.sep), fileName.split(os.path.sep)
+	while len(l1) >= 1 and len(l2) >= 1 and l1[0] == l2[0]:
+		l1, l2 = l1[1:], l2[1:]
+	p = ['../' * len(l1)] + l2
+	return os.path.join( *p )
+
+
 class ImageGenerator:
 	def __init__(self, file, className, macros, symbols):
 		self.base_path, self.filename = os.path.split(file)
@@ -98,6 +106,10 @@ class ImageGenerator:
 	def _makeImage(self, formula):
 		global options
 		prefix = os.path.join(self.base_path, "img" + str(self.index))
+		imgprefix = os.path.join(self.base_path, options.img_path)
+		if not os.path.isdir(imgprefix):
+			os.mkdir(imgprefix)
+		image = os.path.join(imgprefix, "img" + str(self.index) + ".png")
 
 		remove(prefix + ".tex", True)
 		remove(prefix + ".aux", True)
@@ -113,11 +125,11 @@ class ImageGenerator:
 		self.system("dvips -o " + prefix + ".ps " + prefix + ".dvi", prefix + ".ps")
 		self.system("ps2ps " + prefix + ".ps " + prefix + ".epsi", prefix + ".epsi")
 		if options.ghostscript:
-			self.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r" + str(options.resolution) + " -sDEVICE=pngalpha -sOutputFile=" + prefix + ".png " + prefix + ".epsi", prefix + ".png")
+			self.system("gs -dDOINTERPOLATE -dBATCH -dNOPAUSE -dEPSCrop -q -r" + str(options.resolution) + " -sDEVICE=pngalpha -sOutputFile=" + image + " " + prefix + ".epsi", image)
 		else:
-			self.system("convert -density 600 " + prefix + ".epsi -resample " + str(options.resolution) + " -trim +repage " + prefix + ".png", prefix + ".png")
+			self.system("convert -density 600 " + prefix + ".epsi -resample " + str(options.resolution) + " -trim +repage " + image, image)
 
-		return prefix + ".png"
+		return image
 	def _makeMathML(self, formula):
 		prefix = os.path.join(self.base_path, "img" + str(self.index) + "_lxir")
 		remove(prefix + ".tex", True)
@@ -139,11 +151,12 @@ class ImageGenerator:
 			print "Generation of MathML for formula '%s' produced no output (%d, %d)" % (formula, self.index, len(nodes))
 	def makeImage(self, formula):
 		if not self.images.has_key(formula):
-			self.images[formula] = self._makeImage(formula)
+			img = self._makeImage(formula)
+			self.images[formula] = relativePath(self.base_path, img)
 			try:
 				self.mathml[formula] = self._makeMathML(formula)
 			except:
-				print "Generation of MathML for formula '%s' failed" % formula
+				print "Generation of MathML for formula '%s' failed" % self.index
 				self.mathml[formula] = False
 			self.index += 1
 		return self.images[formula], self.mathml[formula]
@@ -235,7 +248,8 @@ if __name__ == '__main__':
 		parser.add_option("-D", "--not-delete-temp", help="Do not delete temporary files", action="store_false", dest="delete_temp")
 		parser.add_option("-r", "--resolution", help="Resolution of the generated images", action="store", type="int")
 		parser.add_option("-g", "--ghostscript", help="Use ghostscript instead of imagemagick to convert postscript", action="store_true")
-		parser.set_defaults(overwrite = True, verbmath = True, verbose = False, resolution = 92, ghostscript = False)
+		parser.add_option("-i", "--img-path", help="Set image path", action="store", type="string")
+		parser.set_defaults(overwrite = True, verbmath = True, verbose = False, resolution = 92, ghostscript = False, img_path = 'images_math')
 		try:
 			options, args = parser.parse_args(args = args)
 			if len(args) < 1:
