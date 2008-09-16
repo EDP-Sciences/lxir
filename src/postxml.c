@@ -90,7 +90,7 @@ void rebuild_bibliography(xmlNodePtr root, xmlTransformationEntry * param) {
 		if (is_node_element(node, "thebibliography")) {
 			close_siblings(node, "bibitem");
 		} else {
-			xmlTransformationPush(node, rebuild_all_lists, param);
+			xmlTransformationPush(node, rebuild_bibliography, param);
 		}
 		node = next;
 	}
