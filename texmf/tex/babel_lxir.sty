@@ -16,5 +16,29 @@
 %
 % This work consists of the files babel_lxir.sty.
 %% 
+\AtBeginDocument{
 \let\t@gbbl@frenchitemize=\bbl@frenchitemize
 \def\bbl@frenchitemize{\t@gbbl@frenchitemize\let\itemize\itemizeORI}
+%
+% babel redefines \@citex
+% As a try, we just copy and paste the \@citex definition of lxir.sty
+% we need to ensure the \@for definition because it seems it's redifined elsewhere....
+\long\def\@for#1:=#2\do#3{%
+  \expandafter\def\expandafter\@fortmp\expandafter{#2}%
+  \ifx\@fortmp\@empty \else
+    \expandafter\@forloop#2,\@nil,\@nil\@@#1{#3}\fi}
+\def\@citex[#1]#2{\leavevmode
+  \xBegin{citation}
+  \let\@citea\@empty
+  \@cite{\@for\@citeb:=#2\do%
+    {\@citea\def\@citea{,\penalty\@m\ }%
+     \edef\@citeb{\expandafter\@firstofone\@citeb\@empty}%
+     \if@filesw\immediate\write\@auxout{\string\citation{\@citeb}}\fi
+     \@ifundefined{b@\@citeb}{\hbox{\reset@font\bfseries ?}%
+       \G@refundefinedtrue
+       \@latex@warning
+         {Citation `\@citeb' on page \thepage \space undefined}}%
+       {\xBegin{cite}\xEmptyA{params}{key=\@citeb}%
+    \@cite@ofmt{\csname b@\@citeb\endcsname}\xEnd{cite}}}%
+   }{#1}\xEnd{citation}}
+}
