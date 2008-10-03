@@ -80,13 +80,13 @@ class ImageGenerator:
 		remove(file + ".images-log", True)
 		self.log = open(file + ".images-log", "w")
 
-	def system(self, cmd, result):
+	def system(self, cmd, result, accept_fail = False):
 		self.log.write(">>>>>>>>>>>>>>>> Executing %s\n" % cmd)
 		self.log.flush()
 		o = subprocess.Popen(cmd, shell=True, stdout=self.log, stderr=subprocess.STDOUT)
 		errcode = o.wait()
 		self.log.write("<<<<<<<<<<<<<<<< Result : %d, %s is %s \n" % (errcode, result, os.path.exists(result)))
-		if errcode != 0 or not os.path.exists(result):
+		if (errcode != 0 and not accept_fail) or not os.path.exists(result):
 			raise Exception("Image %d of %s failed (while executing '%s' process)" % (self.index, self.filename, cmd))
 
 	def genLaTeXSource(self, formula, file, lxir):
@@ -138,7 +138,7 @@ class ImageGenerator:
 		remove(prefix + ".dvi", True)
 		remove(prefix + ".xhtml", True)
 		self.genLaTeXSource(formula, prefix + ".tex", True)
-		self.system("latex -interaction=batchmode " + prefix + ".tex", prefix + ".dvi")
+		self.system("latex -interaction=batchmode " + prefix + ".tex", prefix + ".dvi", True)
 		self.system("lxir " + prefix + ".dvi > " + prefix + ".xhtml", prefix + ".xhtml")
 		doc = NonvalidatingReader.parseUri(prefix + ".xhtml")
 		ctxt = Context(doc, processorNss=NSS)
@@ -147,16 +147,24 @@ class ImageGenerator:
 			formula = nodes[0]
 			if formula:
 				return formula
+		elif len(nodes) == 3 and formula.find('eqnarray'):
+			formula = nodes[0]
+			if formula:
+				return formula
 		else:
 			print "Generation of MathML for formula '%s' produced no output (%d, %d)" % (formula, self.index, len(nodes))
 	def makeImage(self, formula):
 		if not self.images.has_key(formula):
-			img = self._makeImage(formula)
-			self.images[formula] = relativePath(self.base_path, img)
+			try:
+				img = self._makeImage(formula)
+				self.images[formula] = relativePath(self.base_path, img)
+			except Exception, e:
+				print "Generation of Image for formula '%s' failed: %s" % (self.index, e)
+				self.images[formula] = False
 			try:
 				self.mathml[formula] = self._makeMathML(formula)
-			except:
-				print "Generation of MathML for formula '%s' failed" % self.index
+			except Exception, e:
+				print "Generation of MathML for formula '%s' failed: %s" % (self.index, e)
 				self.mathml[formula] = False
 			self.index += 1
 		return self.images[formula], self.mathml[formula]
@@ -191,11 +199,11 @@ def insert_math_images(file):
 	for env in mathEnvironments:
 		for node in Evaluate("//xhtml:div[@class='" + env + "']", context=ctxt):
 			c = Context(node, processorNss=NSS)
-			formula = "\\begin{" + env + "}\n"
+			formula = "\\begin{" + env + "*}\n"
 			for t in Evaluate(".//xhtml:span[@class='formule']//text()", context=c):
 				formula += t.nodeValue
 				t.parentNode.removeChild(t)
-			formula += "\n\\end{" + env + "}"
+			formula += "\n\\end{" + env + "*}"
 			image, mathml = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
 			# remove the empty text node(s)
 			for t in Evaluate(".//xhtml:span[@class='formule']", context=c):

@@ -47,6 +47,7 @@ def escape_math(expr):
 	expr = expr.replace("\n", "!n")
 	expr = expr.replace("%", "!p")
 	expr = expr.replace("#", "!s")
+	expr = expr.replace("~", "!t")
 	return expr
 
 def fix_tex_line(line):
