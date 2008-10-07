@@ -11,7 +11,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is EDP-Sciences.
 %
 % This work consists of the files amsmath_lxir.sty.
@@ -32,6 +32,7 @@
 \renewenvironment{gathered}{\lxirvmathenv{gathered}}{\endlxirvmathenv{gathered}}
 \renewenvironment{aligned}{\lxirvmathenv{aligned}}{\endlxirvmathenv{aligned}}
 \else
+\let\endmathdisplay@a=\relax
 \def\@eqnnum{\xEmptyA{equationumber}{value=\theequation}}
 \renewenvironment{equation}{%
   \incr@eqnum
@@ -45,5 +46,68 @@
   \mathdisplay@pop
   \ignorespacesafterend
 }
-\let\endmathdisplay@a=\relax
+\renewenvironment{equation*}{%
+  \mathdisplay@push
+  \st@rredtrue \global\@eqnswfalse
+  \xBegin{equation}
+  \mathdisplay{equation*}%
+}{%
+  \endmathdisplay{equation*}%
+  \xEnd{equation}
+  \mathdisplay@pop
+  \ignorespacesafterend
+}
+\renewenvironment{multline}{%
+  \xBegin{multline}%
+  \start@multline\st@rredfalse%
+}{%
+  \iftagsleft@ \@xp\lendmultline@ \else \@xp\rendmultline@ \fi
+  \ignorespacesafterend
+  \xEnd{multline}
+}
+\renewenvironment{multline*}{%
+	\start@multline\st@rredtrue
+	\xBegin{multline-star}%
+}{%
+	\endmultline
+	\xEnd{multline-star}%
+}
+\renewenvironment{gather}{%
+	\xBegin{gather}%
+  \start@gather\st@rredfalse
+}{%
+  \math@cr \black@\totwidth@ \egroup
+  $$\xEnd{gather} \ignorespacesafterend
+}
+\renewenvironment{gather*}{%
+  \start@gather\st@rredtrue
+	\xBegin{gather-star}%
+}{%
+  \endgather
+	\xEnd{gather-star}%
+}
+\renewenvironment{align}{%
+	\xBegin{align}%
+  \start@align\@ne\st@rredfalse\m@ne
+}{%
+  \math@cr \black@\totwidth@
+  \egroup
+  \ifingather@
+    \restorealignstate@
+    \egroup
+    \nonumber
+    \ifnum0=`{\fi\iffalse}\fi
+  \else
+    $$%
+  \fi
+	\xEnd{align}%
+  \ignorespacesafterend
+}
+\renewenvironment{align*}{%
+  \start@align\@ne\st@rredtrue\m@ne
+	\xBegin{align-star}%
+}{%
+  \endalign
+	\xEnd{align-star}%
+}
 \fi
