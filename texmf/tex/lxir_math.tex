@@ -11,13 +11,13 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is EDP-Sciences.
 %
 % This work consists of the files lxir_math.tex.
-% 
+%
 % Begin/end math tagging
-% 
+%
 %% Logging is required for math support.
 \showboxbreadth=10000
 \showboxdepth=10000
@@ -25,31 +25,33 @@
 \relpenalty=10000
 \tracingoutput=1% so that output is written in the log file
 \let\old@outputpage=\@outputpage
-\def\@outputpage{% 
+\def\@outputpage{%
 \message{^^J***T@GS START OUTPUTING BOX TO LOG***^^J}
 %\showbox\@outputbox % Output the "page" box in the log
 \old@outputpage
 \message{^^J***T@GS END OF OUTPUT***^^J}
 }
-% 
-% 
+%
+%
 % From Hermes (& TeXBook p. 179 & latex.ltx p. 2131)
-% 
+%
 \def\Xendmath{\xEnd{math}}
 \def\Xbeginmath{\xBegin{math}}
-% 
-\def\Xenddisplay{\xEnd{display}}
-\def\Xbegindisplay{\xBegin{display}}
-% 
-\frozen@everymath = {\Xbeginmath\check@mathfonts% 
-                     \the\everymath\aftergroup\Xendmath}% 
-% 
-\frozen@everydisplay = {\Xbegindisplay\check@mathfonts% 
-                        \the\everydisplay\aftergroup\Xenddisplay}% 
-% 
+%
+\def\Xenddisplay{\leavevmode\xEnd{display}}
+%
+\frozen@everymath = {\Xbeginmath\check@mathfonts%
+                     \the\everymath\aftergroup\Xendmath}%
+%
+\frozen@everydisplay = {%
+	\xBegin{display}
+	\check@mathfonts
+	\the\everydisplay%
+	\aftergroup\Xenddisplay}%
+%
 \def\equation{\xBegin{equation}$$\refstepcounter{equation}}
 \def\endequation{$$\xEmptyA{eqnnum}{value=\theequation}\xEnd{equation}\@ignoretrue}
-% 
+%
 \def\eqnarray{%
    \xBegin{eqnarray}%
    \stepcounter{equation}%
@@ -80,7 +82,7 @@
 \def\Xmo#1{\xBegin{mathop}#1\xEnd{mathop}} % LaTeX math operator
 \def\Xmf#1{\xBegin{mathfrac}#1\xEnd{mathfrac}} % LaTeX math ``generalized'' fraction
 \def\Xmcom#1{\xBegin{mathcommand}#1\xEnd{mathcommand}} % LaTeX math command other than operator and...
-% 
+%
 %%% From File: ltmath.dtx
 % \message{math definitions,}
 %% \CharacterTable
@@ -100,8 +102,8 @@
 %%   Right brace   \}     Tilde         \~}
 %%
 %\def\operator@font\relax
-% 
-% 
+%
+%
 % MATH
 \def\mathopt@g#1{\xEmptyAA{#1}{mathtype=op}{mathcontent=#1}}
 \def\log{\mathop{\mathopt@g{log}}\nolimits}

@@ -66,8 +66,8 @@
   \xEnd{multline}
 }
 \renewenvironment{multline*}{%
-	\start@multline\st@rredtrue
 	\xBegin{multline-star}%
+	\start@multline\st@rredtrue
 }{%
 	\endmultline
 	\xEnd{multline-star}%
@@ -80,8 +80,8 @@
   $$\xEnd{gather} \ignorespacesafterend
 }
 \renewenvironment{gather*}{%
-  \start@gather\st@rredtrue
 	\xBegin{gather-star}%
+  \start@gather\st@rredtrue
 }{%
   \endgather
 	\xEnd{gather-star}%
@@ -104,10 +104,17 @@
   \ignorespacesafterend
 }
 \renewenvironment{align*}{%
-  \start@align\@ne\st@rredtrue\m@ne
 	\xBegin{align-star}%
+  \start@align\@ne\st@rredtrue\m@ne
 }{%
   \endalign
 	\xEnd{align-star}%
 }
+\frozen@everydisplay = {%
+ 	\xBegin{display}
+	\check@mathfonts
+	\the\everydisplay%
+	\@displaytrue
+	\aftergroup\Xenddisplay
+	}%
 \fi

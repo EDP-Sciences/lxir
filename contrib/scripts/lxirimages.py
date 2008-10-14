@@ -30,6 +30,8 @@ mathEnvironments = [
 	'equation',
 	'multline',
 	'eqnarray',
+	'gather',
+	'align',
 ]
 
 tempfiles = []
@@ -152,7 +154,7 @@ class ImageGenerator:
 			if formula:
 				return formula
 		else:
-			print "Generation of MathML for formula '%s' produced no output (%d, %d)" % (formula, self.index, len(nodes))
+			print "Generation of MathML for formula %d produced %d output(s)" % (self.index, len(nodes))
 	def makeImage(self, formula):
 		if not self.images.has_key(formula):
 			try:
@@ -196,27 +198,6 @@ def insert_math_images(file):
 
 	gen = ImageGenerator(file, latexClass, macros, symbols)
 
-	for env in mathEnvironments:
-		for node in Evaluate("//xhtml:div[@class='" + env + "']", context=ctxt):
-			c = Context(node, processorNss=NSS)
-			formula = "\\begin{" + env + "*}\n"
-			for t in Evaluate(".//xhtml:span[@class='formule']//text()", context=c):
-				formula += t.nodeValue
-				t.parentNode.removeChild(t)
-			formula += "\n\\end{" + env + "*}"
-			image, mathml = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
-			# remove the empty text node(s)
-			for t in Evaluate(".//xhtml:span[@class='formule']", context=c):
-				t.parentNode.removeChild(t)
-
-			img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
-			img.setAttributeNS(XHTML_NAMESPACE, "src", image)
-			img.setAttributeNS(XHTML_NAMESPACE, "alt", formula)
-			node.appendChild(img)
-
-			if mathml:
-				node.appendChild(node.ownerDocument.importNode(mathml, True))
-
 	# Convert All math images
 	for node in Evaluate("//xhtml:span[@class='formule']", context=ctxt):
 		c = Context(node, processorNss=NSS)
@@ -224,15 +205,21 @@ def insert_math_images(file):
 		for t in Evaluate(".//xhtml:span[@class='text']//text()", context=c):
 			formula += t.nodeValue
 			t.parentNode.removeChild(t)
+		if len(formula) > 1 and formula[1] != "$":
+			p = node.parentNode
+			env = p.getAttributeNS(None, 'class')
+			assert(env, "No env found for equation")
+			formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
 		image, mathml = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
 		# remove the empty text node(s)
 		for t in Evaluate(".//xhtml:span[@class='text']", context=c):
 			t.parentNode.removeChild(t)
 
-		img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
-		img.setAttributeNS(XHTML_NAMESPACE, "src", image)
-		img.setAttributeNS(XHTML_NAMESPACE, "alt", formula)
-		node.appendChild(img)
+		if image:
+			img = node.ownerDocument.createElementNS(XHTML_NAMESPACE, "img")
+			img.setAttributeNS(XHTML_NAMESPACE, "src", image)
+			img.setAttributeNS(XHTML_NAMESPACE, "alt", formula)
+			node.appendChild(img)
 
 		if mathml:
 			node.appendChild(node.ownerDocument.importNode(mathml, True))
