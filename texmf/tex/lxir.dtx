@@ -413,8 +413,8 @@
 \def\thinspace{[entity!\#x2009!]}
 \def\enspace{[entity!\#x2002!]}
 \def\enskip{[entity!\#x2002!]}
-\def\quad{[entity!\#x2001!]} % quad = 1 em
-\def\qquad{[entity!\#x2001!][entity!\#x2001!]} % qquad = 2 em
+\def\quad{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!]\fi} % quad = 1 em
+\def\qquad{\ifmmode\mathrel{\xEmptyAA{qquad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!][entity!\#x2001!]\fi} % qquad = 2 em
 %    \end{macrocode}
 % \section{Tagging of font attributes (family, series \& shapes) and sizes}
 % \label{sec:fonts}
@@ -1151,8 +1151,8 @@
 %    \begin{macrocode}
 \AtBeginDocument{\usebox{\lxir@pckg@list}}
 %    \end{macrocode}
-%    \begin{macrocode}
-\let\lxir@font=\font
-\def\font#1#2{\global\def#1{\xEmptyA{switch-font}{#1}}}
-%    \end{macrocode}
+%%    \begin{macrocode}
+%%\let\lxir@font=\font
+%%\def\font#1#2{\global\def#1{\xEmptyA{switch-font}{#1}}}
+%%    \end{macrocode}
 %</lxir>

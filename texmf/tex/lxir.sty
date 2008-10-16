@@ -177,8 +177,8 @@
 \def\thinspace{[entity!\#x2009!]}
 \def\enspace{[entity!\#x2002!]}
 \def\enskip{[entity!\#x2002!]}
-\def\quad{[entity!\#x2001!]} % quad = 1 em
-\def\qquad{[entity!\#x2001!][entity!\#x2001!]} % qquad = 2 em
+\def\quad{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!]\fi} % quad = 1 em
+\def\qquad{\ifmmode\mathrel{\xEmptyAA{qquad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!][entity!\#x2001!]\fi} % qquad = 2 em
 \newsavebox{\XX@font@list}
 \newcommand{\addFontTo@list}[6]{%
 \sbox\XX@font@list{\unhbox\XX@font@list\protect\xEmptyAAAAAA{fontDescription}{encoding=#1}{family=#2}{series=#3}{shape=#4}{size=#5}{name=#6}%
@@ -691,6 +691,10 @@
     \@reset@ptions}%
   \reserved@a}
 \AtBeginDocument{\usebox{\lxir@pckg@list}}
+%%    \begin{macrocode}
+%%\let\lxir@font=\font
+%%\def\font#1#2{\global\def#1{\xEmptyA{switch-font}{#1}}}
+%%    \end{macrocode}
 \endinput
 %%
 %% End of file `lxir.sty'.

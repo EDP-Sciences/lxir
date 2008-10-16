@@ -34,10 +34,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kpathsea/kpathsea.h>
 #endif
 
-#define NODE_VBOX 1	// 
-#define NODE_HBOX 2	// 
+#define NODE_VBOX 1	//
+#define NODE_HBOX 2	//
 #define NODE_SPECIAL 3	// *name* id
-#define NODE_GLUE 4 // 
+#define NODE_GLUE 4 //
 #define NODE_PENALTY 5
 #define NODE_RULE 6 // param
 #define NODE_KERN 7
@@ -99,7 +99,7 @@ int utf8(const char * c) {
 			if (result < (1 << 15)) result = -1;
 		}
 	}
-	
+
 	return result;
 }
 
@@ -138,12 +138,12 @@ xmlNodePtr new_node(const char * line) {
 	xmlNodePtr node;
 	int i, type = NODE_OTHER;
 	const char * name, * param;
-	
+
 	if (*line++ != '\\') {
 		fprintf(stderr, "Invalid line : \"%s\", expected a '\\'\n", line - 1);
 		exit(-1);
 	}
-	
+
 	for(i = 0; i < NBTYPES; ++i) {
 		if(strncmp(line, types[i].name, types[i].len) == 0) {
 			name = types[i].name;
@@ -158,7 +158,7 @@ xmlNodePtr new_node(const char * line) {
 	}
 	node = xmlNewNode(0, BAD_CAST name);
 	xmlNewTextChild(node, 0, BAD_CAST "param", BAD_CAST param);
-	
+
 	return node;
 }
 
@@ -167,11 +167,11 @@ int read_log_file(xmlNodePtr root, const char * filename) {
 	int state = 0;
 	int err, depth;
 	regex_t page_regex, box_regex;
-	
+
 	xmlNodePtr current = 0;
 	FILE * f = fopen(filename, "r");
 	if (!f) return -1;
-	
+
 	err = regcomp(&page_regex, "\\*\\*\\*T@GS START OUTPUTING BOX TO LOG\\*\\*\\*", REG_EXTENDED);
 	if(err) {
 		char * errbuff;
@@ -182,7 +182,7 @@ int read_log_file(xmlNodePtr root, const char * filename) {
 		free(errbuff);
 		exit(-1);
 	}
-	
+
 	err = regcomp(&box_regex, "Completed box being shipped out \\[([0-9]+)\\]", REG_EXTENDED);
 	if(err) {
 		char * errbuff;
@@ -193,8 +193,8 @@ int read_log_file(xmlNodePtr root, const char * filename) {
 		free(errbuff);
 		exit(-1);
 	}
-	
-	
+
+
 	while(!feof(f)) {
 		fgets(line, 1024, f);
 		{
@@ -230,13 +230,13 @@ int read_log_file(xmlNodePtr root, const char * filename) {
 		} else if (state == 2) {
 			int d = 0;
 			xmlNodePtr node;
-			
+
 			while (line[d] == '.') d++;
 			if (line[d] == '|') d++;
 			if(line[d] == '\\') {
-			
+
 				node = new_node(line + d);
-				
+
 				if (d == 0 && depth == 0) {
 					xmlAddChild(current, node);
 				} else if (d == depth) {
@@ -271,12 +271,12 @@ int read_log_file(xmlNodePtr root, const char * filename) {
 			} else {
 				int d = 0;
 				xmlNodePtr node;
-				
+
 				xmlNodeAddContent(current->children, BAD_CAST "\n");
 				state = 2;
 				while (line[d] == '.') d++;
 				node = new_node(line + d);
-				
+
 				if (d == depth) {
 					// append as next
 					xmlAddNextSibling(current, node);
@@ -303,30 +303,30 @@ int read_log_file(xmlNodePtr root, const char * filename) {
 			}
 		}
 	}
-	
+
 	fclose(f);
 	return 0;
 }
 
-static 
+static
 int is_node_valid(xmlNodePtr node, char const * type, char const * content, size_t len) {
-	int result = 
+	int result =
 		node &&
 		node->type == XML_ELEMENT_NODE &&
 		strcmp((const char *)node->name, type) == 0;
 	if (!result || !content) return result;
-	
-	
-	result = 
+
+
+	result =
 			node->children &&
 			node->children->type == XML_ELEMENT_NODE &&
 			strcmp((const char *)node->children->name, "param") == 0 &&
 			node->children->children &&
 			node->children->children->type == XML_TEXT_NODE;
 	if (!result) return result;
-	
+
 	if(len == -1) len = strlen(content);
-	
+
 	if (len == 0) {
 		return strcmp((const char *)node->children->children->content, content) == 0;
 	} else {
@@ -334,9 +334,9 @@ int is_node_valid(xmlNodePtr node, char const * type, char const * content, size
 	}
 }
 
-static 
+static
 int is_node_valid_mathbox(xmlNodePtr node) {
-	return 
+	return
 		is_node_valid(node, "hbox", 0, 0) ||
 		is_node_valid(node, "other", 0, 0) ||
 		is_node_valid(node, "mrow", 0, 0) ||
@@ -348,7 +348,7 @@ static
 int real_xml_extract_math_id(xmlNodePtr node, const char * content, int len, char * buffer) {
 	while(node) {
 		int ret;
-		
+
 		if (is_node_valid(node, "special", content, len)) {
 			const char * str = (const char *) node->children->children->content + len;
 			while(isdigit(*str)) {
@@ -359,7 +359,7 @@ int real_xml_extract_math_id(xmlNodePtr node, const char * content, int len, cha
 			xmlFreeNode(node);
 			return 0;
 		}
-		
+
 		ret = real_xml_extract_math_id(node->children, content, len, buffer);
 		if (!ret) return ret;
 		node = node->next;
@@ -370,9 +370,9 @@ int real_xml_extract_math_id(xmlNodePtr node, const char * content, int len, cha
 static
 int xml_extract_math_id(xmlNodePtr base, const char * type, const char * p, char * e) {
 	char content[128];
-	
+
 	int len = sprintf(content, "{::tag lxir %s(%s){id=", type, p);
-	
+
 	return real_xml_extract_math_id(base, content, len, e);
 }
 
@@ -381,7 +381,7 @@ xmlNodePtr extract_math_expr(xmlNodePtr start, xmlNodePtr end, const char * type
 	xmlNodePtr math = xmlNewNode(0, BAD_CAST "math");
 	// xmlNewProp(math, BAD_CAST "type", type);
 	char id[32];
-	
+
 	while (start->next != end) {
 		xmlNodePtr node = start->next;
 		xmlUnlinkNode(node);
@@ -391,7 +391,7 @@ xmlNodePtr extract_math_expr(xmlNodePtr start, xmlNodePtr end, const char * type
 		xmlNewProp(math, BAD_CAST "begin-id", BAD_CAST id);
 	if(xml_extract_math_id(end, "end", type, id) == 0)
 		xmlNewProp(math, BAD_CAST "end-id", BAD_CAST id);
-	
+
 	return math;
 }
 
@@ -504,16 +504,16 @@ pattern for display math :
 */
 static
 void extract_display_math(xmlNodePtr root, xmlNodePtr basemath) {
-	xmlNodePtr node = root->children;	
+	xmlNodePtr node = root->children;
 	int state = 0;
 	while (node) {
 		if (state == 2) {
 			if (is_node_valid(node, "glue", "(\\baselineskip)", 15) ||
 				is_node_valid(node, "glue", "(\\lineskip)", 11)) {
-			
+
 				xmlNodePtr end = node->next;
 				int estate = 0;
-				while (end) { 
+				while (end) {
 					if (estate == 2) {
 						if (is_node_valid(end, "glue", "(\\baselineskip)", 15) ||
 							is_node_valid(end, "glue", "(\\lineskip)", 11)) {
@@ -536,7 +536,7 @@ void extract_display_math(xmlNodePtr root, xmlNodePtr basemath) {
 							estate = 1;
 						}
 					}
-					end = end->next; 
+					end = end->next;
 				}
 				if (!end) {
 					char id[32];
@@ -558,7 +558,7 @@ void extract_display_math(xmlNodePtr root, xmlNodePtr basemath) {
 				is_node_valid(node, "glue", "(\\abovedisplayshortskip)", 24) ||
 				is_node_valid(node, "glue", "(\\abovedisplayskip)", 19)
 			) {
-				
+
 				state = 2;
 			} else {
 				state = 0;
@@ -578,10 +578,10 @@ void extract_display_math(xmlNodePtr root, xmlNodePtr basemath) {
 static
 void transform_inline_math(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
-		
+
 		if (is_node_valid(node, "mathon", 0, 0)) {
 			xmlNodePtr math, end;
 			end = node->next;
@@ -601,7 +601,7 @@ void transform_inline_math(xmlNodePtr root, xmlTransformationEntry * param) {
 			next = end->next;
 			xmlUnlinkNode(end);
 			xmlFreeNode(end);
-			
+
 		} else {
 			xmlTransformationPush(node, transform_inline_math, param);
 		}
@@ -615,7 +615,7 @@ xmlNodePtr extract_all_math(xmlNodePtr root) {
 	extract_display_math(root, math);
 	extract_inline_math(root, math);
 	extract_special_inline_math(root, math);
-	
+
 	return math;
 }
 
@@ -629,9 +629,9 @@ xmlNodePtr extract_all_math(xmlNodePtr root) {
 		<kern /> ?
 		<hbox> {...} </hbox>
 	</vbox>
-	
+
 	we will produce :
-	
+
 	<mfrac>
 		<hbox> {...} </hbox>
 		<hbox> {...} </hbox>
@@ -644,7 +644,7 @@ void transform_over_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	while(node) {
 		xmlNodePtr next = node->next;
 		xmlNodePtr row1 = 0, row2 = 0, rule = 0, tmp = 0;
-		
+
 		if(is_node_valid(node, "vbox", 0, 0) &&
 			(tmp = node->children) &&
 			is_node_valid(tmp, "param", 0, 0) &&
@@ -673,7 +673,7 @@ void transform_over_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 			) &&
 				!row2->next)
 				{
-			
+
 			xmlNodePtr frac;
 			frac = xmlNewNode(0, BAD_CAST "mfrac");
 			xmlUnlinkNode(row1);
@@ -688,7 +688,7 @@ void transform_over_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 		} else {
 			xmlTransformationPush(node, transform_over_pattern, param);
 		}
-		
+
 		node = next;
 	}
 }
@@ -771,13 +771,13 @@ void transform_sqrt_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 			xmlUnlinkNode(tmp);
 			xmlFreeNode(tmp);
 			next = sqrt->next;
-			
+
 			xmlTransformationPush(content, transform_sqrt_pattern, param);
 
 		} else {
 			xmlTransformationPush(node, transform_sqrt_pattern, param);
 		}
-		
+
 		node = next;
 	}
 }
@@ -803,7 +803,7 @@ void transform_underline_pattern(xmlNodePtr root, xmlTransformationEntry * param
 	xmlNodePtr node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
-		
+
 		xmlNodePtr content = 0, tmp = 0;
 		if(
 			is_node_valid(node, "vbox", 0, 0) &&
@@ -824,7 +824,7 @@ void transform_underline_pattern(xmlNodePtr root, xmlTransformationEntry * param
 			xmlAddPrevSibling(node, under);
 			xmlUnlinkNode(node);
 			xmlFreeNode(node);
-			
+
 			next = under->next;
 
 			xmlTransformationPush(content, transform_underline_pattern, param);
@@ -832,7 +832,7 @@ void transform_underline_pattern(xmlNodePtr root, xmlTransformationEntry * param
 		} else {
 			xmlTransformationPush(node, transform_underline_pattern, param);
 		}
-		
+
 		node = next;
 	}
 }
@@ -861,7 +861,7 @@ void transform_overline_pattern(xmlNodePtr root, xmlTransformationEntry * param)
 	xmlNodePtr node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
-		
+
 		xmlNodePtr content = 0, tmp = 0;
 		if(
 			is_node_valid(node, "vbox", 0, 0) &&
@@ -884,7 +884,7 @@ void transform_overline_pattern(xmlNodePtr root, xmlTransformationEntry * param)
 			xmlAddPrevSibling(node, over);
 			xmlUnlinkNode(node);
 			xmlFreeNode(node);
-			
+
 			next = over->next;
 
 			xmlTransformationPush(content, transform_overline_pattern, param);
@@ -892,7 +892,7 @@ void transform_overline_pattern(xmlNodePtr root, xmlTransformationEntry * param)
 		} else {
 			xmlTransformationPush(node, transform_overline_pattern, param);
 		}
-		
+
 		node = next;
 	}
 }
@@ -915,16 +915,16 @@ void transform_subsup_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	while(node) {
 		xmlNodePtr next = node->next;
 		xmlNodePtr content = 0, subscript = 0, superscript = 0, tmp = 0, box = 0;
-		
+
 		if ((content = node) &&
 			(
-				is_node_valid(content, "other", 0, 0) || 
+				is_node_valid(content, "other", 0, 0) ||
 				is_node_valid(content, "hbox", 0, 0) ||
 				(
 					is_node_valid(content, "glue", 0, 0) &&
 					(content = content->next) &&
 					(
-						is_node_valid(content, "other", 0, 0) || 
+						is_node_valid(content, "other", 0, 0) ||
 						is_node_valid(content, "hbox", 0, 0)
 					)
 				)
@@ -941,10 +941,10 @@ void transform_subsup_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 			(subscript = tmp->next) &&
 			is_node_valid(subscript, "hbox", 0, 0) &&
 			!subscript->next
-			
+
 		) {
 			next = box->next;
-			
+
 			xmlNodePtr subsup = xmlNewNode(0, BAD_CAST "msubsup");
 
 			xmlAddPrevSibling(content, subsup);
@@ -958,7 +958,7 @@ void transform_subsup_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 			transform_subsup_pattern(content, param);
 			transform_subsup_pattern(subscript, param);
 			transform_subsup_pattern(superscript, param);
-			
+
 			xmlUnlinkNode(box);
 			xmlFreeNode(box);
 
@@ -995,7 +995,7 @@ void transform_subsup_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 			<hbox />
 		</hbox>
 	</mrow>
-=>  
+=>
 	<mfenced open="{1}" close = "{3}">
 	{2}
 	</mfenced>
@@ -1004,7 +1004,7 @@ void transform_subsup_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 static
 const char * trans_fenced_char(const char * chr) {
 	int code = utf8(chr);
-	
+
 	if((code & 0xffffff00) == 0x0010ff00) {
 		code &= 0xff;
 		if (code == 000 || code == 020 || code == 022 || code == 040) return "(";
@@ -1021,6 +1021,9 @@ const char * trans_fenced_char(const char * chr) {
 		if (code == 013 || code == 035 || code == 053) return "⟩";
 		if (code == 016 || code == 036 || code == 054) return "/";
 		if (code == 017 || code == 037 || code == 055) return "\\";
+		if (code == 014) return "|";
+		if (code == 015) return "∥";
+		fprintf(stderr, "lxir : unknown fenced char %d\n", code);
 	}
 	return chr;
 }
@@ -1036,11 +1039,11 @@ void transform_left_and_right_pattern(xmlNodePtr root, xmlTransformationEntry * 
 
 	xmlNodePtr node = root->children;
 	int state = 0;
-	
+
 	while(node) {
 		xmlNodePtr next = node->next;
 		xmlNodePtr box, row, sub, tmp;
-		
+
 		if (
 			is_node_valid(node, "hbox", 0, 0) &&
 			(tmp = node->children) &&
@@ -1085,15 +1088,15 @@ void transform_left_and_right_pattern(xmlNodePtr root, xmlTransformationEntry * 
 		} else {
 			xmlTransformationPush(node, transform_left_and_right_pattern, param);
 		}
-		
+
 		if (next == 0 && state == 2) {
 			xmlNodePtr fenced = xmlNewNode(0, BAD_CAST "mfenced");
 			xmlNodePtr content = xmlNewNode(0, BAD_CAST "mrow");
 			xmlAddChild(fenced, content);
-			
+
 			xmlNewProp(fenced, BAD_CAST "open", BAD_CAST get_fenced_char(left));
 			xmlNewProp(fenced, BAD_CAST "close", BAD_CAST get_fenced_char(right));
-			
+
 			tmp = begin->next;
 			do {
 				xmlNodePtr next = tmp->next;
@@ -1101,16 +1104,16 @@ void transform_left_and_right_pattern(xmlNodePtr root, xmlTransformationEntry * 
 				xmlAddChild(content, tmp);
 				tmp = next;
 			} while(tmp && tmp != end);
-			
+
 			xmlAddPrevSibling(begin, fenced);
-			
+
 			xmlUnlinkNode(begin);
 			xmlFreeNode(begin);
 			xmlUnlinkNode(end);
 			xmlFreeNode(end);
-			
+
 			transform_left_and_right_pattern(content, param);
-			
+
 			next = fenced->next;
 			state = 0;
 		}
@@ -1158,19 +1161,19 @@ void transform_underscript_pattern(xmlNodePtr root, xmlTransformationEntry * par
 			xmlAddChild(s, up);
 			xmlUnlinkNode(down);
 			xmlAddChild(s, down);
-			
+
 			xmlAddPrevSibling(node, s);
 			xmlUnlinkNode(node);
 			xmlFreeNode(node);
-			
+
 			transform_underscript_pattern(up, param);
 			transform_underscript_pattern(down, param);
-			
+
 			next = s->next;
 		} else {
 			xmlTransformationPush(node, transform_underscript_pattern, param);
 		}
-		
+
 		node = next;
 	}
 }
@@ -1215,19 +1218,19 @@ void transform_overscript_pattern(xmlNodePtr root, xmlTransformationEntry * para
 			xmlAddChild(s, down);
 			xmlUnlinkNode(up);
 			xmlAddChild(s, up);
-			
+
 			xmlAddPrevSibling(node, s);
 			xmlUnlinkNode(node);
 			xmlFreeNode(node);
-			
+
 			transform_overscript_pattern(up, param);
 			transform_overscript_pattern(down, param);
-			
+
 			next = s->next;
 		} else {
 			xmlTransformationPush(node, transform_overscript_pattern, param);
 		}
-		
+
 		node = next;
 	}
 }
@@ -1284,20 +1287,20 @@ void transform_underoverscript_pattern(xmlNodePtr root, xmlTransformationEntry *
 			xmlAddChild(s, down);
 			xmlUnlinkNode(up);
 			xmlAddChild(s, up);
-			
+
 			xmlAddPrevSibling(node, s);
 			xmlUnlinkNode(node);
 			xmlFreeNode(node);
-			
+
 			transform_underoverscript_pattern(base, param);
 			transform_underoverscript_pattern(up, param);
 			transform_underoverscript_pattern(down, param);
-			
+
 			next = s->next;
 		} else {
 			xmlTransformationPush(node, transform_underoverscript_pattern, param);
 		}
-		
+
 		node = next;
 	}
 }
@@ -1318,7 +1321,7 @@ void transform_sub_or_sup_pattern(xmlNodePtr root, xmlTransformationEntry * tpar
 		xmlNodePtr next = node->next;
 		xmlNodePtr script = 0, tmp = 0, kern = 0;
 		const char * param = 0, * shift = 0;
-		
+
 		if (
 			is_node_valid_mathbox(node) &&
 			(script = node->next) &&
@@ -1339,15 +1342,15 @@ void transform_sub_or_sup_pattern(xmlNodePtr root, xmlTransformationEntry * tpar
 			double v;
 			xmlNodePtr subsup, row, relm;
 			xmlChar * type;
-			
+
 			v = atof(shift + 10);
-			
+
 			if (v > 0) {
 				type = BAD_CAST "msub";
 			} else {
 				type = BAD_CAST "msup";
 			}
-			
+
 			subsup = xmlNewNode(0, type);
 			xmlAddPrevSibling(node, subsup);
 
@@ -1365,7 +1368,7 @@ void transform_sub_or_sup_pattern(xmlNodePtr root, xmlTransformationEntry * tpar
 				xmlUnlinkNode(kern);
 				xmlFreeNode(kern);
 			}
-			
+
 			xmlUnlinkNode(node);
 			xmlAddChild(subsup, node);
 			xmlAddChild(subsup, row);
@@ -1389,7 +1392,7 @@ void transform_simple_sub_or_sup_pattern(xmlNodePtr root, xmlTransformationEntry
 		xmlNodePtr next = node->next;
 		xmlNodePtr script = 0, tmp = 0;
 		const char * param = 0, * shift = 0;
-		
+
 		if (
 			(script = node) &&
 			is_node_valid(script, "hbox", 0, 0) &&
@@ -1402,15 +1405,15 @@ void transform_simple_sub_or_sup_pattern(xmlNodePtr root, xmlTransformationEntry
 			double v;
 			xmlNodePtr subsup, row, relm;
 			xmlChar * type;
-			
+
 			v = atof(shift + 10);
-			
+
 			if (v > 0) {
 				type = BAD_CAST "msub";
 			} else {
 				type = BAD_CAST "msup";
 			}
-			
+
 			subsup = xmlNewNode(0, type);
 			xmlAddPrevSibling(node, subsup);
 			xmlNewProp(subsup, BAD_CAST "single", BAD_CAST "1");
@@ -1469,7 +1472,7 @@ void transform_array_line(xmlNodePtr root, xmlNodePtr line) {
 	xmlNodePtr node = root->children;
 	while (node) {
 		xmlNodePtr next = node->next;
-		
+
 		if (is_node_valid(node, "hbox", 0, 0)) {
 			xmlNodePtr cell = xmlNewNode(0, BAD_CAST "mtd");
 			transform_array_cell(node, cell);
@@ -1484,13 +1487,13 @@ void transform_array_content(xmlNodePtr root, xmlNodePtr array) {
 	xmlNodePtr node = root->children;
 	while (node) {
 		xmlNodePtr next = node->next;
-		
+
 		if (is_node_valid(node, "hbox", 0, 0)) {
 			xmlNodePtr row = xmlNewNode(0, BAD_CAST "mtr");
 			xmlAddChild(array, row);
 			transform_array_line(node, row);
 		}
-		
+
 		node = next;
 	}
 }
@@ -1502,7 +1505,7 @@ void transform_array_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	while(node) {
 		xmlNodePtr next = node->next;
 		xmlNodePtr vbox, tmp, end;
-		
+
 		if (is_node_valid(node, "special", "{::tag lxir begin(array){id=", -1) &&
 			(tmp = node->next) &&
 			is_node_valid(tmp, "special", "{::tag lxir empty(params){id=", -1) &&
@@ -1534,9 +1537,9 @@ void transform_array_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 		<param />
 		{...}
 	</hbox>
-	
+
 	we will produce :
-	
+
 	<mrow>
 		{...}
 	</mrow>
@@ -1554,9 +1557,9 @@ void transform_mrow_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 			}
 			xmlNodeSetName(node, BAD_CAST "mrow");
 		}
-		
+
 		xmlTransformationPush(node, transform_mrow_pattern, param);
-		
+
 		node = next;
 	}
 }
@@ -1575,7 +1578,7 @@ void transform_mrow_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	<mn>, <mi> or <mo> depending on content
 */
 
-static 
+static
 xmlNodePtr insert_character_node(xmlNodePtr node, const char * type, const char * content, int force) {
 	if(!force && is_node_valid(node, type, 0, 0)) {
 		xmlNodeAddContent(node, BAD_CAST content);
@@ -1592,7 +1595,7 @@ static
 xmlNodePtr insert_character_mathml_type(xmlNodePtr node, const char * chr, const char * font) {
 	int c = utf8(chr);
 	// fprintf(stderr, "CHAR : %s => 0x%8.8x\n", chr, c);
-	if ((c >= '0' && c <= '9') || c == '.' || c == ',') {
+	if ((c >= '0' && c <= '9') || c == '.') {
 		return insert_character_node(node, "mn", chr, 0);
 	}
 	if (c >= 0xF730 && c <= 0xF739) { // oldstyle
@@ -1611,16 +1614,16 @@ xmlNodePtr insert_character_mathml_type(xmlNodePtr node, const char * chr, const
 		c == '!' || c == '<' || c == '>' || c == '(' || c == ')' ||
 		c == '[' || c == ']' || c == '=' || c == '{' || c == '}' ||
 		c == 0x230a || c == 0x2308 || c == 0x27e8 || c == 0x27e9 ||
-		c == 0x2309 || c == 0x230b || c == 0x00b1 || c == 0x2213 || 
+		c == 0x2309 || c == 0x230b || c == 0x00b1 || c == 0x2213 ||
 		c == 0x005c || c == 0x00b7 || c == 0x00d7 || c == 0x2217 ||
 		c == 0x22c6 || c == 0x22c4 || c == 0x25E6 || c == 0x2022 ||
 		c == 0x00F7 || c == 0x2229 || c == 0x222a || c == 0x228e ||
-		c == 0x2293 || c == 0x2294 || c == 0x22b2 || c == 0x22b3 || 
+		c == 0x2293 || c == 0x2294 || c == 0x22b2 || c == 0x22b3 ||
 		c == 0x2240 || c == 0x25ef || c == 0x25b3 || c == 0x25bd ||
-		c == 0x2228 || c == 0x2227 || c == 0x2295 || c == 0x2296 || 
-		c == 0x2298 || c == 0x2299 || c == 0x2020 || c == 0x2021 || 
-		c == 0x2210 || c == 0x2264 || c == 0x227a || c == 0x227c || 
-		c == 0x226a || c == 0x2282 || c == 0x2286 || c == 0x2291 || 
+		c == 0x2228 || c == 0x2227 || c == 0x2295 || c == 0x2296 ||
+		c == 0x2298 || c == 0x2299 || c == 0x2020 || c == 0x2021 ||
+		c == 0x2210 || c == 0x2264 || c == 0x227a || c == 0x227c ||
+		c == 0x226a || c == 0x2282 || c == 0x2286 || c == 0x2291 ||
 		c == 0x2208 || c == 0x22a2 || c == 0x2323 || c == 0x2322 ||
 		c == 0x2265 || c == 0x227b || c == 0x227d || c == 0x226b ||
 		c == 0x2283 || c == 0x2287 || c == 0x2292 || c == 0x220b ||
@@ -1644,10 +1647,10 @@ void transform_mathsym_patterns(xmlNodePtr root, xmlTransformationEntry * param)
 	xmlNodePtr node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
-		
+
 		if(is_node_valid(node, "special", "{::tag lxir empty(", 18)) {
 			const char * type, * mathtype, * mathchar, * mathcontent;
-			
+
 			type = (const char *) node->children->children->content + 20;
 			mathtype = strstr(type, "{mathtype=");
 			mathchar = strstr(type, "{mathchar=");
@@ -1714,21 +1717,21 @@ void transform_string_patterns(xmlNodePtr root, xmlTransformationEntry * param) 
 			xmlAddPrevSibling(node, tmp);
 			prev = insert_character_mathml_type(tmp,
 				trans_fenced_char(get_charcode(node->children->children->content + len + 1, &trans)), type);
-			
+
 			while (end && is_node_valid(end, "other", type, -1)) {
-				prev = insert_character_mathml_type(prev, 
+				prev = insert_character_mathml_type(prev,
 					trans_fenced_char(get_charcode(end->children->children->content + len + 1, &trans)), type);
 				end = end->next;
 			}
 			next = end;
-			
+
 			while(node != end) {
 				xmlNodePtr next = node->next;
 				xmlUnlinkNode(node);
 				xmlFreeNode(node);
 				node = next;
 			}
-			
+
 			xmlUnlinkNode(tmp);
 			xmlFreeNode(tmp);
 		} else {
@@ -1775,7 +1778,7 @@ void drop_extra_sub_or_sup(xmlNodePtr root) {
 			is_node_valid(node, "mfrac", 0, 0) &&
 			(	!node->children ||
 				!node->children->next)) {
-			
+
 			while(node->children) {
 				xmlNodePtr c = node->children;
 				drop_extra_sub_or_sup(c);
@@ -1809,7 +1812,7 @@ void drop_empty_mrows(xmlNodePtr root, xmlTransformationEntry * param) {
 				xmlFreeNode(node);
 				next = c;
 			} else if (!node->next && node->parent->children == node && is_node_valid(node->parent, "mrow", 0, 0)) {
-				
+
 				while (node->children) {
 					xmlNodePtr c = node->children;
 					xmlUnlinkNode(c);
@@ -1833,8 +1836,8 @@ void drop_empty_vbox(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
-		if (is_node_valid(node, "vbox", 0, 0) && 
-			node->children && 
+		if (is_node_valid(node, "vbox", 0, 0) &&
+			node->children &&
 /*			is_node_valid(node->children, "param", 0, 0)
 		) {
 			if (!node->children->next) {
@@ -1851,7 +1854,7 @@ void drop_empty_vbox(xmlNodePtr root, xmlTransformationEntry * param) {
 			} else {
 				xmlTransformationPush(node, drop_empty_vbox, param);
 			}
-*/			
+*/
 			is_node_valid(node->children, "param", 0, 0) &&
 			!node->children->next
 		) {
@@ -1869,13 +1872,13 @@ void transform_mtable_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
-		if (is_node_valid(node, "vbox", 0, 0) && 
-			node->children && 
+		if (is_node_valid(node, "vbox", 0, 0) &&
+			node->children &&
 			is_node_valid(node->children, "param", 0, 0)
 		) {
 			xmlNodePtr children, mtable = xmlNewNode(0, BAD_CAST "mtable");
 			xmlAddPrevSibling(node, mtable);
-			
+
 			children = node->children->next;
 			while(children) {
 				xmlNodePtr next = children->next;
@@ -1886,7 +1889,7 @@ void transform_mtable_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 				xmlTransformationPush(children, transform_mtable_pattern, param);
 				children = next;
 			}
-			
+
 			xmlUnlinkNode(node);
 			xmlFreeNode(node);
 		} else {
@@ -1924,7 +1927,7 @@ void xmlRegisterMathTransformations() {
 xmlDocPtr mathlog_read_file(const char * logname) {
 	xmlNodePtr root, math;
 	xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
-	
+
 	root = xmlNewNode(0, BAD_CAST "tex-log");
 	xmlDocSetRootElement(doc, root);
 	read_log_file(root, logname);
@@ -1956,10 +1959,10 @@ xmlNodePtr get_math_expr(xmlNodePtr root, int begin_id, int end_id) {
 		) {
 			return node;
 		}
-		
+
 		r = get_math_expr(node, begin_id, end_id);
 		if (r) return r;
-		
+
 		node = node->next;
 	}
 	return 0;
@@ -1969,7 +1972,7 @@ xmlNodePtr mathlog_copy_expr(xmlDocPtr src, xmlDocPtr doc, int begin_id, int end
 	xmlNodePtr root = src->children;
 	xmlNodePtr copy, node = get_math_expr(root, begin_id, end_id);
 	if (!node) return 0;
-	
+
 	copy = xmlDocCopyNode(node, doc, 1);
 	if (copy) {
 		xmlNodeSetName(copy, BAD_CAST "math"); /* it could be mrow */
@@ -2013,16 +2016,16 @@ int main(int argc, char * argv[]) {
 #if USE_KPSE
 	kpse_set_program_name(argv[0], "lxir");
 #endif
-	
+
 	init_transformations();
-	
+
 	lfm_init();
-	
+
 	if (argc < 2) {
 		fprintf(stderr, "Usage : %s <log>\n", argv[0]);
 		exit(-1);
 	}
-	
+
 	doc = mathlog_read_file(argv[1]);
 	save_math_nodes(doc->children);
 	xmlFreeDoc(doc);

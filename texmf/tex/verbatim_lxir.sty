@@ -1,0 +1,10 @@
+%% Package 'verbatim' latex_x_ tagging
+%% copyright EDP Sciences 2007
+%% Xavier Trochu
+%% 
+\def\verbatim@processline{\xBegin{verbatim-line}\the\verbatim@line\xEnd{verbatim-line}}
+\let\t@g@verbatim=\@verbatim
+\def\@verbatim{\xBegin{verbatim}\t@g@verbatim}
+\let\t@gendverbatim=\endverbatim
+\def\endverbatim{\t@gendverbatim\xEnd{verbatim}}
+\expandafter\let\csname endverbatim*\endcsname =\endverbatim

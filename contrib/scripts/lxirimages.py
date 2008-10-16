@@ -26,14 +26,6 @@ symbolPackages = [
 	u'txfonts.sty',
 ]
 
-mathEnvironments = [
-	'equation',
-	'multline',
-	'eqnarray',
-	'gather',
-	'align',
-]
-
 tempfiles = []
 
 def find_source(name):
@@ -98,6 +90,15 @@ class ImageGenerator:
 		o.write("\\documentclass" + self.className + "\n")
 		for symbol in self.symbols:
 			o.write("\\usepackage{" + symbol + "}\n")
+			if symbol == "amsmath" and not lxir:
+				o.write("""%% The following force equation numbers NOT to be included in the graphical output
+\\makeatletter
+\\tag@false
+\\let\\tag@true=\\relax
+\\st@rredtrue
+\\let\\st@rredfalse=\\relax
+\\makeatother
+""")
 		o.write("\\pagestyle{empty}\n")
 		o.write("\\begin{document}\n")
 		for macro in self.macros:
@@ -205,11 +206,15 @@ def insert_math_images(file):
 		for t in Evaluate(".//xhtml:span[@class='text']//text()", context=c):
 			formula += t.nodeValue
 			t.parentNode.removeChild(t)
-		if len(formula) > 1 and formula[1] != "$":
+		formula = formula.strip()
+		if len(formula) > 1 and formula[0] != "$":
 			p = node.parentNode
 			env = p.getAttributeNS(None, 'class')
 			assert(env, "No env found for equation")
-			formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
+			if env[-5:] == "-star":
+				env = env[:-5]+"*"
+			if len(env) > 0:
+				formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
 		image, mathml = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
 		# remove the empty text node(s)
 		for t in Evaluate(".//xhtml:span[@class='text']", context=c):
