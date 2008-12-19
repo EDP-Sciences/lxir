@@ -1901,23 +1901,24 @@ void transform_mtable_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 
 static
 void merge_mn_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
-	xmlNodePtr node = root->children, next;
+	xmlNodePtr node = root->children;
 	while(node) {
 		if (is_node_valid(node, "mn", 0, 0) &&
-			(next = node->next) &&
-			is_node_valid(next, "mn", 0, 0)
+			node->next && is_node_valid(node->next, "mn", 0, 0)
 		) {
-			while (next) {
-				xmlNodePtr nextnext = next->next;
-				xmlChar * content = xmlNodeGetContent(next);
+			xmlNodePtr supp = node->next;
+			while (supp) {
+				xmlNodePtr next = supp->next;
+				xmlChar * content = xmlNodeGetContent(supp);
 				xmlNodeAddContent(node, content);
 				xmlFree(content);
-				xmlUnlinkNode(next);
-				next = is_node_valid(nextnext, "mn", 0, 0) ? nextnext : NULL;
+				xmlUnlinkNode(supp);
+				supp = is_node_valid(next, "mn", 0, 0) ? next : NULL;
+			}
 		} else {
 			xmlTransformationPush(node, merge_mn_sequence, param);
 		}
-		node = next;
+		node = node->next;
 	}
 }
 
