@@ -1899,6 +1899,28 @@ void transform_mtable_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
+static
+void merge_mn_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children, next;
+	while(node) {
+		if (is_node_valid(node, "mn", 0, 0) &&
+			(next = node->next) &&
+			is_node_valid(next, "mn", 0, 0)
+		) {
+			while (next) {
+				xmlNodePtr nextnext = next->next;
+				xmlChar * content = xmlNodeGetContent(next);
+				xmlNodeAddContent(node, content);
+				xmlFree(content);
+				xmlUnlinkNode(next);
+				next = is_node_valid(nextnext, "mn", 0, 0) ? nextnext : NULL;
+		} else {
+			xmlTransformationPush(node, merge_mn_sequence, param);
+		}
+		node = next;
+	}
+}
+
 void xmlRegisterMathTransformations() {
 #define DEF(x) xmlTransformationRegister("math", #x, x, 0);
 	DEF(transform_inline_math)
@@ -1921,6 +1943,7 @@ void xmlRegisterMathTransformations() {
 	DEF(drop_empty_mrows)
 	DEF(drop_empty_vbox)
 	DEF(transform_mtable_pattern)
+	DEF(merge_mn_sequence)
 #undef DEF
 }
 
