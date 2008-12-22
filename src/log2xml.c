@@ -1900,25 +1900,45 @@ void transform_mtable_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 }
 
 static
+int xmlChildElementCount(xmlNodePtr node) {
+	int count = 0;
+	xmlNodePtr child = node->children;
+	while (child) {
+		if(child->type == XML_ELEMENT_NODE) ++count;
+		child = child->next;
+	}
+	return count;
+}
+
+static
+int is_dual_math_node(xmlNodePtr node) {
+	if (	is_node_valid(node, "msub", 0, 0) ||
+			is_node_valid(node, "msup", 0, 0) ||
+			is_node_valid(node, "mover", 0, 0) ||
+			is_node_valid(node, "munder", 0, 0))
+		return xmlChildElementCount(node) <= 2;
+	if (	is_node_valid(node, "msubsup", 0, 0) ||
+			is_node_valid(node, "munderover", 0, 0))
+		return xmlChildElementCount(node) <= 3;
+	return 0;
+}
+
+static
 void merge_mn_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
 		if (is_node_valid(node, "mn", 0, 0) &&
-			node->next && is_node_valid(node->next, "mn", 0, 0)
+			node->next && is_node_valid(node->next, "mn", 0, 0) &&
+			!is_dual_math_node(node->parent)
 		) {
-			xmlNodePtr supp = node->next;
-			while (supp) {
-				xmlNodePtr next = supp->next;
-				xmlChar * content = xmlNodeGetContent(supp);
-				xmlNodeAddContent(node, content);
-				xmlFree(content);
-				xmlUnlinkNode(supp);
-				supp = is_node_valid(next, "mn", 0, 0) ? next : NULL;
-			}
+			xmlChar * content = xmlNodeGetContent(node->next);
+			xmlNodeAddContent(node, content);
+			xmlFree(content);
+			xmlUnlinkNode(node->next);
 		} else {
 			xmlTransformationPush(node, merge_mn_sequence, param);
+			node = node->next;
 		}
-		node = node->next;
 	}
 }
 
