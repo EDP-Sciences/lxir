@@ -155,7 +155,14 @@ class ImageGenerator:
 			if formula:
 				return formula
 		else:
-			print "Generation of MathML for formula %d produced %d output(s)" % (self.index, len(nodes))
+			nodes = Evaluate("//xhtml:span[@class='msub' or @class='msup']", context=ctxt)
+			if len(nodes) == 1:
+				formula = nodes[0]
+				if formula:
+					print "Found simple math expression for formula %d" % self.index
+					return formula
+			else:
+				print "Generation of MathML for formula %d produced %d output(s)" % (self.index, len(nodes))
 	def makeImage(self, formula):
 		if not self.images.has_key(formula):
 			try:
@@ -227,7 +234,21 @@ def insert_math_images(file):
 			node.appendChild(img)
 
 		if mathml:
-			node.appendChild(node.ownerDocument.importNode(mathml, True))
+			if mathml.tagName != 'math':
+				# here, we have the case : a$_b$
+				# mathml is: <span class='msub'><span /><span>b</span></span>
+				# original xml is : ... <span>a</span><span class="formula"> ...</span>
+				# and node is the formula
+				# p is "a"
+				p = node.previousSibling
+				assert p.tagName == 'span'
+				p.parentNode.removeChild(p)
+				newNode = node.parentNode.insertBefore(mathml, node)
+				newNode.firstChild.appendChild(p)
+				node.parentNode.removeChild(node)
+				print "Formula '%s' replaced by simple form (%s)." % (formula, newNode.tagName + '.' + newNode.getAttributeNS(None, u'class'))
+			else:
+				node.appendChild(node.ownerDocument.importNode(mathml, True))
 
 	base, ext = os.path.splitext(file)
 	output = base + "_images" + ext
