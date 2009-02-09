@@ -1,6 +1,6 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
-import os, sys, subprocess
+import os, sys, subprocess, traceback
 from Ft.Xml.XPath.Context import Context
 from Ft.Xml.XPath import Evaluate
 from Ft.Xml.Domlette import NonvalidatingReader, Print
@@ -80,8 +80,10 @@ class ImageGenerator:
 		o = subprocess.Popen(cmd, shell=True, stdout=self.log, stderr=subprocess.STDOUT)
 		errcode = o.wait()
 		self.log.write("<<<<<<<<<<<<<<<< Result : %d, %s is %s \n" % (errcode, result, os.path.exists(result)))
-		if (errcode != 0 and not accept_fail) or not os.path.exists(result):
-			raise Exception("Image %d of %s failed (while executing '%s' process)" % (self.index, self.filename, cmd))
+		if errcode != 0 and not accept_fail:
+			raise Exception("Image %d of %s failed (%d while executing '%s' process)" % (self.index, self.filename, errcode, cmd))
+		if not os.path.exists(result):
+			raise Exception("Image %d of %s failed (no output while executing '%s' process)" % (self.index, self.filename, errcode, cmd))
 
 	def genLaTeXSource(self, formula, file, lxir):
 		o = open(file, "w")
@@ -168,13 +170,13 @@ class ImageGenerator:
 			try:
 				img = self._makeImage(formula)
 				self.images[formula] = relativePath(self.base_path, img)
-			except Exception, e:
-				print "Generation of Image for formula '%s' failed: %s" % (self.index, e)
+			except:
+				print "Generation of Image for formula '%s' failed: %s" % (self.index, traceback.format_exc())
 				self.images[formula] = False
 			try:
 				self.mathml[formula] = self._makeMathML(formula)
-			except Exception, e:
-				print "Generation of MathML for formula '%s' failed: %s" % (self.index, e)
+			except:
+				print "Generation of MathML for formula '%s' failed: %s" % (self.index, traceback.format_exc())
 				self.mathml[formula] = False
 			self.index += 1
 		return self.images[formula], self.mathml[formula]

@@ -8,7 +8,8 @@ PACKAGES = \
 	graphicx_lxir.sty \
 	natbib_lxir.sty \
 	tabularx_lxir.sty \
-	hyperref_lxir.sty
+	hyperref_lxir.sty \
+	txfonts_lxir.sty
 
 CORE = \
 	lxir.dtx \
