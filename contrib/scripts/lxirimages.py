@@ -212,9 +212,8 @@ def insert_math_images(file):
 	for node in Evaluate("//xhtml:span[@class='formule']", context=ctxt):
 		c = Context(node, processorNss=NSS)
 		formula = ""
-		for t in Evaluate(".//xhtml:span[@class='text']//text()", context=c):
+		for t in Evaluate("xhtml:span[@class='text']/text()", context=c):
 			formula += t.nodeValue
-			t.parentNode.removeChild(t)
 		formula = formula.strip()
 		if len(formula) > 1 and formula[0] != "$":
 			p = node.parentNode
@@ -224,9 +223,9 @@ def insert_math_images(file):
 				env = env[:-5]+"*"
 			if len(env) > 0:
 				formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
-		image, mathml = gen.makeImage(formula.replace(u'\u02c6', '^').strip())
+		image, mathml = gen.makeImage(formula)
 		# remove the empty text node(s)
-		for t in Evaluate(".//xhtml:span[@class='text']", context=c):
+		for t in Evaluate("xhtml:span[@class='text']", context=c):
 			t.parentNode.removeChild(t)
 
 		if image:
@@ -238,14 +237,15 @@ def insert_math_images(file):
 		if mathml:
 			if mathml.tagName != 'math':
 				# here, we have the case : a$_b$
-				# mathml is: <span class='msub'><span /><span>b</span></span>
+				# mathml is: <span class='msub'><span class='mi'/><span>b</span></span>
 				# original xml is : ... <span>a</span><span class="formula"> ...</span>
 				# and node is the formula
-				# p is "a"
+				# p is <span>a</span>
 				p = node.previousSibling
-				assert p.tagName == 'span'
-				p.parentNode.removeChild(p)
-				newNode = node.parentNode.insertBefore(mathml, node)
+				if p.nodeType == p.TEXT_NODE and p.nodeValue.strip() == "":
+					p = p.previousSibling
+				assert p.nodeType == p.ELEMENT_NODE and p.tagName == 'span'
+				newNode = node.parentNode.insertBefore(mathml.cloneNode(True), node)
 				newNode.firstChild.appendChild(p)
 				node.parentNode.removeChild(node)
 				print "Formula '%s' replaced by simple form (%s)." % (formula, newNode.tagName + '.' + newNode.getAttributeNS(None, u'class'))
