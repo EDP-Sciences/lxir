@@ -181,6 +181,24 @@ class ImageGenerator:
 			self.index += 1
 		return self.images[formula], self.mathml[formula]
 
+def get_prev_span_node(node):
+	prev = node.previousSibling
+	if prev.nodeType == node.TEXT_NODE and prev.nodeValue.strip() == "":
+		prev = prev.previousSibling
+	assert prev.nodeType == node.ELEMENT_NODE and prev.tagName == 'span'
+	tnode = prev.firstChild
+	assert tnode.nodeType == node.TEXT_NODE
+	text = tnode.nodeValue.strip()
+	pos = text.rfind(" ") + 1
+	if pos == 0:
+		return prev
+
+	doc = node.ownerDocument
+	prev.replaceChild(doc.createTextNode(text[:pos]), tnode)
+	n = prev.cloneNode(False)
+	n.appendChild(doc.createTextNode(text[pos:]))
+	return n
+
 def insert_math_images(file):
 	file = os.path.abspath(file)
 	doc = NonvalidatingReader.parseUri(file)
@@ -241,10 +259,7 @@ def insert_math_images(file):
 				# original xml is : ... <span>a</span><span class="formula"> ...</span>
 				# and node is the formula
 				# p is <span>a</span>
-				p = node.previousSibling
-				if p.nodeType == p.TEXT_NODE and p.nodeValue.strip() == "":
-					p = p.previousSibling
-				assert p.nodeType == p.ELEMENT_NODE and p.tagName == 'span'
+				p = get_prev_span_node(node)
 				newNode = node.parentNode.insertBefore(mathml.cloneNode(True), node)
 				newNode.firstChild.appendChild(p)
 				node.parentNode.removeChild(node)
