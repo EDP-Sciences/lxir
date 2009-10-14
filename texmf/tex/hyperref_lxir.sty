@@ -1,6 +1,16 @@
-\def\hyper@link@[#1]#2#3#4{%
-	\xEmptyAAA{hyperlink}{ltype=#1}{ref=#2#3}{name=#4}%
-}
-\def\@hyper@@anchor#1\relax#2#3\relax{
+\def\@hyper@@anchor#1{
 	\xEmptyA{hypertarget}{name=#1}
 }
+\gdef\hyper@link#1#2#3{%
+	\xEmptyAAA{hyperlink}{ltype=#1}{ref=#2}{name=#3}%
+}
+\def\hyper@linkurl#1#2{%
+	\xEmptyAA{hyperlinkurl}{src=#1}{target=#2}%
+}
+\def\hyper@linkfile#1#2{%
+	\xEmptyAA{hyperlinkfile}{src=#1}{target=#2}%
+}
+\let\hyper@anchorstart\@gobble
+\let\hyper@anchorend\@empty
+\let\hyper@linkstart\@gobbletwo
+\let\hyper@linkend\@empty
