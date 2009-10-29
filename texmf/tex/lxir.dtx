@@ -113,20 +113,20 @@
 % these parameters may be reset in packages. 
 % \subsection{Word,Page, Paragraph, hyphenation}
 % The spaces between words are tagged to 1sp so that word  breaks can be
-% clearly identified in the DVI:
+% clearly identified in the DVI. We try to keep this definition at the begining of document as well as upstream, in case the dimension are use somewhere else.
 %    \begin{macrocode}
 %<*lxir>
 %\parindent=1sp
-\AtBeginDocument{\spaceskip=1sp\xspaceskip=1sp}
+\spaceskip=1sp\xspaceskip=1sp\AtBeginDocument{\spaceskip=1sp\xspaceskip=1sp}
 %    \end{macrocode}
 % and we prevent hyphenation: 
 %    \begin{macrocode}
-\AtBeginDocument{\pretolerance=10000}
+\pretolerance=10000\AtBeginDocument{\pretolerance=10000}
 %    \end{macrocode}
 % 
 % The italic correction is set to null,  to preserved the 1sp space between words:
 %    \begin{macrocode}
-\AtBeginDocument{\let\@@italiccorr=\relax}
+\let\@@italiccorr=\relax\AtBeginDocument{\let\@@italiccorr=\relax}
 %    \end{macrocode}
 % We also want to forbid line break breaks in math:
 %    \begin{macrocode}
@@ -134,12 +134,13 @@
 %    \end{macrocode}
 % Paragraph width is set to almost the maximum: 
 %    \begin{macrocode}
-\AtBeginDocument{\hsize=0.99\maxdimen}
-\setlength\textwidth{0.99\maxdimen} % need to be set again to this value in classes?
+\hsize=0.99\maxdimen\AtBeginDocument{\hsize=0.99\maxdimen}
+\setlength\textwidth{0.99\maxdimen}\AtBeginDocument{\setlength\textwidth{0.99\maxdimen}}%
+\setlength\columnwidth{0.99\maxdimen}\AtBeginDocument{\setlength\columnwidth{0.99\maxdimen}}%
 %    \end{macrocode}
 % Page height is set to almost the maximum: 
 %    \begin{macrocode}
-\AtBeginDocument{\vsize=0.99\maxdimen}
+\vsize=0.99\maxdimen\AtBeginDocument{\vsize=0.99\maxdimen}
 %    \end{macrocode}
 % We ``neutralize'' the previously used commands and dimensions.  
 %    \begin{macrocode}

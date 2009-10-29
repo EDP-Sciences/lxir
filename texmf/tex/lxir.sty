@@ -46,13 +46,14 @@
 \ExecuteOptions{}
 \ProcessOptions
 \RequirePackage{lxirtag}[2007/06/06]
-\AtBeginDocument{\spaceskip=1sp\xspaceskip=1sp}
-\AtBeginDocument{\pretolerance=10000}
-\AtBeginDocument{\let\@@italiccorr=\relax}
+\spaceskip=1sp\xspaceskip=1sp\AtBeginDocument{\spaceskip=1sp\xspaceskip=1sp}
+\pretolerance=10000\AtBeginDocument{\pretolerance=10000}
+\let\@@italiccorr=\relax\AtBeginDocument{\let\@@italiccorr=\relax}
 \AtBeginDocument{\binoppenalty=10000\relpenalty=10000}
-\AtBeginDocument{\hsize=0.99\maxdimen}
-\setlength\textwidth{0.99\maxdimen} % need to be set again to this value in classes?
-\AtBeginDocument{\vsize=0.99\maxdimen}
+\hsize=0.99\maxdimen\AtBeginDocument{\hsize=0.99\maxdimen}
+\setlength\textwidth{0.99\maxdimen}\AtBeginDocument{\setlength\textwidth{0.99\maxdimen}}%
+\setlength\columnwidth{0.99\maxdimen}\AtBeginDocument{\setlength\columnwidth{0.99\maxdimen}}%
+\vsize=0.99\maxdimen\AtBeginDocument{\vsize=0.99\maxdimen}
 \AtBeginDocument{%
 \newskip\junkskip
 \let\spaceskip=\junkskip
