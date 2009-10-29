@@ -73,6 +73,11 @@
 \def\LaTeX{\xEmpty{LaTeX}}
 \let\t@gpar=\par
 \def\par{\xEmpty{parsep}\t@gpar}
+\def\@doendpe{\@endpetrue
+     \everypar{{\setbox\z@\lastbox}\everypar{}\@endpefalse}}
+\def\@setpar#1{}
+\def\@par{}
+\def\@restorepar{}
 \def\mathopt@g#1{\xEmptyAA{#1}{mathtype=op}{mathcontent=#1}}
 \def\log{\mathop{\mathopt@g{log}}\nolimits}
 \def\lg{\mathop{\mathopt@g{lg}}\nolimits}

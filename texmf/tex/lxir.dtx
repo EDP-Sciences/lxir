@@ -277,10 +277,15 @@
 \def\LaTeXe\xEmpty{LaTeXe}
 \def\LaTeX{\xEmpty{LaTeX}}
 %    \end{macrocode}
-% Paragraph separation: 
+% Paragraph separation is tagged. We also redefine \@doendpe which include in latex.ltx a nasty \def\par. The commands use to modify \par are neutralized.
 %    \begin{macrocode}
 \let\t@gpar=\par
 \def\par{\xEmpty{parsep}\t@gpar}
+\def\@doendpe{\@endpetrue
+     \everypar{{\setbox\z@\lastbox}\everypar{}\@endpefalse}}
+\def\@setpar#1{}
+\def\@par{}
+\def\@restorepar{}
 %    \end{macrocode}
 % MATH
 \def\mathopt@g#1{\xEmptyAA{#1}{mathtype=op}{mathcontent=#1}}
