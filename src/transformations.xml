@@ -137,5 +137,6 @@
 		<transformation name="transform_sqrt_pattern" />
 		<transformation name="transform_mtable_pattern" />
 		<transformation name="merge_mn_sequence" />
+		<transformation name="merge_mi_sequence" />
 	</stack>
 </transformations>

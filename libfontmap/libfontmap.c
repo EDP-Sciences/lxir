@@ -53,7 +53,15 @@ struct fontenc_s {
 };
 
 static struct fontenc_s * fontencs = 0;
-static struct fontenc_s * mathfontencs = 0;
+
+struct mathfontenc_s {
+	struct mathfontenc_s * next;
+	char * name;
+	char * variant;
+	struct fontmap_s * map;
+};
+
+static struct mathfontenc_s * mathfontencs = 0;
 
 struct accent_s {
 	struct accent_s * next;
@@ -137,14 +145,14 @@ static struct doc_s * read_config() {
 
 static int read_ligature_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
-	
+
 	node = find_first_element_node(doc, "encodings");
 	while (node) {
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "ligature") == 0) {
 			xmlChar * src, * dst;
 			src = xmlGetProp(node, BAD_CAST "src");
 			dst = xmlGetProp(node, BAD_CAST "dst");
-			
+
 			if (src && dst) {
 				struct ligature_s * lig = (struct ligature_s *) malloc(sizeof(struct ligature_s));
 				lig->next = ligatures;
@@ -160,7 +168,7 @@ static int read_ligature_docs(xmlDocPtr doc) {
 
 static const char * find_ligature(const char * src) {
 	struct ligature_s * lig = ligatures;
-	
+
 	while (lig) {
 		if(strcmp(src, lig->src) == 0)
 			return lig->dst;
@@ -171,13 +179,13 @@ static const char * find_ligature(const char * src) {
 
 static int read_encoding_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
-	
+
 	node = find_first_element_node(doc, "encodings");
 	while (node) {
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "encoding") == 0) {
 			xmlNodePtr children = node->children;
 			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
-			
+
 			if (name && children) {
 				struct fontmap_s * map = fontmaps;
 				while (map) {
@@ -195,7 +203,7 @@ static int read_encoding_docs(xmlDocPtr doc) {
 				map->info.size = 0;
 				while(children) {
 					if (children->type == XML_ELEMENT_NODE) {
-						const char * src = (const char *) xmlGetProp(children, BAD_CAST "value"); 
+						const char * src = (const char *) xmlGetProp(children, BAD_CAST "value");
 						src = find_ligature(src);
 						map->info.map[map->info.size++] = strdup(src);
 					}
@@ -220,14 +228,14 @@ static struct fontmap_s * find_encoding(const char * name) {
 
 static int read_font_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
-	
+
 	node = find_first_element_node(doc, "encodings");
 	while (node) {
-		
+
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "font") == 0) {
 			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
 			const char * encoding = (const char *)xmlGetProp(node, BAD_CAST "encoding");
-			
+
 			if (name && encoding) {
 				struct fontmap_s * map = find_encoding(encoding);
 				if (map) {
@@ -239,7 +247,7 @@ static int read_font_docs(xmlDocPtr doc) {
 						}
 						font = font->next;
 					}
-					
+
 					font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
 					font->next = fontencs;
 					fontencs = font;
@@ -249,11 +257,11 @@ static int read_font_docs(xmlDocPtr doc) {
 					fprintf(stderr, "Unknown encoding in font declaration %s : \"%s\"\n", name, encoding);
 				}
 			} else {
-				fprintf(stderr, "Invalid font declaration, no name or no encoding found (%s, %s)\n", 
+				fprintf(stderr, "Invalid font declaration, no name or no encoding found (%s, %s)\n",
 					name ? name : "", encoding ? encoding : "");
 			}
 		}
-		
+
 		node = node->next;
 	}
 	return 0;
@@ -261,18 +269,19 @@ static int read_font_docs(xmlDocPtr doc) {
 
 static int read_mathfont_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
-	
+
 	node = find_first_element_node(doc, "encodings");
 	while (node) {
-		
+
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "mathfont") == 0) {
 			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
 			const char * encoding = (const char *)xmlGetProp(node, BAD_CAST "encoding");
-			
+			const char * variant = (const char *)xmlGetProp(node, BAD_CAST "mathvariant");
+
 			if (name && encoding) {
 				struct fontmap_s * map = find_encoding(encoding);
 				if (map) {
-					struct fontenc_s * font = mathfontencs;
+					struct mathfontenc_s * font = mathfontencs;
 					while (font) {
 						if (strcmp(font->name, name) == 0) {
 							fprintf(stderr, "Warning: mathfont \"%s\" declared more than once !\n", name);
@@ -280,21 +289,22 @@ static int read_mathfont_docs(xmlDocPtr doc) {
 						}
 						font = font->next;
 					}
-					
-					font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
+
+					font = (struct mathfontenc_s *)malloc(sizeof(struct mathfontenc_s));
 					font->next = mathfontencs;
 					mathfontencs = font;
 					font->name = strdup((const char *)name);
 					font->map = map;
+					font->variant = variant ? strdup((const char *)variant) : 0;
 				} else {
 					fprintf(stderr, "Unknown encoding in mathfont declaration %s : \"%s\"\n", name, encoding);
 				}
 			} else {
-				fprintf(stderr, "Invalid mathfont declaration, no name or no encoding found (%s, %s)\n", 
+				fprintf(stderr, "Invalid mathfont declaration, no name or no encoding found (%s, %s)\n",
 					name ? name : "", encoding ? encoding : "");
 			}
 		}
-		
+
 		node = node->next;
 	}
 	return 0;
@@ -302,36 +312,36 @@ static int read_mathfont_docs(xmlDocPtr doc) {
 
 static int read_accent_docs(xmlDocPtr doc) {
 	xmlNodePtr node;
-	
+
 	node = find_first_element_node(doc, "encodings");
 	while (node) {
-		
+
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "accent") == 0) {
 			xmlChar * base, * accent, * conv;
 			struct accent_s * a;
-			
+
 			base = xmlGetProp(node, BAD_CAST "base");
 			accent = xmlGetProp(node, BAD_CAST "accent");
 			conv = xmlGetProp(node, BAD_CAST "char");
 
 			a = (struct accent_s *)malloc(sizeof(struct accent_s));
-				
+
 			a->next = accents;
 			accents = a;
 			a->base = strdup((const char *)base);
 			a->accent = strdup((const char *)accent);
 			a->conv = strdup((const char *)conv);
 		}
-		
+
 		node = node->next;
 	}
-	
+
 	return 0;
 }
 
 int lfm_get_accent(const char * base, const char * accent, char * conv) {
 	struct accent_s * a = accents;
-	
+
 	while(a) {
 		if (strcmp(a->base, base) == 0 && strcmp(a->accent, accent) == 0) {
 			strcpy(conv, a->conv);
@@ -355,12 +365,12 @@ static int read_data(struct doc_s * docs, int (*ptr)(xmlDocPtr)) {
 int lfm_init() {
 	int err;
 	struct doc_s * docs;
-    
+
 	LIBXML_TEST_VERSION;
-	
+
 	docs = read_config();
 	if (!docs) return -1;
-	
+
 	err = read_data(docs, read_ligature_docs);
 	if (err) return err;
 	err = read_data(docs, read_encoding_docs);
@@ -371,56 +381,66 @@ int lfm_init() {
 	if (err) return err;
 	err = read_data(docs, read_accent_docs);
 	if (err) return err;
-	
+
 	while(docs) {
 		struct doc_s * next = docs->next;
 		xmlFreeDoc(docs->doc);
 		free(docs);
 		docs = next;
 	}
-	
+
 	return 0;
 }
 
 int lfm_close() {
 	while (accents) {
 		struct accent_s * next = accents->next;
-		
+
 		free(accents->base);
 		free(accents->accent);
 		free(accents->conv);
 		free(accents);
 		accents = next;
 	}
-	
+
 	while (ligatures) {
 		struct ligature_s * next = ligatures->next;
-			
+
 		free(ligatures->src);
 		free(ligatures->dst);
 		free(ligatures);
 		ligatures = next;
 	}
-	
+
 	while (fontencs) {
 		struct fontenc_s * next = fontencs->next;
-			
+
 		free(fontencs->name);
 		free(fontencs);
 		fontencs = next;
 	}
-	
+
+	while (mathfontencs) {
+		struct mathfontenc_s * next = mathfontencs->next;
+
+		free(mathfontencs->name);
+		if (mathfontencs->variant)
+			free(mathfontencs->variant);
+		free(mathfontencs);
+		mathfontencs = next;
+	}
+
 	while(fontmaps) {
 		int i;
 		struct fontmap_s * next = fontmaps->next;
-		
+
 		for(i = 0; i< fontmaps->info.size; ++i)
 			free(fontmaps->info.map[i]);
-		
+
 		free(fontmaps->info.map);
 		free(fontmaps->name);
 		free(fontmaps);
-		
+
 		fontmaps = next;
 	}
 	return 0;
@@ -444,7 +464,7 @@ int lfm_get_translation_map(const char * fontname, struct translation_info * pin
 }
 
 int lfm_get_math_encoding_map(const char * mathfont, struct translation_info * pinfo) {
-	struct fontenc_s * font = mathfontencs;
+	struct mathfontenc_s * font = mathfontencs;
 	while(font) {
 		if(strcmp(mathfont, font->name) == 0) {
 			*pinfo = font->map->info;
@@ -455,3 +475,15 @@ int lfm_get_math_encoding_map(const char * mathfont, struct translation_info * p
 	fprintf(stderr, "Unknown math font : %s\n", mathfont);
 	return lfm_get_math_encoding_map("tenrm", pinfo);
 }
+
+const char * lfm_get_math_encoding_variant(const char * mathfont) {
+	struct mathfontenc_s * font = mathfontencs;
+	while(font) {
+		if(strcmp(mathfont, font->name) == 0) {
+			return font->variant;
+		}
+		font = font->next;
+	}
+	return 0;
+}
+

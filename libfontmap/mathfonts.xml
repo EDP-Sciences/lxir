@@ -13,7 +13,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is Xavier Trochu.
 %
 % This work consists of the files mathfonts.xml.
@@ -23,28 +23,32 @@
   <mathfont name="tenrm" encoding="OT1Encoding"/>
   <mathfont name="sevenrm" encoding="OT1Encoding"/>
   <mathfont name="fiverm" encoding="OT1Encoding"/>
-  
-  <mathfont name="teni" encoding="TeXMathItalicEncoding"/>
-  <mathfont name="seveni" encoding="TeXMathItalicEncoding"/>
-  <mathfont name="fivei" encoding="TeXMathItalicEncoding"/>
-  
+
+  <mathfont name="teni" encoding="TeXMathItalicEncoding" mathvariant="italic" />
+  <mathfont name="seveni" encoding="TeXMathItalicEncoding" mathvariant="italic" />
+  <mathfont name="fivei" encoding="TeXMathItalicEncoding" mathvariant="italic" />
+
   <mathfont name="tensy" encoding="TeXMathSymbolEncoding"/>
   <mathfont name="sevensy" encoding="TeXMathSymbolEncoding"/>
   <mathfont name="fivesy" encoding="TeXMathSymbolEncoding"/>
-  
+
   <mathfont name="tenex" encoding="TeXMathExtensionEncoding"/>
-  
+
   <mathfont name="tenbf" encoding="OT1Encoding"/>
   <mathfont name="sevenbf" encoding="OT1Encoding"/>
   <mathfont name="fivebf" encoding="OT1Encoding"/>
-  
+
   <mathfont name="tensl" encoding="OT1Encoding"/>
   <mathfont name="tentt" encoding="TeXTypewriterTextEncoding"/>
   <mathfont name="tenit" encoding="OT1Encoding"/>
   <!-- latex math font -->
   <mathfont name="OT1" encoding="OT1Encoding"/>
-  <mathfont name="OML" encoding="TeXMathItalicEncoding"/>
+  <mathfont name="OML" encoding="TeXMathItalicEncoding" mathvariant="italic" />
   <mathfont name="OMX" encoding="TeXMathExtensionEncoding"/>
   <mathfont name="T1" encoding="CorkEncoding"/>
   <mathfont name="OMS" encoding="TeXMathSymbolEncoding"/>
+
+  <mathfont name="OML/cmm/m/it/10" encoding="TeXMathItalicEncoding" mathvariant="italic" />
+  <mathfont name="OT1/cmr/m/n/10" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="OMS/cmsy/m/n/10" encoding="TeXMathSymbolEncoding" mathvariant="normal"/>
 </encodings>

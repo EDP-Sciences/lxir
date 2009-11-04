@@ -415,7 +415,7 @@ const char * get_charcode(const xmlChar * content, struct translation_info * tra
 }
 
 static
-const char * get_other_content(xmlNodePtr node) {
+const char * get_other_content(xmlNodePtr node, char const **pvariant) {
 	struct translation_info trans;
 	char * type;
 	const char * ret;
@@ -429,6 +429,9 @@ const char * get_other_content(xmlNodePtr node) {
 	if(lfm_get_math_encoding_map(type, &trans)) {
 		fprintf(stderr, "Unable to find encoding for math font \"%s\"\n", type);
 		exit(-1);
+	}
+	if (pvariant) {
+		*pvariant = lfm_get_math_encoding_variant(type);
 	}
 	ret = get_charcode(node->children->children->content + len + 1, &trans);
 	free(type);
@@ -1030,7 +1033,7 @@ const char * trans_fenced_char(const char * chr) {
 
 static
 const char * get_fenced_char(xmlNodePtr node) {
-	return trans_fenced_char(get_other_content(node));
+	return trans_fenced_char(get_other_content(node, 0));
 }
 
 static
@@ -1579,12 +1582,21 @@ void transform_mrow_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 */
 
 static
-xmlNodePtr insert_character_node(xmlNodePtr node, const char * type, const char * content, int force) {
+xmlNodePtr insert_character_node(xmlNodePtr node, const char * font, const char * type, const char * content, int force) {
+	const char * mathvariant = lfm_get_math_encoding_variant(font);
 	if(!force && is_node_valid(node, type, 0, 0)) {
+		if(!xmlGetProp(node, BAD_CAST "mathvariant")) {
+			if (mathvariant) {
+				xmlSetProp(node, BAD_CAST "mathvariant", BAD_CAST mathvariant);
+			}
 		xmlNodeAddContent(node, BAD_CAST content);
+		}
 		return node;
 	} else {
 		xmlNodePtr next = xmlNewNode(NULL, BAD_CAST type);
+		if (mathvariant) {
+			xmlSetProp(next, BAD_CAST "mathvariant", BAD_CAST mathvariant);
+		}
 		xmlNodeAddContent(next, BAD_CAST content);
 		xmlAddNextSibling(node, next);
 		return next;
@@ -1596,16 +1608,19 @@ xmlNodePtr insert_character_mathml_type(xmlNodePtr node, const char * chr, const
 	int c = utf8(chr);
 	// fprintf(stderr, "CHAR : %s => 0x%8.8x\n", chr, c);
 	if ((c >= '0' && c <= '9') || c == '.') {
-		return insert_character_node(node, "mn", chr, 0);
+		return insert_character_node(node, font, "mn", chr, 0);
 	}
 	if (c >= 0xF730 && c <= 0xF739) { // oldstyle
 		char tmp[2];
 		tmp[0] = c - 0xF730 + '0';
 		tmp[1] = 0;
-		xmlNodePtr cnode = insert_character_node(node, "mn", tmp, 0);
+		xmlNodePtr cnode = insert_character_node(node, font, "mn", tmp, 0);
 		if(!xmlGetProp(cnode, BAD_CAST "mathvariant")) {
 			xmlSetProp(cnode, BAD_CAST "mathvariant", BAD_CAST "script");
 			xmlSetProp(cnode, BAD_CAST "tex-style", BAD_CAST "oldstyle");
+		} else {
+			fprintf(stderr, "Old style script characters error !\n");
+			exit(-1);
 		}
 		return cnode;
 	}
@@ -1636,10 +1651,10 @@ xmlNodePtr insert_character_mathml_type(xmlNodePtr node, const char * chr, const
 		c == 0x2198 || c == 0x21bc || c == 0x21c0 || c == 0x2199 ||
 		c == 0x21bd || c == 0x21c1 || c == 0x2196 || c == 0x2212
 	) {
-		return insert_character_node(node, "mo", chr, 1);
+		return insert_character_node(node, font, "mo", chr, 1);
 	}
 
-	return insert_character_node(node, "mi", chr, 1);
+	return insert_character_node(node, font, "mi", chr, 1);
 }
 
 static
@@ -1707,8 +1722,10 @@ void transform_string_patterns(xmlNodePtr root, xmlTransformationEntry * param) 
 			type = strdup((const char *)node->children->children->content);
 			*strchr(type, ' ') = 0;
 			len = strlen(type);
+/*
 			slash = strchr(type, '/');
 			if (slash) *slash = 0;
+*/
 			if(lfm_get_math_encoding_map(type, &trans)) {
 				fprintf(stderr, "Unable to find encoding for math font \"%s\"\n", type);
 				exit(-1);
@@ -1900,7 +1917,7 @@ void transform_mtable_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 }
 
 static
-int xmlChildElementCount(xmlNodePtr node) {
+int xmlChildElementCount_(xmlNodePtr node) {
 	int count = 0;
 	xmlNodePtr child = node->children;
 	while (child) {
@@ -1916,10 +1933,10 @@ int is_dual_math_node(xmlNodePtr node) {
 			is_node_valid(node, "msup", 0, 0) ||
 			is_node_valid(node, "mover", 0, 0) ||
 			is_node_valid(node, "munder", 0, 0))
-		return xmlChildElementCount(node) <= 2;
+		return xmlChildElementCount_(node) <= 2;
 	if (	is_node_valid(node, "msubsup", 0, 0) ||
 			is_node_valid(node, "munderover", 0, 0))
-		return xmlChildElementCount(node) <= 3;
+		return xmlChildElementCount_(node) <= 3;
 	return 0;
 }
 
@@ -1937,6 +1954,25 @@ void merge_mn_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 			xmlUnlinkNode(node->next);
 		} else {
 			xmlTransformationPush(node, merge_mn_sequence, param);
+			node = node->next;
+		}
+	}
+}
+
+static
+void merge_mi_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children;
+	while(node) {
+		if (is_node_valid(node, "mi", 0, 0) &&
+			node->next && is_node_valid(node->next, "mi", 0, 0) &&
+			strcmp(xmlGetProp(node, BAD_CAST "mathvariant"), xmlGetProp(node->next, BAD_CAST "mathvariant")) == 0
+		) {
+			xmlChar * content = xmlNodeGetContent(node->next);
+			xmlNodeAddContent(node, content);
+			xmlFree(content);
+			xmlUnlinkNode(node->next);
+		} else {
+			xmlTransformationPush(node, merge_mi_sequence, param);
 			node = node->next;
 		}
 	}
@@ -1965,6 +2001,7 @@ void xmlRegisterMathTransformations() {
 	DEF(drop_empty_vbox)
 	DEF(transform_mtable_pattern)
 	DEF(merge_mn_sequence)
+	DEF(merge_mi_sequence)
 #undef DEF
 }
 

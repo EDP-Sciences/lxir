@@ -33,6 +33,7 @@ int lfm_destroy_context(struct fontmap_s * ctxt);
 */
 
 int lfm_get_math_encoding_map(const char *, struct translation_info *);
+const char * lfm_get_math_encoding_variant(const char *);
 int lfm_get_translation_map(const char *, struct translation_info *);
 int lfm_get_accent(const char *, const char *, char *);
 
