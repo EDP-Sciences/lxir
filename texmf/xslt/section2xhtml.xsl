@@ -10,8 +10,12 @@
       <xsl:text>_n_</xsl:text>
       <xsl:value-of select="count(preceding-sibling::section)+1"/>
     </xsl:variable>
+    
     <a name="{$idSection}"/>
     <div class="{name()}" idSection="{$idSection}">
+      <xsl:attribute name="sectionLevel">
+         <xsl:value-of select="sectionHeader/@lxir:level"/>
+      </xsl:attribute>
       <xsl:apply-templates/>
     </div>
     <!-- line break for better debug -->
@@ -21,7 +25,6 @@
   <xsl:template match="sectionHeader">
     <xsl:variable name="classname">
       <xsl:value-of select="name()"/>
-      <xsl:value-of select="@lxir:level"/>
     </xsl:variable>
     <div class="{$classname}">
       <xsl:apply-templates select="sectionMark"/>
