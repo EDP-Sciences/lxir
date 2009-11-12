@@ -187,7 +187,7 @@ def make_lxir_source(source, macros):
 							else:
 								if bracket_level == 0:
 									math_type = 1
-									d.write(line[index:nindex] + "\n\\begin{formule}\n$")
+									d.write(line[index:nindex] + "\\begin{formule}$")
 									index = nindex + 1
 								else:
 									findex = line.find("$", nindex + 1)
@@ -196,11 +196,11 @@ def make_lxir_source(source, macros):
 									d.write(line[index:nindex] + "\\verbatimmathformule{%s}" % escape_math(line[nindex + 1:findex]))
 									index = findex + 1
 						elif math_type == 1:
-								d.write(line[index:nindex] + "$\n\\end{formule}\n")
+								d.write(line[index:nindex] + "$\\end{formule}")
 								math_type = 0
 								index = nindex + 1
-								if line[index] == '\n':
-									index = -1
+								if line[index] == ' ':
+									d.write("\\")
 						elif math_type == 2:
 							if line[nindex:nindex+2] == "$$":
 								d.write(line[index:nindex] + "$$\n\\end{formule}\n")
