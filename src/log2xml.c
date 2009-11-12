@@ -1589,8 +1589,8 @@ xmlNodePtr insert_character_node(xmlNodePtr node, const char * font, const char 
 			if (mathvariant) {
 				xmlSetProp(node, BAD_CAST "mathvariant", BAD_CAST mathvariant);
 			}
-		xmlNodeAddContent(node, BAD_CAST content);
 		}
+		xmlNodeAddContent(node, BAD_CAST content);
 		return node;
 	} else {
 		xmlNodePtr next = xmlNewNode(NULL, BAD_CAST type);
