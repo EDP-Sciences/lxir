@@ -196,11 +196,14 @@ def make_lxir_source(source, macros):
 									d.write(line[index:nindex] + "\\verbatimmathformule{%s}" % escape_math(line[nindex + 1:findex]))
 									index = findex + 1
 						elif math_type == 1:
-								d.write(line[index:nindex] + "$\\end{formule}")
+								d.write(line[index:nindex] + "$\\end{formule}\n")
 								math_type = 0
 								index = nindex + 1
 								if line[index] == ' ':
-									d.write("\\")
+									index += 1
+									d.write("[entity!\#x20!]")
+								elif line[index] == '\n':
+									index = -1
 						elif math_type == 2:
 							if line[nindex:nindex+2] == "$$":
 								d.write(line[index:nindex] + "$$\n\\end{formule}\n")
