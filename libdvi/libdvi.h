@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DVI_SKIP_SPACE_SMALL	1
 #define DVI_SKIP_SPACE_NORMAL	2
 #define DVI_NO_FONT_TRANSLATION	4
+#define DVI_CMTT10_NEUTRAL 8
 
 /* Error codes */
 #define DVIERR_INVALID_POP	(-2)

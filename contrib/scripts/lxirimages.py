@@ -83,7 +83,7 @@ class ImageGenerator:
 		if errcode != 0 and not accept_fail:
 			raise Exception("Image %d of %s failed (%d while executing '%s' process)" % (self.index, self.filename, errcode, cmd))
 		if not os.path.exists(result):
-			raise Exception("Image %d of %s failed (no output while executing '%s' process)" % (self.index, self.filename, errcode, cmd))
+			raise Exception("Image %d of %s failed (no output while executing '%s' process)" % (self.index, self.filename, cmd))
 
 	def genLaTeXSource(self, formula, file, lxir):
 		o = open(file, "w")
@@ -233,14 +233,14 @@ def insert_math_images(file):
 		for t in Evaluate("xhtml:span[@class='text']/text()", context=c):
 			formula += t.nodeValue
 		formula = formula.strip()
-		if len(formula) > 1 and formula[0] != "$":
+		assert len(formula)
+		if  formula[0] != "$":
 			p = node.parentNode
 			env = p.getAttributeNS(None, 'class')
 			assert env, "No env found for equation"
 			if env[-5:] == "-star":
 				env = env[:-5]+"*"
-			if len(env) > 0:
-				formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
+			formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
 		image, mathml = gen.makeImage(formula)
 		# remove the empty text node(s)
 		for t in Evaluate("xhtml:span[@class='text']", context=c):

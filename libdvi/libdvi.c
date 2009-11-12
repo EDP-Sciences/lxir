@@ -716,7 +716,11 @@ int dvi_read_postamble(dvifilestate_t * s) {
 
 			if (!(s->flags & DVI_NO_FONT_TRANSLATION)) {
 				struct translation_info ti;
-				err = lfm_get_translation_map(pfont->current.name ? pfont->current.name : "cmr10", &ti);
+				const char * font_name = pfont->current.name;
+				if (!font_name) font_name = "cmr10";
+				if ((s->flags & DVI_CMTT10_NEUTRAL) && strcmp(font_name, "cmtt10") == 0)
+					font_name = "LxirNeutralFont";
+				err = lfm_get_translation_map(font_name, &ti);
 				if (err) return DVIERR_NOTRANSLATION_MAP;
 
 				pfont->current.map = ti.map;

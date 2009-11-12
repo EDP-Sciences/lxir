@@ -1559,7 +1559,7 @@ int main(int argc, char * argv[]) {
 		dvifile = argv[1];
 	}
 
-	err = dvi_read(&dvi, dvifile, flags);
+	err = dvi_read(&dvi, dvifile, flags | DVI_CMTT10_NEUTRAL);
 	if(err) {
 		fprintf(stderr, "Error (%d) reading DVI file.\n", err);
 		return -1;

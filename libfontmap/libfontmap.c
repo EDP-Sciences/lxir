@@ -362,6 +362,32 @@ static int read_data(struct doc_s * docs, int (*ptr)(xmlDocPtr)) {
 	return 0;
 }
 
+static
+void add_neutral_font() {
+	struct fontmap_s * map;
+	struct fontenc_s * font;
+	int i;
+	char * chr;
+
+	map = (struct fontmap_s *) malloc(sizeof(struct fontmap_s));
+	map->next = fontmaps;
+	fontmaps = map;
+	map->name = strdup("LxirNeutralEncoding");
+	map->info.map = malloc(256*sizeof(char*));
+	map->info.size = 256;
+	for (i = 0; i < 256; i++) {
+		chr = malloc(2);
+		chr[0] = (char)i;
+		chr[1] = 0;
+		map->info.map[i] = chr;
+	}
+	font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
+	font->next = fontencs;
+	fontencs = font;
+	font->name = strdup("LxirNeutralFont");
+	font->map = find_encoding("LxirNeutralEncoding");
+}
+
 int lfm_init() {
 	int err;
 	struct doc_s * docs;
@@ -388,6 +414,8 @@ int lfm_init() {
 		free(docs);
 		docs = next;
 	}
+
+	add_neutral_font();
 
 	return 0;
 }
