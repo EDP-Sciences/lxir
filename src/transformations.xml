@@ -40,8 +40,10 @@
 		<!-- Cette transformation traite les node ayant un nom du type (hermes specifique) -->
 		<transformation name="fix_special_nodes" />
 
-		<!-- Cette transformation supprime les tags <text> à l'interieur du mode mathématique -->
-		<transformation name="mathmode_drop_text" />
+		<!-- Cette transformation supprime les tags <text> à l'interieur du mode mathématique
+		XT: Attention, cette transformation provoque des erreurs, elle doit rester commentée.
+		-->
+		<!-- <transformation name="mathmode_drop_text" /> -->
 
 		<!-- Cette transformation effectue l'opération suivante :
 		Transform :
@@ -123,7 +125,7 @@
 		<transformation name="transform_over_pattern" />
 		<transformation name="transform_subsup_pattern" />
 		<transformation name="transform_sub_or_sup_pattern" />
-		<!-- <transformation name="transform_simple_sub_or_sup_pattern" /> -->
+		<transformation name="transform_simple_sub_or_sup_pattern" />
 		<transformation name="transform_underline_pattern" />
 		<transformation name="transform_overline_pattern" />
 		<transformation name="transform_mathsym_patterns" />
