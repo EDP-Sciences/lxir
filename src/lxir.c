@@ -1529,6 +1529,11 @@ int main(int argc, char * argv[]) {
 
 	if (argc < 2) {
 		fprintf(stderr, "Usage : %s [-skip {1|sp|all}] <dvi>\n", argv[0]);
+#if USE_KPSE
+		fprintf(stderr, "lxir is using kpse\n");
+#else
+		fprintf(stderr, "lxir is using a static path to %s\n", TEXMF_XML_DIR);
+#endif
 		return -1;
 	}
 	if(argc >= 4) {

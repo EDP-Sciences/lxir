@@ -207,7 +207,7 @@ def insert_math_images(file):
 	# Check that verbatim math is used
 	for node in Evaluate("//xhtml:span[@class='verbatimmath']/@lxir:value", context=ctxt):
 		verbatimmath = node.value
-	assert(verbatimmath == u'true', "Need verbatim math mode for math conversion")
+	assert verbatimmath == u'true', "Need verbatim math mode for math conversion"
 
 	# Check that the document class is known
 	latexClass = None
@@ -217,7 +217,7 @@ def insert_math_images(file):
 			latexClass = latexClasses[node.value]
 		elif node.value in symbolPackages:
 			symbols.append(node.value[:-4])
-	assert(latexClass, "Unknown document class used")
+	assert latexClass, "Unknown document class used"
 
 	# Get All macro text
 	macros = []
@@ -236,7 +236,7 @@ def insert_math_images(file):
 		if len(formula) > 1 and formula[0] != "$":
 			p = node.parentNode
 			env = p.getAttributeNS(None, 'class')
-			assert(env, "No env found for equation")
+			assert env, "No env found for equation"
 			if env[-5:] == "-star":
 				env = env[:-5]+"*"
 			if len(env) > 0:

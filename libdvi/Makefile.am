@@ -24,5 +24,5 @@ EXTRA_PROGRAMS = dvidump
 dvidump_SOURCES = dvidump.c
 dvidump_CFLAGS= $(KPSE_CFLAGS)
 dvidump_LDFLAGS = $(AM_LDFLAGS) $(KPSE_LD_FLAGS)
-dvidump_LDADD = libdvi.la ../libfontmap/libfontmap.la
+dvidump_LDADD = libdvi.la ../libfontmap/libfontmap.la ../libtfm/libtfm.la -lkpathsea
 

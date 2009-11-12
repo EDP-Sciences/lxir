@@ -1,4 +1,6 @@
 DISTCHECK_CONFIGURE_FLAGS=--with-tools --without-kpse
+ACLOCAL_AMFLAGS=-I m4
+
 if BUILD_TOOLS
 TOOLS_DISTCLEANFILES = \
 	$(builddir)/libfontmap/tools/accents/accents.xml \
