@@ -49,7 +49,9 @@
   <mathfont name="OMS" encoding="TeXMathSymbolEncoding"/>
 
   <mathfont name="OML/cmm/m/it/10" encoding="TeXMathItalicEncoding" mathvariant="italic" />
+  <mathfont name="OML/cmm/m/it/7" encoding="TeXMathItalicEncoding" mathvariant="italic" />
   <mathfont name="OT1/cmr/m/n/10" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="OT1/cmr/m/n/7" encoding="OT1Encoding" mathvariant="normal"/>
   <mathfont name="OMS/cmsy/m/n/10" encoding="TeXMathSymbolEncoding" mathvariant="normal"/>
   <mathfont name="OMS/cmsy/m/n/7" encoding="TeXMathSymbolEncoding" mathvariant="normal"/>
 </encodings>
