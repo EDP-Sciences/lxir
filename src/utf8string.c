@@ -53,10 +53,16 @@ int utf8_get_next_char(xmlNodePtr text, xmlChar * output) {
 		lchar = utf8_copy_char((const char *)text->content, (char *)output);
 		output[lchar] = 0;
 		if (len > lchar) {
-			xmlNodePtr sibling = text->prev;
 			xmlNodePtr rest = xmlNewText(text->content + lchar);
-			xmlUnlinkNode(text);
-			xmlAddNextSibling(sibling, rest);
+			if (text->next) {
+				xmlNodePtr next = text->next;
+				xmlUnlinkNode(text);
+				xmlAddPrevSibling(next, rest);
+			} else {
+				xmlNodePtr parent = text->parent;
+				xmlUnlinkNode(text);
+				xmlAddChild(parent, rest);
+			}
 		} else {
 			xmlUnlinkNode(text);
 		}
@@ -73,6 +79,6 @@ static int get_family(xmlChar * chr) {
 
 int utf8_get_next_family_char(xmlChar * base, int * pfamily, xmlChar ** pelement) {
 	int family = 0;
-	
+
 }
 */

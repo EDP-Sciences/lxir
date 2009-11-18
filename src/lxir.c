@@ -1190,9 +1190,9 @@ int get_char_from_next_text(xmlNodePtr node, xmlChar * text) {
 	if (node->parent &&
 			node->parent->next &&
 			is_valid_node(node->parent->next, "text") &&
-			node->parent->next->children &&
-			xmlNodeIsText(node->parent->next->children)) {
-		return utf8_get_next_char(node->parent->next->children, text);
+			node->parent->next->last &&
+			xmlNodeIsText(node->parent->next->last)) {
+		return utf8_get_next_char(node->parent->next->last, text);
 	}
 	return -1;
 }
@@ -1201,6 +1201,7 @@ void transform_accent_tags(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
+		xmlNodePtr parent = node->parent;
 		if (node->type == XML_ELEMENT_NODE) {
 
 			if(is_valid_node(node, "node") &&
@@ -1213,21 +1214,21 @@ void transform_accent_tags(xmlNodePtr root, xmlTransformationEntry * param) {
 
 				err = get_char_from_next_text(node, accent);
 				if(err) {
-//					fprintf(stderr, "Invalid accent ! unable to find text for accent\n");
+					fprintf(stderr, "Invalid accent ! unable to find text for accent\n");
 					xmlNewTextChild(node, NULL, BAD_CAST "letter", BAD_CAST "*error*");
 					xmlNewTextChild(node, NULL, BAD_CAST "accent", BAD_CAST "*error*");
 					node = next; continue ;
 				}
 				err = get_char_from_next_text(node, base);
 				if(err) {
-//					fprintf(stderr, "Invalid accent ! unable to find text for base\n");
+					fprintf(stderr, "Invalid accent ! unable to find text for base\n");
 					xmlNewTextChild(node, NULL, BAD_CAST "letter", BAD_CAST "*error*");
 					xmlNewTextChild(node, NULL, BAD_CAST "accent", accent);
 					node = next; continue ;
 				}
 				err = lfm_get_accent((const char *)base,(const char *) accent,(char *) conv);
 				if (err) {
-//					fprintf(stderr, "Unknown accent found ! letter = \"%s\", accent = \"%s\"\n", base, accent);
+					fprintf(stderr, "Unknown accent found ! letter = \"%s\", accent = \"%s\"\n", base, accent);
 					xmlNewTextChild(node, NULL, BAD_CAST "letter", base);
 					xmlNewTextChild(node, NULL, BAD_CAST "accent", accent);
 				} else {
@@ -1235,7 +1236,7 @@ void transform_accent_tags(xmlNodePtr root, xmlTransformationEntry * param) {
 						xmlAddPrevSibling(node->next, xmlNewText(conv));
 						next = node->next;
 					} else {
-						xmlAddChild(node->parent, xmlNewText(conv));
+						xmlAddChild(parent, xmlNewText(conv));
 						next = node->prev;
 					}
 					xmlUnlinkNode(node);
