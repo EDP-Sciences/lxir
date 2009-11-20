@@ -33,24 +33,24 @@ inline int is_node_element_not(xmlNodePtr node, const char * name) {
 	Cette fonction effectue transforme une séquence d'éléments quelconques
 	séparé par des noeuds spécifiques en séquence de noeuds spécifiques contenant
 	les élémentes quelconques.
-	
+
 	<item />
 	toto
 	<item />
 	titi
-	
+
 	devient :
-	
+
 	<item>toto</item>
 	<item>titi</item>
 */
 static
 void close_siblings(xmlNodePtr root, const char * name) {
 	xmlNodePtr node = root->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
-		
+
 		if (is_node_element(node, name)) {
 			xmlNodePtr inner = node->next;
 			while (inner && is_node_element_not(inner, name)) {
@@ -61,7 +61,7 @@ void close_siblings(xmlNodePtr root, const char * name) {
 			}
 			next = inner;
 		}
-		
+
 		node = next;
 	}
 }
@@ -69,7 +69,7 @@ void close_siblings(xmlNodePtr root, const char * name) {
 static
 void rebuild_all_lists(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
 		if (is_node_element(node, "list")) {
@@ -84,7 +84,7 @@ void rebuild_all_lists(xmlNodePtr root, xmlTransformationEntry * param) {
 static
 void rebuild_bibliography(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
 		if (is_node_element(node, "thebibliography")) {
@@ -120,34 +120,34 @@ int is_par_end_node(xmlNodePtr node) {
 	return
 		is_name_in_list(name, stop_paragraph_list_names)
 	||
-		is_name_in_list(name, stop_section_list_names);	
+		is_name_in_list(name, stop_section_list_names);
 }
 
 static
 void rebuild_paragraphs(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	int found = 0;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
-		
+
 		if (node->type == XML_ELEMENT_NODE &&
 				is_name_in_list(node->name, stop_paragraph_list_names)) {
-			
+
 			xmlNodePtr par = xmlNewNode(0, BAD_CAST "par");
 			xmlNodePtr content = node->next;
-			
+
 			while (content && content->type == XML_ELEMENT_NODE &&
 					!is_par_end_node(content)) {
 				xmlNodePtr n = content->next;
-				
+
 				xmlUnlinkNode(content);
 				xmlAddChild(par, content);
-				
+
 				content = n;
 			}
 			next = content;
-			
+
 			if (par->children) {
 				xmlAddNextSibling(node, par);
 			}
@@ -155,10 +155,10 @@ void rebuild_paragraphs(xmlNodePtr root, xmlTransformationEntry * param) {
 				xmlUnlinkNode(node);
 				xmlFreeNode(node);
 			}
-			
+
 			found = 1;
 		}
-		
+
 		node = next;
 	}
 	if (!found) {
@@ -177,7 +177,9 @@ int get_section_level(xmlNodePtr section) {
 		header = header->next;
 	if (!header) return -1;
 	const char * level = (const char *)xmlGetProp(header, BAD_CAST "level");
-	return level ? atoi(level) : -1;
+	int result = level ? atoi(level) : -1;
+	xmlFree(level);
+	return result;
 }
 
 static
@@ -193,25 +195,25 @@ int is_stop_section_node(xmlNodePtr node, int level) {
 static
 void rebuild_sections(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
-		
+
 		if (is_node_element(node, "section")) {
 			int level = get_section_level(node);
 			xmlNodePtr n = node->next;
-			
+
 			while(n && !is_stop_section_node(n, level)) {
 				xmlNodePtr nn = n->next;
-				
+
 				xmlUnlinkNode(n);
 				xmlAddChild(node, n);
-				
+
 				n = nn;
 			}
 			next = node->next;
 		}
-		
+
 		xmlTransformationPush(node, rebuild_sections, param);
 		node = next;
 	}
@@ -235,7 +237,7 @@ int count_number_of_vline(xmlNodePtr tab) {
 	xmlNodePtr node = tab->children;
 	int result = 0;
 	while (node) {
-		if (is_node_element(node, "vline") || 
+		if (is_node_element(node, "vline") ||
 			is_node_element(node, "intercolumnDef")
 		) {
 			return result;
@@ -286,7 +288,7 @@ xmlNodePtr create_line_groups(xmlNodePtr tab) {
 	int tageol = 0, cvlinee = 0, c = 0;
 
 	count_number_of_columns(tab, &ncols, &nvlines);
-	
+
 	while(node) {
 		xmlNodePtr next = node->next;
 		if (is_node_element(node, "columnsModel")) {
@@ -320,13 +322,17 @@ xmlNodePtr create_line_groups(xmlNodePtr tab) {
 			if (!row) row = xmlNewNode(0, BAD_CAST "row");
 			xmlUnlinkNode(node);
 			xmlAddChild(row, node);
-			c += atoi((const char *) xmlGetProp(node, "span"));
+			xmlChar * span = xmlGetProp(node, "span");
+			c += atoi((const char *) span);
+			xmlFree(span);
 		} else if (is_node_element(node, "eol")) {
 			tageol = 1;
 		} else if (is_node_element(node, "setcolor")) {
 			/* nothing here */
 		} else if (is_node_element_not(node,"text")) {
-			fprintf(stderr, "Unknown node in tabular, %s (id: %s)\n", (const char *)node->name, (const char *)xmlGetProp(node, BAD_CAST "id"));
+			xmlChar * id = xmlGetProp(node, BAD_CAST "id");
+			fprintf(stderr, "Unknown node in tabular, %s (id: %s)\n", (const char *)node->name, (const char *)id);
+			xmlFree(id);
 		}
 		if ( (c == ncols || tageol) &&
 			(cvlinee == nvlines || is_node_element_not(node, "multicolumn"))
@@ -366,11 +372,11 @@ void create_col_groupchildren(xmlNodePtr model) {
 			xmlAddChild(result, node);
 		} else {
 			if (!group) group = xmlNewNode(0, BAD_CAST "columnsGroup");
-			
+
 			xmlUnlinkNode(node);
 			xmlAddChild(group, node);
 		}
-		
+
 		node = next;
 	}
 	if (group) xmlAddChild(result, group);
@@ -381,10 +387,10 @@ void create_col_groupchildren(xmlNodePtr model) {
 static
 void create_col_groups(xmlNodePtr tab) {
 	xmlNodePtr node = tab->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
-		if (is_node_element(node, "columnsModel")) 
+		if (is_node_element(node, "columnsModel"))
 		{	/* normalement, il n'y en a qu'un */
 			create_col_groupchildren(node);
 		}
@@ -395,7 +401,7 @@ void create_col_groups(xmlNodePtr tab) {
 static
 void rebuild_tabulars(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	
+
 	while (node) {
 		xmlNodePtr next = node->next;
 		if (is_node_element(node, "tabular") || is_node_element(node, "array")) {

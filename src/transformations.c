@@ -389,21 +389,26 @@ void xmlTransformationInit(const char * filename) {
 
 	while(node) {
 		if (node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "stack") == 0) {
-			const char * type = (const char *)xmlGetProp(node, BAD_CAST "type");
+			xmlChar * type = xmlGetProp(node, BAD_CAST "type");
 			xmlNodePtr child = node->children;
 			while (child) {
 				if (child->type == XML_ELEMENT_NODE && strcmp((const char *) child->name, "transformation") == 0) {
-					const char * name = (const char *)xmlGetProp(child, BAD_CAST "name");
-					const char * param = (const char *)xmlGetProp(child, BAD_CAST "param");
-					xmlTransformationAddToList(type, name, param);
-					if (REPORT_ALL_TRANSFORMATIONS || xmlGetProp(child, BAD_CAST "report")) {
+					xmlChar * name = xmlGetProp(child, BAD_CAST "name");
+					xmlChar * param = xmlGetProp(child, BAD_CAST "param");
+					xmlTransformationAddToList((const char *)type, (const char *)name, (const char *)param);
+					xmlChar * report = xmlGetProp(child, BAD_CAST "report");
+					if (REPORT_ALL_TRANSFORMATIONS || report) {
 						char filename[128];
 						sprintf(filename, "temp-%d-%s.xml", i++, name);
-						xmlTransformationAddToList(type, "dump_tree", filename);
+						xmlTransformationAddToList((const char *)type, "dump_tree", filename);
 					}
+					xmlFree(name);
+					xmlFree(param);
+					xmlFree(report);
 				}
 				child = child->next;
 			}
+			xmlFree(type);
 		}
 		node = node->next;
 	}

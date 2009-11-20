@@ -282,14 +282,12 @@ void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 		xmlChar * t1, * t2, * accent;
 		t1 = utf8_trim(text1content);
 		t2 = utf8_trim(text2content);
-		fprintf(stderr, "Checking accentuated character between \"%s\" and \"%s\"", t1, t2);
 
 		if (xmlUTF8Strlen(t1) == 1 && (accent = check_accent(t1, t2))) {
 			/* transform here */
 			const xmlChar * base = xmlUTF8Strpos(t2, 1);
 			int size1 = xmlStrlen(accent), size2 = xmlStrlen(base);
 			xmlChar * result = xmlMalloc(size1 + size2 + 1);
-			fprintf(stderr, " success : \"%s\"\n", accent);
 
 			memcpy(result, accent, size1);
 			memcpy(result + size1, base, size2);
@@ -310,7 +308,6 @@ void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 			const xmlChar * base = xmlUTF8Strpos(t1, 1);
 			int size1 = xmlStrlen(accent), size2 = xmlStrlen(base);
 			xmlChar * result = xmlMalloc(size1 + size2 + 1);
-			fprintf(stderr, " success : \"%s\"\n", accent);
 
 			memcpy(result, accent, size1);
 			memcpy(result + size1, base, size2);
@@ -326,8 +323,6 @@ void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 			xmlAddChild(text2, xmlNewText(result));
 			xmlFree(result);
 			remove_xxx_node_before(text2, "textaccent");
-		} else {
-			fprintf(stderr, " failed\n");
 		}
 
 		xmlFree(t1);
@@ -986,11 +981,15 @@ void merge_adjacent_text_nodes(xmlNodePtr root, xmlTransformationEntry * param) 
 }
 
 static
-int is_accent_node_name(xmlChar * name) {
-	return name && (
-		strcmp((const char *)name, "textaccent") == 0 ||
-		strcmp((const char *)name, "mathaccent") == 0
-	);
+int is_accent_node_type(xmlNodePtr node) {
+	xmlChar * type = xmlGetProp(node, BAD_CAST "type");
+	if (!type) return 0;
+	int result =
+		strcmp((const char *)type, "textaccent") == 0 ||
+		strcmp((const char *)type, "mathaccent") == 0
+	;
+	xmlFree(type);
+	return result;
 }
 
 static
@@ -1123,9 +1122,8 @@ void merge_accent_tags1(xmlNodePtr root, xmlTransformationEntry * param) {
 				//		<text>{...}</text><node type="textaccent"/><text>{...}</text>
 				//	into :
 				//		<text>{...}<node type="textaccent" />{...}</text>
-				xmlChar * type = xmlGetProp(next, BAD_CAST "type");
 				xmlNodePtr last = next->next;
-				if (last && is_accent_node_name(type) && is_valid_node(last, "text")) {
+				if (last && is_accent_node_type(next) && is_valid_node(last, "text")) {
 					xmlNodePtr child;
 					xmlUnlinkNode(next);
 					xmlAddNextSibling(node->last, next);
@@ -1151,8 +1149,7 @@ void merge_accent_tags2(xmlNodePtr root, xmlTransformationEntry * param) {
 		if (node->type == XML_ELEMENT_NODE) {
 			if(next && is_valid_node(node, "node") && is_valid_node(next, "text")) {
 
-				xmlChar * type = xmlGetProp(node, BAD_CAST "type");
-				if (is_accent_node_name(type)) {
+				if (is_accent_node_type(node)) {
 					//	Transform :
 					//		<node type="textaccent"/><text>{...}</text>
 					//	into :
@@ -1199,13 +1196,12 @@ int get_char_from_next_text(xmlNodePtr node, xmlChar * text) {
 
 void transform_accent_tags(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	while(node) {
+	while (node) {
 		xmlNodePtr next = node->next;
-		xmlNodePtr parent = node->parent;
-		if (node->type == XML_ELEMENT_NODE) {
 
+		if (node->type == XML_ELEMENT_NODE) {
 			if(is_valid_node(node, "node") &&
-					is_accent_node_name(xmlGetProp(node, BAD_CAST "type"))
+					is_accent_node_type(node)
 					) {
 				xmlChar base[10];
 				xmlChar accent[10];
@@ -1232,15 +1228,25 @@ void transform_accent_tags(xmlNodePtr root, xmlTransformationEntry * param) {
 					xmlNewTextChild(node, NULL, BAD_CAST "letter", base);
 					xmlNewTextChild(node, NULL, BAD_CAST "accent", accent);
 				} else {
-					if (node->next) {
-						xmlAddPrevSibling(node->next, xmlNewText(conv));
-						next = node->next;
+					xmlNodePtr text = xmlNewText(conv);
+					next = node->next;
+
+					if (next) {
+						xmlUnlinkNode(node);
+						xmlFreeNode(node);
+						xmlAddPrevSibling(next, text);
+						if (
+							xmlNodeIsText(next) && next->prev && xmlNodeIsText(next->prev)
+						) {
+							next = xmlTextMerge(next->prev, next);
+						}
 					} else {
-						xmlAddChild(parent, xmlNewText(conv));
-						next = node->prev;
+						xmlNodePtr parent = node->parent;
+						xmlUnlinkNode(node);
+						xmlFreeNode(node);
+						xmlAddChild(parent, text);
 					}
-					xmlUnlinkNode(node);
-					xmlFreeNode(node);
+
 				}
 			} else {
 				xmlTransformationPush(node, transform_accent_tags, param);
