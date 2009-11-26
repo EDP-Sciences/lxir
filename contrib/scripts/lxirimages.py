@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import os, sys, subprocess, traceback
 from Ft.Xml.XPath.Context import Context
@@ -233,15 +233,18 @@ def insert_math_images(file):
 		for t in Evaluate("xhtml:span[@class='text']/text()", context=c):
 			formula += t.nodeValue
 		formula = formula.strip()
-		assert len(formula)
-		if  formula[0] != "$":
-			p = node.parentNode
-			env = p.getAttributeNS(None, 'class')
-			assert env, "No env found for equation"
-			if env[-5:] == "-star":
-				env = env[:-5]+"*"
-			formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
-		image, mathml = gen.makeImage(formula)
+		if not len(formula):
+			print "empty formula found in document"
+			image, mathml = None, None
+		else:
+			if  formula[0] != "$":
+				p = node.parentNode
+				env = p.getAttributeNS(None, 'class')
+				assert env, "No env found for equation"
+				if env[-5:] == "-star":
+					env = env[:-5]+"*"
+				formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
+			image, mathml = gen.makeImage(formula)
 		# remove the empty text node(s)
 		for t in Evaluate("xhtml:span[@class='text']", context=c):
 			t.parentNode.removeChild(t)

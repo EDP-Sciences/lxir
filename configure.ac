@@ -156,5 +156,6 @@ AC_CONFIG_FILES([
 	texmf/xslt/Makefile
 	texmf/xslt/xlatex2xhtml.xsl
 	texmf/css/Makefile
+	testsuite/Makefile
 ])
 AC_OUTPUT

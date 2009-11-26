@@ -741,7 +741,7 @@ static
 void transform_sqrt_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
-		const char * prop;
+		xmlChar * prop;
 		xmlNodePtr next = node->next;
 		xmlNodePtr tmp = 0, content = 0;
 		if(
@@ -749,8 +749,9 @@ void transform_sqrt_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 				is_sqrt_symbol_node(node) ||
 				(
 					is_node_valid(node, "msup", 0, 0) &&
-					(prop = (const char *) xmlGetProp(node, BAD_CAST "single")) &&
-					(strcmp(prop, "1") == 0) &&
+					(prop = xmlGetProp(node, BAD_CAST "single")) &&
+					(strcmp((const char *)prop, "1") == 0) &&
+					(xmlFree(prop), 1) &&
 					(tmp = node->children) &&
 					is_sqrt_symbol_node(tmp)
 				) ||
@@ -761,8 +762,9 @@ void transform_sqrt_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 			) &&
 			(tmp = node->next) &&
 			is_node_valid(tmp, "menclose", 0, 0) &&
-			(prop = (const char *) xmlGetProp(tmp, BAD_CAST "notation")) &&
-			(strcmp(prop, "top") == 0) &&
+			(prop = xmlGetProp(tmp, BAD_CAST "notation")) &&
+			(strcmp((const char *)prop, "top") == 0) &&
+			(xmlFree(prop), 1) &&
 			(content = tmp->children)
 		) {
 			xmlNodePtr sqrt = xmlNewNode(0, BAD_CAST "msqrt");
@@ -1388,8 +1390,12 @@ void transform_sub_or_sup_pattern(xmlNodePtr root, xmlTransformationEntry * tpar
 static
 void transform_simple_sub_or_sup_pattern(xmlNodePtr root, xmlTransformationEntry * tparam) {
 	xmlNodePtr node = root->children;
-	const char * type = (const char *)xmlGetProp(root, BAD_CAST "type");
-	if (type && strcmp(type, "display") == 0) return;
+	xmlChar * type = xmlGetProp(root, BAD_CAST "type");
+	if (type && strcmp((const char *)type, "display") == 0) {
+		xmlFree(type);
+		return;
+	}
+	xmlFree(type);
 
 	while(node) {
 		xmlNodePtr next = node->next;
@@ -1585,10 +1591,16 @@ static
 xmlNodePtr insert_character_node(xmlNodePtr node, const char * font, const char * type, const char * content, int force) {
 	const char * mathvariant = lfm_get_math_encoding_variant(font);
 	if(!force && is_node_valid(node, type, 0, 0)) {
-		if(!xmlGetProp(node, BAD_CAST "mathvariant")) {
+		xmlChar * v = xmlGetProp(node, BAD_CAST "mathvariant");
+		if(!v) {
 			if (mathvariant) {
 				xmlSetProp(node, BAD_CAST "mathvariant", BAD_CAST mathvariant);
 			}
+		} else {
+			if (strcmp((const char *)v, mathvariant)) {
+				fprintf(stderr, "Mathvariant mistmath !\n");
+			}
+			xmlFree(v);
 		}
 		xmlNodeAddContent(node, BAD_CAST content);
 		return node;
@@ -1615,10 +1627,12 @@ xmlNodePtr insert_character_mathml_type(xmlNodePtr node, const char * chr, const
 		tmp[0] = c - 0xF730 + '0';
 		tmp[1] = 0;
 		xmlNodePtr cnode = insert_character_node(node, font, "mn", tmp, 0);
-		if(!xmlGetProp(cnode, BAD_CAST "mathvariant")) {
+		xmlChar * v = xmlGetProp(node, BAD_CAST "mathvariant");
+		if(!v) {
 			xmlSetProp(cnode, BAD_CAST "mathvariant", BAD_CAST "script");
 			xmlSetProp(cnode, BAD_CAST "tex-style", BAD_CAST "oldstyle");
 		} else {
+			xmlFree(v);
 			fprintf(stderr, "Old style script characters error !\n");
 			exit(-1);
 		}
@@ -1817,7 +1831,12 @@ void drop_empty_mrows(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
 		xmlNodePtr next = node->next;
-		if (is_node_valid(node, "mrow", 0, 0) && !xmlGetProp(node, BAD_CAST "begin-id") && !xmlGetProp(node, BAD_CAST "end-id")) {
+		if (is_node_valid(node, "mrow", 0, 0)) {
+			xmlChar * p = xmlGetProp(node, BAD_CAST "begin-id");
+			if (p) { xmlFree(p); node = next; continue; }
+			p = xmlGetProp(node, BAD_CAST "end-id");
+			if (p) { xmlFree(p); node = next; continue; }
+
 			if (!node->children) {
 				xmlUnlinkNode(node);
 				xmlFreeNode(node);
@@ -2035,8 +2054,9 @@ xmlNodePtr get_math_expr(xmlNodePtr root, int begin_id, int end_id) {
 			(is_node_valid(node, "math", 0, 0) || is_node_valid(node, "mrow", 0, 0)) &&
 			(prop = xmlGetProp(node, BAD_CAST "begin-id")) &&
 			atoi((const char *)prop) == begin_id &&
+			(xmlFree(prop), 1) &&
 			(prop = xmlGetProp(node, BAD_CAST "end-id")) &&
-			atoi((const char *)prop) == end_id
+			atoi((const char *)prop) == end_id && (xmlFree(prop), 1)
 		) {
 			return node;
 		}

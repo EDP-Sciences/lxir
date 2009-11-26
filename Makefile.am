@@ -1,3 +1,4 @@
+AUTOMAKE_OPTIONS = dejagnu
 DISTCHECK_CONFIGURE_FLAGS=--with-tools --without-kpse
 ACLOCAL_AMFLAGS=-I m4
 
@@ -22,3 +23,5 @@ MKTEXLSR = `which mktexlsr`
 install-data-hook:
 	$(MKTEXLSR) $(TEXMF_DEST_DIR)
 endif
+
+RUNTESTDEFAULTFLAGS = --tool lxir LXIR=$(builddir)/src/lxir --srcdir $$srcdir/testsuite
