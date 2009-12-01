@@ -188,8 +188,8 @@ def get_prev_span_node(node):
 	assert prev.nodeType == node.ELEMENT_NODE and prev.tagName == 'span'
 	tnode = prev.firstChild
 	assert tnode.nodeType == node.TEXT_NODE
-	text = tnode.nodeValue.rstrip()
-	pos = text.rfind(" ") + 1
+	text = tnode.nodeValue
+	pos = text.rstrip().rfind(" ") + 1
 	if pos == 0:
 		return prev
 
