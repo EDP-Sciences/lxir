@@ -32,7 +32,10 @@
 \renewenvironment{gathered}{\lxirvmathenv{gathered}}{\endlxirvmathenv{gathered}}
 \renewenvironment{aligned}{\lxirvmathenv{aligned}}{\endlxirvmathenv{aligned}}
 \else
-\let\endmathdisplay@a=\relax
+\def\endmathdisplay@a{%
+	\ifx\df@tag\@empty \else \veqno \alt@tag \df@tag \fi
+	\ifx\df@label\@empty \else \@xp\ltx@label\@xp{\df@label}\fi
+}
 \def\@eqnnum{\xEmptyA{equationumber}{value=\theequation}}
 \renewenvironment{equation}{%
   \incr@eqnum

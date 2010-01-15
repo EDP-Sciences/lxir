@@ -71,6 +71,7 @@ class ImageGenerator:
 		self.index = 1
 		self.images = {}
 		self.mathml = {}
+		self.labels = {}
 		remove(file + ".images-log", True)
 		self.log = open(file + ".images-log", "w")
 
@@ -88,7 +89,7 @@ class ImageGenerator:
 	def genLaTeXSource(self, formula, file, lxir):
 		o = open(file, "w")
 		if lxir:
-			o.write("\\RequirePackage{lxir}")
+			o.write("\\RequirePackage{lxir}\n")
 		o.write("\\documentclass" + self.className + "\n")
 		for symbol in self.symbols:
 			o.write("\\usepackage{" + symbol + "}\n")
@@ -135,6 +136,11 @@ class ImageGenerator:
 			self.system("convert -density 600 " + prefix + ".epsi -resample " + str(options.resolution) + " -trim +repage " + image, image)
 
 		return image
+	def _getLabel(self, context):
+		nodes = Evaluate("//xhtml:a[@class='label']", context = context)
+		if not nodes or len(nodes) == 0:
+			return None
+		return nodes[0]
 	def _makeMathML(self, formula):
 		prefix = os.path.join(self.base_path, "img" + str(self.index) + "_lxir")
 		remove(prefix + ".tex", True)
@@ -147,22 +153,23 @@ class ImageGenerator:
 		self.system("lxir " + prefix + ".dvi > " + prefix + ".xhtml", prefix + ".xhtml")
 		doc = NonvalidatingReader.parseUri(prefix + ".xhtml")
 		ctxt = Context(doc, processorNss=NSS)
+		label = self._getLabel(ctxt)
 		nodes = Evaluate("//mm:math", context=ctxt)
 		if len(nodes) == 1:
 			formula = nodes[0]
 			if formula:
-				return formula
+				return formula, label
 		elif len(nodes) == 3 and formula.find('eqnarray'):
 			formula = nodes[0]
 			if formula:
-				return formula
+				return formula, label
 		else:
 			nodes = Evaluate("//xhtml:span[@class='msub' or @class='msup']", context=ctxt)
 			if len(nodes) == 1:
 				formula = nodes[0]
 				if formula:
 					print "Found simple math expression for formula %d" % self.index
-					return formula
+					return formula, label
 			else:
 				print "Generation of MathML for formula %d produced %d output(s)" % (self.index, len(nodes))
 	def makeImage(self, formula):
@@ -172,14 +179,17 @@ class ImageGenerator:
 				self.images[formula] = relativePath(self.base_path, img)
 			except:
 				print "Generation of Image for formula '%s' failed: %s" % (self.index, traceback.format_exc())
-				self.images[formula] = False
+				self.images[formula] = None
 			try:
-				self.mathml[formula] = self._makeMathML(formula)
+				mathml, label = self._makeMathML(formula)
+				self.mathml[formula] = mathml
+				self.labels[formula] = label
 			except:
 				print "Generation of MathML for formula '%s' failed: %s" % (self.index, traceback.format_exc())
-				self.mathml[formula] = False
+				self.mathml[formula] = None
+				self.labels[formula] = None
 			self.index += 1
-		return self.images[formula], self.mathml[formula]
+		return self.images[formula], self.mathml[formula], self.labels[formula]
 
 def get_prev_span_node(node):
 	prev = node.previousSibling
@@ -235,7 +245,7 @@ def insert_math_images(file):
 		formula = formula.strip()
 		if not len(formula):
 			print "empty formula found in document"
-			image, mathml = None, None
+			image, mathml, label = None, None, None
 		else:
 			if  formula[0] != "$":
 				p = node.parentNode
@@ -244,7 +254,7 @@ def insert_math_images(file):
 				if env[-5:] == "-star":
 					env = env[:-5]+"*"
 				formula = "\\begin{" + env + "}\n" + formula + "\n\\end{" + env + "}"
-			image, mathml = gen.makeImage(formula)
+			image, mathml, label = gen.makeImage(formula)
 		# remove the empty text node(s)
 		for t in Evaluate("xhtml:span[@class='text']", context=c):
 			t.parentNode.removeChild(t)
@@ -270,6 +280,8 @@ def insert_math_images(file):
 			else:
 				node.appendChild(node.ownerDocument.importNode(mathml, True))
 
+		if label:
+			node.appendChild(node.ownerDocument.importNode(label, True))
 	base, ext = os.path.splitext(file)
 	output = base + "_images" + ext
 	o = open(output, "w")
