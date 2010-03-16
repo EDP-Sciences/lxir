@@ -1,0 +1,66 @@
+proc call_latex { src } {
+	global verbose
+	global LATEX
+
+	if {[which $LATEX] == 0} {
+		perror "Can't find $LATEX"
+		return ""
+	}
+	if { $verbose > 0 } {
+		verbose "Spawning \"$LATEX $src\"\n"
+	} else {
+		send_log "Spawning \"$LATEX $src\"\n"
+	}
+
+	catch "exec $LATEX $src" comp_output
+
+	if ![string match "" $comp_output] {
+		send_log "$comp_output\n"
+	}
+
+	regsub -- {([^\.]*)\.tex} $src {\1.dvi} dvi
+
+	if ![file exists $dvi] {
+		perror "latex compilation failed, no DVI output" 0
+	} else {
+		return $dvi;
+	}
+}
+
+if ![info exists LATEX] {
+	set LATEX "latex"
+	verbose "LATEX defaulting to $LATEX" 2
+}
+
+proc process_tex { src } {
+	global verbose
+	global LXIR
+
+	verbose "Executing test case $src"
+	set timeout 150
+
+	if [file exists $src] {
+		verbose "Processing $src" 2
+
+		set dvi [call_latex $src]
+
+		if { $verbose > 0 } {
+			verbose "Spawning \"$LXIR $dvi\"\n"
+		} else {
+			send_log "Spawning \"$LXIR $dvi\"\n"
+		}
+
+		catch "exec $LXIR $dvi" comp_output
+
+		if ![string match "" $comp_output] {
+			send_log "$comp_output\n"
+		}
+
+	} else {
+		perror "$src doesn't exist" 0
+	}
+}
+
+foreach i [glob $srcdir/$subdir/*.tex] {
+	process_tex $i
+}
