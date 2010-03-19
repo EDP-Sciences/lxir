@@ -109,6 +109,9 @@ class ImageGenerator:
 		o.write(formula + "\n")
 		o.write("\\end{document}\n")
 		o.close()
+	def _getLaTeXCmd(self):
+		global options
+		return "%s -interaction=%s" % (options.latex, options.interaction)
 	def _makeImage(self, formula):
 		global options
 		prefix = os.path.join(self.base_path, "img" + str(self.index))
@@ -127,7 +130,7 @@ class ImageGenerator:
 
 		self.genLaTeXSource(formula, prefix + ".tex", False)
 
-		self.system("latex -interaction=batchmode " + prefix + ".tex", prefix + ".dvi")
+		self.system(self._getLaTeXCmd() + prefix + ".tex", prefix + ".dvi")
 		self.system("dvips -o " + prefix + ".ps " + prefix + ".dvi", prefix + ".ps")
 		self.system("ps2ps " + prefix + ".ps " + prefix + ".epsi", prefix + ".epsi")
 		if options.ghostscript:
@@ -149,7 +152,7 @@ class ImageGenerator:
 		remove(prefix + ".dvi", True)
 		remove(prefix + ".xhtml", True)
 		self.genLaTeXSource(formula, prefix + ".tex", True)
-		self.system("latex -interaction=batchmode " + prefix + ".tex", prefix + ".dvi", True)
+		self.system(self._getLaTeXCmd() + prefix + ".tex", prefix + ".dvi", True)
 		self.system("lxir " + prefix + ".dvi > " + prefix + ".xhtml", prefix + ".xhtml")
 		doc = NonvalidatingReader.parseUri(prefix + ".xhtml")
 		ctxt = Context(doc, processorNss=NSS)
@@ -302,7 +305,11 @@ if __name__ == '__main__':
 		parser.add_option("-r", "--resolution", help="Resolution of the generated images", action="store", type="int")
 		parser.add_option("-g", "--ghostscript", help="Use ghostscript instead of imagemagick to convert postscript", action="store_true")
 		parser.add_option("-i", "--img-path", help="Set image path", action="store", type="string")
-		parser.set_defaults(overwrite = True, verbmath = True, verbose = False, resolution = 92, ghostscript = False, img_path = 'images_math')
+		parser.add_option("-I", "--interaction", help="Set LaTeX interaction mode", action="store", type="string")
+		parser.add_option("-l", "--latex", help="Path to latex binary", action="store", type="string")
+		parser.set_defaults(overwrite = True, verbmath = True, verbose = False, \
+			resolution = 92, ghostscript = False, img_path = 'images_math', \
+			interaction = "batchmode", latex = "latex")
 		try:
 			options, args = parser.parse_args(args = args)
 			if len(args) < 1:

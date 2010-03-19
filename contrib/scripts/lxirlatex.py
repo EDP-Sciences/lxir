@@ -231,10 +231,12 @@ def system(cmd, result, log):
 	return errcode
 
 def compile_latex_source(filename, log):
+	global options
 	if options.verbose:
 		print("Compiling latex source :%s" % filename)
 	output = os.path.splitext(filename)[0] + '.dvi'
-	system("latex -interaction=batchmode %s" % filename, output, log)
+	cmd = "%s -interaction=%s %s" % (options.latex, options.interaction, filename)
+	system(cmd, output, log)
 	return output
 
 def compile_lxir_source(dvi, log):
@@ -257,7 +259,10 @@ if __name__ == '__main__':
 		parser.add_option("-O", "--not-overwrite", help="Do not overwrite temporary files", action="store_false", dest="overwrite")
 		parser.add_option("-d", "--delete-temp", help="Delete temporary files", action="store_true")
 		parser.add_option("-D", "--not-delete-temp", help="Do not delete temporary files", action="store_false", dest="delete_temp")
-		parser.set_defaults(overwrite = True, verbmath = True, verbose = False)
+		parser.add_option("-I", "--interaction", help="Set LaTeX interaction mode", action="store", type="string")
+		parser.add_option("-l", "--latex", help="Path to latex binary", action="store", type="string")
+		parser.set_defaults(overwrite = True, verbmath = True, verbose = False, \
+			latex = "latex", interaction = "batchmode")
 		try:
 			options, args = parser.parse_args()
 			if len(args) < 1:
