@@ -184,9 +184,6 @@
 /* tfm search path */
 #undef TFM_SEARCH_PATH
 
-/* Use kpathsea library */
-#undef USE_KPSE
-
 /* Version number of package */
 #undef VERSION
 

@@ -208,10 +208,8 @@ int dvi_append_text_node(dvifilestate_t * s) {
 	node->v = s->stack->state.v;
 	node->size = 0;
 	node->content = 0;
-#ifdef USE_KPSE
 	node->width = 0;
 	node->prev_char = -1;
-#endif
 
 	return dvi_append_node(s, &node->header);
 }
@@ -310,15 +308,12 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 	if(!(s->flags & DVI_NO_FONT_TRANSLATION)) {
 		char * chr;
 		int l, size;
-#ifdef USE_KPSE
 		int width;
 		tfmfile_t * tfm;
-#endif
 		if(ch < 0 || ch >= s->font->mapsize) {
 			return DVIERR_INVALID_CHAR;
 		}
 
-#ifdef USE_KPSE
 		tfm = s->font ? s->font->tfm : NULL;
 		if (tfm) {
 			width = tfm_size(tfm, ch, NULL);
@@ -329,7 +324,6 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 				c->width += pn;
 			}
 		}
-#endif
 		chr = s->font->map[ch];
 		l = strlen(chr);
 		size = s->size + l;
@@ -743,9 +737,7 @@ int dvi_read_postamble(dvifilestate_t * s) {
 		struct font_list_s * next = list->next;
 
 		memcpy(&s->file->fonts[c], &list->current, sizeof(dvifont_t));
-#ifdef USE_KPSE
 		s->file->fonts[c].tfm = tfm_open(s->file->fonts[c].name, s->file->fonts[c].scale);
-#endif
 		free(list);
 
 		list = next;
@@ -1142,10 +1134,8 @@ int dvi_destroy(dvifile_t * f) {
 	for (i = 0; i < f->nbfonts; ++i) {
 		free(f->fonts[i].area);
 		free(f->fonts[i].name);
-#ifdef USE_KPSE
 		if (f->fonts[i].tfm)
 			tfm_close(f->fonts[i].tfm);
-#endif
 	}
 
 	free(f->fonts);

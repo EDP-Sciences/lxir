@@ -24,9 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libxml/tree.h>
 #include <assert.h>
 
-#if USE_KPSE
 #include <kpathsea/kpathsea.h>
-#endif
 
 #include "libfontmap.h"
 
@@ -90,12 +88,10 @@ static struct doc_s * read_config() {
 	xmlDocPtr doc;
 	xmlNodePtr node;
 	struct doc_s * docs = 0;
-#if USE_KPSE
-	const char * kpse_path = kpse_find_file ("config.xml", kpse_xml_format, true);
+	const char * kpse_path = kpse_find_file ("config.xml", kpse_tex_format, true);
 	if (kpse_path) {
 		doc = xmlReadFile(kpse_path, NULL, 0);
 	} else
-#endif
 		doc = xmlReadFile(TEXMF_XML_DIR "/config.xml", NULL, 0);
 	if(!doc) return 0;
 	node = find_first_element_node(doc, "lfm-config");
@@ -106,23 +102,19 @@ static struct doc_s * read_config() {
 				struct doc_s * doc;
 				xmlDocPtr ptr;
 				xmlChar * opt = xmlGetProp(node, BAD_CAST "optional");
-#if USE_KPSE
-				kpse_path = kpse_find_file (path, kpse_xml_format, true);
+				kpse_path = kpse_find_file (path, kpse_tex_format, true);
 				if (kpse_path) {
 					ptr = xmlReadFile(kpse_path, NULL, XML_PARSE_NOWARNING);
 				} else {
-#endif
-				if (*path != '/') {
-					char * p = malloc(strlen(TEXMF_XML_DIR) + strlen((const char *) path) + 2);
-					sprintf(p, TEXMF_XML_DIR "/%s", path);
-					ptr = xmlReadFile(p, NULL, XML_PARSE_NOWARNING);
-					free(p);
-				} else {
-					ptr = xmlReadFile((const char *) path, NULL, XML_PARSE_NOWARNING);
+					if (*path != '/') {
+						char * p = malloc(strlen(TEXMF_XML_DIR) + strlen((const char *) path) + 2);
+						sprintf(p, TEXMF_XML_DIR "/%s", path);
+						ptr = xmlReadFile(p, NULL, XML_PARSE_NOWARNING);
+						free(p);
+					} else {
+						ptr = xmlReadFile((const char *) path, NULL, XML_PARSE_NOWARNING);
+					}
 				}
-#if USE_KPSE
-				}
-#endif
 				if(!ptr) {
 					if(!opt || strcmp((const char *)opt, "0") == 0) {
 						fprintf(stderr, "Unable to find file \"%s\"\n", path);

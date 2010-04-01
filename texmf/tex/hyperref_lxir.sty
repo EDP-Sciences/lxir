@@ -5,7 +5,7 @@
 	\xEmptyAAA{hyperlink}{ltype=#1}{ref=#2}{name=#3}%
 }
 \def\hyper@linkurl#1#2{%
-	\xEmptyAA{hyperlinkurl}{src=#1}{target=#2}%
+	\xBegin{hyperlinkurl}\xAttr{target=#2}#1\xEnd{hyperlinkurl}%
 }
 \def\hyper@linkfile#1#2{%
 	\xEmptyAA{hyperlinkfile}{src=#1}{target=#2}%

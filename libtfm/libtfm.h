@@ -1,10 +1,6 @@
 #ifndef LIBTFM_H
 #define LIBTFM_H 1
 
-#ifndef USE_KPSE
-# error libtfm requires kpathsea
-#endif
-
 struct tfm_kerning_s {
 	int next_char;
 	int kerning;

@@ -28,9 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libdvi.h>
 #include <libfontmap.h>
 
-#if USE_KPSE
 #include <kpathsea/kpathsea.h>
-#endif
 
 #include "transformations.h"
 #include "utf8string.h"
@@ -115,9 +113,7 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 				sprintf(pbuffer, "%d", text->font); xmlNewProp(node, BAD_CAST "font", BAD_CAST pbuffer);
 				sprintf(pbuffer, "%d", text->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
 				sprintf(pbuffer, "%d", text->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
-#ifdef USE_KPSE
 				sprintf(pbuffer, "%d", text->width); xmlNewProp(node, BAD_CAST "width", BAD_CAST pbuffer);
-#endif
 			} break;
 		case DVINODE_XXX: {
 				dvinode_xxx_t * xxx = (dvinode_xxx_t *) node;
@@ -1524,9 +1520,7 @@ int main(int argc, char * argv[]) {
     xmlDocPtr mathdoc;
     xmlNodePtr root;
 
-#if USE_KPSE
 	kpse_set_program_name(argv[0], "lxir");
-#endif
 
     LIBXML_TEST_VERSION;
 	xmlSubstituteEntitiesDefault(1);
@@ -1536,11 +1530,6 @@ int main(int argc, char * argv[]) {
 
 	if (argc < 2) {
 		fprintf(stderr, "Usage : %s [-skip {1|sp|all}] <dvi>\n", argv[0]);
-#if USE_KPSE
-		fprintf(stderr, "lxir is using kpse\n");
-#else
-		fprintf(stderr, "lxir is using a static path to %s\n", TEXMF_XML_DIR);
-#endif
 		return -1;
 	}
 	if(argc >= 4) {

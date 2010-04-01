@@ -1,5 +1,4 @@
 #include <kpathsea/kpathsea.h>
-#define USE_KPSE 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>

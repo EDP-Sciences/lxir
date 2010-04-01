@@ -18,9 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef LIBDVI_H
 #define LIBDVI_H
 
-#ifdef USE_KPSE
 #include <libtfm.h>
-#endif
 
 /* flags */
 #define DVI_SKIP_SPACE_SMALL	1
@@ -74,10 +72,8 @@ typedef struct dvinode_text_s {
 	int h, v;
 	int size;
 	char * content;
-#if USE_KPSE
 	int prev_char;
 	int width;
-#endif
 } dvinode_text_t;
 
 typedef struct dvinode_rule_s {
@@ -116,9 +112,7 @@ typedef struct dvifont_s {
 	char * name;
 	char ** map;
 	int mapsize;
-#if USE_KPSE
 	tfmfile_t * tfm;
-#endif
 } dvifont_t;
 
 typedef struct dvifile_s {

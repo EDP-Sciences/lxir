@@ -30,9 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "transformations.h"
 
-#if USE_KPSE
 #include <kpathsea/kpathsea.h>
-#endif
 
 #define NODE_VBOX 1	//
 #define NODE_HBOX 2	//
@@ -2114,9 +2112,7 @@ int main(int argc, char * argv[]) {
     LIBXML_TEST_VERSION;
 	xmlSubstituteEntitiesDefault(1);
 	xmlLoadExtDtdDefaultValue = 1;
-#if USE_KPSE
 	kpse_set_program_name(argv[0], "lxir");
-#endif
 
 	init_transformations();
 

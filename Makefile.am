@@ -11,17 +11,12 @@ TOOLS_DISTCLEANFILES = \
 endif
 DISTCLEANFILES = $(TOOLS_DISTCLEANFILES)
 
-if USE_KPSE
-KPSE_PATH = libkpathsea
-endif
 
-SUBDIRS = $(KPSE_PATH) libfontmap libdvi libtfm src texmf
+SUBDIRS = libfontmap libdvi libtfm src texmf
 EXTRA_DIST = lppl.txt gpl-3.0.txt
 
-if USE_KPSE
 MKTEXLSR = `which mktexlsr`
 install-data-hook:
 	$(MKTEXLSR) $(TEXMF_DEST_DIR)
-endif
 
 RUNTESTDEFAULTFLAGS = --tool lxir LXIR=$(builddir)/src/lxir --srcdir $$srcdir/testsuite

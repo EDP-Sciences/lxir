@@ -25,9 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libxslt/transform.h>
 #include <string.h>
 
-#if USE_KPSE
 #include <kpathsea/kpathsea.h>
-#endif
 
 #include "transformations.h"
 
@@ -318,19 +316,15 @@ void xslt_proc(xmlNodePtr root, xmlTransformationEntry * param) {
 		char * path;
 		old = param->stack->document;
 
-#if USE_KPSE
-		path = kpse_find_file(param->parameter, kpse_xslt_format, true);
+		path = kpse_find_file(param->parameter, kpse_tex_format, true);
 		if (path) {
 			ss = xsltParseStylesheetFile((const xmlChar *)path);
 		} else {
-#endif
 			path = malloc(strlen(TEXMF_XSLT_DIR) + strlen(param->parameter) + 2);
 			sprintf(path, TEXMF_XSLT_DIR "/%s", param->parameter);
 			ss = xsltParseStylesheetFile((const xmlChar *)path);
 			free(path);
-#if USE_KPSE
 		}
-#endif
 		result = xsltApplyStylesheet(ss, old, 0);
 		xsltFreeStylesheet(ss);
 
@@ -366,23 +360,19 @@ void xmlTransformationInit(const char * filename) {
 	int i = 1;
 
 
-#if USE_KPSE
-	const char * path = kpse_find_file(filename, kpse_xml_format, true);
+	const char * path = kpse_find_file(filename, kpse_tex_format, true);
 	if (path) {
 		trans = xmlReadFile(path, NULL, 0);
 	} else {
-#endif
 		char * path = malloc(strlen(TEXMF_XML_DIR) + strlen(filename) + 2);
 		sprintf(path, TEXMF_XML_DIR "/%s", filename);
 		trans = xmlReadFile(path, NULL, 0);
 		free(path);
-#if USE_KPSE
 	}
 	if (!trans) {
 		fprintf(stderr, "Unable to find \"%s\", exiting...\n", filename);
 		exit(-1);
 	}
-#endif
 	node = find_first_element_node(trans);
 
 	xmlRegisterBaseTransformations();

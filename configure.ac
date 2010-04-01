@@ -54,16 +54,6 @@ AC_CHECK_FUNCS([strtol])
 AC_CHECK_FUNCS([strtoul])
 	
 
-AC_ARG_WITH([kpse], [AS_HELP_STRING([--with-kpse], [support libkpathsea])])
-	
-AC_MSG_CHECKING([wether we will use kpathsea])
-if test "$with_kpse" != "no" ; then
-	AC_DEFINE(USE_KPSE, [1], [Use kpathsea library])
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
-
 AC_ARG_WITH([tools], [AS_HELP_STRING([--with-tools], [build helper tools])])
 
 AC_MSG_CHECKING([wether we will build the utility tools])
@@ -101,9 +91,7 @@ AC_SUBST(LIBXML2_LIBS)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
 
-AM_CONDITIONAL([USE_KPSE], [test "x$with_kpse" != "xno"])
 AM_CONDITIONAL([BUILD_TOOLS], [test "x$with_tools" == "xyes"])
-AM_CONDITIONAL([KPSE_x64], [test "$target_cpu" == "x86_64"])
 
 AC_ARG_WITH(texmf-prefix,
 	[AS_HELP_STRING([--with-texmf-prefix=[path]], [Specify location of texmf destination])],
