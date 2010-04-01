@@ -52,7 +52,7 @@ AC_CHECK_FUNCS([strrchr])
 AC_CHECK_FUNCS([strstr])
 AC_CHECK_FUNCS([strtol])
 AC_CHECK_FUNCS([strtoul])
-	
+
 
 AC_ARG_WITH([tools], [AS_HELP_STRING([--with-tools], [build helper tools])])
 
@@ -129,7 +129,6 @@ AC_DEFINE_UNQUOTED(TFM_SEARCH_PATH, "${TFM_SEARCH_PATH}", [tfm search path])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_FILES([
 	Makefile
-	libkpathsea/Makefile
 	libfontmap/Makefile
 	libfontmap/tools/Makefile
 	libfontmap/tools/tfmlist/Makefile

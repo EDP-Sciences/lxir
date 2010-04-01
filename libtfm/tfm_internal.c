@@ -103,7 +103,7 @@ static
 int int_tfm_read_char_info(struct tfm_internal_file_s * f, FILE * fp) {
 	int i;
 	int num_chars = f->file_header.ec - f->file_header.bc + 1;
-	if (num_chars < 0 || num_chars >= 256) return -1;
+	if (num_chars < 0 || num_chars > 256) return -1;
 
 	f->char_info = (struct tfm_internal_char_info_s *) malloc(num_chars * sizeof(struct tfm_internal_char_info_s));
 	if(!f->char_info) return -1;

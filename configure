@@ -16548,7 +16548,7 @@ _ACEOF
 
 ac_config_headers="$ac_config_headers config.h"
 
-ac_config_files="$ac_config_files Makefile libkpathsea/Makefile libfontmap/Makefile libfontmap/tools/Makefile libfontmap/tools/tfmlist/Makefile libfontmap/tools/enc2tbl/Makefile libfontmap/tools/accents/Makefile libdvi/Makefile libtfm/Makefile src/Makefile texmf/Makefile texmf/default/Makefile texmf/tex/Makefile texmf/xslt/Makefile texmf/xslt/xlatex2xhtml.xsl texmf/css/Makefile testsuite/Makefile"
+ac_config_files="$ac_config_files Makefile libfontmap/Makefile libfontmap/tools/Makefile libfontmap/tools/tfmlist/Makefile libfontmap/tools/enc2tbl/Makefile libfontmap/tools/accents/Makefile libdvi/Makefile libtfm/Makefile src/Makefile texmf/Makefile texmf/default/Makefile texmf/tex/Makefile texmf/xslt/Makefile texmf/xslt/xlatex2xhtml.xsl texmf/css/Makefile testsuite/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -17628,7 +17628,6 @@ do
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "libkpathsea/Makefile") CONFIG_FILES="$CONFIG_FILES libkpathsea/Makefile" ;;
     "libfontmap/Makefile") CONFIG_FILES="$CONFIG_FILES libfontmap/Makefile" ;;
     "libfontmap/tools/Makefile") CONFIG_FILES="$CONFIG_FILES libfontmap/tools/Makefile" ;;
     "libfontmap/tools/tfmlist/Makefile") CONFIG_FILES="$CONFIG_FILES libfontmap/tools/tfmlist/Makefile" ;;
