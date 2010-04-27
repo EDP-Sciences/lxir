@@ -1,9 +1,7 @@
 \def\@hyper@@anchor#1{
 	\xEmptyA{hypertarget}{name=#1}
 }
-\gdef\hyper@link#1#2#3{%
-	\xEmptyAAA{hyperlink}{ltype=#1}{ref=#2}{name=#3}%
-}
+\gdef\hyper@link#1#2#3{\xBegin{hyperlink}\xAttrA{type=#1}{ref=#2}#3\xEnd{hyperlink}}
 \def\hyper@linkurl#1#2{%
 	\xBegin{hyperlinkurl}\xAttr{target=#2}#1\xEnd{hyperlinkurl}%
 }

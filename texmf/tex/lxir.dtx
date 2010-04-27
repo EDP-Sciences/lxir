@@ -12,7 +12,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is EDP-Sciences.
 %
 % This work consists of the files lxir.dtx, lxir.ins and the
@@ -23,9 +23,9 @@
 % author Romeo Anghelache http://romeo.roua.org
 % Other parts come from latex.ltx (LaTeX3 project) distributed with TeXLive 2007
 %
-% modifs a mettre dans svn : 
+% modifs a mettre dans svn :
 % -------------------------
-% 
+%
 % \fi
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -77,15 +77,15 @@
 % $> latex mydoc.tex
 % $> lxir mydoc.dvi
 % \end{verbatim}
-% The package \Package{lxir} loads \Package{lxirtag}, which define a set of commands whose purpose is to tag the dvi 
+% The package \Package{lxir} loads \Package{lxirtag}, which define a set of commands whose purpose is to tag the dvi
 % with ``\cs{special}'' instructions. The content of these instructions are recognised by the \File{lxir}
-% program and transformed to  XML tags. 
+% program and transformed to  XML tags.
 % The package \Package{lxir}  also aims to:
 % \begin{itemize}
 % \item set some \TeX{} parameters for word and paragraph tagging;
 % \item overload the commands and environments defined in \File{latex.ltx}
 % \end{itemize}
-% One of the effect of the \File{latex.ltx} command overload is to enable a 
+% One of the effect of the \File{latex.ltx} command overload is to enable a
 % mechanism for classes and packages tagging.
 % \subsection{Using of \Package{lxirtag} to write ``\LXir{} compliant'' classes or a packages}
 % If you want to write a class or a package ready to use with \LXir{}, you can include \Module{lxirtag}
@@ -108,9 +108,9 @@
 %<lxirtag>\ProvidesPackage{lxirtag}[2007/06/06 v0.1b LXir tagging package]
 %    \end{macrocode}
 % \section{\TeX{} Parameters Setting}
-% Several \TeX{} parameters are set to ease to tagging and 
+% Several \TeX{} parameters are set to ease to tagging and
 % to prevent hyphenation. A potential problem is that
-% these parameters may be reset in packages. 
+% these parameters may be reset in packages.
 % \subsection{Word,Page, Paragraph, hyphenation}
 % The spaces between words are tagged to 1sp so that word  breaks can be
 % clearly identified in the DVI. We try to keep this definition at the begining of document as well as upstream, in case the dimension are use somewhere else.
@@ -119,11 +119,11 @@
 %\parindent=1sp
 \spaceskip=1sp\xspaceskip=1sp\AtBeginDocument{\spaceskip=1sp\xspaceskip=1sp}
 %    \end{macrocode}
-% and we prevent hyphenation: 
+% and we prevent hyphenation:
 %    \begin{macrocode}
 \pretolerance=10000\AtBeginDocument{\pretolerance=10000}
 %    \end{macrocode}
-% 
+%
 % The italic correction is set to null,  to preserved the 1sp space between words:
 %    \begin{macrocode}
 \let\@@italiccorr=\relax\AtBeginDocument{\let\@@italiccorr=\relax}
@@ -132,17 +132,17 @@
 %    \begin{macrocode}
 \AtBeginDocument{\binoppenalty=10000\relpenalty=10000}
 %    \end{macrocode}
-% Paragraph width is set to almost the maximum: 
+% Paragraph width is set to almost the maximum:
 %    \begin{macrocode}
 \hsize=0.99\maxdimen\AtBeginDocument{\hsize=0.99\maxdimen}
 \setlength\textwidth{0.99\maxdimen}\AtBeginDocument{\setlength\textwidth{0.99\maxdimen}}%
 \setlength\columnwidth{0.99\maxdimen}\AtBeginDocument{\setlength\columnwidth{0.99\maxdimen}}%
 %    \end{macrocode}
-% Page height is set to almost the maximum: 
+% Page height is set to almost the maximum:
 %    \begin{macrocode}
 \vsize=0.99\maxdimen\AtBeginDocument{\vsize=0.99\maxdimen}
 %    \end{macrocode}
-% We ``neutralize'' the previously used commands and dimensions.  
+% We ``neutralize'' the previously used commands and dimensions.
 %    \begin{macrocode}
 \AtBeginDocument{%
 \newskip\junkskip
@@ -168,7 +168,7 @@
 % \label{tagging}
 %\subsection{``\cmd{\special}'' tagging  for \Program{lxir}}
 % We use |\special{}| for the tagging of commands and environments in order
-% to produce element nodes in the resulting XML. Both empty and non empty elements can 
+% to produce element nodes in the resulting XML. Both empty and non empty elements can
 % be generate.
 %
 %\subsubsection{Non Empty nodes}
@@ -197,14 +197,14 @@
 % In most cases \LXir{} can generate unicode characters
 % by reading and interpreting fonts information in the dvi. In some case
 % case, this information in not present  and
-% must be tagged. This is not done by a special but by inserting 
+% must be tagged. This is not done by a special but by inserting
 % a string of the form [entity!\#xN!] where N is the hexadecimal unicode number.
 % (e.g. [entity!\#5F!] for underscore).
 %\subsection{Macros defined for the tagging}
-% A set of macros are defined to ease the tagging and to provide an unique 
+% A set of macros are defined to ease the tagging and to provide an unique
 % id attribute for each node:
 % \pagebreak
-% The macro |\xBegin|, together with |\xEnd|,  are used to  create a node 
+% The macro |\xBegin|, together with |\xEnd|,  are used to  create a node
 % containing other nodes:
 % \begin{verbatim}
 % \xBegin{myTag}something\xEnd{myTag}
@@ -216,9 +216,9 @@
 % </node>
 % \end{verbatim}
 % in the XML.
-% These commands are used to produce empty nodes, with attributes: \\ 
+% These commands are used to produce empty nodes, with attributes: \\
 % |\xEmpty{myTag}| will be output  |<node type="myTag" id="0">|, \\
-% |\xEmptyA{myTag}{myatrr=a}| will be output  |<node type="myTag" id="0" myatrr="a">|,\\ 
+% |\xEmptyA{myTag}{myatrr=a}| will be output  |<node type="myTag" id="0" myatrr="a">|,\\
 % |\xEmptyA{myTag}{myatrr1=a}{myatrr2=b}| will be output \\ |<node type="myTag" id="0" myatrr1="a" myatrr2="b">|,\\
 % and so on .
 % \par
@@ -243,14 +243,14 @@
 \def\xEmptyAAAAA#1#2#3#4#5#6{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}{#5}{#6}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}{#5}{#6}}\xNextTag\relax\fi}
 \def\xEmptyAAAAAA#1#2#3#4#5#6#7{\ift@gOn\ift@gDebug\message{EMPTY: #1 {#2}{#3}{#4}{#5}{#6}{#7}^^J}\fi\special{::tag lxir empty(#1){id=\the\xTagcount} {#2}{#3}{#4}{#5}{#6}{#7}}\xNextTag\relax\fi}
 %    \end{macrocode}
-% Element attribute key="value" in the output XML will be add if |\xEmptyA...{params}{key=value}...| follow the element. The following 
-% commands are short cuts for the feature. By example : 
+% Element attribute key="value" in the output XML will be add if |\xEmptyA...{params}{key=value}...| follow the element. The following
+% commands are short cuts for the feature. By example :
 % \begin{verbatim}
 % \xBegin{myCommand}\xAttrA{myKey1=value1}{myKey2=value2}%
 %  ...
 % \xEnd{myCommand}%
 % \end{verbatim}
-% will be merged by lxir as 
+% will be merged by lxir as
 % \begin{verbatim}
 % <span class="myCommand" myKey1="value1" myKey2="value2">
 % ...
@@ -364,7 +364,7 @@
 \def\rightleftharpoons{\mathrel{\xEmptyAA{rightleftharpoons}{mathtype=rel}{mathchar=21cc}}}
 \def\colon{\mathpunct{\xEmptyAA{colon}{mathtype=punct}{mathchar=3a}}}
 %\subsection{Redefinition of accents}
-% 
+%
 %    \begin{macrocode}
 %
 %accents
@@ -386,10 +386,10 @@
 \def\~#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7E }\else{\ifmmode\mathaccent\else\accent\fi"7E #1}\fi}}
 \def\"#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7F }\else{\ifmmode\mathaccent\else\accent\fi"7F #1}\fi}}
 \let\oldcopyright=\copyright
-\def\copyright{{\xEmpty{textaccent}\oldcopyright}}%    
+\def\copyright{{\xEmpty{textaccent}\oldcopyright}}%
 %    \end{macrocode}
 %\subsection{Entities for some special characters}
-% 
+%
 % Redefinition of some LICR commands as entities.
 % \label{sec:entities}
 % \emph{PARTIE \`A REVOIR}
@@ -403,7 +403,7 @@
 %\def\textasciicircum{[entity!\#x!]} no need
 %\def\textasciitilde{[entity!\#x!]}  no need
 %\def\textcompwordmark{[entity!\#x!]} what's that ??
-\def\textunderscore{[entity!\#x5F!]} 
+\def\textunderscore{[entity!\#x5F!]}
 \def\textvisiblespace{[entity!\#x2423!]}
 \def\textellipsis{\ifmmode\mathord{\xEmptyAA{textellipsis}{mathtype=ord}{mathchar=2026}}\else[entity!\#x2026!]\fi}
 \def\textregistered{[entity!\#xAE!]}
@@ -418,15 +418,19 @@
 %\label{sec:spacing}
 %    \begin{macrocode}
 \def\thinspace{[entity!\#x2009!]}
+\def\,{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2009}}\else[entity!\#x2009!]\fi}
+\def\:{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2003}}\else[entity!\#x2003!]\fi}
+\def\;{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2004}}\else[entity!\#x2004!]\fi}
 \def\enspace{[entity!\#x2002!]}
 \def\enskip{[entity!\#x2002!]}
 \def\quad{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!]\fi} % quad = 1 em
 \def\qquad{\ifmmode\mathrel{\xEmptyAA{qquad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!][entity!\#x2001!]\fi} % qquad = 2 em
+\def~{[entity!\#xa0!]}
 %    \end{macrocode}
 % \section{Tagging of font attributes (family, series \& shapes) and sizes}
 % \label{sec:fonts}
 %  The idea is to introduce a tag containing the font name (as it appear in the dvi) together with
-%  the font attribute each time a font is loaded. The tags are stored in a global box and write at 
+%  the font attribute each time a font is loaded. The tags are stored in a global box and write at
 % the end of the document.
 %    \begin{macrocode}
 \newsavebox{\XX@font@list}
@@ -492,18 +496,18 @@
 %\subsection{Verbatim}
 %\label{sec:verbatim}
 % In verbatim environment, spaces and line breaks must be kept.
-% In the other hand, lxir require special treatement of spacing to 
+% In the other hand, lxir require special treatement of spacing to
 % rebuild words. A solution would be to have a ``verbatim mode'' in lxir
-% to change this behaviour. Here we redefined the space in order to add an 
+% to change this behaviour. Here we redefined the space in order to add an
 % empty tag \verb|\xEmpty{verbatimSpace}|. We also add a tag for line break in the
 % \verb|\par| redefined macro.
 %    \begin{macrocode}
 % Verbatim
-% with \verb 
+% with \verb
 \let\t@gverb@egroup=\verb@egroup
-\def\verb@egroup{\xEnd{verb}\t@gverb@egroup} 
+\def\verb@egroup{\xEnd{verb}\t@gverb@egroup}
 \let\t@gverb=\verb
-\def\verb{\xBegin{verb}\def\t@gspace{\xEmpty{verbatimSpace}}\t@gverb} 
+\def\verb{\xBegin{verb}\def\t@gspace{\xEmpty{verbatimSpace}}\t@gverb}
 % with verbatim environment:
 {\catcode`\ =\active%
 \gdef\@vobeyspaces{\catcode`\ \active\def {\t@gspace}}}
@@ -559,9 +563,9 @@
 % Lists environment are to be post-process so as to introduce a little bit
 % of hierarchy...
 % \cmd{\item} is generically tagged, but each list environnement should
-% be tagged. 
+% be tagged.
 %    \begin{macrocode}
-% Lists (L4314) 
+% Lists (L4314)
 % enumerate L4534
 \let\t@genumerate=\enumerate
 \def\enumerate{\t@genumerate\xBegin{list}\xEmptyA{params}{listType=enumerate}}
@@ -628,7 +632,7 @@
       \refstepcounter\@listctr
     \fi
   \fi
-% lxir : we don't accumulate the item labels     
+% lxir : we don't accumulate the item labels
 \xBegin{itemMark}#1\xEnd{itemMark}
 %\sbox\@tempboxa{#1}}%
 % \global\setbox\@labels\hbox{%
@@ -722,21 +726,21 @@
 % \@settab: \=   The \= command sets a tab stop at the current position.
 % \@tabplus: \+  The \+ command moves the left margin of the next and all the following commands one tab stop to the right.
 % \@tabminus: \- The \- command moves the left margin of the next and all the following commands one tab stop to the left.
-% \@tabrj: \` The `\` command allows you to put text flushed right against any tab stop, including tab stop 0. 
+% \@tabrj: \` The `\` command allows you to put text flushed right against any tab stop, including tab stop 0.
 % \section{Tabulation}
-% Because tabular material is processed in math mode, a "math" node child is add 
+% Because tabular material is processed in math mode, a "math" node child is add
 % and should be suppressed in the post-process.\par\noindent
 % The \cmd{\hrule} and \cmd{\vrule} are not tagged, as it's tend to have strange side effects
 % too hard  to understand...
 % They appear in the XML as "rule" nodes, and the a and b dimensions are sufficient to determine
 % wether it's a horizontal or vertical line.
 % \par\noindent
-% End of Line tagging is done by redefining  \cmd{\@tabularcr} and \cmd{\@arraycr}. The resulting tag 
-% is in the last ``cell'' unless a \cmd{\multicolumn} is the last element of the line: in the case, the eol 
-% tag is after the multicolumn node.  
+% End of Line tagging is done by redefining  \cmd{\@tabularcr} and \cmd{\@arraycr}. The resulting tag
+% is in the last ``cell'' unless a \cmd{\multicolumn} is the last element of the line: in the case, the eol
+% tag is after the multicolumn node.
 % To tag the table columns description, we create and use a  \cmd{\t@g@coldesc} box.
 % Array should have the same structure...
-% \emph{BUG : spaces are dropped in column separators.}\\ 
+% \emph{BUG : spaces are dropped in column separators.}\\
 %    \begin{macrocode}
 %%% From File: lttab.dtx
 % Tabutation L4849
@@ -748,7 +752,7 @@
 \let\t@garray=\array
 \def\array{\xBegin{array}\t@garray}
 \def\tabular{\xBegin{tabular}\let\@halignto\@empty\@tabular}
-\def\endarray{\crcr\egroup\egroup\xEnd{array}} 
+\def\endarray{\crcr\egroup\egroup\xEnd{array}}
 \def\endtabular{\crcr\egroup\egroup $\egroup\xEnd{tabular}} %$ for emacs
 \def\@arraycr{%
   \xEmpty{eol}${\ifnum0=`}\fi\@ifstar\@xarraycr\@xarraycr} % $
@@ -811,7 +815,7 @@
   \ifcase \@lastchclass \@acol
       \or \or \@preamerr \@ne\or \@preamerr \tw@\or \or \@acol \fi\@addtocoldesc{\xEnd{columnsModel}}%
 }
-% tagging of colums: 
+% tagging of colums:
 %    Character     Class       Number
 %    ---------     -----       ------
 %        c           0           0
@@ -832,7 +836,7 @@
 %  For the column definition:
 %    \begin{macrocode}
 \ifcase \@chnum \@addtocoldesc{\xEmptyA{col}{align=center}}
-                     \or\@addtocoldesc{ \xEmptyA{col}{align=left}} 
+                     \or\@addtocoldesc{ \xEmptyA{col}{align=left}}
                      \or \@addtocoldesc{\xEmptyA{col}{align=right}}\fi
 %    \end{macrocode}
 %  and the preamble is modified in order to tag  the cells:
@@ -876,7 +880,7 @@
 \def\@classi{\@addtocoldesc{\xEmpty{vline}}\t@g@classi}
 % @{content}: the content appears in the array,
 % but the padding is modified...
-% So we tag it. 
+% So we tag it.
 %\let\t@g@classii=\@classii
 %\def\@classii{\t@g@classii}
 \def\@tabclassiv{\@addtocoldesc{\xBegin{intercolumnDef}\@nextchar\xEnd{intercolumnDef}}\@addtopreamble{\protect\xBegin{intercolumn}\@nextchar\protect\xEnd{intercolumn}}}
@@ -898,7 +902,7 @@
 %    \end{macrocode}
 % \section{Sectionning and \cmd{\maketitle}'s Elements}
 % \label{sec:section}
-% The macro \cmd{\tableofcontents} is defined in classes, but the general 
+% The macro \cmd{\tableofcontents} is defined in classes, but the general
 % mecanism of list of someting (toc, list of figures, ...) is provided here.
 %    \begin{macrocode}
 %%% From File: ltsect.dtx l5597
@@ -953,7 +957,7 @@
 \let\t@g@starttoc=\@starttoc
 \def\@starttoc#1{\xBegin{listOf}\xEmptyA{typeList}{listType=#1}\t@g@starttoc{#1}\xEnd{listOf}}
 %    \end{macrocode}
-% The dots in lists are in math mode! We suppress them. 
+% The dots in lists are in math mode! We suppress them.
 %    \begin{macrocode}
 \def\dotfill{}
 \def\@dottedtocline#1#2#3#4#5{}
@@ -961,7 +965,7 @@
 % \section{Floats}
 % \label{sec:floats}
 % \emph{\cmd{\@makecaption} must be defined in the classes.
-% Therefore the "captionMark" and "captionText" tags must be   
+% Therefore the "captionMark" and "captionText" tags must be
 % tagged in classes as well. This is done in standard classes: article, report and book.}
 %
 % We don't try to distinguish float on one or two columns because we
@@ -988,8 +992,8 @@
 \def\@xfloat #1[#2]{\xBegin{float}\xEmptyA{params}{floatType=#1}\def\@captype{#1}}
 % \marginpar
 \let\t@gmarginpar=\marginpar
-\def\marginpar#1{\xBegin{marginpar}{#1}\xEnd{marginpar}} 
-% footnote: 
+\def\marginpar#1{\xBegin{marginpar}{#1}\xEnd{marginpar}}
+% footnote:
 % \footnote, \footnotemark{}, \footnotetext{} (to insert in a minipage a mark related to the next \footnote{} OUTSIDE the minipage : see Latex Companion 2nd edition p.110
 \def\@textsuperscript#1{%
   {\xBegin{superscript}#1\xEnd{superscript}}}
@@ -1019,7 +1023,7 @@
         \rule\z@\footnotesep\ignorespaces\xBegin{footnoteText}#1\xEnd{footnoteText}\@finalstrut\strutbox}%
     \color@endgroup\xEnd{footnote}}}%
 % for footnotes inside minipages
-\long\def\@mpfootnotetext#1{%       
+\long\def\@mpfootnotetext#1{%
   \global\setbox\@mpfootins\vbox{%
 \xBegin{mpfootnote}
 \xEmptyA{params}{page=\thepage}
@@ -1028,7 +1032,7 @@
     \hsize\columnwidth
     \@parboxrestore
     \protected@edef\@currentlabel
-         {\csname p@mpfootnote\endcsname\@thefnmark}%    
+         {\csname p@mpfootnote\endcsname\@thefnmark}%
     \color@begingroup
       \@makefntext{%
       \xBegin{footnoteText}%
@@ -1045,7 +1049,7 @@
 %    \end{macrocode}
 % \section{Bibliography}
 % \label{sec:biblio}
-% End tagging of "bibitem" must be done in post-processing. 
+% End tagging of "bibitem" must be done in post-processing.
 %    \begin{macrocode}
 % partialy processed in class
 \let\t@g@bibitem=\@bibitem
@@ -1061,7 +1065,7 @@
 %\let\t@gbibliography=\bibliography
 %\def\bibliography#1{\xBegin{bibliography}\t@gbibliography{#1}\xEnd{bibliography}}
 %    \end{macrocode}
-% For the |\cite| tagging, we keep the loop and tag each of the citations. 
+% For the |\cite| tagging, we keep the loop and tag each of the citations.
 %    \begin{macrocode}
 % \cite tagging:
 \def\@citex[#1]#2{\leavevmode
@@ -1082,7 +1086,7 @@
 % \label{sec:class}
 % We implement a mechanism to tag the class and package by overloading the macros in an additional file
 % \textit{package}\texttt{\_lxir.sty} or \textit{class}\texttt{\_lxir.cls}.
-% If such a file exists, it will be added at the end of the class or package. 
+% If such a file exists, it will be added at the end of the class or package.
 % \par
 % We also tag the name of the class and packages used in the document.
 %    \begin{macrocode}
@@ -1100,6 +1104,8 @@
   \xdef\@currname{#1}%
   \global\let\@currext#4%
   \expandafter\let\csname\@currname.\@currext-h@@k\endcsname\@empty
+  \def\LXir@tag@filename{\@currname_lxir}
+  \def\LXir@tag@file{\@currname_lxir.\@currext}
   \let\CurrentOption\@empty
   \@reset@ptions
   \makeatletter
@@ -1121,6 +1127,7 @@
              \MessageBreak
              Try typing \space <return> \space to proceed.}}}%
       {\@pass@ptions\@currext{#2}{#1}%
+       \IfFileExists{\LXir@tag@file}{\@pass@ptions\@currext{#2}{#1_lxir}}{}
        \global\expandafter
        \let\csname ver@\@currname.\@currext\endcsname\@empty
        \InputIfFileExists
@@ -1129,14 +1136,6 @@
          {\add@toPkg@Cls@List{\@currname.\@currext}}%
 % end of We tag class and package
          {\@missingfileerror\@currname\@currext}%
-% lxir mechanism for tagging
-       \def\LXir@tag@file{\@currname_lxir.\@currext}
-       \InputIfFileExists
-         {\LXir@tag@file}%
-         {\LXir@Info{`\LXir@tag@file' loaded for tagging of `\@currname'}%
-           \add@toLXirList{\LXir@tag@file}}%
-         {\LXir@Info{No file `\LXir@tag@file' found for tagging of `\@currname'}}%
-% end of lxir mechanism for tagging
     \let\@unprocessedoptions\@@unprocessedoptions
     \csname\@currname.\@currext-h@@k\endcsname
     \expandafter\let\csname\@currname.\@currext-h@@k\endcsname
@@ -1151,6 +1150,14 @@
            `\csname ver@#1.\@currext\endcsname'\MessageBreak
           is available}}%
     \ifx\@currext\@clsextension\let\LoadClass\@twoloadclasserror\fi
+% lxir mechanism for tagging
+    \InputIfFileExists
+         {\LXir@tag@file}%
+         {\xdef\@currname{\LXir@tag@filename}\LXir@Info{`\LXir@tag@file' loaded for tagging of `\LXir@tag@filename'}%
+           \add@toLXirList{\LXir@tag@file}}%
+         {\LXir@Info{No file `\LXir@tag@file' found for tagging of `\LXir@tag@filename'}
+         }%
+% end of lxir mechanism for tagging
     \@popfilename
     \@reset@ptions}%
   \reserved@a}

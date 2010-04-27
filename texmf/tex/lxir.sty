@@ -5,21 +5,21 @@
 %% The original source files were:
 %%
 %% lxir.dtx  (with options: `lxir')
-%%
+%% 
 %% Copyright (c) 2007 by EDP Sciences
-%%
+%% 
 %% Author Jean-Paul Jorda and Xavier Trochu - EDP Sciences
-%%
+%% 
 %% This file may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either
 %% version 1.2 of this license or (at your option) any later
 %% version. The latest version of this license is in:
-%%
+%% 
 %% http://www.latex-project.org/lppl.txt
-%%
+%% 
 %% and version 1.2 or later is part of all distributions of
 %% LaTeX version 1999/12/01 or later.
-%%
+%% 
 %% lxir.dtx
 %% part of lxir - a tool to convert latex documents to xml.
 %% Copyright 2007 EDP-Sciences
@@ -182,11 +182,14 @@
 \def\textquotedblright{\xEmpty{RQUOTE}}
 \def\textperthousand{[entity!\#x2030!]}
 \def\thinspace{[entity!\#x2009!]}
+\def\,{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2009}}\else[entity!\#x2009!]\fi}
+\def\:{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2003}}\else[entity!\#x2003!]\fi}
+\def\;{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2004}}\else[entity!\#x2004!]\fi}
 \def\enspace{[entity!\#x2002!]}
 \def\enskip{[entity!\#x2002!]}
-\def~{[entity!\#xa0!]}
 \def\quad{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!]\fi} % quad = 1 em
 \def\qquad{\ifmmode\mathrel{\xEmptyAA{qquad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!][entity!\#x2001!]\fi} % qquad = 2 em
+\def~{[entity!\#xa0!]}
 \newsavebox{\XX@font@list}
 \newcommand{\addFontTo@list}[6]{%
 \sbox\XX@font@list{\unhbox\XX@font@list\protect\xEmptyAAAAAA{fontDescription}{encoding=#1}{family=#2}{series=#3}{shape=#4}{size=#5}{name=#6}%
@@ -648,6 +651,8 @@
   \xdef\@currname{#1}%
   \global\let\@currext#4%
   \expandafter\let\csname\@currname.\@currext-h@@k\endcsname\@empty
+  \def\LXir@tag@filename{\@currname_lxir}
+  \def\LXir@tag@file{\@currname_lxir.\@currext}
   \let\CurrentOption\@empty
   \@reset@ptions
   \makeatletter
@@ -669,18 +674,13 @@
              \MessageBreak
              Try typing \space <return> \space to proceed.}}}%
       {\@pass@ptions\@currext{#2}{#1}%
+       \IfFileExists{\LXir@tag@file}{\@pass@ptions\@currext{#2}{#1_lxir}}{}
        \global\expandafter
        \let\csname ver@\@currname.\@currext\endcsname\@empty
        \InputIfFileExists
          {\@currname.\@currext}%
          {\add@toPkg@Cls@List{\@currname.\@currext}}%
          {\@missingfileerror\@currname\@currext}%
-       \def\LXir@tag@file{\@currname_lxir.\@currext}
-       \InputIfFileExists
-         {\LXir@tag@file}%
-         {\LXir@Info{`\LXir@tag@file' loaded for tagging of `\@currname'}%
-           \add@toLXirList{\LXir@tag@file}}%
-         {\LXir@Info{No file `\LXir@tag@file' found for tagging of `\@currname'}}%
     \let\@unprocessedoptions\@@unprocessedoptions
     \csname\@currname.\@currext-h@@k\endcsname
     \expandafter\let\csname\@currname.\@currext-h@@k\endcsname
@@ -695,6 +695,12 @@
            `\csname ver@#1.\@currext\endcsname'\MessageBreak
           is available}}%
     \ifx\@currext\@clsextension\let\LoadClass\@twoloadclasserror\fi
+    \InputIfFileExists
+         {\LXir@tag@file}%
+         {\xdef\@currname{\LXir@tag@filename}\LXir@Info{`\LXir@tag@file' loaded for tagging of `\LXir@tag@filename'}%
+           \add@toLXirList{\LXir@tag@file}}%
+         {\LXir@Info{No file `\LXir@tag@file' found for tagging of `\LXir@tag@filename'}
+         }%
     \@popfilename
     \@reset@ptions}%
   \reserved@a}
