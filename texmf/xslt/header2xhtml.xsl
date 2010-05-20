@@ -36,7 +36,8 @@
     <xsl:attribute name="lxir:header">
       <xsl:value-of select="@lxir:header"/>
     </xsl:attribute>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="@*"/>
+    <xsl:apply-templates select="*|text()"/>
   </div>
 </xsl:template>
 
