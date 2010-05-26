@@ -26,23 +26,7 @@
     <a name="top"/>
     <div class="header">
       <xsl:apply-templates select="//*[@lxir:header='yes']"/>
-      <xsl:apply-templates select="//LaTeXClass"/>	
-      <xsl:apply-templates select="//maketitle"/>	
          </div>
   </xsl:template>
-
-<xsl:template match="title|subtitle|author|date|abstract|resume">
-  <div class="{name(.)}">
-    <xsl:attribute name="lxir:header">
-      <xsl:value-of select="@lxir:header"/>
-    </xsl:attribute>
-    <xsl:apply-templates select="@*"/>
-    <xsl:apply-templates select="*|text()"/>
-  </div>
-</xsl:template>
-
-<xsl:template match="author/and">
-  <xsl:text> -- </xsl:text>
-</xsl:template>
 
 </xsl:stylesheet>
