@@ -144,11 +144,13 @@ int dvi_new(dvifilestate_t **, const char * filename);
 int dvi_close(dvifilestate_t *, dvifile_t **);
 
 /* Implementation */
+static
 int get_word_space(dvifilestate_t * s) {
 	if (!s->font) return 0;
 	return s->font->design_size / 5;
 }
 
+static
 int is_space_skip(dvifilestate_t * s, int a) {
 	return (
 		((s->flags & DVI_SKIP_SPACE_SMALL) && a == 1) ||

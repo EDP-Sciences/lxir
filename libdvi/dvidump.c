@@ -22,6 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "libdvi.h"
 #include "../libfontmap/libfontmap.h"
 
+#include <kpathsea/kpathsea.h>
+
 void dump_font(dvifont_t * font) {
 	char * area = font->area;
 	char * name = font->name;
@@ -38,18 +40,18 @@ void dump_page(dvifont_t * fonts, dvinode_header_t * node) {
 				int index;
 				dvinode_text_t * text = (dvinode_text_t *) node;
 				for(index = 0; fonts[index].index != text->font; ++index) ;
-				printf("\tTEXT (%s, %d) : %s\n", fonts[index].name, text->size, text->content); 
+				printf("\tTEXT (%s, %d) : %s\n", fonts[index].name, text->size, text->content);
 			} break;
 			case DVINODE_RULE: printf("\tRULE\n"); break;
 			case DVINODE_CONTROL: printf("\tCONTROL\n"); break;
 			case DVINODE_BOP: printf("\tBOP\n"); break;
 			case DVINODE_XXX: {
 				dvinode_xxx_t * xxx = (dvinode_xxx_t *) node;
-				printf("\tXXX : %s\n", xxx->content); 
+				printf("\tXXX : %s\n", xxx->content);
 			} break;
 			default: fprintf(stderr, "Invalid node type : %d\n", node->type); exit(-1);
 		}
-		
+
 		node = node->next;
 	}
 }
@@ -60,7 +62,10 @@ int main(int argc, char * argv[]) {
 	int p = 1;
 	int flags = 0;
 	const char * filename = 0;
-	
+
+	kpse_set_program_name(argv[0], "dvidump");
+	lfm_init();
+
 	err = 0;
 	while (err == 0 && p < argc) {
 		if(strcmp(argv[p], "-n") == 0) {
@@ -84,7 +89,7 @@ int main(int argc, char * argv[]) {
 			else filename = argv[p++];
 		}
 	}
-	
+
 	if ((flags & (DVI_SKIP_SPACE_NORMAL|DVI_SKIP_SPACE_SMALL)) == 0) {
 		flags |= DVI_SKIP_SPACE_NORMAL;
 	}
@@ -100,7 +105,7 @@ int main(int argc, char * argv[]) {
 		err = lfm_init(0);
 		if (err) {
 			fprintf(stderr, "Error initialising libfontmap (%d)\n", err);
-			return err; 
+			return err;
 		}
 	}
 	err = dvi_read(&f, filename, flags);
@@ -111,7 +116,7 @@ int main(int argc, char * argv[]) {
 	if(!err) {
 		printf("DVI Comment : \"%s\"\n", f->comment);
 		printf("DVI file has %d pages\n", f->nbpages);
-		
+
 		int i;
 		for(i = 0; i < f->nbfonts; ++i) {
 			dump_font(&f->fonts[i]);
@@ -121,12 +126,12 @@ int main(int argc, char * argv[]) {
 			printf("Page %d\n", i+1);
 			dump_page(f->fonts, f->pages[i]);
 		}
-		
+
 		dvi_destroy(f);
 	} else {
 		fprintf(stderr, "Error reading DVI file (%d)\n", err);
 		return err;
 	}
-	
+
 	return 0;
 }
