@@ -20,7 +20,8 @@ my %MathFontNames = ('lcmtt' => ['OT1'],
 		     'cmex'  => ['OMX'],
 		     'txr'   => ['OT1', 'T1'],
 		     'txmi'  => ['OML'],
-			 'txsy' => ['OMS']
+			 'txsy' => ['OMS'],
+			 'txex' => ['OMX'],
 		    );
 
 my %FontsSeries = ('m'   => '',
