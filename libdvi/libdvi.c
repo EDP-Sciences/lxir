@@ -306,6 +306,7 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 	if (!c || c->header.type != DVINODE_TEXT || c->content) {
 		int err = dvi_append_text_node (s);
 		if (err) return err;
+		c = (dvinode_text_t *) s->current_node;
 	}
 	if(!(s->flags & DVI_NO_FONT_TRANSLATION)) {
 		char * chr;
@@ -385,7 +386,7 @@ int dvi_new_fp(dvifilestate_t ** ps, FILE * fp, int close) {
 		free(s);
 		return DVIERR_NOMEM;
 	}
-
+	s->file->version = DVI_VERSION_CHAR;
 	s->file->nbfonts = 0;
 	s->file->fonts = 0;
 	s->file->nbpages = 0;
@@ -1128,7 +1129,7 @@ int dvi_destroy(dvifile_t * f) {
 	int i;
 
 	for (i = 0; i < f->nbpages; ++i) {
-		//~ dvi_destroy_nodes(f->pages[i]);
+		dvi_destroy_nodes(f->pages[i]);
 	}
 
 	free(f->pages);
