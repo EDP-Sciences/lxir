@@ -25,8 +25,25 @@
   <xsl:template name="header">
     <a name="top"/>
     <div class="header">
-      <xsl:apply-templates select="//*[@lxir:header='yes']"/>
-         </div>
+        <xsl:apply-templates select="//*[@lxir:header='yes']" mode="header"/>
+     </div>
+  </xsl:template>
+  <xsl:template name="back">
+    <a name="top"/>
+    <div class="back">
+        <xsl:apply-templates select="//*[@lxir:back='yes']" mode="back"/>
+     </div>
+  </xsl:template>
+
+  <xsl:template match="*[@lxir:header='yes']"  mode="header">
+      <xsl:if test="not (ancestor::*[@lxir:header='yes'])">
+	  <xsl:apply-templates select="."/>
+      </xsl:if>
+  </xsl:template>
+  <xsl:template match="*[@lxir:back='yes']"  mode="back">
+      <xsl:if test="not (ancestor::*[@lxir:back='yes'])">
+	  <xsl:apply-templates select="."/>
+      </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>

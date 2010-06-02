@@ -29,6 +29,9 @@
 
   <xsl:template match="ref|pageref">
     <a href="#{@lxir:idref}">
+	<xsl:attribute name="class">
+	    <xsl:value-of select="name()"/>
+	</xsl:attribute>
       <xsl:apply-templates/>
     </a>
   </xsl:template>
