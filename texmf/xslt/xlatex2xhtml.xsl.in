@@ -71,9 +71,7 @@
 
 	<!-- -->
 	<span class="body">
-	  <xsl:apply-templates select="text()|*[
-				      (not(@lxir:header) or @lxir:header != 'yes')
-                                       				       ] "/> 
+	  <xsl:apply-templates select="text()|*[not (@lxir:header = 'yes' or @lxir:back = 'yes')] "/> 
 	</span>
       </body>
     </html>
