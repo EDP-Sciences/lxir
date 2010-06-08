@@ -10,7 +10,8 @@ my %MathFontEncodings = (
 			 'OT1' => 'OT1Encoding',
 			 'OMS' => 'TeXMathSymbolEncoding',
 			 'OMX' => 'TeXMathExtensionEncoding',
-			'T1' => 'CorkEncoding'
+			 'T1'  => 'CorkEncoding',
+			 'U'   => 'OT1Encoding',
 			);
 
 
@@ -18,10 +19,13 @@ my %MathFontNames = ('lcmtt' => ['OT1'],
 		     'cmtt'  => ['OT1', 'T1'],
 		     'cmsy'  => ['OMS'],
 		     'cmex'  => ['OMX'],
+			 'cmr'   => ['OT1'],
+			 'cmm'   => ['OML'],
 		     'txr'   => ['OT1', 'T1'],
 		     'txmi'  => ['OML'],
-			 'txsy' => ['OMS'],
-			 'txex' => ['OMX'],
+			 'txsy'  => ['OMS'],
+			 'txsyc' => ['U'],
+			 'txex'  => ['OMX'],
 		    );
 
 my %FontsSeries = ('m'   => '',
