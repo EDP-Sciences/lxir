@@ -130,11 +130,11 @@
 		<transformation name="transform_overline_pattern" />
 		<transformation name="transform_mathsym_patterns" />
 		<transformation name="transform_array_pattern"/>
-		<transformation name="replace_entities_in_text"/>
 		<transformation name="drop_remaining_tex_nodes" />
 		<transformation name="transform_string_patterns" />
 		<transformation name="merge_mn_sequence" />
 		<transformation name="merge_mi_sequence" />
+		<transformation name="replace_entities_in_math"/>
 		<transformation name="transform_mrow_pattern" />
 		<transformation name="drop_empty_mrows" />
 		<transformation name="drop_empty_vbox" />

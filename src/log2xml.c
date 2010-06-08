@@ -1995,6 +1995,93 @@ void merge_mi_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
+/*
+    <mo mathvariant="normal">[</mo>
+    <mi mathvariant="italic">entity</mi>
+    <mo mathvariant="normal">!</mo>
+    <mi mathvariant="normal">#</mi>
+	...
+    <mo mathvariant="normal">!</mo>
+    <mo mathvariant="normal">]</mo>
+    <mi mathvariant="normal">c</mi>
+*/
+
+static
+int is_math_text_valid(xmlNodePtr node, char const * type, char const * content) {
+	int result =
+		node &&
+		node->type == XML_ELEMENT_NODE &&
+		strcmp((const char *)node->name, type) == 0;
+	if (!result || !content) return result;
+
+	return node->children &&
+		node->children->type == XML_TEXT_NODE &&
+		node->children->content &&
+		strcmp((const char *)node->children->content, content) == 0;
+}
+
+static
+void math_strtol_node(xmlNodePtr node, xmlChar const * buffer) {
+	xmlChar chr[10];
+	int value;
+	if (*buffer == 'x')
+		value = strtol(buffer + 1, NULL, 16);
+	else
+		value = strtol(buffer, NULL, 0);
+	to_utf8(value, chr);
+	// fprintf(stderr, "math_strtol_node '%s' %d '%s'\n", buffer, value, chr);
+	xmlNodeAddContent(node, chr);
+}
+
+static
+void replace_entities_in_math(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children;
+	xmlNodePtr temp, start, end;
+	while(node) {
+		if (is_math_text_valid(node, "mo", "[") &&
+			(temp = node->next) && is_math_text_valid(temp, "mi", "entity") &&
+			(temp = temp->next) && is_math_text_valid(temp, "mo", "!") &&
+			(temp = temp->next) && is_math_text_valid(temp, "mi", "#")
+		) {
+			start = temp->next;
+			end = temp;
+			while (end) {
+				if (is_math_text_valid(end, "mo", "!")) { break; }
+				end = end->next;
+			}
+			if (start && end &&
+				(temp = end->next) && is_math_text_valid(temp, "mo", "]")
+			) {
+				xmlNodePtr n = start;
+				xmlBufferPtr buffer = xmlBufferCreate();
+				while (n != end) {
+					xmlChar * content = xmlNodeGetContent(n);
+					xmlBufferCat(buffer, content);
+					xmlFree(content);
+					n = n->next;
+				}
+				n = xmlNewNode(0, BAD_CAST "mo");
+				xmlSetProp(n, BAD_CAST "entity", BAD_CAST "1");
+				math_strtol_node(n, xmlBufferContent(buffer));
+				xmlBufferFree(buffer);
+				xmlAddPrevSibling(node, n);
+
+				temp = temp->next;
+				while (node != temp) {
+					xmlNodePtr next = node->next;
+					xmlUnlinkNode(node);
+					node = next;
+				}
+			} else {
+				node = temp;
+			}
+		} else {
+			xmlTransformationPush(node, replace_entities_in_math, param);
+			node = node->next;
+		}
+	}
+}
+
 void xmlRegisterMathTransformations() {
 #define DEF(x) xmlTransformationRegister("math", #x, x, 0);
 	DEF(transform_inline_math)
@@ -2019,6 +2106,7 @@ void xmlRegisterMathTransformations() {
 	DEF(transform_mtable_pattern)
 	DEF(merge_mn_sequence)
 	DEF(merge_mi_sequence)
+	DEF(replace_entities_in_math)
 #undef DEF
 }
 
@@ -2030,7 +2118,7 @@ xmlDocPtr mathlog_read_file(const char * logname) {
 	xmlDocSetRootElement(doc, root);
 	read_log_file(root, logname);
 #if TEST
-	xmlSaveFormatFileEnc("temp-log.xml", doc, "UTF-8", 1);
+	xmlSaveFormatFileEnc("temp-rawlog.xml", doc, "UTF-8", 1);
 #endif
 	math = extract_all_math(root);
 	xmlDocSetRootElement(doc, math);

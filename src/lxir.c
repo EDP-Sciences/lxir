@@ -1480,9 +1480,6 @@ void xmlRegisterTextTransformations() {
 	DEF(transform_verbatim_formula)
 	DEF(transform_verbatim_macro)
 #undef DEF
-#define DEF(x) xmlTransformationRegister("math", #x, x, 0);
-	DEF(replace_entities_in_text)
-#undef DEF
 }
 
 extern void xmlRegisterPostXmlTransformations();
@@ -1579,7 +1576,9 @@ int main(int argc, char * argv[]) {
 
 	dvi_destroy(dvi);
 
+#if TEST
 	xmlSaveFormatFileEnc("temp-0-rawdvi.xml", doc, "UTF-8", 1);
+#endif
 
 	xmlTransformationApplyList("text", &doc);
 

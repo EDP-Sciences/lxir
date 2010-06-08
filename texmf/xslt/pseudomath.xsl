@@ -13,7 +13,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is Jean-Paul Jorda.
 %
 % This work consists of the files pseudomath.xsl.
@@ -29,13 +29,13 @@
   </xsl:copy>
 </xsl:template>
 
-  <xsl:template match="math">
+  <xsl:template match="math[count(*)=1]">
     <xsl:choose>
       <xsl:when test="msup[@single='1']">
-	<xsl:apply-templates/>
+	<xsl:apply-templates mode="simple_math" />
       </xsl:when>
       <xsl:when test="msub[@single='1']">
-	<xsl:apply-templates/>
+	<xsl:apply-templates mode="simple_math"/>
       </xsl:when>
       <xsl:otherwise>
 	<!-- "true" maths : a make a copy -->
@@ -45,12 +45,12 @@
   </xsl:template>
 
   <!-- templates for "pseudo-math" -->
-  <xsl:template match="msup">
+  <xsl:template match="msup" mode="simple_math">
     <sup>
       <xsl:apply-templates/>
     </sup>
   </xsl:template>
-  <xsl:template match="msub">
+  <xsl:template match="msub" mode="simple_math">
     <sub>
       <xsl:apply-templates/>
     </sub>
