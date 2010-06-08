@@ -2024,6 +2024,10 @@ static
 void math_strtol_node(xmlNodePtr node, xmlChar const * buffer) {
 	xmlChar chr[10];
 	int value;
+	if (*buffer++ != '#') {
+		fprintf(stderr, "Invalid entity code '%s' found\n", buffer);
+		return;
+	}
 	if (*buffer == 'x')
 		value = strtol(buffer + 1, NULL, 16);
 	else
@@ -2041,9 +2045,9 @@ void replace_entities_in_math(xmlNodePtr root, xmlTransformationEntry * param) {
 		if (is_math_text_valid(node, "mo", "[") &&
 			(temp = node->next) && is_math_text_valid(temp, "mi", "entity") &&
 			(temp = temp->next) && is_math_text_valid(temp, "mo", "!") &&
-			(temp = temp->next) && is_math_text_valid(temp, "mi", "#")
+			(temp = temp->next) && is_math_text_valid(temp, "mi", 0)
 		) {
-			start = temp->next;
+			start = temp;
 			end = temp;
 			while (end) {
 				if (is_math_text_valid(end, "mo", "!")) { break; }
