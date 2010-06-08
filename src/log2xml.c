@@ -2026,6 +2026,7 @@ void math_strtol_node(xmlNodePtr node, xmlChar const * buffer) {
 	int value;
 	if (*buffer++ != '#') {
 		fprintf(stderr, "Invalid entity code '%s' found\n", buffer);
+		xmlAddChild(node, xmlNewComment(buffer));
 		return;
 	}
 	if (*buffer == 'x')
