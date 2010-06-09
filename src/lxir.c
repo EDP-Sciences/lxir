@@ -1549,8 +1549,10 @@ int main(int argc, char * argv[]) {
 
 	lfm_init();
 
+	if (args.cmtt10_neutral_flag)
+		flags |= DVI_CMTT10_NEUTRAL;
 
-	err = dvi_read(&dvi, dvifile, flags | DVI_CMTT10_NEUTRAL);
+	err = dvi_read(&dvi, dvifile, flags);
 	if(err) {
 		fprintf(stderr, "Error (%d) reading DVI file.\n", err);
 		return -1;
@@ -1560,9 +1562,8 @@ int main(int argc, char * argv[]) {
 	start_entities();
 
 	mathdoc = mathlog_read_file(get_log_filename(dvifile));
-#if TEST
-	xmlSaveFormatFileEnc("temp-mathlog.xml", mathdoc, "UTF-8", 1);
-#endif
+	if (args.save_raw_flag)
+		xmlSaveFormatFileEnc("temp-mathlog.xml", mathdoc, "UTF-8", 1);
 
 	doc = xmlNewDoc(BAD_CAST "1.0");
 	doc->_private = mathdoc;
@@ -1575,9 +1576,8 @@ int main(int argc, char * argv[]) {
 
 	dvi_destroy(dvi);
 
-#if TEST
-	xmlSaveFormatFileEnc("temp-0-rawdvi.xml", doc, "UTF-8", 1);
-#endif
+	if (args.save_raw_flag)
+		xmlSaveFormatFileEnc("temp-0-rawdvi.xml", doc, "UTF-8", 1);
 
 	xmlTransformationApplyList("text", &doc);
 
