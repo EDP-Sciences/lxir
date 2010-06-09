@@ -1,0 +1,6 @@
+# package "lxir"
+# version "1.0"
+purpose "Convert specially tagged DVI files into XML"
+args "--unamed-opts"
+option "skip" s "set the space skip detection method"
+	enum values="1","sp","all" default="1" optional

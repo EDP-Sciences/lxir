@@ -35,6 +35,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "log2xml.h"
 #include "entities.h"
 
+#include "cmdline.h"
+
 #define REPORT_ALL 0
 
 int do_not_add_space = 0;
@@ -1511,11 +1513,33 @@ int main(int argc, char * argv[]) {
 	int err;
 	int flags;
 	const char * dvifile;
+	struct gengetopt_args_info args;
 
 	dvifile_t * dvi;
     xmlDocPtr doc;
     xmlDocPtr mathdoc;
     xmlNodePtr root;
+
+	if(cmdline_parser(argc, argv, &args))
+		return -1;
+	switch(args.skip_arg) {
+		case skip_arg_1:
+			flags = DVI_SKIP_SPACE_SMALL;
+			do_not_add_space = 1;
+			break;
+		case skip_arg_sp:
+			flags = DVI_SKIP_SPACE_NORMAL;
+			break;
+		case skip_arg_all:
+			flags = DVI_SKIP_SPACE_SMALL | DVI_SKIP_SPACE_NORMAL;
+			break;
+	}
+	if (args.inputs_num != 1) {
+		fprintf(stderr, "Needs a single DVI file input (%d given)\n", args.inputs_num);
+		return -1;
+	}
+	dvifile = args.inputs[0];
+
 
 	kpse_set_program_name(argv[0], "lxir");
 
@@ -1525,32 +1549,6 @@ int main(int argc, char * argv[]) {
 
 	lfm_init();
 
-	if (argc < 2) {
-		fprintf(stderr, "Usage : %s [-skip {1|sp|all}] <dvi>\n", argv[0]);
-		return -1;
-	}
-	if(argc >= 4) {
-		if (strcmp(argv[1], "-skip")) {
-			fprintf(stderr, "invalid parameter : %s\n", argv[1]);
-			return -1;
-		}
-		if (strcmp(argv[2], "1") == 0) {
-			flags = DVI_SKIP_SPACE_SMALL;
-			do_not_add_space = 1;
-		} else if(strcmp(argv[2], "sp") == 0) {
-			flags = DVI_SKIP_SPACE_NORMAL;
-		} else if(strcmp(argv[2], "all") == 0) {
-			flags = DVI_SKIP_SPACE_SMALL | DVI_SKIP_SPACE_NORMAL;
-		} else {
-			fprintf(stderr, "unknown value for skip parameter : %s\n", argv[2]);
-			return -1;
-		}
-		dvifile = argv[3];
-	} else {
-		flags = DVI_SKIP_SPACE_SMALL;
-		do_not_add_space = 1;
-		dvifile = argv[1];
-	}
 
 	err = dvi_read(&dvi, dvifile, flags | DVI_CMTT10_NEUTRAL);
 	if(err) {
@@ -1558,12 +1556,13 @@ int main(int argc, char * argv[]) {
 		return -1;
 	}
 
-
 	init_transformations();
 	start_entities();
 
 	mathdoc = mathlog_read_file(get_log_filename(dvifile));
+#if TEST
 	xmlSaveFormatFileEnc("temp-mathlog.xml", mathdoc, "UTF-8", 1);
+#endif
 
 	doc = xmlNewDoc(BAD_CAST "1.0");
 	doc->_private = mathdoc;
@@ -1588,6 +1587,7 @@ int main(int argc, char * argv[]) {
 	xmlCleanupParser();
     xmlMemoryDump();
 	lfm_close();
+	cmdline_parser_free(&args);
 #ifndef _WIN32
 	stop_entities();
 #endif
