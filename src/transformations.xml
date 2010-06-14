@@ -129,7 +129,7 @@
 		<transformation name="transform_underline_pattern" />
 		<transformation name="transform_overline_pattern" />
 		<transformation name="transform_mathsym_patterns" />
-		<transformation name="transform_array_pattern"/>
+		<transformation name="transform_array_pattern" />
 		<transformation name="drop_remaining_tex_nodes" />
 		<transformation name="transform_string_patterns" />
 		<transformation name="merge_mn_sequence" />
@@ -140,5 +140,6 @@
 		<transformation name="drop_empty_vbox" />
 		<transformation name="transform_sqrt_pattern" />
 		<transformation name="transform_mtable_pattern" />
+		<transformation name="xslt_proc" param="log-prescript.xsl" />
 	</stack>
 </transformations>

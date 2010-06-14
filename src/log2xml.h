@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef MATHLOG_H
 #define MATHLOG_H 1
 
-extern xmlDocPtr mathlog_read_file(const char * logname);
+extern xmlDocPtr mathlog_read_file(const char * logname, int save_raw_log);
 extern xmlNodePtr mathlog_copy_expr(xmlDocPtr src, xmlDocPtr doc, int begin_id, int end_id);
 
 #endif

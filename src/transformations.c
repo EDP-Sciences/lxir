@@ -380,6 +380,7 @@ void xmlTransformationInit(const char * filename) {
 	while(node) {
 		if (node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "stack") == 0) {
 			xmlChar * type = xmlGetProp(node, BAD_CAST "type");
+			xmlChar * report_all = xmlGetProp(node, BAD_CAST "report-all");
 			xmlNodePtr child = node->children;
 			while (child) {
 				if (child->type == XML_ELEMENT_NODE && strcmp((const char *) child->name, "transformation") == 0) {
@@ -387,7 +388,7 @@ void xmlTransformationInit(const char * filename) {
 					xmlChar * param = xmlGetProp(child, BAD_CAST "param");
 					xmlTransformationAddToList((const char *)type, (const char *)name, (const char *)param);
 					xmlChar * report = xmlGetProp(child, BAD_CAST "report");
-					if (REPORT_ALL_TRANSFORMATIONS || report) {
+					if (REPORT_ALL_TRANSFORMATIONS || report_all || report) {
 						char filename[128];
 						sprintf(filename, "temp-%d-%s.xml", i++, name);
 						xmlTransformationAddToList((const char *)type, "dump_tree", filename);
@@ -404,77 +405,3 @@ void xmlTransformationInit(const char * filename) {
 	}
 	xmlFreeDoc(trans);
 }
-
-
-/*
-
-int xmlTransformationCallNext(xmlNodePtr node) {
-	xmlTransformationStackEntry * current = top;
-	if (!current) return 0;
-
-	top = current->next;
-
-	(*current->transformation)(node ? node : current->node, current->param);
-
-	free(current);
-	return 1;
-}
-
-void xmlTransformationCallAll(xmlNodePtr node) {
-	while(xmlTransformationCallNext(node)) ;
-}
-
-void xmlTransformationPush(xmlNodePtr node, xmlTransformation trans, void * param) {
-	xmlTransformationStackEntry * next = malloc(sizeof(xmlTransformationStackEntry));
-	next->node = node;
-	next->transformation = trans;
-	next->param = param;
-	if(top) {
-		next->next = top;
-		top = next;
-	} else {
-		last = next;
-		top = next;
-	}
-}
-
-void xmlTransformationPushLast(xmlNodePtr node, xmlTransformation trans, void * param) {
-	xmlTransformationStackEntry * next;
-	if (!top) {
-		xmlTransformationPush(node, trans, param);
-		return;
-	}
-	next = malloc(sizeof(xmlTransformationStackEntry));
-	next->node = node;
-	next->transformation = trans;
-	next->param = param;
-	next->next = 0;
-	last->next = next;
-	last = next;
-}
-
-int xmlTransformationPushNamed(xmlNodePtr node, const char * type, const char * name, void * param) {
-	xmlTransformationInfoEntry * entry = nametop;
-	while(entry) {
-		if (strcmp(name, entry->name) == 0 && strcmp(type, entry->type) == 0) {
-			xmlTransformationPush(node, entry->transformation, param ? param : entry->param);
-			return 1;
-		}
-		entry = entry->next;
-	}
-	return 0;
-}
-
-int xmlTransformationPushNamedLast(xmlNodePtr node, const char * type, const char * name, void * param) {
-	xmlTransformationInfoEntry * entry = nametop;
-	while(entry) {
-		if (strcmp(name, entry->name) == 0 && strcmp(type, entry->type) == 0) {
-			xmlTransformationPushLast(node, entry->transformation, param ? param : entry->param);
-			return 1;
-		}
-		entry = entry->next;
-	}
-	return 0;
-}
-
-*/

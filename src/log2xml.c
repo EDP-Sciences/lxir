@@ -2115,23 +2115,21 @@ void xmlRegisterMathTransformations() {
 #undef DEF
 }
 
-xmlDocPtr mathlog_read_file(const char * logname) {
+xmlDocPtr mathlog_read_file(const char * logname, int save_raw_log) {
 	xmlNodePtr root, math;
 	xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
 
 	root = xmlNewNode(0, BAD_CAST "tex-log");
 	xmlDocSetRootElement(doc, root);
 	read_log_file(root, logname);
-#if TEST
-	xmlSaveFormatFileEnc("temp-rawlog.xml", doc, "UTF-8", 1);
-#endif
+	if (save_raw_log)
+		xmlSaveFormatFileEnc("temp-rawlog.xml", doc, "UTF-8", 1);
 	math = extract_all_math(root);
 	xmlDocSetRootElement(doc, math);
 	xmlFreeNode(root);
 	xmlTransformationApplyList("math", &doc);
-#if TEST
-	xmlSaveFormatFileEnc("temp-math.xml", doc, "UTF-8", 1);
-#endif
+	if (save_raw_log)
+		xmlSaveFormatFileEnc("temp-mathlog.xml", doc, "UTF-8", 1);
 	return doc;
 }
 
