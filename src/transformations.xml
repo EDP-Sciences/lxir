@@ -140,6 +140,6 @@
 		<transformation name="drop_empty_vbox" />
 		<transformation name="transform_sqrt_pattern" />
 		<transformation name="transform_mtable_pattern" />
-		<transformation name="xslt_proc" param="log-prescript.xsl" />
+		<transformation name="xslt_proc" param="log-fixes.xsl" />
 	</stack>
 </transformations>

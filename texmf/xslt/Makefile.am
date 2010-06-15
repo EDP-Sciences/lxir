@@ -14,6 +14,8 @@ dist_xslt_DATA = \
 	header2xhtml.xsl \
 	linetab.xsl \
 	list2xhtml.xsl \
+	log-enlargesub.xsl \
+	log-fixes.xsl \
 	log-prescript.xsl \
 	math2xhtml.xsl \
 	mathns.xsl \
