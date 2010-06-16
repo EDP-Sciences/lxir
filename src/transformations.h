@@ -19,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TRANSFORMATIONS_H 1
 
 /* #define USE_DOUBLE_LINKED_LIST 1 */
-#define REPORT_ALL_TRANSFORMATIONS 0
 
 struct xmlTransformationStack;
 
@@ -29,6 +28,8 @@ typedef struct xmlTransformationEntry {
 } xmlTransformationEntry;
 
 typedef void (*xmlTransformation)(xmlNodePtr, xmlTransformationEntry *);
+
+void xmlTransformationSetReport(int);
 
 void xmlTransformationRegister(const char *, const char *, xmlTransformation, const char *);
 void xmlTransformationPush(xmlNodePtr, xmlTransformation, xmlTransformationEntry *);

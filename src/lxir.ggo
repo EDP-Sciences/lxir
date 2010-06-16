@@ -9,5 +9,7 @@ option "skip" s "Set the space skip detection method"
 section "Debuging options"
 option "cmtt10-neutral" - "Declare the cmtt10 font as encoding neutral."
 	flag on
-option "save-raw" R "Save raw XML files after DVI and LOG parsing"
+option "save-raw" R "Save raw XML files after DVI and LOG parsing."
+	flag off
+option "report-all-transformations" - "Save all intermediate DOM states."
 	flag off

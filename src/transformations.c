@@ -93,8 +93,14 @@ typedef struct xmlTransformationInfoEntry {
 	const char * parameter;
 } xmlTransformationInfoEntry;
 
+static int xmlTransformationReport = 0;
 static xmlTransformationList * lists = 0;
 static xmlTransformationInfoEntry * nametop = 0;
+
+void xmlTransformationSetReport(int value) {
+	xmlTransformationReport = value;
+}
+
 
 int xmlTransformationAddToList(const char * type, const char * name, const char * parameter) {
 	xmlTransformationList * list = lists;
@@ -354,6 +360,12 @@ xmlNodePtr find_first_element_node(xmlDocPtr doc) {
 	else return 0;
 }
 
+static int should_report(xmlChar * report_all, xmlChar * report) {
+	if (xmlTransformationReport) return 1;
+	if (report_all && strcmp(report_all, "yes") == 0) return 1;
+	if (report && strcmp(report, "yes") == 0) return 1;
+}
+
 void xmlTransformationInit(const char * filename) {
 	xmlDocPtr trans;
 	xmlNodePtr node;
@@ -388,7 +400,7 @@ void xmlTransformationInit(const char * filename) {
 					xmlChar * param = xmlGetProp(child, BAD_CAST "param");
 					xmlTransformationAddToList((const char *)type, (const char *)name, (const char *)param);
 					xmlChar * report = xmlGetProp(child, BAD_CAST "report");
-					if (REPORT_ALL_TRANSFORMATIONS || report_all || report) {
+					if (should_report(report_all, report)) {
 						char filename[128];
 						sprintf(filename, "temp-%d-%s.xml", i++, name);
 						xmlTransformationAddToList((const char *)type, "dump_tree", filename);

@@ -1559,6 +1559,9 @@ int main(int argc, char * argv[]) {
 	}
 
 	init_transformations();
+	if (args.report_all_transformations_flag)
+		xmlTransformationSetReport(1);
+
 	start_entities();
 
 	mathdoc = mathlog_read_file(get_log_filename(dvifile), args.save_raw_flag);
