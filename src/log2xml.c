@@ -1026,6 +1026,7 @@ const char * trans_fenced_char(const char * chr) {
 		if (code == 017 || code == 037 || code == 055) return "\\";
 		if (code == 014) return "|";
 		if (code == 015) return "∥";
+		if (code == 0132) return "∫";
 		fprintf(stderr, "lxir : unknown fenced char %d\n", code);
 	}
 	return chr;
@@ -1378,6 +1379,12 @@ void transform_sub_or_sup_pattern(xmlNodePtr root, xmlTransformationEntry * tpar
 			transform_sub_or_sup_pattern(node, tparam);
 			transform_sub_or_sup_pattern(row, tparam);
 			next = subsup->next;
+		} else if (is_node_valid(node, "munderover", 0, 0)) {
+			xmlNodePtr child = node->children;
+			while (child) {
+				xmlTransformationPush(child, transform_sub_or_sup_pattern, tparam);
+				child = child->next;
+			}
 		} else {
 			xmlTransformationPush(node, transform_sub_or_sup_pattern, tparam);
 		}
