@@ -16,6 +16,7 @@ dist_xslt_DATA = \
 	list2xhtml.xsl \
 	log-enlargesub.xsl \
 	log-fixes.xsl \
+	log-negative.xsl \
 	log-prescript.xsl \
 	math2xhtml.xsl \
 	mathns.xsl \
