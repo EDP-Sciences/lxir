@@ -1977,12 +1977,19 @@ void merge_mn_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 }
 
 static
+int mathvariant_equal(xmlChar * mv1, xmlChar * mv2) {
+	if (!mv1 && !mv2) return 1;
+	if (mv1 && mv2) return !strcmp(mv1, mv2);
+	return 0;
+}
+
+static
 void merge_mi_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
 		if (is_node_valid(node, "mi", 0, 0) &&
 			node->next && is_node_valid(node->next, "mi", 0, 0) &&
-			strcmp(xmlGetProp(node, BAD_CAST "mathvariant"), xmlGetProp(node->next, BAD_CAST "mathvariant")) == 0
+			mathvariant_equal(xmlGetProp(node, BAD_CAST "mathvariant"), xmlGetProp(node->next, BAD_CAST "mathvariant"))
 		) {
 			xmlChar * content = xmlNodeGetContent(node->next);
 			xmlNodeAddContent(node, content);
