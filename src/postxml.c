@@ -176,8 +176,8 @@ int get_section_level(xmlNodePtr section) {
 	while (header && !is_node_element(header, "sectionHeader"))
 		header = header->next;
 	if (!header) return -1;
-	const char * level = (const char *)xmlGetProp(header, BAD_CAST "level");
-	int result = level ? atoi(level) : -1;
+	xmlChar * level = xmlGetProp(header, BAD_CAST "level");
+	int result = level ? atoi((const char *)level) : -1;
 	xmlFree(level);
 	return result;
 }
