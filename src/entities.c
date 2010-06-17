@@ -123,7 +123,7 @@ xmlNodePtr new_entity(xmlDocPtr doc, xmlChar * src, size_t len) {
 		result = (xmlEntityPtr) xmlNewText(temp);
 		xmlFree(temp);
 	}
-	return result;
+	return (xmlNodePtr) result;
 }
 
 int xmlReplaceEntities(xmlNodePtr node) {

@@ -364,6 +364,7 @@ static int should_report(xmlChar * report_all, xmlChar * report) {
 	if (xmlTransformationReport) return 1;
 	if (report_all && strcmp(report_all, "yes") == 0) return 1;
 	if (report && strcmp(report, "yes") == 0) return 1;
+	return 0;
 }
 
 void xmlTransformationInit(const char * filename) {
