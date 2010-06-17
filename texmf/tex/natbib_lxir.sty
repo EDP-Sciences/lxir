@@ -11,7 +11,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is EDP-Sciences.
 %
 % This work consists of the files natbib_lxir.sty.
@@ -51,7 +51,7 @@
 %\def\citenumfont#1{\xBegin{HELLO}#1\xEnd{HELLO}}
 \def\t@gCitenum#1#2{\xBegin{cite}\xAttr{key=#2}\citenumfont{#1}\xEnd{cite}}
 \def\NAT@citexnum[#1][#2]#3{%
-  \xBegin{citation}\xAttrAA{keys=#3}{before=#1}{after=#2}%
+  \xBegin{citation}\xAttr{keys=#3}%
  \NAT@sort@cites{#3}%
  \let\@citea\@empty
   \@cite{\def\NAT@num{-1}\let\NAT@last@yr\relax\let\NAT@nm\@empty
@@ -130,7 +130,7 @@
 %
 \def\NAT@citex%
   [#1][#2]#3{%
-    \xBegin{citation}\xAttrAA{keys=#3}{before=#1}{after=#2}%
+    \xBegin{citation}\xAttr{keys=#3}%
   \NAT@sort@cites{#3}%
   \let\@citea\@empty
   \@cite{\let\NAT@nm\@empty\let\NAT@year\@empty
