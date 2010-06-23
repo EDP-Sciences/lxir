@@ -1486,12 +1486,6 @@ void xmlRegisterTextTransformations() {
 
 extern void xmlRegisterPostXmlTransformations();
 
-void xmlRegisterTransformations() {
-	xmlRegisterTextTransformations();
-	xmlRegisterMathTransformations();
-	xmlRegisterPostXmlTransformations();
-}
-
 static
 const char * get_log_filename(const char * filename) {
 static char buffer[1024];
@@ -1504,8 +1498,14 @@ static char buffer[1024];
 }
 
 static
-void init_transformations() {
-	xmlRegisterTransformations();
+void init_transformations(int report) {
+	xmlRegisterTextTransformations();
+	xmlRegisterMathTransformations();
+	xmlRegisterPostXmlTransformations();
+
+	if (report)
+		xmlTransformationSetReport(1);
+
 	xmlTransformationInit("transformations.xml");
 }
 
@@ -1558,9 +1558,7 @@ int main(int argc, char * argv[]) {
 		return -1;
 	}
 
-	init_transformations();
-	if (args.report_all_transformations_flag)
-		xmlTransformationSetReport(1);
+	init_transformations(args.report_all_transformations_flag);
 
 	start_entities();
 
