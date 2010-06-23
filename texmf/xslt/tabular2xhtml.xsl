@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns="http://www.w3.org/1999/xhtml"
 		xmlns:lxir="http://www.latex-lxir.org">
@@ -81,8 +81,82 @@
 </xsl:template>
 
 <xsl:template match="vline"/>
-<xsl:template match="hline"/>
-<xsl:template match="cline"/>
+
+<xsl:template match="hline">
+	<xsl:if test="preceding-sibling::*[1][self::rowGroup] and following-sibling::*[1][self::rowGroup]">
+		<xsl:variable name="cols">
+			<xsl:value-of select="count(ancestor::*[self::tabular or self::array][1]/columnsModel[1]/columnsGroup/*[self::col or self::par])" />
+		</xsl:variable>
+		<tr>
+			<td>
+				<xsl:if test="$cols > 1">
+					<xsl:attribute name="colspan">
+						<xsl:value-of select="$cols" />
+					</xsl:attribute>
+				</xsl:if>
+				<hr />
+			</td>
+		</tr>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="cline">
+	<xsl:variable name="from">
+		<xsl:value-of select="@lxir:from" />
+	</xsl:variable>
+	<xsl:variable name="to">
+		<xsl:value-of select="@lxir:to" />
+	</xsl:variable>
+	<xsl:variable name="cols">
+		<xsl:value-of select="count(ancestor::*[self::tabular or self::array][1]/columnsModel[1]/columnsGroup/*[self::col or self::par])" />
+	</xsl:variable>
+
+	<xsl:variable name="before">
+		<xsl:value-of select="$from - 1" />
+	</xsl:variable>
+	<xsl:variable name="rule">
+		<xsl:value-of select="$to - $from + 1" />
+	</xsl:variable>
+	<xsl:variable name="after">
+		<xsl:value-of select="$cols - $to" />
+	</xsl:variable>
+	<tr>
+		<xsl:choose>
+			<xsl:when test="$before = 0" />
+			<xsl:when test="$before = 1">
+				<td />
+			</xsl:when>
+			<xsl:otherwise>
+				<td>
+					<xsl:attribute name="colspan">
+						<xsl:value-of select="$before" />
+					</xsl:attribute>
+				</td>
+			</xsl:otherwise>
+		</xsl:choose>
+		<td>
+		<xsl:if test="$rule > 1">
+			<xsl:attribute name="colspan">
+				<xsl:value-of select="$rule" />
+			</xsl:attribute>
+		</xsl:if>
+			<hr />
+		</td>
+		<xsl:choose>
+			<xsl:when test="$after = 0" />
+			<xsl:when test="$after = 1">
+				<td />
+			</xsl:when>
+			<xsl:otherwise>
+				<td>
+					<xsl:attribute name="colspan">
+						<xsl:value-of select="$after" />
+					</xsl:attribute>
+				</td>
+			</xsl:otherwise>
+		</xsl:choose>
+	</tr>
+</xsl:template>
 
 <xsl:template match="columnsModel">
   <xsl:apply-templates/>
@@ -110,9 +184,7 @@
 </xsl:template>
 
 <xsl:template match="rowGroup">
-  <tbody>
-    <xsl:apply-templates/>
-  </tbody>
+	<xsl:apply-templates/>
 </xsl:template>
 <xsl:template match="row">
   <tr>
@@ -122,9 +194,11 @@
 
 <xsl:template match="multicolumn">
   <td>
-    <xsl:attribute name="colspan">
-      <xsl:value-of select="@lxir:span"/>
-     </xsl:attribute>
+	<xsl:if test="@lxir:span > 1">
+		<xsl:attribute name="colspan">
+		  <xsl:value-of select="@lxir:span"/>
+		 </xsl:attribute>
+	</xsl:if>
      <xsl:attribute name="align">
        <xsl:choose>
 	 <xsl:when test="columnsModel/col/@lxir:align">
