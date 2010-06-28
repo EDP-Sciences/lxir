@@ -6,34 +6,37 @@ use strict  ;
 use XML::LibXML ;
 
 my %MathFontEncodings = (
-			 'OML' => 'TeXMathItalicEncoding',
-			 'OT1' => 'OT1Encoding',
-			 'OMS' => 'TeXMathSymbolEncoding',
-			 'OMX' => 'TeXMathExtensionEncoding',
-			 'T1'  => 'CorkEncoding',
-			 'U'   => 'OT1Encoding',
-			);
+	'OML' => 'TeXMathItalicEncoding',
+	'OT1' => 'OT1Encoding',
+	'OMS' => 'TeXMathSymbolEncoding',
+	'OMX' => 'TeXMathExtensionEncoding',
+	'T1'  => 'CorkEncoding',
+	'U'   => 'OT1Encoding',
+);
 
 
-my %MathFontNames = ('lcmtt' => ['OT1'],
-		     'cmtt'  => ['OT1', 'T1'],
-		     'cmsy'  => ['OMS'],
-		     'cmex'  => ['OMX'],
-			 'cmr'   => ['OT1'],
-			 'cmm'   => ['OML'],
-		     'txr'   => ['OT1', 'T1'],
-		     'txmi'  => ['OML'],
-			 'txss'  => ['OT1'],
-			 'txsy'  => ['OMS'],
-			 'txsyc' => ['U'],
-			 'txex'  => ['OMX'],
-		    );
+my %MathFontNames = (
+	'lcmtt' => ['OT1'],
+	'cmtt'  => ['OT1', 'T1'],
+	'cmsy'  => ['OMS'],
+	'cmex'  => ['OMX'],
+	'cmr'   => ['OT1', 'T1'],
+	'cmm'   => ['OML'],
+	'txr'   => ['OT1', 'T1'],
+	'txmi'  => ['OML'],
+	'txss'  => ['OT1'],
+	'txsy'  => ['OMS'],
+	'txsyc' => ['U'],
+	'txex'  => ['OMX'],
+);
 
-my %FontsSeries = ('m'   => '',
-		   'bx'  => 'bold',
-		   'b'   => 'bold',
-		   'sbx' => 'bold',
-		  );
+my %FontsSeries = (
+	'm'   => '',
+	'bx'  => 'bold',
+	'b'   => 'bold',
+	'sbx' => 'bold',
+);
+
 my %FontForms  = ('n'   => 'normal',
 		  'it'  => 'italic',
 		  'sl'  => 'slanted',

@@ -356,165 +356,325 @@
   <mathfont name="OML/cmm/sbx/ui/12" encoding="TeXMathItalicEncoding" mathvariant="boldnormal"/>
   <!--####### cmr #######-->
   <mathfont name="OT1/cmr/b/it/5" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/b/it/5" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/b/it/6" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/b/it/6" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/b/it/7" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/b/it/7" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/b/it/8" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/b/it/8" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/b/it/9" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/b/it/9" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/b/it/10" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/b/it/10" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/b/it/11" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/b/it/11" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/b/it/12" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/b/it/12" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/b/n/5" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/n/5" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/n/6" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/n/6" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/n/7" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/n/7" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/n/8" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/n/8" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/n/9" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/n/9" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/n/10" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/n/10" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/n/11" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/n/11" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/n/12" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/n/12" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/sc/5" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/b/sc/5" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/b/sc/6" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/b/sc/6" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/b/sc/7" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/b/sc/7" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/b/sc/8" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/b/sc/8" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/b/sc/9" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/b/sc/9" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/b/sc/10" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/b/sc/10" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/b/sc/11" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/b/sc/11" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/b/sc/12" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/b/sc/12" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/b/sl/5" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/b/sl/5" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/b/sl/6" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/b/sl/6" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/b/sl/7" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/b/sl/7" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/b/sl/8" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/b/sl/8" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/b/sl/9" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/b/sl/9" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/b/sl/10" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/b/sl/10" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/b/sl/11" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/b/sl/11" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/b/sl/12" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/b/sl/12" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/b/ui/5" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/ui/5" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/ui/6" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/ui/6" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/ui/7" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/ui/7" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/ui/8" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/ui/8" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/ui/9" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/ui/9" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/ui/10" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/ui/10" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/ui/11" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/ui/11" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/b/ui/12" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/b/ui/12" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/it/5" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/bx/it/5" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/bx/it/6" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/bx/it/6" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/bx/it/7" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/bx/it/7" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/bx/it/8" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/bx/it/8" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/bx/it/9" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/bx/it/9" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/bx/it/10" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/bx/it/10" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/bx/it/11" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/bx/it/11" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/bx/it/12" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/bx/it/12" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/bx/n/5" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/n/5" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/n/6" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/n/6" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/n/7" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/n/7" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/n/8" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/n/8" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/n/9" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/n/9" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/n/10" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/n/10" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/n/11" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/n/11" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/n/12" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/n/12" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/sc/5" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/bx/sc/5" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/bx/sc/6" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/bx/sc/6" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/bx/sc/7" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/bx/sc/7" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/bx/sc/8" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/bx/sc/8" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/bx/sc/9" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/bx/sc/9" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/bx/sc/10" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/bx/sc/10" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/bx/sc/11" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/bx/sc/11" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/bx/sc/12" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/bx/sc/12" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/bx/sl/5" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/bx/sl/5" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/bx/sl/6" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/bx/sl/6" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/bx/sl/7" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/bx/sl/7" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/bx/sl/8" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/bx/sl/8" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/bx/sl/9" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/bx/sl/9" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/bx/sl/10" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/bx/sl/10" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/bx/sl/11" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/bx/sl/11" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/bx/sl/12" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/bx/sl/12" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/bx/ui/5" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/ui/5" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/ui/6" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/ui/6" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/ui/7" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/ui/7" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/ui/8" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/ui/8" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/ui/9" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/ui/9" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/ui/10" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/ui/10" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/ui/11" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/ui/11" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/bx/ui/12" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/bx/ui/12" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/m/it/5" encoding="OT1Encoding" mathvariant="italic"/>
+  <mathfont name="T1/cmr/m/it/5" encoding="CorkEncoding" mathvariant="italic"/>
   <mathfont name="OT1/cmr/m/it/6" encoding="OT1Encoding" mathvariant="italic"/>
+  <mathfont name="T1/cmr/m/it/6" encoding="CorkEncoding" mathvariant="italic"/>
   <mathfont name="OT1/cmr/m/it/7" encoding="OT1Encoding" mathvariant="italic"/>
+  <mathfont name="T1/cmr/m/it/7" encoding="CorkEncoding" mathvariant="italic"/>
   <mathfont name="OT1/cmr/m/it/8" encoding="OT1Encoding" mathvariant="italic"/>
+  <mathfont name="T1/cmr/m/it/8" encoding="CorkEncoding" mathvariant="italic"/>
   <mathfont name="OT1/cmr/m/it/9" encoding="OT1Encoding" mathvariant="italic"/>
+  <mathfont name="T1/cmr/m/it/9" encoding="CorkEncoding" mathvariant="italic"/>
   <mathfont name="OT1/cmr/m/it/10" encoding="OT1Encoding" mathvariant="italic"/>
+  <mathfont name="T1/cmr/m/it/10" encoding="CorkEncoding" mathvariant="italic"/>
   <mathfont name="OT1/cmr/m/it/11" encoding="OT1Encoding" mathvariant="italic"/>
+  <mathfont name="T1/cmr/m/it/11" encoding="CorkEncoding" mathvariant="italic"/>
   <mathfont name="OT1/cmr/m/it/12" encoding="OT1Encoding" mathvariant="italic"/>
+  <mathfont name="T1/cmr/m/it/12" encoding="CorkEncoding" mathvariant="italic"/>
   <mathfont name="OT1/cmr/m/n/5" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/n/5" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/n/6" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/n/6" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/n/7" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/n/7" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/n/8" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/n/8" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/n/9" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/n/9" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/n/10" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/n/10" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/n/11" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/n/11" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/n/12" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/n/12" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/sc/5" encoding="OT1Encoding" mathvariant="smallcap"/>
+  <mathfont name="T1/cmr/m/sc/5" encoding="CorkEncoding" mathvariant="smallcap"/>
   <mathfont name="OT1/cmr/m/sc/6" encoding="OT1Encoding" mathvariant="smallcap"/>
+  <mathfont name="T1/cmr/m/sc/6" encoding="CorkEncoding" mathvariant="smallcap"/>
   <mathfont name="OT1/cmr/m/sc/7" encoding="OT1Encoding" mathvariant="smallcap"/>
+  <mathfont name="T1/cmr/m/sc/7" encoding="CorkEncoding" mathvariant="smallcap"/>
   <mathfont name="OT1/cmr/m/sc/8" encoding="OT1Encoding" mathvariant="smallcap"/>
+  <mathfont name="T1/cmr/m/sc/8" encoding="CorkEncoding" mathvariant="smallcap"/>
   <mathfont name="OT1/cmr/m/sc/9" encoding="OT1Encoding" mathvariant="smallcap"/>
+  <mathfont name="T1/cmr/m/sc/9" encoding="CorkEncoding" mathvariant="smallcap"/>
   <mathfont name="OT1/cmr/m/sc/10" encoding="OT1Encoding" mathvariant="smallcap"/>
+  <mathfont name="T1/cmr/m/sc/10" encoding="CorkEncoding" mathvariant="smallcap"/>
   <mathfont name="OT1/cmr/m/sc/11" encoding="OT1Encoding" mathvariant="smallcap"/>
+  <mathfont name="T1/cmr/m/sc/11" encoding="CorkEncoding" mathvariant="smallcap"/>
   <mathfont name="OT1/cmr/m/sc/12" encoding="OT1Encoding" mathvariant="smallcap"/>
+  <mathfont name="T1/cmr/m/sc/12" encoding="CorkEncoding" mathvariant="smallcap"/>
   <mathfont name="OT1/cmr/m/sl/5" encoding="OT1Encoding" mathvariant="slanted"/>
+  <mathfont name="T1/cmr/m/sl/5" encoding="CorkEncoding" mathvariant="slanted"/>
   <mathfont name="OT1/cmr/m/sl/6" encoding="OT1Encoding" mathvariant="slanted"/>
+  <mathfont name="T1/cmr/m/sl/6" encoding="CorkEncoding" mathvariant="slanted"/>
   <mathfont name="OT1/cmr/m/sl/7" encoding="OT1Encoding" mathvariant="slanted"/>
+  <mathfont name="T1/cmr/m/sl/7" encoding="CorkEncoding" mathvariant="slanted"/>
   <mathfont name="OT1/cmr/m/sl/8" encoding="OT1Encoding" mathvariant="slanted"/>
+  <mathfont name="T1/cmr/m/sl/8" encoding="CorkEncoding" mathvariant="slanted"/>
   <mathfont name="OT1/cmr/m/sl/9" encoding="OT1Encoding" mathvariant="slanted"/>
+  <mathfont name="T1/cmr/m/sl/9" encoding="CorkEncoding" mathvariant="slanted"/>
   <mathfont name="OT1/cmr/m/sl/10" encoding="OT1Encoding" mathvariant="slanted"/>
+  <mathfont name="T1/cmr/m/sl/10" encoding="CorkEncoding" mathvariant="slanted"/>
   <mathfont name="OT1/cmr/m/sl/11" encoding="OT1Encoding" mathvariant="slanted"/>
+  <mathfont name="T1/cmr/m/sl/11" encoding="CorkEncoding" mathvariant="slanted"/>
   <mathfont name="OT1/cmr/m/sl/12" encoding="OT1Encoding" mathvariant="slanted"/>
+  <mathfont name="T1/cmr/m/sl/12" encoding="CorkEncoding" mathvariant="slanted"/>
   <mathfont name="OT1/cmr/m/ui/5" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/ui/5" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/ui/6" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/ui/6" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/ui/7" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/ui/7" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/ui/8" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/ui/8" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/ui/9" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/ui/9" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/ui/10" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/ui/10" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/ui/11" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/ui/11" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/m/ui/12" encoding="OT1Encoding" mathvariant="normal"/>
+  <mathfont name="T1/cmr/m/ui/12" encoding="CorkEncoding" mathvariant="normal"/>
   <mathfont name="OT1/cmr/sbx/it/5" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/sbx/it/5" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/sbx/it/6" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/sbx/it/6" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/sbx/it/7" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/sbx/it/7" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/sbx/it/8" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/sbx/it/8" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/sbx/it/9" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/sbx/it/9" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/sbx/it/10" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/sbx/it/10" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/sbx/it/11" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/sbx/it/11" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/sbx/it/12" encoding="OT1Encoding" mathvariant="bolditalic"/>
+  <mathfont name="T1/cmr/sbx/it/12" encoding="CorkEncoding" mathvariant="bolditalic"/>
   <mathfont name="OT1/cmr/sbx/n/5" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/n/5" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/n/6" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/n/6" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/n/7" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/n/7" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/n/8" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/n/8" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/n/9" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/n/9" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/n/10" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/n/10" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/n/11" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/n/11" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/n/12" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/n/12" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/sc/5" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/sbx/sc/5" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/sbx/sc/6" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/sbx/sc/6" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/sbx/sc/7" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/sbx/sc/7" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/sbx/sc/8" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/sbx/sc/8" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/sbx/sc/9" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/sbx/sc/9" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/sbx/sc/10" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/sbx/sc/10" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/sbx/sc/11" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/sbx/sc/11" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/sbx/sc/12" encoding="OT1Encoding" mathvariant="boldsmallcap"/>
+  <mathfont name="T1/cmr/sbx/sc/12" encoding="CorkEncoding" mathvariant="boldsmallcap"/>
   <mathfont name="OT1/cmr/sbx/sl/5" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/sbx/sl/5" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/sbx/sl/6" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/sbx/sl/6" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/sbx/sl/7" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/sbx/sl/7" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/sbx/sl/8" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/sbx/sl/8" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/sbx/sl/9" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/sbx/sl/9" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/sbx/sl/10" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/sbx/sl/10" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/sbx/sl/11" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/sbx/sl/11" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/sbx/sl/12" encoding="OT1Encoding" mathvariant="boldslanted"/>
+  <mathfont name="T1/cmr/sbx/sl/12" encoding="CorkEncoding" mathvariant="boldslanted"/>
   <mathfont name="OT1/cmr/sbx/ui/5" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/ui/5" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/ui/6" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/ui/6" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/ui/7" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/ui/7" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/ui/8" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/ui/8" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/ui/9" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/ui/9" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/ui/10" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/ui/10" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/ui/11" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/ui/11" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <mathfont name="OT1/cmr/sbx/ui/12" encoding="OT1Encoding" mathvariant="boldnormal"/>
+  <mathfont name="T1/cmr/sbx/ui/12" encoding="CorkEncoding" mathvariant="boldnormal"/>
   <!--####### cmsy #######-->
   <mathfont name="OMS/cmsy/b/it/5" encoding="TeXMathSymbolEncoding" mathvariant="bolditalic"/>
   <mathfont name="OMS/cmsy/b/it/6" encoding="TeXMathSymbolEncoding" mathvariant="bolditalic"/>
