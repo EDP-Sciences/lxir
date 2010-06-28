@@ -670,6 +670,7 @@ struct node_stack_entry {
 	xmlNodePtr attr;
 	int type;
 	xmlChar * name;
+	int id;
 
 	struct node_stack_entry * next;
 	struct node_stack_entry * prev;
@@ -702,6 +703,7 @@ static
 struct node_stack_entry *
 new_node_stack_entry(xmlNodePtr node) {
 	struct node_stack_entry * entry;
+	const char * id;
 
 	if (!is_valid_node(node, "xxx")) return 0;
 
@@ -711,6 +713,13 @@ new_node_stack_entry(xmlNodePtr node) {
 	if (!is_xxx_valid_name(node, &entry->name, &entry->type, entry->attr)) {
 		fprintf(stderr, "Invalid xxx node structure ! it has no name ???\n");
 		exit(-1);
+	}
+
+	id = (const char *)xmlGetProp(entry->attr, BAD_CAST "id");
+	if (id) {
+		entry->id = atoi(id);
+	} else {
+		entry->id = -1;
 	}
 
 	if (entry->type == NODE_TYPE_EMPTY) {
@@ -789,7 +798,8 @@ int build_hierarchy_step(struct node_stack * stack) {
 	/* find the first CLOSE node */
 	while(entry && entry->type != NODE_TYPE_CLOSE) entry = entry->next;
 	if(!entry) {
-		fprintf(stderr, "Invalid xxx hierarchy, open node \"%s\" without closing nodes found\n", stack->first->name);
+		fprintf(stderr, "Invalid xxx hierarchy, open node \"%s:%d\" without "
+			"closing nodes found\n", stack->first->name, stack->first->id);
 		exit(-1);
 	}
 	/* find the first OPEN node before */
@@ -798,7 +808,9 @@ int build_hierarchy_step(struct node_stack * stack) {
 		entry = stack->first;
 		unlink_node_stack(stack, entry);
 
-		fprintf(stderr, "Invalid xxx hierarchy, closing node \"%s\" found without matching open\nReplacing by an empty node...\n", entry->name);
+		fprintf(stderr, "Invalid xxx hierarchy, closing node \"%s:%d\""
+			" found without matching open\nReplacing by an empty node...\n",
+			entry->name, entry->id);
 		next = entry->node->next;
 		xmlUnlinkNode(entry->node);
 		xmlFreeNode(entry->node);
@@ -810,9 +822,13 @@ int build_hierarchy_step(struct node_stack * stack) {
 	}
 	match = entry->next;
 	/* find the matching CLOSE node after */
-	while(match && match->type == NODE_TYPE_CLOSE && strcmp((const char *)match->name, (const char *)entry->name)) match = match->next;
+	while(match &&
+			match->type == NODE_TYPE_CLOSE &&
+			strcmp((const char *)match->name, (const char *)entry->name))
+		match = match->next;
 	if(!match || match->type != NODE_TYPE_CLOSE) {
-		fprintf(stderr, "Invalid xxx hierarchy, unable to find a matching close node for \"%s\"\n", entry->name);
+		fprintf(stderr, "Invalid xxx hierarchy, unable to find a matching "
+			"close node for \"%s:%d\"\n", entry->name, entry->id);
 		exit(-1);
 	}
 	/* place the "match" node just before the "entry->next" node */

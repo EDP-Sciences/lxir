@@ -192,10 +192,14 @@ int read_log_file(xmlNodePtr root, const char * filename) {
 		exit(-1);
 	}
 
-
 	while(!feof(f)) {
-		fgets(line, 1024, f);
-		{
+		if(!fgets(line, 1024, f)) {
+			if (ferror(f)) {
+				perror("There was an error reading input file");
+				exit(-1);
+			}
+			break;
+		} else {
 			int l = strlen(line) - 1;
 			if (line[l] == '\n') line[l] = 0;
 		}
