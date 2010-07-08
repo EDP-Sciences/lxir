@@ -37,6 +37,7 @@ void tfm_close(tfmfile_t *);
 	et, apres l'execution de la fonction, il pointe vers la distance de kerning
 	nécéssaire (0 s'il n'y a pas de kerning possible).
 */
-int tfm_size(tfmfile_t *, int first_char, int *pnext_char);
+int tfm_size(tfmfile_t *, int first_char);
+int tfm_kern_size(tfmfile_t *, int first_char, int next_char);
 
 #endif

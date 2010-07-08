@@ -136,24 +136,28 @@ void tfm_close(tfmfile_t * tfm) {
 	free(tfm);
 }
 
-int tfm_size(tfmfile_t * tfm, int first_char, int * pnext_char) {
+int tfm_size(tfmfile_t * tfm, int first_char) {
 	int char_index = first_char - tfm->character_offset;
 	if (char_index < 0 || char_index >= tfm->character_count) {
 		fprintf(stderr, "libtfm error: invalid char requested\n");
 		return 0;
 	}
-	if (pnext_char) {
-		if (tfm->characters[char_index].kerning_count) {
-			int i;
-			for (i = 0; i < tfm->characters[char_index].kerning_count; ++i) {
-				if (tfm->characters[char_index].kernings[i].next_char == *pnext_char) {
-					*pnext_char = tfm->characters[char_index].kernings[i].kerning;
-					break;
-				}
+	return tfm->characters[char_index].width;
+}
+
+int tfm_kern_size(tfmfile_t * tfm, int first_char, int next_char) {
+	int char_index = first_char - tfm->character_offset;
+	if (char_index < 0 || char_index >= tfm->character_count) {
+		fprintf(stderr, "libtfm error: invalid char requested\n");
+		return 0;
+	}
+	if (tfm->characters[char_index].kerning_count) {
+		int i;
+		for (i = 0; i < tfm->characters[char_index].kerning_count; ++i) {
+			if (tfm->characters[char_index].kernings[i].next_char == next_char) {
+				return tfm->characters[char_index].kernings[i].kerning;
 			}
-		} else {
-			*pnext_char = 0;
 		}
 	}
-	return tfm->characters[char_index].width;
+	return 0;
 }

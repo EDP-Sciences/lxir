@@ -313,19 +313,17 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 		int l, size;
 		int width;
 		tfmfile_t * tfm;
-		if(ch < 0 || ch >= s->font->mapsize) {
+		if(ch < 0 || !s->font || ch >= s->font->mapsize) {
 			return DVIERR_INVALID_CHAR;
 		}
 
-		tfm = s->font ? s->font->tfm : NULL;
+		tfm = s->font->tfm;
 		if (tfm) {
-			width = tfm_size(tfm, ch, NULL);
-			c->width += width;
+			c->width += tfm_size(tfm, ch);
 			if (c->prev_char >= 0) {
-				int pn = ch;
-				tfm_size(tfm, c->prev_char, &pn);
-				c->width += pn;
+				c->width += tfm_kern_size(tfm, c->prev_char, ch);
 			}
+			c->prev_char = ch;
 		}
 		chr = s->font->map[ch];
 		l = strlen(chr);

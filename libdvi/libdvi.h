@@ -72,8 +72,8 @@ typedef struct dvinode_text_s {
 	int h, v;
 	int size;
 	char * content;
-	int prev_char;
 	int width;
+	int prev_char;
 } dvinode_text_t;
 
 typedef struct dvinode_rule_s {
