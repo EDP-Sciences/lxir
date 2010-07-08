@@ -890,6 +890,10 @@
 %\def\@classii{\t@g@classii}
 \def\@classv{\@addtocoldesc{\xEmptyA{par}{width=\@nextchar}}\@addtopreamble{\protect\xBegin{cell}\@startpbox{\@nextchar}\ignorespaces
 \@sharp\@endpbox\protect\xEnd{cell}}}
+\let\t@g@arrayparboxrestore=\@arrayparboxrestore
+\def\@arrayparboxrestore{\t@g@arrayparboxrestore%
+	\def\par{\xEmpty{parsep}\@@par}%
+}
 %    \end{macrocode}
 % \section{Theorems}
 % \label{sec:theorem}

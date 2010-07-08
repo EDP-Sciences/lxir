@@ -504,6 +504,10 @@
 \def\@arrayclassiv{\@addtocoldesc{\xBegin{intercolumnDef}$\@nextchar$\xEnd{intercolumnDef}}\@addtopreamble{\protect\xBegin{intercolumn}$\@nextchar$\protect\xEnd{intercolumn}}}
 \def\@classv{\@addtocoldesc{\xEmptyA{par}{width=\@nextchar}}\@addtopreamble{\protect\xBegin{cell}\@startpbox{\@nextchar}\ignorespaces
 \@sharp\@endpbox\protect\xEnd{cell}}}
+\let\t@g@arrayparboxrestore=\@arrayparboxrestore
+\def\@arrayparboxrestore{\t@g@arrayparboxrestore%
+\def\par{\xEmpty{parsep}\@@par}%
+}
 %%% From File: ltthm.dtx 5557
 %% Is it enought ?
 \def\@begintheorem#1#2{\xBegin{theorem}\trivlist

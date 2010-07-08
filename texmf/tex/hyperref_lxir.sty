@@ -12,9 +12,9 @@
 \let\hyper@anchorend\@empty
 \let\hyper@linkstart\@gobbletwo
 \let\hyper@linkend\@empty
-\let\Url@moving\@empty
-\AtBeginDocument{\let\t@gref\NoHy@OrgRef\def\ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}\xBegin{refMark}{\t@gref{#1}}\xEnd{refMark}\xEnd{ref}}%
+% \let\Url@moving\@empty
+\AtBeginDocument{%\let\t@gref\ref\def\ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}\xBegin{refMark}{\t@gref{#1}}\xEnd{refMark}\xEnd{ref}}%
 \let\t@gpageref\NoHy@OrgPageRef\def\pageref#1{\xBegin{pageref}\xEmptyA{params}{idref=#1}\xBegin{pagerefMark}{\t@gpageref{#1}}\xEnd{pagerefMark}\xEnd{pageref}}%
-\def\label#1{\xEmptyA{label}{idlabel=#1}\t@glabel{#1}}%
+%\let\t@glabel\label\def\label#1{\xEmptyA{label}{idlabel=#1}\t@glabel{#1}}%
 }
-\def\Url@FormatString{\Url@String}%
+% \def\Url@FormatString{\Url@String}%
