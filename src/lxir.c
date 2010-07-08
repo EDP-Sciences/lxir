@@ -54,8 +54,8 @@ void print_font(xmlNodePtr root, dvifont_t * font) {
 
 	size = xmlNewChild(node, NULL, BAD_CAST "size", NULL);
 
-	sprintf(pbuffer, "%d", font->scale);	xmlNewProp(size, BAD_CAST "scale", BAD_CAST pbuffer);
-	sprintf(pbuffer, "%d", font->design_size);	xmlNewProp(size, BAD_CAST "design_size", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", font->scale);	xmlNewProp(size, BAD_CAST "scale", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", font->design_size);	xmlNewProp(size, BAD_CAST "design_size", BAD_CAST pbuffer);
 
 	if (font->area && *font->area) {
 		xmlNewTextChild(node, NULL, BAD_CAST "area", BAD_CAST font->area);
@@ -76,9 +76,9 @@ void make_header(xmlNodePtr root, dvifile_t * dvi) {
 
 	size = xmlNewChild(header, NULL, BAD_CAST "size", NULL);
 
-	sprintf(pbuffer, "%d", dvi->num);	xmlNewProp(size, BAD_CAST "num", BAD_CAST pbuffer);
-	sprintf(pbuffer, "%d", dvi->den);	xmlNewProp(size, BAD_CAST "den", BAD_CAST pbuffer);
-	sprintf(pbuffer, "%d", dvi->mag);	xmlNewProp(size, BAD_CAST "mag", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", dvi->num);	xmlNewProp(size, BAD_CAST "num", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", dvi->den);	xmlNewProp(size, BAD_CAST "den", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", dvi->mag);	xmlNewProp(size, BAD_CAST "mag", BAD_CAST pbuffer);
 
 	xmlNewTextChild(header, NULL, BAD_CAST "comment", BAD_CAST dvi->comment);
 
@@ -112,10 +112,10 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 				node = xmlNewTextChild(root, NULL, BAD_CAST "text", BAD_CAST content);
 
 				free(content);
-				sprintf(pbuffer, "%d", text->font); xmlNewProp(node, BAD_CAST "font", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%d", text->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%d", text->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%d", text->width); xmlNewProp(node, BAD_CAST "width", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", text->font); xmlNewProp(node, BAD_CAST "font", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", text->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", text->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", text->width); xmlNewProp(node, BAD_CAST "width", BAD_CAST pbuffer);
 			} break;
 		case DVINODE_XXX: {
 				dvinode_xxx_t * xxx = (dvinode_xxx_t *) node;
@@ -149,10 +149,10 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 		case DVINODE_RULE: {
 				dvinode_rule_t * rule = (dvinode_rule_t *) node;
 				xmlNodePtr node = xmlNewChild(root, NULL, BAD_CAST "rule", NULL);
-				sprintf(pbuffer, "%d", rule->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%d", rule->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%d", rule->a); xmlNewProp(node, BAD_CAST "a", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%d", rule->b); xmlNewProp(node, BAD_CAST "b", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", rule->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", rule->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", rule->a); xmlNewProp(node, BAD_CAST "a", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", rule->b); xmlNewProp(node, BAD_CAST "b", BAD_CAST pbuffer);
 			} break;
 	}
 }
@@ -952,7 +952,7 @@ int merge_adjacent_text(xmlNodePtr root) {
 					xmlFreeNode(next);
 					next = node;
 				} else {
-					int nodeF, nextF;
+					unsigned int nodeF, nextF;
 					int nodeH, nodeV, nextH, nextV;
 					nodeH = atoi((const char *)xmlGetProp(node, BAD_CAST "h"));
 					nodeV = atoi((const char *)xmlGetProp(node, BAD_CAST "v"));
@@ -963,9 +963,9 @@ int merge_adjacent_text(xmlNodePtr root) {
 					nodeF = atoi((const char *)xmlGetProp(node, BAD_CAST "font"));
 					nextF = atoi((const char *)xmlGetProp(next, BAD_CAST "font"));
 
-					if ( (nodeF == nextF) && (nodeV == nextV || nodeH == nextH ||
+					if ( (nodeF == nextF) && (nodeH == nextH ||
 						/* the next one is more experimental. 786432 is the "normal" spacing between lines (this should be detected ?) */
-						( (nextV - nodeV) <= 786432 && (nextH < nodeH) ) ) ) {
+						( (nextV - nodeV) <= 786432 && (nextH <= nodeH) ) ) ) {
 						xmlNodePtr text;
 						/* if (nextV - nodeV) { fprintf(stderr, "merging %d and %d (%d)\n", nodeV, nextV, (nextV - nodeV)); } */
 						xmlUnlinkNode(node);
