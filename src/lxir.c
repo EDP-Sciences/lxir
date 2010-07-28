@@ -54,8 +54,8 @@ void print_font(xmlNodePtr root, dvifont_t * font) {
 
 	size = xmlNewChild(node, NULL, BAD_CAST "size", NULL);
 
-	sprintf(pbuffer, "%ld", font->scale);	xmlNewProp(size, BAD_CAST "scale", BAD_CAST pbuffer);
-	sprintf(pbuffer, "%ld", font->design_size);	xmlNewProp(size, BAD_CAST "design_size", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", (long)font->scale);	xmlNewProp(size, BAD_CAST "scale", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", (long)font->design_size);	xmlNewProp(size, BAD_CAST "design_size", BAD_CAST pbuffer);
 
 	if (font->area && *font->area) {
 		xmlNewTextChild(node, NULL, BAD_CAST "area", BAD_CAST font->area);
@@ -76,9 +76,9 @@ void make_header(xmlNodePtr root, dvifile_t * dvi) {
 
 	size = xmlNewChild(header, NULL, BAD_CAST "size", NULL);
 
-	sprintf(pbuffer, "%ld", dvi->num);	xmlNewProp(size, BAD_CAST "num", BAD_CAST pbuffer);
-	sprintf(pbuffer, "%ld", dvi->den);	xmlNewProp(size, BAD_CAST "den", BAD_CAST pbuffer);
-	sprintf(pbuffer, "%ld", dvi->mag);	xmlNewProp(size, BAD_CAST "mag", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", (long)dvi->num);	xmlNewProp(size, BAD_CAST "num", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", (long)dvi->den);	xmlNewProp(size, BAD_CAST "den", BAD_CAST pbuffer);
+	sprintf(pbuffer, "%ld", (long)dvi->mag);	xmlNewProp(size, BAD_CAST "mag", BAD_CAST pbuffer);
 
 	xmlNewTextChild(header, NULL, BAD_CAST "comment", BAD_CAST dvi->comment);
 
@@ -112,10 +112,10 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 				node = xmlNewTextChild(root, NULL, BAD_CAST "text", BAD_CAST content);
 
 				free(content);
-				sprintf(pbuffer, "%ld", text->font); xmlNewProp(node, BAD_CAST "font", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", text->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", text->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", text->width); xmlNewProp(node, BAD_CAST "width", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)text->font); xmlNewProp(node, BAD_CAST "font", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)text->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)text->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)text->width); xmlNewProp(node, BAD_CAST "width", BAD_CAST pbuffer);
 			} break;
 		case DVINODE_XXX: {
 				dvinode_xxx_t * xxx = (dvinode_xxx_t *) node;
@@ -149,10 +149,10 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 		case DVINODE_RULE: {
 				dvinode_rule_t * rule = (dvinode_rule_t *) node;
 				xmlNodePtr node = xmlNewChild(root, NULL, BAD_CAST "rule", NULL);
-				sprintf(pbuffer, "%ld", rule->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", rule->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", rule->a); xmlNewProp(node, BAD_CAST "a", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", rule->b); xmlNewProp(node, BAD_CAST "b", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)rule->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)rule->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)rule->a); xmlNewProp(node, BAD_CAST "a", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)rule->b); xmlNewProp(node, BAD_CAST "b", BAD_CAST pbuffer);
 			} break;
 	}
 }
