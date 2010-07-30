@@ -413,6 +413,45 @@ void rebuild_tabulars(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
+static
+xmlNodePtr check_multirow_node(xmlNodePtr node) {
+	xmlNodePtr parent;
+	xmlChar * attr;
+	int v;
+
+	if (!is_node_element(node, "span")) return node;
+	attr = xmlGetProp(node, "class");
+	if (!attr || strcmp(attr, "multirow")) return node;
+	attr = xmlGetProp(node, "rows");
+	if (!attr) return node;
+	v = atoi((const char *) attr);
+	if (v < 2) return node;
+	parent = node->parent;
+	if (!is_node_element(parent, "td") && !is_node_element(parent, "tr")) {
+		fprintf(stderr, "Error : multirow span not in table cell !\n");
+		return 0;
+	}
+	xmlNewProp(parent, BAD_CAST "rowspan", attr);
+	return node;
+}
+
+static
+void update_rowspan(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children;
+
+	while (node) {
+		xmlNodePtr next = node->next;
+		node = check_multirow_node(node);
+		if (node)
+			xmlTransformationPush(node, update_rowspan, param);
+		node = next;
+	}
+}
+
+/* defined in table.c */
+extern
+void clean_rowspan(xmlNodePtr, xmlTransformationEntry *);
+
 void xmlRegisterPostXmlTransformations() {
 #define DEF(x) xmlTransformationRegister("text", #x, x, 0);
 	DEF(rebuild_all_lists)
@@ -420,5 +459,7 @@ void xmlRegisterPostXmlTransformations() {
 	DEF(rebuild_paragraphs)
 	DEF(rebuild_sections)
 	DEF(rebuild_tabulars)
+	DEF(update_rowspan)
+	DEF(clean_rowspan)
 #undef DEF
 }

@@ -1478,6 +1478,7 @@ void transform_verbatim_macro(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
+
 void xmlRegisterTextTransformations() {
 #define DEF(x) xmlTransformationRegister("text", #x, x, 0);
 	DEF(remove_page_nodes)

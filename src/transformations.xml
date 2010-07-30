@@ -115,6 +115,8 @@
 		<transformation name="rebuild_sections" />
 		<transformation name="rebuild_tabulars" />
 		<transformation name="xslt_proc" param="xlatex2xhtml.xsl" />
+		<transformation name="update_rowspan" />
+		<transformation name="clean_rowspan" />
 	</stack>
 	<stack type="math">
 		<transformation name="transform_inline_math" />

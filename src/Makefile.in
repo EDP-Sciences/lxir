@@ -54,7 +54,8 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(xmldir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_lxir_OBJECTS = lxir-lxir.$(OBJEXT) lxir-transformations.$(OBJEXT) \
 	lxir-utf8string.$(OBJEXT) lxir-log2xml.$(OBJEXT) \
-	lxir-entities.$(OBJEXT) lxir-postxml.$(OBJEXT)
+	lxir-entities.$(OBJEXT) lxir-postxml.$(OBJEXT) \
+	lxir-table.$(OBJEXT)
 lxir_OBJECTS = $(am_lxir_OBJECTS)
 lxir_DEPENDENCIES = cmdline.o ../libdvi/libdvi.la \
 	../libfontmap/libfontmap.la ../libtfm/libtfm.la
@@ -241,10 +242,13 @@ top_srcdir = @top_srcdir@
 xmldir = $(TEXMF_XML_DIR)
 xml_DATA = config.xml ligatures.xml transformations.xml
 EXTRA_DIST = config.xml ligatures.xml transformations.xml
-lxir_SOURCES = lxir.c transformations.c utf8string.c log2xml.c entities.c postxml.c \
+lxir_SOURCES = lxir.c transformations.c utf8string.c log2xml.c entities.c \
+	postxml.c table.c \
 	utf8string.h log2xml.h transformations.h entities.h
 
-lxir_LDADD = cmdline.o ../libdvi/libdvi.la ../libfontmap/libfontmap.la ../libtfm/libtfm.la
+lxir_LDADD = cmdline.o ../libdvi/libdvi.la ../libfontmap/libfontmap.la \
+	../libtfm/libtfm.la
+
 lxir_CFLAGS = -Werror $(CFLAGS) $(LIBXML2_CFLAGS) $(LIBXSLT_CFLAGS) \
 	-I$(srcdir)/../libdvi -I$(srcdir)/../libfontmap -I$(srcdir)/../libtfm
 
@@ -340,6 +344,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lxir-log2xml.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lxir-lxir.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lxir-postxml.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lxir-table.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lxir-transformations.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lxir-utf8string.Po@am__quote@
 
@@ -447,6 +452,20 @@ lxir-postxml.obj: postxml.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='postxml.c' object='lxir-postxml.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lxir_CFLAGS) $(CFLAGS) -c -o lxir-postxml.obj `if test -f 'postxml.c'; then $(CYGPATH_W) 'postxml.c'; else $(CYGPATH_W) '$(srcdir)/postxml.c'; fi`
+
+lxir-table.o: table.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lxir_CFLAGS) $(CFLAGS) -MT lxir-table.o -MD -MP -MF $(DEPDIR)/lxir-table.Tpo -c -o lxir-table.o `test -f 'table.c' || echo '$(srcdir)/'`table.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lxir-table.Tpo $(DEPDIR)/lxir-table.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='table.c' object='lxir-table.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lxir_CFLAGS) $(CFLAGS) -c -o lxir-table.o `test -f 'table.c' || echo '$(srcdir)/'`table.c
+
+lxir-table.obj: table.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lxir_CFLAGS) $(CFLAGS) -MT lxir-table.obj -MD -MP -MF $(DEPDIR)/lxir-table.Tpo -c -o lxir-table.obj `if test -f 'table.c'; then $(CYGPATH_W) 'table.c'; else $(CYGPATH_W) '$(srcdir)/table.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/lxir-table.Tpo $(DEPDIR)/lxir-table.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='table.c' object='lxir-table.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lxir_CFLAGS) $(CFLAGS) -c -o lxir-table.obj `if test -f 'table.c'; then $(CYGPATH_W) 'table.c'; else $(CYGPATH_W) '$(srcdir)/table.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
