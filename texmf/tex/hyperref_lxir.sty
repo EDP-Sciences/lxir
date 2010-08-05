@@ -13,8 +13,36 @@
 \let\hyper@linkstart\@gobbletwo
 \let\hyper@linkend\@empty
 % \let\Url@moving\@empty
-\AtBeginDocument{\def\ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}\xEnd{ref}}%
-\let\t@gpageref\NoHy@OrgPageRef\def\pageref#1{\xBegin{pageref}\xEmptyA{params}{idref=#1}\xBegin{pagerefMark}{\t@gpageref{#1}}\xEnd{pagerefMark}\xEnd{pageref}}%
+\AtBeginDocument{%
+\def\lxir@@setref#1#2#3{% csname, extract group, refname
+  \ifx#1\relax
+  \else
+	\expandafter\@firstoffive #1
+  \fi
+}
+\def\ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}%
+	\xBegin{refMark}%
+	\@ifundefined{r@#1}{}{%
+		\Hy@safe@activestrue
+		\expandafter\lxir@@setref\csname r@#1\endcsname\@firstoffive{#1}%
+		\Hy@safe@activesfalse
+	}%
+	\xEnd{refMark}%
+	\xEnd{ref}}%
+\def\lxir@@setpageref#1#2#3{% csname, extract group, refname
+  \ifx#1\relax
+  \else
+	\expandafter\@secondoffive #1
+  \fi
+}
+\def\pageref#1{\xBegin{pageref}\xEmptyA{params}{idref=#1}%
+	\xBegin{pagerefMark}%
+	\@ifundefined{r@#1}{}{%
+		\Hy@safe@activestrue
+		\expandafter\lxir@@setpageref\csname r@#1\endcsname\@secondoffive{#1}%
+		\Hy@safe@activesfalse
+	}%
+	\xEnd{pagerefMark}\xEnd{pageref}}%
 %\let\t@glabel\label\def\label#1{\xEmptyA{label}{idlabel=#1}\t@glabel{#1}}%
 }
 % \def\Url@FormatString{\Url@String}%
