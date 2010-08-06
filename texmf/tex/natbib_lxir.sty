@@ -24,6 +24,7 @@
 \def\@lbibitem[#1]#2{\xBegin{bibitem}\xEmptyA{params}{key=#2}\t@g@lbibitem[#1]{#2}\xEnd{bibitem}}
 \let\bibpreamble\relax
 \renewenvironment{thebibliography}[1]{%
+  \def\mbox#1{#1}%
   \xBegin{thebibliography}
  \xBegin{thebibliographyMark}\bibsection\xEnd{thebibliographyMark}\parindent \z@\bibpreamble\bibfont\list
    {\@biblabel{\arabic{NAT@ctr}}}{\@bibsetup{#1}%
