@@ -124,6 +124,27 @@ int is_par_end_node(xmlNodePtr node) {
 }
 
 static
+void rebuild_paragraphs(xmlNodePtr, xmlTransformationEntry *);
+
+static
+void make_paragraph_before(xmlNodePtr parsep, xmlTransformationEntry * param) {
+	xmlNodePtr node = parsep;
+	while (node->prev)
+		node = node->prev;
+	if (node != parsep) {
+		xmlNodePtr par = xmlNewNode(0, BAD_CAST "par");
+		while (node != parsep) {
+			xmlNodePtr n = node->next;
+			xmlUnlinkNode(node);
+			xmlAddChild(par, node);
+			xmlTransformationPush(node, rebuild_paragraphs, param);
+			node = n;
+		}
+		xmlAddPrevSibling(parsep, par);
+	}
+}
+
+static
 void rebuild_paragraphs(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	int found = 0;
@@ -133,7 +154,20 @@ void rebuild_paragraphs(xmlNodePtr root, xmlTransformationEntry * param) {
 
 		if (node->type == XML_ELEMENT_NODE &&
 				is_name_in_list(node->name, stop_paragraph_list_names)) {
-
+			if (!found) {
+				if (!next) {
+					/* if only a single parsep at the end of another node,
+						then remove it without creating a par */
+					if (strcmp(node->name, "parsep") == 0) {
+						xmlUnlinkNode(node);
+						xmlFreeNode(node);
+					}
+					break;
+				} else {
+					make_paragraph_before(node, param);
+					found = 1;
+				}
+			}
 			xmlNodePtr par = xmlNewNode(0, BAD_CAST "par");
 			xmlNodePtr content = node->next;
 
@@ -143,6 +177,7 @@ void rebuild_paragraphs(xmlNodePtr root, xmlTransformationEntry * param) {
 
 				xmlUnlinkNode(content);
 				xmlAddChild(par, content);
+				xmlTransformationPush(content, rebuild_paragraphs, param);
 
 				content = n;
 			}
@@ -155,8 +190,6 @@ void rebuild_paragraphs(xmlNodePtr root, xmlTransformationEntry * param) {
 				xmlUnlinkNode(node);
 				xmlFreeNode(node);
 			}
-
-			found = 1;
 		}
 
 		node = next;
