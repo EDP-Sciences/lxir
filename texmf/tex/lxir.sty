@@ -190,6 +190,7 @@
 \def\quad{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!]\fi} % quad = 1 em
 \def\qquad{\ifmmode\mathrel{\xEmptyAA{qquad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!][entity!\#x2001!]\fi} % qquad = 2 em
 \def~{[entity!\#xa0!]}
+\def\linebreak{\xEmpty{linebreak}}
 \newsavebox{\XX@font@list}
 \newcommand{\addFontTo@list}[6]{%
 \sbox\XX@font@list{\unhbox\XX@font@list\protect\xEmptyAAAAAA{fontDescription}{encoding=#1}{family=#2}{series=#3}{shape=#4}{size=#5}{name=#6}%
