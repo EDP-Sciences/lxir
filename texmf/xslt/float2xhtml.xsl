@@ -24,24 +24,28 @@
 		xmlns:lxir="http://www.latex-lxir.org">
 
 <xsl:template match="float">
- <div class="float">
-    <xsl:apply-templates select="@*"/>
-    <xsl:choose>
-      <xsl:when test="name(*[1]) = 'centering'">
-	<center>
-	  <xsl:apply-templates/>
-	</center>
-      </xsl:when>
-      <xsl:otherwise>
-	<xsl:apply-templates/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </div>
+    <div class="{name()}">
+	<xsl:apply-templates select="@*"/>
+	<xsl:apply-templates select="par[1]"/>
+    </div>
     <!-- line break for better debug -->
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="float/centering"/>
+<xsl:template match="float/par">
+    <xsl:choose>
+	<xsl:when test="name(*[1]) = 'centering'">
+	    <center>
+		<xsl:apply-templates select="*|following-sibling::par"/>
+	    </center>
+	</xsl:when>
+	<xsl:otherwise>
+	    <xsl:apply-templates/>
+	</xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="float/par/centering"/>
 
 <xsl:template match="caption">
   <div class="{name()}">
@@ -53,6 +57,8 @@
       </a>
       
     <xsl:apply-templates select="captionMark"/>
+    <!-- avec hyperref : -->
+    <xsl:apply-templates select="hyperlinkurl/captionMark"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="captionText"/>    
   </div>
