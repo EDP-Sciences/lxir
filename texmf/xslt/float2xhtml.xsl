@@ -40,7 +40,7 @@
 	    </center>
 	</xsl:when>
 	<xsl:otherwise>
-	    <xsl:apply-templates/>
+	    <xsl:apply-templates select="*|following-sibling::par"/>
 	</xsl:otherwise>
     </xsl:choose>
 </xsl:template>
