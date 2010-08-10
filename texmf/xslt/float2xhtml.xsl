@@ -25,24 +25,25 @@
 
 <xsl:template match="float">
     <div class="{name()}">
-	<xsl:apply-templates select="@*"/>
-	<xsl:apply-templates select="par[1]"/>
+	<xsl:choose>
+	    <xsl:when test="par/centering">
+		<center>
+		    <xsl:apply-templates select="@*"/>
+		    <xsl:apply-templates select="par"/>
+		</center>
+	    </xsl:when>
+	    <xsl:otherwise>
+		<xsl:apply-templates select="@*"/>
+		<xsl:apply-templates select="par"/>
+	    </xsl:otherwise>
+	</xsl:choose>
     </div>
     <!-- line break for better debug -->
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="float/par">
-    <xsl:choose>
-	<xsl:when test="name(*[1]) = 'centering'">
-	    <center>
-		<xsl:apply-templates select="*|following-sibling::par"/>
-	    </center>
-	</xsl:when>
-	<xsl:otherwise>
-	    <xsl:apply-templates select="*|following-sibling::par"/>
-	</xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="*"/>
 </xsl:template>
 
 <xsl:template match="float/par/centering"/>
