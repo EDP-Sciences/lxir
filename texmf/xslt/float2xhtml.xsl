@@ -25,16 +25,15 @@
 
 <xsl:template match="float">
     <div class="{name()}">
+	<xsl:apply-templates select="@*"/>
 	<xsl:choose>
 	    <xsl:when test="par/centering">
 		<center>
-		    <xsl:apply-templates select="@*"/>
-		    <xsl:apply-templates select="par"/>
+		    <xsl:apply-templates/>
 		</center>
 	    </xsl:when>
 	    <xsl:otherwise>
-		<xsl:apply-templates select="@*"/>
-		<xsl:apply-templates select="par"/>
+		<xsl:apply-templates/>
 	    </xsl:otherwise>
 	</xsl:choose>
     </div>
