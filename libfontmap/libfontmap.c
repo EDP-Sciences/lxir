@@ -380,9 +380,13 @@ void add_neutral_font() {
 	font->map = find_encoding("LxirNeutralEncoding");
 }
 
+static int lfm_init_done = 0;
+
 int lfm_init() {
 	int err;
 	struct doc_s * docs;
+	if (lfm_init_done > 0)
+		return 0;
 
 	LIBXML_TEST_VERSION;
 
@@ -409,10 +413,14 @@ int lfm_init() {
 
 	add_neutral_font();
 
+	lfm_init_done++;
 	return 0;
 }
 
 int lfm_close() {
+	if (lfm_init_done == 0) return -1;
+	if (--lfm_init_done) return 0;
+
 	while (accents) {
 		struct accent_s * next = accents->next;
 
