@@ -64,7 +64,6 @@ int main(int argc, char * argv[]) {
 	const char * filename = 0;
 
 	kpse_set_program_name(argv[0], "dvidump");
-	lfm_init();
 
 	err = 0;
 	while (err == 0 && p < argc) {
@@ -91,7 +90,7 @@ int main(int argc, char * argv[]) {
 	}
 
 	if ((flags & (DVI_SKIP_SPACE_NORMAL|DVI_SKIP_SPACE_SMALL)) == 0) {
-		flags |= DVI_SKIP_SPACE_NORMAL;
+		flags |= DVI_SKIP_SPACE_SMALL;
 	}
 
 	if (!filename || err) {
@@ -99,19 +98,16 @@ int main(int argc, char * argv[]) {
 		return err;
 	}
 
-	printf("flags = %d\n", flags);
+	/* printf("flags = %d\n", flags); */
 
-	if ((flags & DVI_NO_FONT_TRANSLATION) == 0) {
-		err = lfm_init(0);
-		if (err) {
-			fprintf(stderr, "Error initialising libfontmap (%d)\n", err);
-			return err;
-		}
+	err = lfm_init();
+	if (err) {
+		fprintf(stderr, "Error initialising libfontmap (%d)\n", err);
+		return err;
 	}
+
 	err = dvi_read(&f, filename, flags);
-	if ((flags & DVI_NO_FONT_TRANSLATION) == 0) {
-		lfm_close();
-	}
+	lfm_close();
 
 	if(!err) {
 		printf("DVI Comment : \"%s\"\n", f->comment);

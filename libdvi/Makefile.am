@@ -12,7 +12,6 @@ libdvi_la_CFLAGS = @LIBXML2_CFLAGS@ -I$(srcdir)/../libfontmap \
 EXTRA_PROGRAMS = dvidump
 
 dvidump_SOURCES = dvidump.c
-dvidump_CFLAGS =
 dvidump_LDFLAGS = $(AM_LDFLAGS)
 dvidump_CFLAGS = -I$(srcdir)/../libfontmap -I$(srcdir)/../libtfm
 dvidump_LDADD = libdvi.la ../libfontmap/libfontmap.la ../libtfm/libtfm.la -lkpathsea
