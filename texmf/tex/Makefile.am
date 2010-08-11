@@ -9,6 +9,8 @@ PACKAGES = \
 	natbib_lxir.sty \
 	tabularx_lxir.sty \
 	hyperref_lxir.sty \
+	url_lxir.sty \
+	nameref_lxir.sty \
 	txfonts_lxir.sty \
 	multirow_lxir.sty
 
