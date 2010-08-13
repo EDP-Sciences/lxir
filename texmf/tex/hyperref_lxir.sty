@@ -17,15 +17,15 @@
 \def\lxir@@setref#1#2#3{% csname, extract group, refname
   \ifx#1\relax
   \else
-	\expandafter\@firstoffive #1
+	\expandafter\@firstoffive #1\relax
   \fi
 }
 \def\ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}%
 	\xBegin{refMark}%
 	\@ifundefined{r@#1}{}{%
-		\Hy@safe@activestrue
+		\Hy@safe@activestrue%
 		\expandafter\lxir@@setref\csname r@#1\endcsname\@firstoffive{#1}%
-		\Hy@safe@activesfalse
+		\Hy@safe@activesfalse%
 	}%
 	\xEnd{refMark}%
 	\xEnd{ref}}%
