@@ -102,7 +102,7 @@ int utf8(const char * c) {
 }
 
 static
-void to_utf8(int c, char * b) {
+char * to_utf8(int c, char * b) {
 	if (c < 0) {
 		*b++ = '<';
 		*b++ = '-';
@@ -129,6 +129,7 @@ void to_utf8(int c, char * b) {
 		*b++ = '>';
 	}
 	*b = 0;
+	return b;
 }
 
 static
@@ -1681,6 +1682,47 @@ xmlNodePtr insert_character_mathml_type(xmlNodePtr node, const char * chr, const
 }
 
 static
+char * make_temp_copy(char const * mathchar, int stopchar) {
+	char * buffer;
+	int len;
+	char * pos = strchr(mathchar, stopchar);
+	if (!pos) {
+		return 0;
+	}
+	len = pos - mathchar;
+	buffer = malloc(len + 1);
+	memcpy(buffer, mathchar, len);
+	buffer[len] = 0;
+	return buffer;
+}
+
+static
+char * content_from_mathchar(char const * mchar) {
+	char * buffer;
+	char * token;
+	char * result;
+
+	buffer = make_temp_copy(mchar, '}');
+	if (!buffer) return 0;
+	result = malloc(strlen(buffer) + 1);
+	if (!result) {
+		fprintf(stderr, "Allocation error while coding mathchar\n");
+		exit(-1);
+	}
+	token = strtok(buffer, ",");
+	char * pos = result;
+	while (token) {
+		int value = strtol(token, 0, 16);
+		pos = to_utf8(value, pos);
+		token = strtok(0, ",");
+	}
+	free(buffer);
+	buffer = strdup(result);
+	free(result);
+	return buffer;
+}
+
+static
 void transform_mathsym_patterns(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
@@ -1710,9 +1752,7 @@ void transform_mathsym_patterns(xmlNodePtr root, xmlTransformationEntry * param)
 						content = strdup(mathcontent + 13);
 						*strchr(content, '}') = 0;
 					} else if(mathchar) {
-						int value = strtol(mathchar + 10, 0, 16);
-						content = malloc(5);
-						to_utf8(value, content);
+						content = content_from_mathchar(mathchar + 10);
 					}
 					if (content) {
 						xmlNodePtr chr = xmlNewNode(NULL, BAD_CAST type);
