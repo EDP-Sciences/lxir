@@ -40,7 +40,6 @@
 	<xsl:attribute name="eqLabel">
 	  <xsl:value-of select="label/@idlabel"/>
 	</xsl:attribute>
-	<xsl:apply-templates select="label"/>
       </xsl:if>
       <xsl:apply-templates />
     </div>
