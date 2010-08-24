@@ -82,7 +82,73 @@ int to_utf8(unsigned int code, char * buffer, int size) {
 }
 
 static
-xmlNodePtr new_entity(xmlDocPtr doc, xmlChar * src, size_t len) {
+char * new_entity(const char * src, size_t len) {
+	char * temp;
+	int offset = 8;
+	temp = malloc(len - offset);
+
+	if (src[offset] == '\\') ++offset;
+	if (src[offset] != '#') {
+		strcpy(temp, "&");
+		strncat(temp, src + offset, len - offset);
+		strcat(temp, ";");
+	} else {
+		int c, base = 10, uchar = 0;
+		c = src[++offset];
+		if (c == 'x') {
+			base = 16;
+			c = src[++offset];
+		}
+		while(1) {
+			if (c >= '0' && c <= '9') {
+				uchar = uchar*base + c - '0' + 0;
+			} else {
+				if (base == 16) {
+					if (c >= 'a' && c <= 'f') {
+						uchar = uchar*base + c - 'a' + 10;
+					} else if (c >= 'A' && c <= 'F') {
+						uchar = uchar*base + c - 'A' + 10;
+					} else break;
+				} else {
+					break;
+				}
+			}
+			if (++offset == len) break;
+			c = src[offset];
+		}
+		to_utf8(uchar, temp, 5);
+	}
+	return temp;
+}
+
+extern
+char * replace_entities(const char * content) {
+	int offset = 0;
+	char * result = malloc(strlen(content) + 1);
+	char * temp;
+	*result = 0;
+	while (1) {
+		regmatch_t match;
+		int status = regexec(&re, content + offset, 1, &match, 0);
+		if (status == 0) {
+			if (match.rm_so != 0) {
+				strncat(result, content + offset, match.rm_so);
+			}
+			temp = new_entity(content + offset + match.rm_so, match.rm_eo - match.rm_so);
+			strcat(result, temp);
+			free(temp);
+			offset += match.rm_eo;
+		} else if (status == REG_NOMATCH) {
+			strcat(result, content + offset);
+			break;
+		} else
+			exit_regerror(status);
+	}
+	return result;
+}
+
+static
+xmlNodePtr xml_NewEntity(xmlDocPtr doc, xmlChar * src, size_t len) {
 	xmlEntityPtr result;
 	int offset = 8;
 	if (src[offset] == '\\') ++offset;
@@ -150,7 +216,7 @@ int xmlReplaceEntities(xmlNodePtr node) {
 			if (match.rm_so != 0) {
 				xmlAddPrevSibling(marker, xmlNewTextLen(content + offset, match.rm_so));
 			}
-			xmlAddPrevSibling(marker, new_entity(marker->doc, content + offset + match.rm_so, match.rm_eo - match.rm_so));
+			xmlAddPrevSibling(marker, xml_NewEntity(marker->doc, content + offset + match.rm_so, match.rm_eo - match.rm_so));
 			offset += match.rm_eo;
 		} else if (status == REG_NOMATCH) {
 			xmlAddPrevSibling(marker, xmlNewText(content + offset));

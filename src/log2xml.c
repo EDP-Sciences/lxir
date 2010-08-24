@@ -1722,6 +1722,16 @@ char * content_from_mathchar(char const * mchar) {
 	return buffer;
 }
 
+extern
+char * replace_entities(const char *);
+
+static
+char * content_from_mathcontent(char const * mcontent) {
+	char * content = replace_entities(mcontent);
+	*strchr(content, '}') = 0;
+	return content;
+}
+
 static
 void transform_mathsym_patterns(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
@@ -1749,8 +1759,7 @@ void transform_mathsym_patterns(xmlNodePtr root, xmlTransformationEntry * param)
 				if(type) {
 					char * content = 0;
 					if (mathcontent) {
-						content = strdup(mathcontent + 13);
-						*strchr(content, '}') = 0;
+						content = content_from_mathcontent(mathcontent + 13);
 					} else if(mathchar) {
 						content = content_from_mathchar(mathchar + 10);
 					}
