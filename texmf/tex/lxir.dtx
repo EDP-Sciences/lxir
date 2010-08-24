@@ -421,6 +421,8 @@
 \def\,{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2009}}\else[entity!\#x2009!]\fi}
 \def\:{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2003}}\else[entity!\#x2003!]\fi}
 \def\;{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2004}}\else[entity!\#x2004!]\fi}
+\def\AA{\ifmmode\mathord{\xEmptyAA{AA}{mathtype=ord}{mathchar=212B}}\else[entity!\#x212B!]\fi}
+\def\aa{\ifmmode\mathord{\xEmptyAA{AA}{mathtype=ord}{mathchar=E5}}\else[entity!\#xE5!]\fi}
 \def\enspace{[entity!\#x2002!]}
 \def\enskip{[entity!\#x2002!]}
 \def\quad{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!]\fi} % quad = 1 em
@@ -915,7 +917,7 @@
 \def\title#1{\gdef\@title{\xBegin{title}#1\xEnd{title}}}
 \def\author#1{\gdef\@author{\xBegin{author}#1\xEnd{author}}}
 \def\date#1{\gdef\@date{\xBegin{date}#1\xEnd{date}}}
-\def\thanks#1{\xBegin{thanks}\xBegin{thanksMark}\footnotemark\xEnd{thanksMark}
+\def\thanks#1{\xBegin{thanks}\xBegin{thanksMark}\footnotemark\xEnd{thanksMark}%
   \xBegin{thanksText}{#1}\xEnd{thanksText}\xEnd{thanks}}
 \let\t@gand=\and
 \def\and{\xEmpty{and}}
