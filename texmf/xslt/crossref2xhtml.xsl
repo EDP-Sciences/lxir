@@ -13,18 +13,24 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is Jean-Paul Jorda.
 %
 % This work consists of the files crossref2xhtml.xsl.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-		xmlns="http://www.w3.org/1999/xhtml" 
+		xmlns="http://www.w3.org/1999/xhtml"
 		xmlns:lxir="http://www.latex-lxir.org"
 		>
 
   <xsl:template match="label">
-    <a class="{name()}" name="{@lxir:idlabel}"/>
+    <a class="{name()}" name="{@lxir:idlabel}">
+	<xsl:if test="@lxir:eqnum">
+		<xsl:attribute name="lxir:eqnum">
+			<xsl:value-of select="@lxir:eqnum" />
+		</xsl:attribute>
+	</xsl:if>
+	</a>
   </xsl:template>
 
   <xsl:template match="ref|pageref">
