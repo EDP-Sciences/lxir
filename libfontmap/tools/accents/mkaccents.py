@@ -38,6 +38,18 @@ def find_chars(char):
 		res.append(u"ı")
 	return res
 
+EXTRA_ACCENT_NAMES = {
+	'ACUTE ACCENT': ('APOSTROPHE', 'MODIFIER LETTER PRIME', 'GREEK TONOS'),
+	'TILDE': ( 'SMALL TILDE',),
+	'RING ABOVE': ('DEGREE SIGN',),
+	'DOUBLE ACUTE ACCENT': ('QUOTATION MARK', 'MODIFIER LETTER DOUBLE PRIME',),
+	'VERTICAL LINE ABOVE': ('MODIFIER LETTER VERTICAL LINE',),
+	# CANDRABINDU
+	#~ 'TURNED COMMA ABOVE': ('MODIFIER LETTER TURNED COMMA',),
+	#~ 'COMMA ABOVE': ('MODIFIER LETTER APOSTROPHE', 'ARMENIAN APOSTROPHE',),
+	#~ 'REVERSED COMMA ABOVE': ('MODIFIER LETTER REVERSED COMMA', 'ARMENIAN MODIFIER LETTER HALF RING'),
+}
+
 def find_accents(accent):
 	res = [accent]
 	comb, name = unicodedata.name(accent).split(' ', 1)
@@ -50,6 +62,12 @@ def find_accents(accent):
 			res.append(unicodedata.lookup(name))
 		except:
 			pass
+		if EXTRA_ACCENT_NAMES.has_key(name):
+			for extra in EXTRA_ACCENT_NAMES[name]:
+				try:
+					res.append(unicodedata.lookup(extra))
+				except:
+					pass
 	return res
 
 def write_accent(f, s):
@@ -65,15 +83,15 @@ def write_accent(f, s):
 		if len(accent) != 9:
 			return
 		base, accent = accent.split(' ')
-		
+
 		bases = find_chars(tochar(base))
 		accents = find_accents(tochar(accent))
-		
+
 		for base in bases:
 			for accent in accents:
-				f.write("\t<accent base=\"%s\" accent=\"%s\" char=\"%s\" />\n" % 
+				f.write("\t<accent base=\"%s\" accent=\"%s\" char=\"%s\" />\n" %
 					(escape(base), escape(accent), escape(char)))
-		
+
 	except Exception, d:
 		print "Error writing accent", s, d
 
