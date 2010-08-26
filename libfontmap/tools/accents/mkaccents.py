@@ -17,18 +17,11 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import unicodedata
 import sys
+from xml.sax.saxutils import quoteattr
 
 def tochar(number):
 	s = chr(int(number[2:], 16))+chr(int(number[:2], 16))
 	return s.decode('UTF-16')
-
-def escape(code):
-	if code == u">":
-		return "&gt;"
-	elif code == u"<":
-		return "&lt;"
-	else:
-		return code.encode("UTF-8")
 
 def find_chars(char):
 	res = [char]
@@ -87,10 +80,12 @@ def write_accent(f, s):
 		bases = find_chars(tochar(base))
 		accents = find_accents(tochar(accent))
 
+		q = lambda x: quoteattr(x).encode('utf-8')
+
 		for base in bases:
 			for accent in accents:
-				f.write("\t<accent base=\"%s\" accent=\"%s\" char=\"%s\" />\n" %
-					(escape(base), escape(accent), escape(char)))
+				f.write("\t<accent base=%s accent=%s char=%s />\n" %
+					(q(base), q(accent), q(char)))
 
 	except Exception, d:
 		print "Error writing accent", s, d
