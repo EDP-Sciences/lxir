@@ -264,6 +264,10 @@ void remove_xxx_node_before(xmlNodePtr base, const xmlChar * match) {
 					return;
 				}
 				xmlFree(content);
+			} else {
+				/* at this stage, only control, xxx or text node exists.
+					break the search if text nodes exists */
+				return ;
 			}
 		}
 		node = node->prev;
@@ -300,7 +304,7 @@ void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 			}
 			xmlAddChild(text2, xmlNewText(result));
 			xmlFree(result);
-			remove_xxx_node_before(text2, "textaccent");
+			remove_xxx_node_before(text1, "textaccent");
 		}  else if (xmlUTF8Strlen(t2) == 1 && (accent = check_accent(t2, t1))) {
 			/* transform here */
 			const xmlChar * base = xmlUTF8Strpos(t1, 1);
