@@ -21,7 +21,7 @@
 %\let\t@gNAT@citex=\NAT@citex
 %\def\NAT@citex[#1][#2]#3{\xBegin{cite}\xEmptyAAA{params}{pre-note=#1}{post-note=#2}{key=#3}\t@gNAT@citex[#1][#2]{#3}\xEnd{cite}}
 \let\t@g@lbibitem=\@lbibitem
-\def\@lbibitem[#1]#2{\xBegin{bibitem}\xEmptyA{params}{key=#2}\t@g@lbibitem[#1]{#2}\xEnd{bibitem}}
+\def\@lbibitem[#1]#2{\xBegin{bibitem}\xEmptyA{params}{key=#2}\par\t@g@lbibitem[#1]{#2}\xEnd{bibitem}}
 \let\bibpreamble\relax
 \def\t@gNAT@mbox#1{#1}
 \renewenvironment{thebibliography}[1]{%
