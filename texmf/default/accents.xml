@@ -6,15 +6,20 @@
 	<accent base="A" accent="́" char="Á" />
 	<accent base="A" accent="ˊ" char="Á" />
 	<accent base="A" accent="´" char="Á" />
+	<accent base="A" accent="'" char="Á" />
+	<accent base="A" accent="ʹ" char="Á" />
+	<accent base="A" accent="΄" char="Á" />
 	<accent base="A" accent="̂" char="Â" />
 	<accent base="A" accent="ˆ" char="Â" />
 	<accent base="A" accent="^" char="Â" />
 	<accent base="A" accent="̃" char="Ã" />
 	<accent base="A" accent="~" char="Ã" />
+	<accent base="A" accent="˜" char="Ã" />
 	<accent base="A" accent="̈" char="Ä" />
 	<accent base="A" accent="¨" char="Ä" />
 	<accent base="A" accent="̊" char="Å" />
 	<accent base="A" accent="˚" char="Å" />
+	<accent base="A" accent="°" char="Å" />
 	<accent base="C" accent="̧" char="Ç" />
 	<accent base="C" accent="¸" char="Ç" />
 	<accent base="E" accent="̀" char="È" />
@@ -23,6 +28,9 @@
 	<accent base="E" accent="́" char="É" />
 	<accent base="E" accent="ˊ" char="É" />
 	<accent base="E" accent="´" char="É" />
+	<accent base="E" accent="'" char="É" />
+	<accent base="E" accent="ʹ" char="É" />
+	<accent base="E" accent="΄" char="É" />
 	<accent base="E" accent="̂" char="Ê" />
 	<accent base="E" accent="ˆ" char="Ê" />
 	<accent base="E" accent="^" char="Ê" />
@@ -34,6 +42,9 @@
 	<accent base="I" accent="́" char="Í" />
 	<accent base="I" accent="ˊ" char="Í" />
 	<accent base="I" accent="´" char="Í" />
+	<accent base="I" accent="'" char="Í" />
+	<accent base="I" accent="ʹ" char="Í" />
+	<accent base="I" accent="΄" char="Í" />
 	<accent base="I" accent="̂" char="Î" />
 	<accent base="I" accent="ˆ" char="Î" />
 	<accent base="I" accent="^" char="Î" />
@@ -41,17 +52,22 @@
 	<accent base="I" accent="¨" char="Ï" />
 	<accent base="N" accent="̃" char="Ñ" />
 	<accent base="N" accent="~" char="Ñ" />
+	<accent base="N" accent="˜" char="Ñ" />
 	<accent base="O" accent="̀" char="Ò" />
 	<accent base="O" accent="ˋ" char="Ò" />
 	<accent base="O" accent="`" char="Ò" />
 	<accent base="O" accent="́" char="Ó" />
 	<accent base="O" accent="ˊ" char="Ó" />
 	<accent base="O" accent="´" char="Ó" />
+	<accent base="O" accent="'" char="Ó" />
+	<accent base="O" accent="ʹ" char="Ó" />
+	<accent base="O" accent="΄" char="Ó" />
 	<accent base="O" accent="̂" char="Ô" />
 	<accent base="O" accent="ˆ" char="Ô" />
 	<accent base="O" accent="^" char="Ô" />
 	<accent base="O" accent="̃" char="Õ" />
 	<accent base="O" accent="~" char="Õ" />
+	<accent base="O" accent="˜" char="Õ" />
 	<accent base="O" accent="̈" char="Ö" />
 	<accent base="O" accent="¨" char="Ö" />
 	<accent base="U" accent="̀" char="Ù" />
@@ -60,6 +76,9 @@
 	<accent base="U" accent="́" char="Ú" />
 	<accent base="U" accent="ˊ" char="Ú" />
 	<accent base="U" accent="´" char="Ú" />
+	<accent base="U" accent="'" char="Ú" />
+	<accent base="U" accent="ʹ" char="Ú" />
+	<accent base="U" accent="΄" char="Ú" />
 	<accent base="U" accent="̂" char="Û" />
 	<accent base="U" accent="ˆ" char="Û" />
 	<accent base="U" accent="^" char="Û" />
@@ -68,21 +87,29 @@
 	<accent base="Y" accent="́" char="Ý" />
 	<accent base="Y" accent="ˊ" char="Ý" />
 	<accent base="Y" accent="´" char="Ý" />
+	<accent base="Y" accent="'" char="Ý" />
+	<accent base="Y" accent="ʹ" char="Ý" />
+	<accent base="Y" accent="΄" char="Ý" />
 	<accent base="a" accent="̀" char="à" />
 	<accent base="a" accent="ˋ" char="à" />
 	<accent base="a" accent="`" char="à" />
 	<accent base="a" accent="́" char="á" />
 	<accent base="a" accent="ˊ" char="á" />
 	<accent base="a" accent="´" char="á" />
+	<accent base="a" accent="'" char="á" />
+	<accent base="a" accent="ʹ" char="á" />
+	<accent base="a" accent="΄" char="á" />
 	<accent base="a" accent="̂" char="â" />
 	<accent base="a" accent="ˆ" char="â" />
 	<accent base="a" accent="^" char="â" />
 	<accent base="a" accent="̃" char="ã" />
 	<accent base="a" accent="~" char="ã" />
+	<accent base="a" accent="˜" char="ã" />
 	<accent base="a" accent="̈" char="ä" />
 	<accent base="a" accent="¨" char="ä" />
 	<accent base="a" accent="̊" char="å" />
 	<accent base="a" accent="˚" char="å" />
+	<accent base="a" accent="°" char="å" />
 	<accent base="c" accent="̧" char="ç" />
 	<accent base="c" accent="¸" char="ç" />
 	<accent base="e" accent="̀" char="è" />
@@ -91,6 +118,9 @@
 	<accent base="e" accent="́" char="é" />
 	<accent base="e" accent="ˊ" char="é" />
 	<accent base="e" accent="´" char="é" />
+	<accent base="e" accent="'" char="é" />
+	<accent base="e" accent="ʹ" char="é" />
+	<accent base="e" accent="΄" char="é" />
 	<accent base="e" accent="̂" char="ê" />
 	<accent base="e" accent="ˆ" char="ê" />
 	<accent base="e" accent="^" char="ê" />
@@ -105,9 +135,15 @@
 	<accent base="i" accent="́" char="í" />
 	<accent base="i" accent="ˊ" char="í" />
 	<accent base="i" accent="´" char="í" />
+	<accent base="i" accent="'" char="í" />
+	<accent base="i" accent="ʹ" char="í" />
+	<accent base="i" accent="΄" char="í" />
 	<accent base="ı" accent="́" char="í" />
 	<accent base="ı" accent="ˊ" char="í" />
 	<accent base="ı" accent="´" char="í" />
+	<accent base="ı" accent="'" char="í" />
+	<accent base="ı" accent="ʹ" char="í" />
+	<accent base="ı" accent="΄" char="í" />
 	<accent base="i" accent="̂" char="î" />
 	<accent base="i" accent="ˆ" char="î" />
 	<accent base="i" accent="^" char="î" />
@@ -120,17 +156,22 @@
 	<accent base="ı" accent="¨" char="ï" />
 	<accent base="n" accent="̃" char="ñ" />
 	<accent base="n" accent="~" char="ñ" />
+	<accent base="n" accent="˜" char="ñ" />
 	<accent base="o" accent="̀" char="ò" />
 	<accent base="o" accent="ˋ" char="ò" />
 	<accent base="o" accent="`" char="ò" />
 	<accent base="o" accent="́" char="ó" />
 	<accent base="o" accent="ˊ" char="ó" />
 	<accent base="o" accent="´" char="ó" />
+	<accent base="o" accent="'" char="ó" />
+	<accent base="o" accent="ʹ" char="ó" />
+	<accent base="o" accent="΄" char="ó" />
 	<accent base="o" accent="̂" char="ô" />
 	<accent base="o" accent="ˆ" char="ô" />
 	<accent base="o" accent="^" char="ô" />
 	<accent base="o" accent="̃" char="õ" />
 	<accent base="o" accent="~" char="õ" />
+	<accent base="o" accent="˜" char="õ" />
 	<accent base="o" accent="̈" char="ö" />
 	<accent base="o" accent="¨" char="ö" />
 	<accent base="u" accent="̀" char="ù" />
@@ -139,6 +180,9 @@
 	<accent base="u" accent="́" char="ú" />
 	<accent base="u" accent="ˊ" char="ú" />
 	<accent base="u" accent="´" char="ú" />
+	<accent base="u" accent="'" char="ú" />
+	<accent base="u" accent="ʹ" char="ú" />
+	<accent base="u" accent="΄" char="ú" />
 	<accent base="u" accent="̂" char="û" />
 	<accent base="u" accent="ˆ" char="û" />
 	<accent base="u" accent="^" char="û" />
@@ -147,6 +191,9 @@
 	<accent base="y" accent="́" char="ý" />
 	<accent base="y" accent="ˊ" char="ý" />
 	<accent base="y" accent="´" char="ý" />
+	<accent base="y" accent="'" char="ý" />
+	<accent base="y" accent="ʹ" char="ý" />
+	<accent base="y" accent="΄" char="ý" />
 	<accent base="y" accent="̈" char="ÿ" />
 	<accent base="y" accent="¨" char="ÿ" />
 	<accent base="A" accent="̄" char="Ā" />
@@ -166,9 +213,15 @@
 	<accent base="C" accent="́" char="Ć" />
 	<accent base="C" accent="ˊ" char="Ć" />
 	<accent base="C" accent="´" char="Ć" />
+	<accent base="C" accent="'" char="Ć" />
+	<accent base="C" accent="ʹ" char="Ć" />
+	<accent base="C" accent="΄" char="Ć" />
 	<accent base="c" accent="́" char="ć" />
 	<accent base="c" accent="ˊ" char="ć" />
 	<accent base="c" accent="´" char="ć" />
+	<accent base="c" accent="'" char="ć" />
+	<accent base="c" accent="ʹ" char="ć" />
+	<accent base="c" accent="΄" char="ć" />
 	<accent base="C" accent="̂" char="Ĉ" />
 	<accent base="C" accent="ˆ" char="Ĉ" />
 	<accent base="C" accent="^" char="Ĉ" />
@@ -235,10 +288,13 @@
 	<accent base="h" accent="^" char="ĥ" />
 	<accent base="I" accent="̃" char="Ĩ" />
 	<accent base="I" accent="~" char="Ĩ" />
+	<accent base="I" accent="˜" char="Ĩ" />
 	<accent base="i" accent="̃" char="ĩ" />
 	<accent base="i" accent="~" char="ĩ" />
+	<accent base="i" accent="˜" char="ĩ" />
 	<accent base="ı" accent="̃" char="ĩ" />
 	<accent base="ı" accent="~" char="ĩ" />
+	<accent base="ı" accent="˜" char="ĩ" />
 	<accent base="I" accent="̄" char="Ī" />
 	<accent base="I" accent="ˉ" char="Ī" />
 	<accent base="I" accent="¯" char="Ī" />
@@ -275,9 +331,15 @@
 	<accent base="L" accent="́" char="Ĺ" />
 	<accent base="L" accent="ˊ" char="Ĺ" />
 	<accent base="L" accent="´" char="Ĺ" />
+	<accent base="L" accent="'" char="Ĺ" />
+	<accent base="L" accent="ʹ" char="Ĺ" />
+	<accent base="L" accent="΄" char="Ĺ" />
 	<accent base="l" accent="́" char="ĺ" />
 	<accent base="l" accent="ˊ" char="ĺ" />
 	<accent base="l" accent="´" char="ĺ" />
+	<accent base="l" accent="'" char="ĺ" />
+	<accent base="l" accent="ʹ" char="ĺ" />
+	<accent base="l" accent="΄" char="ĺ" />
 	<accent base="L" accent="̧" char="Ļ" />
 	<accent base="L" accent="¸" char="Ļ" />
 	<accent base="l" accent="̧" char="ļ" />
@@ -289,9 +351,15 @@
 	<accent base="N" accent="́" char="Ń" />
 	<accent base="N" accent="ˊ" char="Ń" />
 	<accent base="N" accent="´" char="Ń" />
+	<accent base="N" accent="'" char="Ń" />
+	<accent base="N" accent="ʹ" char="Ń" />
+	<accent base="N" accent="΄" char="Ń" />
 	<accent base="n" accent="́" char="ń" />
 	<accent base="n" accent="ˊ" char="ń" />
 	<accent base="n" accent="´" char="ń" />
+	<accent base="n" accent="'" char="ń" />
+	<accent base="n" accent="ʹ" char="ń" />
+	<accent base="n" accent="΄" char="ń" />
 	<accent base="N" accent="̧" char="Ņ" />
 	<accent base="N" accent="¸" char="Ņ" />
 	<accent base="n" accent="̧" char="ņ" />
@@ -312,14 +380,24 @@
 	<accent base="o" accent="˘" char="ŏ" />
 	<accent base="O" accent="̋" char="Ő" />
 	<accent base="O" accent="˝" char="Ő" />
+	<accent base="O" accent='"' char="Ő" />
+	<accent base="O" accent="ʺ" char="Ő" />
 	<accent base="o" accent="̋" char="ő" />
 	<accent base="o" accent="˝" char="ő" />
+	<accent base="o" accent='"' char="ő" />
+	<accent base="o" accent="ʺ" char="ő" />
 	<accent base="R" accent="́" char="Ŕ" />
 	<accent base="R" accent="ˊ" char="Ŕ" />
 	<accent base="R" accent="´" char="Ŕ" />
+	<accent base="R" accent="'" char="Ŕ" />
+	<accent base="R" accent="ʹ" char="Ŕ" />
+	<accent base="R" accent="΄" char="Ŕ" />
 	<accent base="r" accent="́" char="ŕ" />
 	<accent base="r" accent="ˊ" char="ŕ" />
 	<accent base="r" accent="´" char="ŕ" />
+	<accent base="r" accent="'" char="ŕ" />
+	<accent base="r" accent="ʹ" char="ŕ" />
+	<accent base="r" accent="΄" char="ŕ" />
 	<accent base="R" accent="̧" char="Ŗ" />
 	<accent base="R" accent="¸" char="Ŗ" />
 	<accent base="r" accent="̧" char="ŗ" />
@@ -331,9 +409,15 @@
 	<accent base="S" accent="́" char="Ś" />
 	<accent base="S" accent="ˊ" char="Ś" />
 	<accent base="S" accent="´" char="Ś" />
+	<accent base="S" accent="'" char="Ś" />
+	<accent base="S" accent="ʹ" char="Ś" />
+	<accent base="S" accent="΄" char="Ś" />
 	<accent base="s" accent="́" char="ś" />
 	<accent base="s" accent="ˊ" char="ś" />
 	<accent base="s" accent="´" char="ś" />
+	<accent base="s" accent="'" char="ś" />
+	<accent base="s" accent="ʹ" char="ś" />
+	<accent base="s" accent="΄" char="ś" />
 	<accent base="S" accent="̂" char="Ŝ" />
 	<accent base="S" accent="ˆ" char="Ŝ" />
 	<accent base="S" accent="^" char="Ŝ" />
@@ -358,8 +442,10 @@
 	<accent base="t" accent="ˇ" char="ť" />
 	<accent base="U" accent="̃" char="Ũ" />
 	<accent base="U" accent="~" char="Ũ" />
+	<accent base="U" accent="˜" char="Ũ" />
 	<accent base="u" accent="̃" char="ũ" />
 	<accent base="u" accent="~" char="ũ" />
+	<accent base="u" accent="˜" char="ũ" />
 	<accent base="U" accent="̄" char="Ū" />
 	<accent base="U" accent="ˉ" char="Ū" />
 	<accent base="U" accent="¯" char="Ū" />
@@ -372,12 +458,18 @@
 	<accent base="u" accent="˘" char="ŭ" />
 	<accent base="U" accent="̊" char="Ů" />
 	<accent base="U" accent="˚" char="Ů" />
+	<accent base="U" accent="°" char="Ů" />
 	<accent base="u" accent="̊" char="ů" />
 	<accent base="u" accent="˚" char="ů" />
+	<accent base="u" accent="°" char="ů" />
 	<accent base="U" accent="̋" char="Ű" />
 	<accent base="U" accent="˝" char="Ű" />
+	<accent base="U" accent='"' char="Ű" />
+	<accent base="U" accent="ʺ" char="Ű" />
 	<accent base="u" accent="̋" char="ű" />
 	<accent base="u" accent="˝" char="ű" />
+	<accent base="u" accent='"' char="ű" />
+	<accent base="u" accent="ʺ" char="ű" />
 	<accent base="U" accent="̨" char="Ų" />
 	<accent base="U" accent="˛" char="Ų" />
 	<accent base="u" accent="̨" char="ų" />
@@ -399,9 +491,15 @@
 	<accent base="Z" accent="́" char="Ź" />
 	<accent base="Z" accent="ˊ" char="Ź" />
 	<accent base="Z" accent="´" char="Ź" />
+	<accent base="Z" accent="'" char="Ź" />
+	<accent base="Z" accent="ʹ" char="Ź" />
+	<accent base="Z" accent="΄" char="Ź" />
 	<accent base="z" accent="́" char="ź" />
 	<accent base="z" accent="ˊ" char="ź" />
 	<accent base="z" accent="´" char="ź" />
+	<accent base="z" accent="'" char="ź" />
+	<accent base="z" accent="ʹ" char="ź" />
+	<accent base="z" accent="΄" char="ź" />
 	<accent base="Z" accent="̇" char="Ż" />
 	<accent base="Z" accent="˙" char="Ż" />
 	<accent base="z" accent="̇" char="ż" />
@@ -441,9 +539,15 @@
 	<accent base="Ü" accent="́" char="Ǘ" />
 	<accent base="Ü" accent="ˊ" char="Ǘ" />
 	<accent base="Ü" accent="´" char="Ǘ" />
+	<accent base="Ü" accent="'" char="Ǘ" />
+	<accent base="Ü" accent="ʹ" char="Ǘ" />
+	<accent base="Ü" accent="΄" char="Ǘ" />
 	<accent base="ü" accent="́" char="ǘ" />
 	<accent base="ü" accent="ˊ" char="ǘ" />
 	<accent base="ü" accent="´" char="ǘ" />
+	<accent base="ü" accent="'" char="ǘ" />
+	<accent base="ü" accent="ʹ" char="ǘ" />
+	<accent base="ü" accent="΄" char="ǘ" />
 	<accent base="Ü" accent="̌" char="Ǚ" />
 	<accent base="Ü" accent="ˇ" char="Ǚ" />
 	<accent base="ü" accent="̌" char="ǚ" />
@@ -499,9 +603,15 @@
 	<accent base="G" accent="́" char="Ǵ" />
 	<accent base="G" accent="ˊ" char="Ǵ" />
 	<accent base="G" accent="´" char="Ǵ" />
+	<accent base="G" accent="'" char="Ǵ" />
+	<accent base="G" accent="ʹ" char="Ǵ" />
+	<accent base="G" accent="΄" char="Ǵ" />
 	<accent base="g" accent="́" char="ǵ" />
 	<accent base="g" accent="ˊ" char="ǵ" />
 	<accent base="g" accent="´" char="ǵ" />
+	<accent base="g" accent="'" char="ǵ" />
+	<accent base="g" accent="ʹ" char="ǵ" />
+	<accent base="g" accent="΄" char="ǵ" />
 	<accent base="N" accent="̀" char="Ǹ" />
 	<accent base="N" accent="ˋ" char="Ǹ" />
 	<accent base="N" accent="`" char="Ǹ" />
@@ -511,21 +621,39 @@
 	<accent base="Å" accent="́" char="Ǻ" />
 	<accent base="Å" accent="ˊ" char="Ǻ" />
 	<accent base="Å" accent="´" char="Ǻ" />
+	<accent base="Å" accent="'" char="Ǻ" />
+	<accent base="Å" accent="ʹ" char="Ǻ" />
+	<accent base="Å" accent="΄" char="Ǻ" />
 	<accent base="å" accent="́" char="ǻ" />
 	<accent base="å" accent="ˊ" char="ǻ" />
 	<accent base="å" accent="´" char="ǻ" />
+	<accent base="å" accent="'" char="ǻ" />
+	<accent base="å" accent="ʹ" char="ǻ" />
+	<accent base="å" accent="΄" char="ǻ" />
 	<accent base="Æ" accent="́" char="Ǽ" />
 	<accent base="Æ" accent="ˊ" char="Ǽ" />
 	<accent base="Æ" accent="´" char="Ǽ" />
+	<accent base="Æ" accent="'" char="Ǽ" />
+	<accent base="Æ" accent="ʹ" char="Ǽ" />
+	<accent base="Æ" accent="΄" char="Ǽ" />
 	<accent base="æ" accent="́" char="ǽ" />
 	<accent base="æ" accent="ˊ" char="ǽ" />
 	<accent base="æ" accent="´" char="ǽ" />
+	<accent base="æ" accent="'" char="ǽ" />
+	<accent base="æ" accent="ʹ" char="ǽ" />
+	<accent base="æ" accent="΄" char="ǽ" />
 	<accent base="Ø" accent="́" char="Ǿ" />
 	<accent base="Ø" accent="ˊ" char="Ǿ" />
 	<accent base="Ø" accent="´" char="Ǿ" />
+	<accent base="Ø" accent="'" char="Ǿ" />
+	<accent base="Ø" accent="ʹ" char="Ǿ" />
+	<accent base="Ø" accent="΄" char="Ǿ" />
 	<accent base="ø" accent="́" char="ǿ" />
 	<accent base="ø" accent="ˊ" char="ǿ" />
 	<accent base="ø" accent="´" char="ǿ" />
+	<accent base="ø" accent="'" char="ǿ" />
+	<accent base="ø" accent="ʹ" char="ǿ" />
+	<accent base="ø" accent="΄" char="ǿ" />
 	<accent base="A" accent="̏" char="Ȁ" />
 	<accent base="a" accent="̏" char="ȁ" />
 	<accent base="A" accent="̑" char="Ȃ" />
@@ -599,33 +727,63 @@
 	<accent base="̈" accent="́" char="̈́" />
 	<accent base="̈" accent="ˊ" char="̈́" />
 	<accent base="̈" accent="´" char="̈́" />
+	<accent base="̈" accent="'" char="̈́" />
+	<accent base="̈" accent="ʹ" char="̈́" />
+	<accent base="̈" accent="΄" char="̈́" />
 	<accent base="¨" accent="́" char="΅" />
 	<accent base="¨" accent="ˊ" char="΅" />
 	<accent base="¨" accent="´" char="΅" />
+	<accent base="¨" accent="'" char="΅" />
+	<accent base="¨" accent="ʹ" char="΅" />
+	<accent base="¨" accent="΄" char="΅" />
 	<accent base="Α" accent="́" char="Ά" />
 	<accent base="Α" accent="ˊ" char="Ά" />
 	<accent base="Α" accent="´" char="Ά" />
+	<accent base="Α" accent="'" char="Ά" />
+	<accent base="Α" accent="ʹ" char="Ά" />
+	<accent base="Α" accent="΄" char="Ά" />
 	<accent base="Ε" accent="́" char="Έ" />
 	<accent base="Ε" accent="ˊ" char="Έ" />
 	<accent base="Ε" accent="´" char="Έ" />
+	<accent base="Ε" accent="'" char="Έ" />
+	<accent base="Ε" accent="ʹ" char="Έ" />
+	<accent base="Ε" accent="΄" char="Έ" />
 	<accent base="Η" accent="́" char="Ή" />
 	<accent base="Η" accent="ˊ" char="Ή" />
 	<accent base="Η" accent="´" char="Ή" />
+	<accent base="Η" accent="'" char="Ή" />
+	<accent base="Η" accent="ʹ" char="Ή" />
+	<accent base="Η" accent="΄" char="Ή" />
 	<accent base="Ι" accent="́" char="Ί" />
 	<accent base="Ι" accent="ˊ" char="Ί" />
 	<accent base="Ι" accent="´" char="Ί" />
+	<accent base="Ι" accent="'" char="Ί" />
+	<accent base="Ι" accent="ʹ" char="Ί" />
+	<accent base="Ι" accent="΄" char="Ί" />
 	<accent base="Ο" accent="́" char="Ό" />
 	<accent base="Ο" accent="ˊ" char="Ό" />
 	<accent base="Ο" accent="´" char="Ό" />
+	<accent base="Ο" accent="'" char="Ό" />
+	<accent base="Ο" accent="ʹ" char="Ό" />
+	<accent base="Ο" accent="΄" char="Ό" />
 	<accent base="Υ" accent="́" char="Ύ" />
 	<accent base="Υ" accent="ˊ" char="Ύ" />
 	<accent base="Υ" accent="´" char="Ύ" />
+	<accent base="Υ" accent="'" char="Ύ" />
+	<accent base="Υ" accent="ʹ" char="Ύ" />
+	<accent base="Υ" accent="΄" char="Ύ" />
 	<accent base="Ω" accent="́" char="Ώ" />
 	<accent base="Ω" accent="ˊ" char="Ώ" />
 	<accent base="Ω" accent="´" char="Ώ" />
+	<accent base="Ω" accent="'" char="Ώ" />
+	<accent base="Ω" accent="ʹ" char="Ώ" />
+	<accent base="Ω" accent="΄" char="Ώ" />
 	<accent base="ϊ" accent="́" char="ΐ" />
 	<accent base="ϊ" accent="ˊ" char="ΐ" />
 	<accent base="ϊ" accent="´" char="ΐ" />
+	<accent base="ϊ" accent="'" char="ΐ" />
+	<accent base="ϊ" accent="ʹ" char="ΐ" />
+	<accent base="ϊ" accent="΄" char="ΐ" />
 	<accent base="Ι" accent="̈" char="Ϊ" />
 	<accent base="Ι" accent="¨" char="Ϊ" />
 	<accent base="Υ" accent="̈" char="Ϋ" />
@@ -633,18 +791,33 @@
 	<accent base="α" accent="́" char="ά" />
 	<accent base="α" accent="ˊ" char="ά" />
 	<accent base="α" accent="´" char="ά" />
+	<accent base="α" accent="'" char="ά" />
+	<accent base="α" accent="ʹ" char="ά" />
+	<accent base="α" accent="΄" char="ά" />
 	<accent base="ε" accent="́" char="έ" />
 	<accent base="ε" accent="ˊ" char="έ" />
 	<accent base="ε" accent="´" char="έ" />
+	<accent base="ε" accent="'" char="έ" />
+	<accent base="ε" accent="ʹ" char="έ" />
+	<accent base="ε" accent="΄" char="έ" />
 	<accent base="η" accent="́" char="ή" />
 	<accent base="η" accent="ˊ" char="ή" />
 	<accent base="η" accent="´" char="ή" />
+	<accent base="η" accent="'" char="ή" />
+	<accent base="η" accent="ʹ" char="ή" />
+	<accent base="η" accent="΄" char="ή" />
 	<accent base="ι" accent="́" char="ί" />
 	<accent base="ι" accent="ˊ" char="ί" />
 	<accent base="ι" accent="´" char="ί" />
+	<accent base="ι" accent="'" char="ί" />
+	<accent base="ι" accent="ʹ" char="ί" />
+	<accent base="ι" accent="΄" char="ί" />
 	<accent base="ϋ" accent="́" char="ΰ" />
 	<accent base="ϋ" accent="ˊ" char="ΰ" />
 	<accent base="ϋ" accent="´" char="ΰ" />
+	<accent base="ϋ" accent="'" char="ΰ" />
+	<accent base="ϋ" accent="ʹ" char="ΰ" />
+	<accent base="ϋ" accent="΄" char="ΰ" />
 	<accent base="ι" accent="̈" char="ϊ" />
 	<accent base="ι" accent="¨" char="ϊ" />
 	<accent base="υ" accent="̈" char="ϋ" />
@@ -652,15 +825,27 @@
 	<accent base="ο" accent="́" char="ό" />
 	<accent base="ο" accent="ˊ" char="ό" />
 	<accent base="ο" accent="´" char="ό" />
+	<accent base="ο" accent="'" char="ό" />
+	<accent base="ο" accent="ʹ" char="ό" />
+	<accent base="ο" accent="΄" char="ό" />
 	<accent base="υ" accent="́" char="ύ" />
 	<accent base="υ" accent="ˊ" char="ύ" />
 	<accent base="υ" accent="´" char="ύ" />
+	<accent base="υ" accent="'" char="ύ" />
+	<accent base="υ" accent="ʹ" char="ύ" />
+	<accent base="υ" accent="΄" char="ύ" />
 	<accent base="ω" accent="́" char="ώ" />
 	<accent base="ω" accent="ˊ" char="ώ" />
 	<accent base="ω" accent="´" char="ώ" />
+	<accent base="ω" accent="'" char="ώ" />
+	<accent base="ω" accent="ʹ" char="ώ" />
+	<accent base="ω" accent="΄" char="ώ" />
 	<accent base="ϒ" accent="́" char="ϓ" />
 	<accent base="ϒ" accent="ˊ" char="ϓ" />
 	<accent base="ϒ" accent="´" char="ϓ" />
+	<accent base="ϒ" accent="'" char="ϓ" />
+	<accent base="ϒ" accent="ʹ" char="ϓ" />
+	<accent base="ϒ" accent="΄" char="ϓ" />
 	<accent base="ϒ" accent="̈" char="ϔ" />
 	<accent base="ϒ" accent="¨" char="ϔ" />
 	<accent base="Е" accent="̀" char="Ѐ" />
@@ -671,11 +856,17 @@
 	<accent base="Г" accent="́" char="Ѓ" />
 	<accent base="Г" accent="ˊ" char="Ѓ" />
 	<accent base="Г" accent="´" char="Ѓ" />
+	<accent base="Г" accent="'" char="Ѓ" />
+	<accent base="Г" accent="ʹ" char="Ѓ" />
+	<accent base="Г" accent="΄" char="Ѓ" />
 	<accent base="І" accent="̈" char="Ї" />
 	<accent base="І" accent="¨" char="Ї" />
 	<accent base="К" accent="́" char="Ќ" />
 	<accent base="К" accent="ˊ" char="Ќ" />
 	<accent base="К" accent="´" char="Ќ" />
+	<accent base="К" accent="'" char="Ќ" />
+	<accent base="К" accent="ʹ" char="Ќ" />
+	<accent base="К" accent="΄" char="Ќ" />
 	<accent base="И" accent="̀" char="Ѝ" />
 	<accent base="И" accent="ˋ" char="Ѝ" />
 	<accent base="И" accent="`" char="Ѝ" />
@@ -693,11 +884,17 @@
 	<accent base="г" accent="́" char="ѓ" />
 	<accent base="г" accent="ˊ" char="ѓ" />
 	<accent base="г" accent="´" char="ѓ" />
+	<accent base="г" accent="'" char="ѓ" />
+	<accent base="г" accent="ʹ" char="ѓ" />
+	<accent base="г" accent="΄" char="ѓ" />
 	<accent base="і" accent="̈" char="ї" />
 	<accent base="і" accent="¨" char="ї" />
 	<accent base="к" accent="́" char="ќ" />
 	<accent base="к" accent="ˊ" char="ќ" />
 	<accent base="к" accent="´" char="ќ" />
+	<accent base="к" accent="'" char="ќ" />
+	<accent base="к" accent="ʹ" char="ќ" />
+	<accent base="к" accent="΄" char="ќ" />
 	<accent base="и" accent="̀" char="ѝ" />
 	<accent base="и" accent="ˋ" char="ѝ" />
 	<accent base="и" accent="`" char="ѝ" />
@@ -767,8 +964,12 @@
 	<accent base="у" accent="¨" char="ӱ" />
 	<accent base="У" accent="̋" char="Ӳ" />
 	<accent base="У" accent="˝" char="Ӳ" />
+	<accent base="У" accent='"' char="Ӳ" />
+	<accent base="У" accent="ʺ" char="Ӳ" />
 	<accent base="у" accent="̋" char="ӳ" />
 	<accent base="у" accent="˝" char="ӳ" />
+	<accent base="у" accent='"' char="ӳ" />
+	<accent base="у" accent="ʺ" char="ӳ" />
 	<accent base="Ч" accent="̈" char="Ӵ" />
 	<accent base="Ч" accent="¨" char="Ӵ" />
 	<accent base="ч" accent="̈" char="ӵ" />
@@ -847,6 +1048,17 @@
 	<accent base="ྫ" accent="ྷ" char="ྫྷ" />
 	<accent base="ྐ" accent="ྵ" char="ྐྵ" />
 	<accent base="ဥ" accent="ီ" char="ဦ" />
+	<accent base="ᬅ" accent="ᬵ" char="ᬆ" />
+	<accent base="ᬇ" accent="ᬵ" char="ᬈ" />
+	<accent base="ᬉ" accent="ᬵ" char="ᬊ" />
+	<accent base="ᬋ" accent="ᬵ" char="ᬌ" />
+	<accent base="ᬍ" accent="ᬵ" char="ᬎ" />
+	<accent base="ᬑ" accent="ᬵ" char="ᬒ" />
+	<accent base="ᬺ" accent="ᬵ" char="ᬻ" />
+	<accent base="ᬼ" accent="ᬵ" char="ᬽ" />
+	<accent base="ᬾ" accent="ᬵ" char="ᭀ" />
+	<accent base="ᬿ" accent="ᬵ" char="ᭁ" />
+	<accent base="ᭂ" accent="ᬵ" char="ᭃ" />
 	<accent base="A" accent="̥" char="Ḁ" />
 	<accent base="a" accent="̥" char="ḁ" />
 	<accent base="B" accent="̇" char="Ḃ" />
@@ -860,9 +1072,15 @@
 	<accent base="Ç" accent="́" char="Ḉ" />
 	<accent base="Ç" accent="ˊ" char="Ḉ" />
 	<accent base="Ç" accent="´" char="Ḉ" />
+	<accent base="Ç" accent="'" char="Ḉ" />
+	<accent base="Ç" accent="ʹ" char="Ḉ" />
+	<accent base="Ç" accent="΄" char="Ḉ" />
 	<accent base="ç" accent="́" char="ḉ" />
 	<accent base="ç" accent="ˊ" char="ḉ" />
 	<accent base="ç" accent="´" char="ḉ" />
+	<accent base="ç" accent="'" char="ḉ" />
+	<accent base="ç" accent="ʹ" char="ḉ" />
+	<accent base="ç" accent="΄" char="ḉ" />
 	<accent base="D" accent="̇" char="Ḋ" />
 	<accent base="D" accent="˙" char="Ḋ" />
 	<accent base="d" accent="̇" char="ḋ" />
@@ -886,9 +1104,15 @@
 	<accent base="Ē" accent="́" char="Ḗ" />
 	<accent base="Ē" accent="ˊ" char="Ḗ" />
 	<accent base="Ē" accent="´" char="Ḗ" />
+	<accent base="Ē" accent="'" char="Ḗ" />
+	<accent base="Ē" accent="ʹ" char="Ḗ" />
+	<accent base="Ē" accent="΄" char="Ḗ" />
 	<accent base="ē" accent="́" char="ḗ" />
 	<accent base="ē" accent="ˊ" char="ḗ" />
 	<accent base="ē" accent="´" char="ḗ" />
+	<accent base="ē" accent="'" char="ḗ" />
+	<accent base="ē" accent="ʹ" char="ḗ" />
+	<accent base="ē" accent="΄" char="ḗ" />
 	<accent base="E" accent="̭" char="Ḙ" />
 	<accent base="e" accent="̭" char="ḙ" />
 	<accent base="E" accent="̰" char="Ḛ" />
@@ -929,15 +1153,27 @@
 	<accent base="Ï" accent="́" char="Ḯ" />
 	<accent base="Ï" accent="ˊ" char="Ḯ" />
 	<accent base="Ï" accent="´" char="Ḯ" />
+	<accent base="Ï" accent="'" char="Ḯ" />
+	<accent base="Ï" accent="ʹ" char="Ḯ" />
+	<accent base="Ï" accent="΄" char="Ḯ" />
 	<accent base="ï" accent="́" char="ḯ" />
 	<accent base="ï" accent="ˊ" char="ḯ" />
 	<accent base="ï" accent="´" char="ḯ" />
+	<accent base="ï" accent="'" char="ḯ" />
+	<accent base="ï" accent="ʹ" char="ḯ" />
+	<accent base="ï" accent="΄" char="ḯ" />
 	<accent base="K" accent="́" char="Ḱ" />
 	<accent base="K" accent="ˊ" char="Ḱ" />
 	<accent base="K" accent="´" char="Ḱ" />
+	<accent base="K" accent="'" char="Ḱ" />
+	<accent base="K" accent="ʹ" char="Ḱ" />
+	<accent base="K" accent="΄" char="Ḱ" />
 	<accent base="k" accent="́" char="ḱ" />
 	<accent base="k" accent="ˊ" char="ḱ" />
 	<accent base="k" accent="´" char="ḱ" />
+	<accent base="k" accent="'" char="ḱ" />
+	<accent base="k" accent="ʹ" char="ḱ" />
+	<accent base="k" accent="΄" char="ḱ" />
 	<accent base="K" accent="̣" char="Ḳ" />
 	<accent base="k" accent="̣" char="ḳ" />
 	<accent base="K" accent="̱" char="Ḵ" />
@@ -957,9 +1193,15 @@
 	<accent base="M" accent="́" char="Ḿ" />
 	<accent base="M" accent="ˊ" char="Ḿ" />
 	<accent base="M" accent="´" char="Ḿ" />
+	<accent base="M" accent="'" char="Ḿ" />
+	<accent base="M" accent="ʹ" char="Ḿ" />
+	<accent base="M" accent="΄" char="Ḿ" />
 	<accent base="m" accent="́" char="ḿ" />
 	<accent base="m" accent="ˊ" char="ḿ" />
 	<accent base="m" accent="´" char="ḿ" />
+	<accent base="m" accent="'" char="ḿ" />
+	<accent base="m" accent="ʹ" char="ḿ" />
+	<accent base="m" accent="΄" char="ḿ" />
 	<accent base="M" accent="̇" char="Ṁ" />
 	<accent base="M" accent="˙" char="Ṁ" />
 	<accent base="m" accent="̇" char="ṁ" />
@@ -979,9 +1221,15 @@
 	<accent base="Õ" accent="́" char="Ṍ" />
 	<accent base="Õ" accent="ˊ" char="Ṍ" />
 	<accent base="Õ" accent="´" char="Ṍ" />
+	<accent base="Õ" accent="'" char="Ṍ" />
+	<accent base="Õ" accent="ʹ" char="Ṍ" />
+	<accent base="Õ" accent="΄" char="Ṍ" />
 	<accent base="õ" accent="́" char="ṍ" />
 	<accent base="õ" accent="ˊ" char="ṍ" />
 	<accent base="õ" accent="´" char="ṍ" />
+	<accent base="õ" accent="'" char="ṍ" />
+	<accent base="õ" accent="ʹ" char="ṍ" />
+	<accent base="õ" accent="΄" char="ṍ" />
 	<accent base="Õ" accent="̈" char="Ṏ" />
 	<accent base="Õ" accent="¨" char="Ṏ" />
 	<accent base="õ" accent="̈" char="ṏ" />
@@ -995,15 +1243,27 @@
 	<accent base="Ō" accent="́" char="Ṓ" />
 	<accent base="Ō" accent="ˊ" char="Ṓ" />
 	<accent base="Ō" accent="´" char="Ṓ" />
+	<accent base="Ō" accent="'" char="Ṓ" />
+	<accent base="Ō" accent="ʹ" char="Ṓ" />
+	<accent base="Ō" accent="΄" char="Ṓ" />
 	<accent base="ō" accent="́" char="ṓ" />
 	<accent base="ō" accent="ˊ" char="ṓ" />
 	<accent base="ō" accent="´" char="ṓ" />
+	<accent base="ō" accent="'" char="ṓ" />
+	<accent base="ō" accent="ʹ" char="ṓ" />
+	<accent base="ō" accent="΄" char="ṓ" />
 	<accent base="P" accent="́" char="Ṕ" />
 	<accent base="P" accent="ˊ" char="Ṕ" />
 	<accent base="P" accent="´" char="Ṕ" />
+	<accent base="P" accent="'" char="Ṕ" />
+	<accent base="P" accent="ʹ" char="Ṕ" />
+	<accent base="P" accent="΄" char="Ṕ" />
 	<accent base="p" accent="́" char="ṕ" />
 	<accent base="p" accent="ˊ" char="ṕ" />
 	<accent base="p" accent="´" char="ṕ" />
+	<accent base="p" accent="'" char="ṕ" />
+	<accent base="p" accent="ʹ" char="ṕ" />
+	<accent base="p" accent="΄" char="ṕ" />
 	<accent base="P" accent="̇" char="Ṗ" />
 	<accent base="P" accent="˙" char="Ṗ" />
 	<accent base="p" accent="̇" char="ṗ" />
@@ -1059,17 +1319,25 @@
 	<accent base="Ũ" accent="́" char="Ṹ" />
 	<accent base="Ũ" accent="ˊ" char="Ṹ" />
 	<accent base="Ũ" accent="´" char="Ṹ" />
+	<accent base="Ũ" accent="'" char="Ṹ" />
+	<accent base="Ũ" accent="ʹ" char="Ṹ" />
+	<accent base="Ũ" accent="΄" char="Ṹ" />
 	<accent base="ũ" accent="́" char="ṹ" />
 	<accent base="ũ" accent="ˊ" char="ṹ" />
 	<accent base="ũ" accent="´" char="ṹ" />
+	<accent base="ũ" accent="'" char="ṹ" />
+	<accent base="ũ" accent="ʹ" char="ṹ" />
+	<accent base="ũ" accent="΄" char="ṹ" />
 	<accent base="Ū" accent="̈" char="Ṻ" />
 	<accent base="Ū" accent="¨" char="Ṻ" />
 	<accent base="ū" accent="̈" char="ṻ" />
 	<accent base="ū" accent="¨" char="ṻ" />
 	<accent base="V" accent="̃" char="Ṽ" />
 	<accent base="V" accent="~" char="Ṽ" />
+	<accent base="V" accent="˜" char="Ṽ" />
 	<accent base="v" accent="̃" char="ṽ" />
 	<accent base="v" accent="~" char="ṽ" />
+	<accent base="v" accent="˜" char="ṽ" />
 	<accent base="V" accent="̣" char="Ṿ" />
 	<accent base="v" accent="̣" char="ṿ" />
 	<accent base="W" accent="̀" char="Ẁ" />
@@ -1081,9 +1349,15 @@
 	<accent base="W" accent="́" char="Ẃ" />
 	<accent base="W" accent="ˊ" char="Ẃ" />
 	<accent base="W" accent="´" char="Ẃ" />
+	<accent base="W" accent="'" char="Ẃ" />
+	<accent base="W" accent="ʹ" char="Ẃ" />
+	<accent base="W" accent="΄" char="Ẃ" />
 	<accent base="w" accent="́" char="ẃ" />
 	<accent base="w" accent="ˊ" char="ẃ" />
 	<accent base="w" accent="´" char="ẃ" />
+	<accent base="w" accent="'" char="ẃ" />
+	<accent base="w" accent="ʹ" char="ẃ" />
+	<accent base="w" accent="΄" char="ẃ" />
 	<accent base="W" accent="̈" char="Ẅ" />
 	<accent base="W" accent="¨" char="Ẅ" />
 	<accent base="w" accent="̈" char="ẅ" />
@@ -1121,8 +1395,10 @@
 	<accent base="t" accent="¨" char="ẗ" />
 	<accent base="w" accent="̊" char="ẘ" />
 	<accent base="w" accent="˚" char="ẘ" />
+	<accent base="w" accent="°" char="ẘ" />
 	<accent base="y" accent="̊" char="ẙ" />
 	<accent base="y" accent="˚" char="ẙ" />
+	<accent base="y" accent="°" char="ẙ" />
 	<accent base="ſ" accent="̇" char="ẛ" />
 	<accent base="ſ" accent="˙" char="ẛ" />
 	<accent base="A" accent="̣" char="Ạ" />
@@ -1132,9 +1408,15 @@
 	<accent base="Â" accent="́" char="Ấ" />
 	<accent base="Â" accent="ˊ" char="Ấ" />
 	<accent base="Â" accent="´" char="Ấ" />
+	<accent base="Â" accent="'" char="Ấ" />
+	<accent base="Â" accent="ʹ" char="Ấ" />
+	<accent base="Â" accent="΄" char="Ấ" />
 	<accent base="â" accent="́" char="ấ" />
 	<accent base="â" accent="ˊ" char="ấ" />
 	<accent base="â" accent="´" char="ấ" />
+	<accent base="â" accent="'" char="ấ" />
+	<accent base="â" accent="ʹ" char="ấ" />
+	<accent base="â" accent="΄" char="ấ" />
 	<accent base="Â" accent="̀" char="Ầ" />
 	<accent base="Â" accent="ˋ" char="Ầ" />
 	<accent base="Â" accent="`" char="Ầ" />
@@ -1145,8 +1427,10 @@
 	<accent base="â" accent="̉" char="ẩ" />
 	<accent base="Â" accent="̃" char="Ẫ" />
 	<accent base="Â" accent="~" char="Ẫ" />
+	<accent base="Â" accent="˜" char="Ẫ" />
 	<accent base="â" accent="̃" char="ẫ" />
 	<accent base="â" accent="~" char="ẫ" />
+	<accent base="â" accent="˜" char="ẫ" />
 	<accent base="Ạ" accent="̂" char="Ậ" />
 	<accent base="Ạ" accent="ˆ" char="Ậ" />
 	<accent base="Ạ" accent="^" char="Ậ" />
@@ -1156,9 +1440,15 @@
 	<accent base="Ă" accent="́" char="Ắ" />
 	<accent base="Ă" accent="ˊ" char="Ắ" />
 	<accent base="Ă" accent="´" char="Ắ" />
+	<accent base="Ă" accent="'" char="Ắ" />
+	<accent base="Ă" accent="ʹ" char="Ắ" />
+	<accent base="Ă" accent="΄" char="Ắ" />
 	<accent base="ă" accent="́" char="ắ" />
 	<accent base="ă" accent="ˊ" char="ắ" />
 	<accent base="ă" accent="´" char="ắ" />
+	<accent base="ă" accent="'" char="ắ" />
+	<accent base="ă" accent="ʹ" char="ắ" />
+	<accent base="ă" accent="΄" char="ắ" />
 	<accent base="Ă" accent="̀" char="Ằ" />
 	<accent base="Ă" accent="ˋ" char="Ằ" />
 	<accent base="Ă" accent="`" char="Ằ" />
@@ -1169,8 +1459,10 @@
 	<accent base="ă" accent="̉" char="ẳ" />
 	<accent base="Ă" accent="̃" char="Ẵ" />
 	<accent base="Ă" accent="~" char="Ẵ" />
+	<accent base="Ă" accent="˜" char="Ẵ" />
 	<accent base="ă" accent="̃" char="ẵ" />
 	<accent base="ă" accent="~" char="ẵ" />
+	<accent base="ă" accent="˜" char="ẵ" />
 	<accent base="Ạ" accent="̆" char="Ặ" />
 	<accent base="Ạ" accent="˘" char="Ặ" />
 	<accent base="ạ" accent="̆" char="ặ" />
@@ -1181,14 +1473,22 @@
 	<accent base="e" accent="̉" char="ẻ" />
 	<accent base="E" accent="̃" char="Ẽ" />
 	<accent base="E" accent="~" char="Ẽ" />
+	<accent base="E" accent="˜" char="Ẽ" />
 	<accent base="e" accent="̃" char="ẽ" />
 	<accent base="e" accent="~" char="ẽ" />
+	<accent base="e" accent="˜" char="ẽ" />
 	<accent base="Ê" accent="́" char="Ế" />
 	<accent base="Ê" accent="ˊ" char="Ế" />
 	<accent base="Ê" accent="´" char="Ế" />
+	<accent base="Ê" accent="'" char="Ế" />
+	<accent base="Ê" accent="ʹ" char="Ế" />
+	<accent base="Ê" accent="΄" char="Ế" />
 	<accent base="ê" accent="́" char="ế" />
 	<accent base="ê" accent="ˊ" char="ế" />
 	<accent base="ê" accent="´" char="ế" />
+	<accent base="ê" accent="'" char="ế" />
+	<accent base="ê" accent="ʹ" char="ế" />
+	<accent base="ê" accent="΄" char="ế" />
 	<accent base="Ê" accent="̀" char="Ề" />
 	<accent base="Ê" accent="ˋ" char="Ề" />
 	<accent base="Ê" accent="`" char="Ề" />
@@ -1199,8 +1499,10 @@
 	<accent base="ê" accent="̉" char="ể" />
 	<accent base="Ê" accent="̃" char="Ễ" />
 	<accent base="Ê" accent="~" char="Ễ" />
+	<accent base="Ê" accent="˜" char="Ễ" />
 	<accent base="ê" accent="̃" char="ễ" />
 	<accent base="ê" accent="~" char="ễ" />
+	<accent base="ê" accent="˜" char="ễ" />
 	<accent base="Ẹ" accent="̂" char="Ệ" />
 	<accent base="Ẹ" accent="ˆ" char="Ệ" />
 	<accent base="Ẹ" accent="^" char="Ệ" />
@@ -1220,9 +1522,15 @@
 	<accent base="Ô" accent="́" char="Ố" />
 	<accent base="Ô" accent="ˊ" char="Ố" />
 	<accent base="Ô" accent="´" char="Ố" />
+	<accent base="Ô" accent="'" char="Ố" />
+	<accent base="Ô" accent="ʹ" char="Ố" />
+	<accent base="Ô" accent="΄" char="Ố" />
 	<accent base="ô" accent="́" char="ố" />
 	<accent base="ô" accent="ˊ" char="ố" />
 	<accent base="ô" accent="´" char="ố" />
+	<accent base="ô" accent="'" char="ố" />
+	<accent base="ô" accent="ʹ" char="ố" />
+	<accent base="ô" accent="΄" char="ố" />
 	<accent base="Ô" accent="̀" char="Ồ" />
 	<accent base="Ô" accent="ˋ" char="Ồ" />
 	<accent base="Ô" accent="`" char="Ồ" />
@@ -1233,8 +1541,10 @@
 	<accent base="ô" accent="̉" char="ổ" />
 	<accent base="Ô" accent="̃" char="Ỗ" />
 	<accent base="Ô" accent="~" char="Ỗ" />
+	<accent base="Ô" accent="˜" char="Ỗ" />
 	<accent base="ô" accent="̃" char="ỗ" />
 	<accent base="ô" accent="~" char="ỗ" />
+	<accent base="ô" accent="˜" char="ỗ" />
 	<accent base="Ọ" accent="̂" char="Ộ" />
 	<accent base="Ọ" accent="ˆ" char="Ộ" />
 	<accent base="Ọ" accent="^" char="Ộ" />
@@ -1244,9 +1554,15 @@
 	<accent base="Ơ" accent="́" char="Ớ" />
 	<accent base="Ơ" accent="ˊ" char="Ớ" />
 	<accent base="Ơ" accent="´" char="Ớ" />
+	<accent base="Ơ" accent="'" char="Ớ" />
+	<accent base="Ơ" accent="ʹ" char="Ớ" />
+	<accent base="Ơ" accent="΄" char="Ớ" />
 	<accent base="ơ" accent="́" char="ớ" />
 	<accent base="ơ" accent="ˊ" char="ớ" />
 	<accent base="ơ" accent="´" char="ớ" />
+	<accent base="ơ" accent="'" char="ớ" />
+	<accent base="ơ" accent="ʹ" char="ớ" />
+	<accent base="ơ" accent="΄" char="ớ" />
 	<accent base="Ơ" accent="̀" char="Ờ" />
 	<accent base="Ơ" accent="ˋ" char="Ờ" />
 	<accent base="Ơ" accent="`" char="Ờ" />
@@ -1257,8 +1573,10 @@
 	<accent base="ơ" accent="̉" char="ở" />
 	<accent base="Ơ" accent="̃" char="Ỡ" />
 	<accent base="Ơ" accent="~" char="Ỡ" />
+	<accent base="Ơ" accent="˜" char="Ỡ" />
 	<accent base="ơ" accent="̃" char="ỡ" />
 	<accent base="ơ" accent="~" char="ỡ" />
+	<accent base="ơ" accent="˜" char="ỡ" />
 	<accent base="Ơ" accent="̣" char="Ợ" />
 	<accent base="ơ" accent="̣" char="ợ" />
 	<accent base="U" accent="̣" char="Ụ" />
@@ -1268,9 +1586,15 @@
 	<accent base="Ư" accent="́" char="Ứ" />
 	<accent base="Ư" accent="ˊ" char="Ứ" />
 	<accent base="Ư" accent="´" char="Ứ" />
+	<accent base="Ư" accent="'" char="Ứ" />
+	<accent base="Ư" accent="ʹ" char="Ứ" />
+	<accent base="Ư" accent="΄" char="Ứ" />
 	<accent base="ư" accent="́" char="ứ" />
 	<accent base="ư" accent="ˊ" char="ứ" />
 	<accent base="ư" accent="´" char="ứ" />
+	<accent base="ư" accent="'" char="ứ" />
+	<accent base="ư" accent="ʹ" char="ứ" />
+	<accent base="ư" accent="΄" char="ứ" />
 	<accent base="Ư" accent="̀" char="Ừ" />
 	<accent base="Ư" accent="ˋ" char="Ừ" />
 	<accent base="Ư" accent="`" char="Ừ" />
@@ -1281,8 +1605,10 @@
 	<accent base="ư" accent="̉" char="ử" />
 	<accent base="Ư" accent="̃" char="Ữ" />
 	<accent base="Ư" accent="~" char="Ữ" />
+	<accent base="Ư" accent="˜" char="Ữ" />
 	<accent base="ư" accent="̃" char="ữ" />
 	<accent base="ư" accent="~" char="ữ" />
+	<accent base="ư" accent="˜" char="ữ" />
 	<accent base="Ư" accent="̣" char="Ự" />
 	<accent base="ư" accent="̣" char="ự" />
 	<accent base="Y" accent="̀" char="Ỳ" />
@@ -1297,8 +1623,10 @@
 	<accent base="y" accent="̉" char="ỷ" />
 	<accent base="Y" accent="̃" char="Ỹ" />
 	<accent base="Y" accent="~" char="Ỹ" />
+	<accent base="Y" accent="˜" char="Ỹ" />
 	<accent base="y" accent="̃" char="ỹ" />
 	<accent base="y" accent="~" char="ỹ" />
+	<accent base="y" accent="˜" char="ỹ" />
 	<accent base="α" accent="̓" char="ἀ" />
 	<accent base="α" accent="̔" char="ἁ" />
 	<accent base="ἀ" accent="̀" char="ἂ" />
@@ -1310,9 +1638,15 @@
 	<accent base="ἀ" accent="́" char="ἄ" />
 	<accent base="ἀ" accent="ˊ" char="ἄ" />
 	<accent base="ἀ" accent="´" char="ἄ" />
+	<accent base="ἀ" accent="'" char="ἄ" />
+	<accent base="ἀ" accent="ʹ" char="ἄ" />
+	<accent base="ἀ" accent="΄" char="ἄ" />
 	<accent base="ἁ" accent="́" char="ἅ" />
 	<accent base="ἁ" accent="ˊ" char="ἅ" />
 	<accent base="ἁ" accent="´" char="ἅ" />
+	<accent base="ἁ" accent="'" char="ἅ" />
+	<accent base="ἁ" accent="ʹ" char="ἅ" />
+	<accent base="ἁ" accent="΄" char="ἅ" />
 	<accent base="ἀ" accent="͂" char="ἆ" />
 	<accent base="ἀ" accent="῀" char="ἆ" />
 	<accent base="ἁ" accent="͂" char="ἇ" />
@@ -1328,9 +1662,15 @@
 	<accent base="Ἀ" accent="́" char="Ἄ" />
 	<accent base="Ἀ" accent="ˊ" char="Ἄ" />
 	<accent base="Ἀ" accent="´" char="Ἄ" />
+	<accent base="Ἀ" accent="'" char="Ἄ" />
+	<accent base="Ἀ" accent="ʹ" char="Ἄ" />
+	<accent base="Ἀ" accent="΄" char="Ἄ" />
 	<accent base="Ἁ" accent="́" char="Ἅ" />
 	<accent base="Ἁ" accent="ˊ" char="Ἅ" />
 	<accent base="Ἁ" accent="´" char="Ἅ" />
+	<accent base="Ἁ" accent="'" char="Ἅ" />
+	<accent base="Ἁ" accent="ʹ" char="Ἅ" />
+	<accent base="Ἁ" accent="΄" char="Ἅ" />
 	<accent base="Ἀ" accent="͂" char="Ἆ" />
 	<accent base="Ἀ" accent="῀" char="Ἆ" />
 	<accent base="Ἁ" accent="͂" char="Ἇ" />
@@ -1346,9 +1686,15 @@
 	<accent base="ἐ" accent="́" char="ἔ" />
 	<accent base="ἐ" accent="ˊ" char="ἔ" />
 	<accent base="ἐ" accent="´" char="ἔ" />
+	<accent base="ἐ" accent="'" char="ἔ" />
+	<accent base="ἐ" accent="ʹ" char="ἔ" />
+	<accent base="ἐ" accent="΄" char="ἔ" />
 	<accent base="ἑ" accent="́" char="ἕ" />
 	<accent base="ἑ" accent="ˊ" char="ἕ" />
 	<accent base="ἑ" accent="´" char="ἕ" />
+	<accent base="ἑ" accent="'" char="ἕ" />
+	<accent base="ἑ" accent="ʹ" char="ἕ" />
+	<accent base="ἑ" accent="΄" char="ἕ" />
 	<accent base="Ε" accent="̓" char="Ἐ" />
 	<accent base="Ε" accent="̔" char="Ἑ" />
 	<accent base="Ἐ" accent="̀" char="Ἒ" />
@@ -1360,9 +1706,15 @@
 	<accent base="Ἐ" accent="́" char="Ἔ" />
 	<accent base="Ἐ" accent="ˊ" char="Ἔ" />
 	<accent base="Ἐ" accent="´" char="Ἔ" />
+	<accent base="Ἐ" accent="'" char="Ἔ" />
+	<accent base="Ἐ" accent="ʹ" char="Ἔ" />
+	<accent base="Ἐ" accent="΄" char="Ἔ" />
 	<accent base="Ἑ" accent="́" char="Ἕ" />
 	<accent base="Ἑ" accent="ˊ" char="Ἕ" />
 	<accent base="Ἑ" accent="´" char="Ἕ" />
+	<accent base="Ἑ" accent="'" char="Ἕ" />
+	<accent base="Ἑ" accent="ʹ" char="Ἕ" />
+	<accent base="Ἑ" accent="΄" char="Ἕ" />
 	<accent base="η" accent="̓" char="ἠ" />
 	<accent base="η" accent="̔" char="ἡ" />
 	<accent base="ἠ" accent="̀" char="ἢ" />
@@ -1374,9 +1726,15 @@
 	<accent base="ἠ" accent="́" char="ἤ" />
 	<accent base="ἠ" accent="ˊ" char="ἤ" />
 	<accent base="ἠ" accent="´" char="ἤ" />
+	<accent base="ἠ" accent="'" char="ἤ" />
+	<accent base="ἠ" accent="ʹ" char="ἤ" />
+	<accent base="ἠ" accent="΄" char="ἤ" />
 	<accent base="ἡ" accent="́" char="ἥ" />
 	<accent base="ἡ" accent="ˊ" char="ἥ" />
 	<accent base="ἡ" accent="´" char="ἥ" />
+	<accent base="ἡ" accent="'" char="ἥ" />
+	<accent base="ἡ" accent="ʹ" char="ἥ" />
+	<accent base="ἡ" accent="΄" char="ἥ" />
 	<accent base="ἠ" accent="͂" char="ἦ" />
 	<accent base="ἠ" accent="῀" char="ἦ" />
 	<accent base="ἡ" accent="͂" char="ἧ" />
@@ -1392,9 +1750,15 @@
 	<accent base="Ἠ" accent="́" char="Ἤ" />
 	<accent base="Ἠ" accent="ˊ" char="Ἤ" />
 	<accent base="Ἠ" accent="´" char="Ἤ" />
+	<accent base="Ἠ" accent="'" char="Ἤ" />
+	<accent base="Ἠ" accent="ʹ" char="Ἤ" />
+	<accent base="Ἠ" accent="΄" char="Ἤ" />
 	<accent base="Ἡ" accent="́" char="Ἥ" />
 	<accent base="Ἡ" accent="ˊ" char="Ἥ" />
 	<accent base="Ἡ" accent="´" char="Ἥ" />
+	<accent base="Ἡ" accent="'" char="Ἥ" />
+	<accent base="Ἡ" accent="ʹ" char="Ἥ" />
+	<accent base="Ἡ" accent="΄" char="Ἥ" />
 	<accent base="Ἠ" accent="͂" char="Ἦ" />
 	<accent base="Ἠ" accent="῀" char="Ἦ" />
 	<accent base="Ἡ" accent="͂" char="Ἧ" />
@@ -1410,9 +1774,15 @@
 	<accent base="ἰ" accent="́" char="ἴ" />
 	<accent base="ἰ" accent="ˊ" char="ἴ" />
 	<accent base="ἰ" accent="´" char="ἴ" />
+	<accent base="ἰ" accent="'" char="ἴ" />
+	<accent base="ἰ" accent="ʹ" char="ἴ" />
+	<accent base="ἰ" accent="΄" char="ἴ" />
 	<accent base="ἱ" accent="́" char="ἵ" />
 	<accent base="ἱ" accent="ˊ" char="ἵ" />
 	<accent base="ἱ" accent="´" char="ἵ" />
+	<accent base="ἱ" accent="'" char="ἵ" />
+	<accent base="ἱ" accent="ʹ" char="ἵ" />
+	<accent base="ἱ" accent="΄" char="ἵ" />
 	<accent base="ἰ" accent="͂" char="ἶ" />
 	<accent base="ἰ" accent="῀" char="ἶ" />
 	<accent base="ἱ" accent="͂" char="ἷ" />
@@ -1428,9 +1798,15 @@
 	<accent base="Ἰ" accent="́" char="Ἴ" />
 	<accent base="Ἰ" accent="ˊ" char="Ἴ" />
 	<accent base="Ἰ" accent="´" char="Ἴ" />
+	<accent base="Ἰ" accent="'" char="Ἴ" />
+	<accent base="Ἰ" accent="ʹ" char="Ἴ" />
+	<accent base="Ἰ" accent="΄" char="Ἴ" />
 	<accent base="Ἱ" accent="́" char="Ἵ" />
 	<accent base="Ἱ" accent="ˊ" char="Ἵ" />
 	<accent base="Ἱ" accent="´" char="Ἵ" />
+	<accent base="Ἱ" accent="'" char="Ἵ" />
+	<accent base="Ἱ" accent="ʹ" char="Ἵ" />
+	<accent base="Ἱ" accent="΄" char="Ἵ" />
 	<accent base="Ἰ" accent="͂" char="Ἶ" />
 	<accent base="Ἰ" accent="῀" char="Ἶ" />
 	<accent base="Ἱ" accent="͂" char="Ἷ" />
@@ -1446,9 +1822,15 @@
 	<accent base="ὀ" accent="́" char="ὄ" />
 	<accent base="ὀ" accent="ˊ" char="ὄ" />
 	<accent base="ὀ" accent="´" char="ὄ" />
+	<accent base="ὀ" accent="'" char="ὄ" />
+	<accent base="ὀ" accent="ʹ" char="ὄ" />
+	<accent base="ὀ" accent="΄" char="ὄ" />
 	<accent base="ὁ" accent="́" char="ὅ" />
 	<accent base="ὁ" accent="ˊ" char="ὅ" />
 	<accent base="ὁ" accent="´" char="ὅ" />
+	<accent base="ὁ" accent="'" char="ὅ" />
+	<accent base="ὁ" accent="ʹ" char="ὅ" />
+	<accent base="ὁ" accent="΄" char="ὅ" />
 	<accent base="Ο" accent="̓" char="Ὀ" />
 	<accent base="Ο" accent="̔" char="Ὁ" />
 	<accent base="Ὀ" accent="̀" char="Ὂ" />
@@ -1460,9 +1842,15 @@
 	<accent base="Ὀ" accent="́" char="Ὄ" />
 	<accent base="Ὀ" accent="ˊ" char="Ὄ" />
 	<accent base="Ὀ" accent="´" char="Ὄ" />
+	<accent base="Ὀ" accent="'" char="Ὄ" />
+	<accent base="Ὀ" accent="ʹ" char="Ὄ" />
+	<accent base="Ὀ" accent="΄" char="Ὄ" />
 	<accent base="Ὁ" accent="́" char="Ὅ" />
 	<accent base="Ὁ" accent="ˊ" char="Ὅ" />
 	<accent base="Ὁ" accent="´" char="Ὅ" />
+	<accent base="Ὁ" accent="'" char="Ὅ" />
+	<accent base="Ὁ" accent="ʹ" char="Ὅ" />
+	<accent base="Ὁ" accent="΄" char="Ὅ" />
 	<accent base="υ" accent="̓" char="ὐ" />
 	<accent base="υ" accent="̔" char="ὑ" />
 	<accent base="ὐ" accent="̀" char="ὒ" />
@@ -1474,9 +1862,15 @@
 	<accent base="ὐ" accent="́" char="ὔ" />
 	<accent base="ὐ" accent="ˊ" char="ὔ" />
 	<accent base="ὐ" accent="´" char="ὔ" />
+	<accent base="ὐ" accent="'" char="ὔ" />
+	<accent base="ὐ" accent="ʹ" char="ὔ" />
+	<accent base="ὐ" accent="΄" char="ὔ" />
 	<accent base="ὑ" accent="́" char="ὕ" />
 	<accent base="ὑ" accent="ˊ" char="ὕ" />
 	<accent base="ὑ" accent="´" char="ὕ" />
+	<accent base="ὑ" accent="'" char="ὕ" />
+	<accent base="ὑ" accent="ʹ" char="ὕ" />
+	<accent base="ὑ" accent="΄" char="ὕ" />
 	<accent base="ὐ" accent="͂" char="ὖ" />
 	<accent base="ὐ" accent="῀" char="ὖ" />
 	<accent base="ὑ" accent="͂" char="ὗ" />
@@ -1488,6 +1882,9 @@
 	<accent base="Ὑ" accent="́" char="Ὕ" />
 	<accent base="Ὑ" accent="ˊ" char="Ὕ" />
 	<accent base="Ὑ" accent="´" char="Ὕ" />
+	<accent base="Ὑ" accent="'" char="Ὕ" />
+	<accent base="Ὑ" accent="ʹ" char="Ὕ" />
+	<accent base="Ὑ" accent="΄" char="Ὕ" />
 	<accent base="Ὑ" accent="͂" char="Ὗ" />
 	<accent base="Ὑ" accent="῀" char="Ὗ" />
 	<accent base="ω" accent="̓" char="ὠ" />
@@ -1501,9 +1898,15 @@
 	<accent base="ὠ" accent="́" char="ὤ" />
 	<accent base="ὠ" accent="ˊ" char="ὤ" />
 	<accent base="ὠ" accent="´" char="ὤ" />
+	<accent base="ὠ" accent="'" char="ὤ" />
+	<accent base="ὠ" accent="ʹ" char="ὤ" />
+	<accent base="ὠ" accent="΄" char="ὤ" />
 	<accent base="ὡ" accent="́" char="ὥ" />
 	<accent base="ὡ" accent="ˊ" char="ὥ" />
 	<accent base="ὡ" accent="´" char="ὥ" />
+	<accent base="ὡ" accent="'" char="ὥ" />
+	<accent base="ὡ" accent="ʹ" char="ὥ" />
+	<accent base="ὡ" accent="΄" char="ὥ" />
 	<accent base="ὠ" accent="͂" char="ὦ" />
 	<accent base="ὠ" accent="῀" char="ὦ" />
 	<accent base="ὡ" accent="͂" char="ὧ" />
@@ -1519,9 +1922,15 @@
 	<accent base="Ὠ" accent="́" char="Ὤ" />
 	<accent base="Ὠ" accent="ˊ" char="Ὤ" />
 	<accent base="Ὠ" accent="´" char="Ὤ" />
+	<accent base="Ὠ" accent="'" char="Ὤ" />
+	<accent base="Ὠ" accent="ʹ" char="Ὤ" />
+	<accent base="Ὠ" accent="΄" char="Ὤ" />
 	<accent base="Ὡ" accent="́" char="Ὥ" />
 	<accent base="Ὡ" accent="ˊ" char="Ὥ" />
 	<accent base="Ὡ" accent="´" char="Ὥ" />
+	<accent base="Ὡ" accent="'" char="Ὥ" />
+	<accent base="Ὡ" accent="ʹ" char="Ὥ" />
+	<accent base="Ὡ" accent="΄" char="Ὥ" />
 	<accent base="Ὠ" accent="͂" char="Ὦ" />
 	<accent base="Ὠ" accent="῀" char="Ὦ" />
 	<accent base="Ὡ" accent="͂" char="Ὧ" />
@@ -1694,6 +2103,9 @@
 	<accent base="᾿" accent="́" char="῎" />
 	<accent base="᾿" accent="ˊ" char="῎" />
 	<accent base="᾿" accent="´" char="῎" />
+	<accent base="᾿" accent="'" char="῎" />
+	<accent base="᾿" accent="ʹ" char="῎" />
+	<accent base="᾿" accent="΄" char="῎" />
 	<accent base="᾿" accent="͂" char="῏" />
 	<accent base="᾿" accent="῀" char="῏" />
 	<accent base="ι" accent="̆" char="ῐ" />
@@ -1722,6 +2134,9 @@
 	<accent base="῾" accent="́" char="῞" />
 	<accent base="῾" accent="ˊ" char="῞" />
 	<accent base="῾" accent="´" char="῞" />
+	<accent base="῾" accent="'" char="῞" />
+	<accent base="῾" accent="ʹ" char="῞" />
+	<accent base="῾" accent="΄" char="῞" />
 	<accent base="῾" accent="͂" char="῟" />
 	<accent base="῾" accent="῀" char="῟" />
 	<accent base="υ" accent="̆" char="ῠ" />
