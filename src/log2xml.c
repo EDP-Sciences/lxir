@@ -1025,8 +1025,8 @@ const char * trans_fenced_char(const char * chr) {
 		if (code == 007 || code == 031 || code == 047 || code == 0155) return "⌉";
 		if (code == 010 || code == 032 || code == 050 || code == 0156) return "{";
 		if (code == 011 || code == 033 || code == 051 || code == 0157) return "}";
-		if (code == 012 || code == 034 || code == 052) return "⟨";
-		if (code == 013 || code == 035 || code == 053) return "⟩";
+		if (code == 012 || code == 034 || code == 052 || code == 0104) return "⟨";
+		if (code == 013 || code == 035 || code == 053 || code == 0105) return "⟩";
 		if (code == 016 || code == 036 || code == 054) return "/";
 		if (code == 017 || code == 037 || code == 055) return "\\";
 		if (code == 014) return "|";
