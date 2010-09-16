@@ -1426,7 +1426,7 @@ void transform_formula_content(xmlNodePtr node, xmlChar * content) {
 static
 void transform_macro_content(xmlNodePtr node, xmlChar * content) {
 	char * temp = transform_verbatim_content(content);
-	xmlNewChild(node, NULL, BAD_CAST "text", BAD_CAST temp);
+	xmlNewTextChild(node, NULL, BAD_CAST "text", BAD_CAST temp);
 	free(temp);
 }
 
