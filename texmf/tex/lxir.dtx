@@ -413,6 +413,10 @@
 \def\textordmasculine{[entity!\#xBA!]}
 \def\textquotedblright{\xEmpty{RQUOTE}}
 \def\textperthousand{[entity!\#x2030!]}
+\def\dag{[entity!\#x2020!]}
+\def\dagger{\mathrel{\xEmptyAA{dagger}{mathtype=rel}{mathchar=2020}}}
+\def\ddag{[entity!\#x2021!]}
+\def\ddagger{\mathrel{\xEmptyAA{ddagger}{mathtype=rel}{mathchar=2021}}}
 %    \end{macrocode}
 %\subsection{Commands for spacing}
 %\label{sec:spacing}
@@ -422,7 +426,7 @@
 \def\:{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2003}}\else[entity!\#x2003!]\fi}
 \def\;{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2004}}\else[entity!\#x2004!]\fi}
 \def\AA{\ifmmode\mathord{\xEmptyAA{AA}{mathtype=ord}{mathchar=212B}}\else[entity!\#x212B!]\fi}
-\def\aa{\ifmmode\mathord{\xEmptyAA{AA}{mathtype=ord}{mathchar=E5}}\else[entity!\#xE5!]\fi}
+\def\aa{\ifmmode\mathord{\xEmptyAA{aa}{mathtype=ord}{mathchar=E5}}\else[entity!\#xE5!]\fi}
 \def\enspace{[entity!\#x2002!]}
 \def\enskip{[entity!\#x2002!]}
 \def\quad{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!]\fi} % quad = 1 em
