@@ -473,6 +473,8 @@ int lfm_close() {
 	}
 	return 0;
 }
+static
+const char DEFAULT_FONT_ENCODING[] = "LxirNeutralFont";
 
 int lfm_get_translation_map(const char * fontname, struct translation_info * pinfo) {
 	struct fontenc_s * font = fontencs;
@@ -483,10 +485,11 @@ int lfm_get_translation_map(const char * fontname, struct translation_info * pin
 		}
 		font = font->next;
 	}
-	fprintf(stderr, "Unknown font : %s\n", fontname);
-	if (strcmp(fontname, "cmr10")) {
-		return lfm_get_translation_map("cmr10", pinfo);
+	fprintf(stderr, "libfontmap: Unknown font `%s', defaulting to encoding of `%s', which might be invalid.\n", fontname, DEFAULT_FONT_ENCODING);
+	if (strcmp(fontname, DEFAULT_FONT_ENCODING)) {
+		return lfm_get_translation_map(DEFAULT_FONT_ENCODING, pinfo);
 	} else {
+		fprintf(stderr, "libfontmap: fonts.xml has no informations about `%s', this is an error !\n", DEFAULT_FONT_ENCODING);
 		exit(-1);
 	}
 }
