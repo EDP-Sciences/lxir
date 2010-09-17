@@ -20,7 +20,7 @@
 	\expandafter\@firstoffive #1\relax
   \fi
 }
-\def\ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}%
+\def\T@ref#1{\xBegin{ref}\xEmptyA{params}{idref=#1}%
 	\xBegin{refMark}%
 	\@ifundefined{r@#1}{}{%
 		\Hy@safe@activestrue%
@@ -35,7 +35,7 @@
 	\expandafter\@secondoffive #1
   \fi
 }
-\def\pageref#1{\xBegin{pageref}\xEmptyA{params}{idref=#1}%
+\def\T@pageref#1{\xBegin{pageref}\xEmptyA{params}{idref=#1}%
 	\xBegin{pagerefMark}%
 	\@ifundefined{r@#1}{}{%
 		\Hy@safe@activestrue
