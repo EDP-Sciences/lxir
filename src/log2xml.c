@@ -1018,8 +1018,8 @@ const char * trans_fenced_char(const char * chr) {
 		if (code == 017 || code == 037 || code == 055) return "\\";
 		if (code == 014) return "|";
 		if (code == 015) return "∥";
-		if (code == 0132) return "∫";
-		fprintf(stderr, "lxir : unknown fenced char %d\n", code);
+		if (code == 0132 || code == 0122) return "∫";
+		fprintf(stderr, "lxir: unknown fenced char %d\n", code);
 	}
 	return chr;
 }
