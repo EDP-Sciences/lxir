@@ -29,6 +29,8 @@
 <xsl:strip-space elements="*"/>
 <xsl:output method="xml" indent="no" encoding="UTF-8"/>
 
+<xsl:template match="@width|@height|@depth" />
+
 <xsl:template match="*|@*">
 	<xsl:copy>
 		<xsl:apply-templates select="*|@*|text()"/>

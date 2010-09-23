@@ -308,6 +308,8 @@ int read_log_file(xmlNodePtr root, const char * filename) {
 	}
 
 	fclose(f);
+	regfree(&page_regex);
+	regfree(&box_regex);
 	return 0;
 }
 
@@ -987,28 +989,6 @@ void transform_subsup_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
-/*
-	<mrow>
-		<hbox>
-			<hbox /> {1}
-			<vbox />
-			<hbox />
-		</hbox>
-	</mrow>
-	<*>* {2} ####FIXME : needs to be greedy here !
-	<mrow>
-		<hbox>
-			<hbox /> {3}
-			<vbox />
-			<hbox />
-		</hbox>
-	</mrow>
-=>
-	<mfenced open="{1}" close = "{3}">
-	{2}
-	</mfenced>
-*/
-
 static
 const char * trans_fenced_char(const char * chr) {
 	int code = utf8(chr);
@@ -1041,6 +1021,97 @@ static
 const char * get_fenced_char(xmlNodePtr node) {
 	return trans_fenced_char(get_other_content(node, 0));
 }
+
+static regex_t box_param_regex;
+
+static
+xmlChar * extract_match(const xmlChar * content, const regmatch_t * match) {
+	double result;
+	int len;
+	xmlChar * buffer;
+	len = match->rm_eo - match->rm_so;
+	if (len == 0) return NULL;
+	buffer = (xmlChar *) xmlMalloc(len + 1);
+	memcpy(buffer, content + match->rm_so, len);
+	buffer[len] = 0;
+	return buffer;
+}
+
+static
+void real_decode_box_parameters(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children;
+	while (node) {
+		xmlNodePtr next = node->next;
+		xmlNodePtr param_node, content_node;
+
+		if(
+			(
+				is_node_valid(node, "hbox", 0, 0) || is_node_valid(node, "vbox", 0, 0)
+			) &&
+			(param_node = node->children) &&
+			is_node_valid(param_node, "param", 0, 0) &&
+			(content_node = param_node->children) &&
+			content_node->type == XML_TEXT_NODE
+		) {
+			regmatch_t matches[6];
+			xmlChar * content = content_node->content;
+			int ret = regexec(&box_param_regex, content, 6, matches, 0);
+			if(ret == 0) {
+				xmlChar * sub;
+
+				sub = extract_match(content, &matches[1]);
+				if (sub) { xmlSetProp(node, BAD_CAST "height", sub); xmlFree(sub); }
+				sub = extract_match(content, &matches[2]);
+				if (sub) { xmlSetProp(node, BAD_CAST "depth", sub); xmlFree(sub); }
+				sub = extract_match(content, &matches[3]);
+				if (sub) { xmlSetProp(node, BAD_CAST "width", sub); xmlFree(sub); }
+				sub = extract_match(content, &matches[5]);
+				if (sub) { xmlSetProp(node, BAD_CAST "shift", sub); xmlFree(sub); }
+			}
+		}
+		xmlTransformationPush(node, real_decode_box_parameters, param);
+		node = next;
+	}
+}
+
+static
+void decode_box_parameters(xmlNodePtr root, xmlTransformationEntry * param) {
+	int err = regcomp(&box_param_regex, "\\(([0-9]+.[0-9]+)\\+([0-9]+.[0-9]+)\\)x([0-9]+.[0-9]+)(, shifted ([+-]?[0-9]+.[0-9]+))?", REG_EXTENDED);
+	if(err) {
+		char * errbuff;
+		size_t s = regerror(err, &box_param_regex, 0, 0);
+		errbuff = malloc(s);
+		regerror(err, &box_param_regex, errbuff, s);
+		fprintf(stderr, "Error compiling box_param_regex : %s\n", errbuff);
+		free(errbuff);
+		exit(-1);
+	}
+
+	real_decode_box_parameters(root, param);
+}
+
+#if 0
+/*
+	<mrow>
+		<hbox>
+			<hbox /> {1}
+			<vbox />
+			<hbox />
+		</hbox>
+	</mrow>
+	<*>* {2} ####FIXME : needs to be greedy here !
+	<mrow>
+		<hbox>
+			<hbox /> {3}
+			<vbox />
+			<hbox />
+		</hbox>
+	</mrow>
+=>
+	<mfenced open="{1}" close = "{3}">
+	{2}
+	</mfenced>
+*/
 
 static
 void transform_left_and_right_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
@@ -1129,6 +1200,121 @@ void transform_left_and_right_pattern(xmlNodePtr root, xmlTransformationEntry * 
 		node = next;
 	}
 }
+#else
+/*
+	<hbox>
+		<param />
+		<hbox>
+			<other /> {1}
+		<hbox>
+		... {2}
+		<hbox>
+			<other /> {3}
+		</hbox>
+	<hbox>
+	(*) the three hboxes must have the same (height + depth).
+
+	<mfenced open="{1}" close = "{3}">
+		{2}
+	</mfenced>
+*/
+
+static
+double get_box_total_height(xmlNodePtr node) {
+	double h, d;
+	xmlChar * attr;
+	attr = xmlGetProp(node, BAD_CAST "height");
+	h = strtod(attr, 0);
+	xmlFree(attr);
+	attr = xmlGetProp(node, BAD_CAST "depth");
+	d = strtod(attr, 0);
+	xmlFree(attr);
+
+	return h + d;
+}
+
+static
+xmlNodePtr is_matching_fence_node(xmlNodePtr node, double height) {
+	xmlNodePtr other_node;
+
+	if (
+		!is_node_valid(node, "hbox", 0, 0) ||
+		!(is_node_valid(node->children, "param", 0, 0)) ||
+		!(other_node = node->children->next) ||
+		!is_node_valid(other_node, "other", 0, 0) ||
+		!(is_node_valid(other_node->children, "param", 0, 0)) ||
+		(other_node->next)
+	)
+		return 0;
+
+
+	if ((get_box_total_height(node) - height) > 1e-5) return 0;
+	return other_node;
+}
+
+static
+void transform_left_and_right_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node, first_child, last_child;
+
+	node = root->children;
+
+	while (node) {
+		xmlNodePtr next = node->next;
+		if (
+			is_node_valid(node, "hbox", 0, 0) &&
+			(node->children) &&
+			(first_child = node->children->next) &&
+			(last_child = node->last) &&
+			(first_child != last_child)
+		) {
+			xmlNodePtr open_char, close_char;
+			double height = get_box_total_height(node);
+
+			if (
+				height > 0 &&
+				(open_char = is_matching_fence_node(first_child, height)) &&
+				(close_char = is_matching_fence_node(last_child, height))
+			) {
+				xmlNodePtr fenced, content, tmp;
+
+				fenced = xmlNewNode(0, BAD_CAST "mfenced");
+				content = xmlNewNode(0, BAD_CAST "mrow");
+				xmlAddChild(fenced, content);
+
+				xmlNewProp(fenced, BAD_CAST "open", BAD_CAST get_fenced_char(open_char));
+				xmlNewProp(fenced, BAD_CAST "close", BAD_CAST get_fenced_char(close_char));
+
+				tmp = first_child->next;
+				do {
+					xmlNodePtr next = tmp->next;
+					xmlUnlinkNode(tmp);
+					xmlAddChild(content, tmp);
+					tmp = next;
+				} while(tmp && tmp != last_child);
+
+				xmlAddPrevSibling(node, fenced);
+
+				xmlUnlinkNode(first_child);
+				xmlFreeNode(first_child);
+				xmlUnlinkNode(last_child);
+				xmlFreeNode(last_child);
+				xmlUnlinkNode(node);
+				xmlFreeNode(node);
+
+				xmlTransformationPush(content, transform_left_and_right_pattern, param);
+			} else {
+				xmlTransformationPush(node, transform_left_and_right_pattern, param);
+			}
+		} else {
+			xmlTransformationPush(node, transform_left_and_right_pattern, param);
+		}
+
+		node = next;
+	}
+
+}
+
+#endif
 
 /*
 	pattern :
@@ -2179,6 +2365,7 @@ void xmlRegisterMathTransformations() {
 	DEF(merge_mn_sequence)
 	DEF(merge_mi_sequence)
 	DEF(replace_entities_in_math)
+	DEF(decode_box_parameters)
 #undef DEF
 }
 

@@ -180,13 +180,13 @@ int is_valid_node(xmlNodePtr node, const char * name) {
 static
 int is_valid_control_node(xmlNodePtr node, const char * type) {
 	return is_valid_node(node, "control") &&
-		(!type || strcmp((const char *)xmlGetProp(node, "type"), type) == 0);
+		(!type || strcmp((const char *)xmlGetProp(node, BAD_CAST "type"), type) == 0);
 }
 
 static inline
 int is_valid_node_type(xmlNodePtr node, const char * type) {
 	return is_valid_node(node, "node") &&
-		(strcmp((const char *)xmlGetProp(node, "type"), type) == 0);
+		(strcmp((const char *)xmlGetProp(node, BAD_CAST "type"), type) == 0);
 }
 
 void remove_page_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
@@ -304,7 +304,7 @@ void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 			}
 			xmlAddChild(text2, xmlNewText(result));
 			xmlFree(result);
-			remove_xxx_node_before(text1, "textaccent");
+			remove_xxx_node_before(text1, BAD_CAST "textaccent");
 		}  else if (xmlUTF8Strlen(t2) == 1 && (accent = check_accent(t2, t1))) {
 			/* transform here */
 			const xmlChar * base = xmlUTF8Strpos(t1, 1);
@@ -324,7 +324,7 @@ void make_accent(xmlNodePtr text1, xmlNodePtr text2) {
 			}
 			xmlAddChild(text2, xmlNewText(result));
 			xmlFree(result);
-			remove_xxx_node_before(text2, "textaccent");
+			remove_xxx_node_before(text2, BAD_CAST "textaccent");
 		}
 
 		xmlFree(t1);
@@ -1293,6 +1293,7 @@ void replace_tabular_math_entities(xmlNodePtr root, xmlTransformationEntry * par
 					(child = node->children)
 				) || (
 					strcmp((const char *)type, "minipage") == 0 &&
+					node->children &&
 					(child = node->children->next)
 				)
 			) &&
@@ -1532,7 +1533,7 @@ void init_transformations(int report) {
 
 int main(int argc, char * argv[]) {
 	int err;
-	int flags;
+	int flags = 0;
 	const char * dvifile;
 	struct gengetopt_args_info args;
 

@@ -33,12 +33,12 @@ class Test:
 		self.curpath = os.path.abspath(os.curdir)
 		self.subdir = os.path.join(self.curpath, self.name)
 		os.makedirs(self.subdir)
+		os.chdir(self.subdir)
 		self.filename = os.path.join(self.subdir, self.name + '.tex')
 		f = open(self.filename, 'w')
 		f.write(self.LATEX_SRC_P % self.src)
 		f.close()
 	def _compile_latex(self):
-		os.chdir(self.subdir)
 		o = Popen(self.LATEX_CMD_P % self.name, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
 		outdata, errdata = o.communicate()
 		returncode = o.wait()
@@ -49,7 +49,7 @@ class Test:
 		returncode = o.wait()
 		assert returncode == 0
 		self.output = outdata
-	def _check_result(self):
+	def _get_result(self):
 		return self.output
 	def _cleanup(self):
 		os.chdir(self.curpath)
@@ -64,7 +64,7 @@ class Test:
 			self._make_source()
 			self._compile_latex()
 			self._compile_lxir()
-			return self._check_result()
+			return self._get_result()
 		finally:
 			self._cleanup()
 
@@ -79,7 +79,25 @@ NSS = {
 }
 
 class MathMLTest(Test):
-	def _check_result(self):
+	IMAGE_CMD_LIST = [
+		"dvips -q {0} -o {0}.ps",
+		"ps2eps -P -l -H -f -q {0}.ps",
+		"gs -dEPSCrop -dSAFER -dBATCH -dNOPAUSE -r250 -sDEVICE=pngalpha -dTextAlphaBits=4 -dGraphicsAlphaBits=4 -sOutputFile=../{0}.png {0}.eps"
+	]
+	def __init__(self, name, src):
+		Test.__init__(self, name, src)
+		self.compile_image = False
+	def _compile_image(self):
+		for cmd_p in self.IMAGE_CMD_LIST:
+			o = Popen(cmd_p.format(self.name), shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
+			outdata, errdata = o.communicate()
+			returncode = o.wait()
+			assert returncode == 0
+	def _compile_latex(self):
+		Test._compile_latex(self)
+		if self.compile_image:
+			self._compile_image()
+	def _get_result(self):
 		doc = NonvalidatingReader.parseString(self.output, self.URI_P % self.name)
 		ctxt = Context(doc, processorNss=NSS)
 		nodes = Evaluate("//mml:math", context=ctxt)
@@ -100,6 +118,7 @@ class TestFolder:
 		self.fill_empty = False
 		self.print_success = False
 		self.print_failure = True
+		self.compile_image = False
 	def fill(self, name, result):
 		filename = os.path.join(self.path, name)
 		f = open(filename, 'r')
@@ -135,6 +154,8 @@ class TestFolder:
 				check = f.readline()[:-1]
 				f.close()
 				test = self.TestClass(name, src)
+				if self.compile_image:
+					test.compile_image = True
 				self.check(name, test(), check)
 		print("RESULTS: %d succeeded, %d failed" % (self.succeeded, self.failed))
 		if self.failed > 0:
