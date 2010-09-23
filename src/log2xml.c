@@ -345,6 +345,9 @@ int is_node_valid_mathbox(xmlNodePtr node) {
 		is_node_valid(node, "hbox", 0, 0) ||
 		is_node_valid(node, "other", 0, 0) ||
 		is_node_valid(node, "mrow", 0, 0) ||
+		is_node_valid(node, "msub", 0, 0) ||
+		is_node_valid(node, "msup", 0, 0) ||
+		is_node_valid(node, "msubsup", 0, 0) ||
 		is_node_valid(node, "mfenced", 0, 0)
 		;
 }
@@ -631,7 +634,7 @@ xmlNodePtr extract_all_math(xmlNodePtr root) {
 	this is the pattern we'll try to match :
 	<vbox>
 		<param />
-		<hbox> {...} </hbox>
+		<hbox> {...} </hbox> / <mfenced>
 		<kern /> ?
 		<rule />
 		<kern /> ?
@@ -657,7 +660,7 @@ void transform_over_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 			(tmp = node->children) &&
 			is_node_valid(tmp, "param", 0, 0) &&
 			(row1 = tmp->next) &&
-			is_node_valid(row1, "hbox", 0, 0) &&
+			is_node_valid_mathbox(row1) &&
 			(tmp = row1->next) &&
 			(	(
 					is_node_valid(tmp, "kern", 0, 0) &&
@@ -673,9 +676,9 @@ void transform_over_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 				(
 					is_node_valid(tmp, "kern", 0, 0) &&
 					(row2 = tmp->next) &&
-					is_node_valid(row2, "hbox", 0, 0)
+					is_node_valid_mathbox(row2)
 				) || (
-					is_node_valid(tmp, "hbox", 0, 0) &&
+					is_node_valid_mathbox(tmp) &&
 					(row2 = tmp)
 				)
 			) &&
@@ -719,6 +722,10 @@ static
 int is_sqrt_symbol_node(xmlNodePtr node) {
 	const char * content;
 	int code;
+	if (is_node_valid(node, "mrow", 0, 0) &&
+			node->children && !node->children->next)
+		node = node->children;
+
 	if(
 		is_node_valid(node, "mi", 0, 0) &&
 		(content = (const char *)node->children->content) &&
@@ -754,10 +761,10 @@ void transform_sqrt_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 				is_sqrt_symbol_node(node) ||
 				(
 					is_node_valid(node, "msup", 0, 0) &&
-					(prop = xmlGetProp(node, BAD_CAST "single")) &&
+				/*	(prop = xmlGetProp(node, BAD_CAST "single")) &&
 					(strcmp((const char *)prop, "1") == 0) &&
 					(xmlFree(prop), 1) &&
-					(tmp = node->children) &&
+				*/	(tmp = node->children) &&
 					is_sqrt_symbol_node(tmp)
 				) ||
 				(
