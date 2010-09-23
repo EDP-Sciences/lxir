@@ -465,7 +465,7 @@ void extract_inline_math(xmlNodePtr root, xmlNodePtr basemath) {
 			if (!end) {
 				char id[32];
 				if(xml_extract_math_id(node, "begin", "math", id)) strcpy(id, "*unknown*");
-				fprintf(stderr, "Unable to find mathoff after mathon begining at ID:%s !\n", id);
+				fprintf(stderr, "lxir: Unable to find mathoff after mathon begining at ID:%s !\n", id);
 				exit(-1);
 			}
 			math = extract_math_expr(node, end, "math");
@@ -552,7 +552,7 @@ void extract_display_math(xmlNodePtr root, xmlNodePtr basemath) {
 				if (!end) {
 					char id[32];
 					if(xml_extract_math_id(node, "begin", "display", id)) strcpy(id, "*unknown*");
-					fprintf(stderr, "Unable to find the end of display section begining at ID:%s !\n", id);
+					fprintf(stderr, "lxir: Unable to find the end of display section begining at ID:%s !\n", id);
 					exit(-1);
 				} else {
 					xmlNodePtr math;
@@ -600,7 +600,7 @@ void transform_inline_math(xmlNodePtr root, xmlTransformationEntry * param) {
 			if (!end) {
 				char id[32];
 				if(xml_extract_math_id(node, "begin", "math", id)) strcpy(id, "*unknown*");
-				fprintf(stderr, "Unable to find mathoff after mathon begining at ID:%s !\n", id);
+				fprintf(stderr, "lxir: Unable to find mathoff after mathon begining at ID:%s !\n", id);
 				exit(-1);
 			}
 			math = extract_math_expr(node, end, "math");
@@ -1083,13 +1083,13 @@ void real_decode_box_parameters(xmlNodePtr root, xmlTransformationEntry * param)
 
 static
 void decode_box_parameters(xmlNodePtr root, xmlTransformationEntry * param) {
-	int err = regcomp(&box_param_regex, "\\(([0-9]+.[0-9]+)\\+([0-9]+.[0-9]+)\\)x([0-9]+.[0-9]+)(, shifted ([+-]?[0-9]+.[0-9]+))?", REG_EXTENDED);
+	int err = regcomp(&box_param_regex, "\\(([+-]?[0-9]+.[0-9]+)\\+([+-]?[0-9]+.[0-9]+)\\)x([+-]?[0-9]+.[0-9]+)(, shifted ([+-]?[0-9]+.[0-9]+))?", REG_EXTENDED);
 	if(err) {
 		char * errbuff;
 		size_t s = regerror(err, &box_param_regex, 0, 0);
 		errbuff = malloc(s);
 		regerror(err, &box_param_regex, errbuff, s);
-		fprintf(stderr, "Error compiling box_param_regex : %s\n", errbuff);
+		fprintf(stderr, "lxir: Error compiling box_param_regex : %s\n", errbuff);
 		free(errbuff);
 		exit(-1);
 	}
@@ -1240,23 +1240,77 @@ double get_box_total_height(xmlNodePtr node) {
 	return h + d;
 }
 
+#define SIZE_DELTA 1e-5
 static
-xmlNodePtr is_matching_fence_node(xmlNodePtr node, double height) {
+xmlNodePtr is_basic_fence_node(xmlNodePtr node) {
+	xmlNodePtr other_node;
+	if (
+		is_node_valid(node, "hbox", 0, 0) &&
+		(is_node_valid(node->children, "param", 0, 0)) &&
+		(other_node = node->children->next) &&
+		is_node_valid(other_node, "other", 0, 0) &&
+		(is_node_valid(other_node->children, "param", 0, 0)) &&
+		!other_node->next
+	) {
+		return other_node;
+	}
+	return 0;
+}
+
+static
+const char * get_composite_fence_char(const char ** fences, int len) {
+	const char * first = fences[0];
+	const char * last = fences[len-1];
+	const char * middle = (len % 2) ? fences[len>>1] : 0;
+
+	if (strcmp(first, "⎧") == 0 && strcmp(middle, "⎨") == 0 && strcmp(last, "⎩") == 0)
+		return "{";
+
+	fprintf(stderr, "lxir: unknown composite fence char <%s %s %s>\n", first, middle ? middle : "", last);
+	return 0;
+}
+
+static
+const char * is_composite_fence_node(xmlNodePtr node, double height) {
+	if (
+		is_node_valid(node, "vbox", 0, 0) &&
+		(get_box_total_height(node) - height) < SIZE_DELTA
+	) {
+		xmlNodePtr sub = node->children->next; /* skip <param> */
+		const char * fences[32];
+		int len = 0;
+		while (sub) {
+			const char * fence;
+			xmlNodePtr o = is_basic_fence_node(sub);
+			if (!o) return 0;
+			assert(len < 32);
+			fences[len++] = get_fenced_char(o);
+			sub = sub->next;
+		}
+		return get_composite_fence_char(fences, len);
+	}
+	return 0;
+}
+
+static
+const char * is_matching_fence_node(xmlNodePtr node, double height) {
 	xmlNodePtr other_node;
 
 	if (
-		!is_node_valid(node, "hbox", 0, 0) ||
-		!(is_node_valid(node->children, "param", 0, 0)) ||
-		!(other_node = node->children->next) ||
-		!is_node_valid(other_node, "other", 0, 0) ||
-		!(is_node_valid(other_node->children, "param", 0, 0)) ||
-		(other_node->next)
-	)
-		return 0;
-
-
-	if ((get_box_total_height(node) - height) > 1e-5) return 0;
-	return other_node;
+		(other_node = is_basic_fence_node(node)) &&
+		(height > 0 && (get_box_total_height(node) - height) < SIZE_DELTA)
+	) {
+		return get_fenced_char(other_node);
+	}
+	if ( /* empty hbox are allowed for \right. */
+		is_node_valid(node, "hbox", 0, 0) &&
+		(is_node_valid(node->children, "param", 0, 0)) &&
+		(!node->children->next) &&
+		get_box_total_height(node) == 0
+	) {
+		return "";
+	}
+	return is_composite_fence_node(node, height);
 }
 
 static
@@ -1274,13 +1328,14 @@ void transform_left_and_right_pattern(xmlNodePtr root, xmlTransformationEntry * 
 			(last_child = node->last) &&
 			(first_child != last_child)
 		) {
-			xmlNodePtr open_char, close_char;
+			const char * open_char, * close_char;
 			double height = get_box_total_height(node);
 
 			if (
 				height > 0 &&
 				(open_char = is_matching_fence_node(first_child, height)) &&
-				(close_char = is_matching_fence_node(last_child, height))
+				(close_char = is_matching_fence_node(last_child, height)) &&
+				(strlen(open_char) + strlen(close_char) > 0)
 			) {
 				xmlNodePtr fenced, content, tmp;
 
@@ -1288,8 +1343,8 @@ void transform_left_and_right_pattern(xmlNodePtr root, xmlTransformationEntry * 
 				content = xmlNewNode(0, BAD_CAST "mrow");
 				xmlAddChild(fenced, content);
 
-				xmlNewProp(fenced, BAD_CAST "open", BAD_CAST get_fenced_char(open_char));
-				xmlNewProp(fenced, BAD_CAST "close", BAD_CAST get_fenced_char(close_char));
+				xmlNewProp(fenced, BAD_CAST "open", BAD_CAST open_char);
+				xmlNewProp(fenced, BAD_CAST "close", BAD_CAST close_char);
 
 				tmp = first_child->next;
 				do {
@@ -1801,7 +1856,7 @@ xmlNodePtr insert_character_node(xmlNodePtr node, const char * font, const char 
 			}
 		} else {
 			if (strcmp((const char *)v, mathvariant)) {
-				fprintf(stderr, "Mathvariant mistmath !\n");
+				fprintf(stderr, "lxir: Mathvariant mistmath !\n");
 			}
 			xmlFree(v);
 		}
@@ -1836,7 +1891,7 @@ xmlNodePtr insert_character_mathml_type(xmlNodePtr node, const char * chr, const
 			xmlSetProp(cnode, BAD_CAST "tex-style", BAD_CAST "oldstyle");
 		} else {
 			xmlFree(v);
-			fprintf(stderr, "Old style script characters error !\n");
+			fprintf(stderr, "lxir: Old style script characters error !\n");
 			exit(-1);
 		}
 		return cnode;
@@ -1899,7 +1954,7 @@ char * content_from_mathchar(char const * mchar) {
 	if (!buffer) return 0;
 	result = malloc(strlen(buffer) + 1);
 	if (!result) {
-		fprintf(stderr, "Allocation error while coding mathchar\n");
+		fprintf(stderr, "lxir: Allocation error while coding mathchar\n");
 		exit(-1);
 	}
 	token = strtok(buffer, ",");
@@ -1992,7 +2047,7 @@ void transform_string_patterns(xmlNodePtr root, xmlTransformationEntry * param) 
 			if (slash) *slash = 0;
 */
 			if(lfm_get_math_encoding_map(type, &trans)) {
-				fprintf(stderr, "Unable to find encoding for math font \"%s\"\n", type);
+				fprintf(stderr, "lxir: Unable to find encoding for math font \"%s\"\n", type);
 				exit(-1);
 			}
 			tmp = xmlNewNode(0, BAD_CAST "tmp");
@@ -2285,7 +2340,7 @@ void math_strtol_node(xmlNodePtr node, xmlChar const * buffer) {
 	xmlChar chr[10];
 	int value;
 	if (*buffer++ != '#') {
-		fprintf(stderr, "Invalid entity code '%s' found\n", buffer);
+		fprintf(stderr, "lxir: Invalid entity code '%s' found\n", buffer);
 		xmlAddChild(node, xmlNewComment(buffer));
 		return;
 	}
