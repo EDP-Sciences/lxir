@@ -846,7 +846,7 @@ void transform_underline_pattern(xmlNodePtr root, xmlTransformationEntry * param
 
 			next = under->next;
 
-			xmlTransformationPush(content, transform_underline_pattern, param);
+			xmlTransformationPush(under, transform_underline_pattern, param);
 
 		} else {
 			xmlTransformationPush(node, transform_underline_pattern, param);
@@ -872,7 +872,7 @@ void transform_underline_pattern(xmlNodePtr root, xmlTransformationEntry * param
 		<hbox /> {1}
 	</menclose>
 
-	NOTE : AFTER sqrt !!!
+	NOTE: do this before looking for sqrt
 */
 
 static
@@ -906,7 +906,7 @@ void transform_overline_pattern(xmlNodePtr root, xmlTransformationEntry * param)
 
 			next = over->next;
 
-			xmlTransformationPush(content, transform_overline_pattern, param);
+			xmlTransformationPush(over, transform_overline_pattern, param);
 
 		} else {
 			xmlTransformationPush(node, transform_overline_pattern, param);
@@ -2320,6 +2320,7 @@ static
 void merge_menclose_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
+		xmlNodePtr next = node->next;
 		if (is_node_valid(node, "menclose", 0, 0) &&
 			node->children &&
 			is_node_valid(node->children, "menclose", 0, 0) &&
@@ -2341,14 +2342,16 @@ void merge_menclose_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 				xmlUnlinkNode(inner);
 				xmlAddChild(node, content);
 				xmlFreeNode(inner);
+				xmlTransformationPush(node, merge_menclose_sequence, param);
+			} else {
+				xmlTransformationPush(inner, merge_menclose_sequence, param);
 			}
 			xmlFree(arg1);
 			xmlFree(arg2);
-			xmlTransformationPush(content, merge_menclose_sequence, param);
 		} else {
 			xmlTransformationPush(node, merge_menclose_sequence, param);
-			node = node->next;
 		}
+		node = next;
 	}
 }
 
