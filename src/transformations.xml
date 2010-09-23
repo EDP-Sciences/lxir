@@ -137,6 +137,7 @@
 		<transformation name="transform_string_patterns" />
 		<transformation name="merge_mn_sequence" />
 		<transformation name="merge_mi_sequence" />
+		<transformation name="merge_menclose_sequence" />
 		<transformation name="replace_entities_in_math"/>
 		<transformation name="transform_mrow_pattern" />
 		<transformation name="drop_empty_mrows" />

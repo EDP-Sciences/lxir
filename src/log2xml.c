@@ -343,12 +343,14 @@ static
 int is_node_valid_mathbox(xmlNodePtr node) {
 	return
 		is_node_valid(node, "hbox", 0, 0) ||
+		is_node_valid(node, "vbox", 0, 0) ||
 		is_node_valid(node, "other", 0, 0) ||
 		is_node_valid(node, "mrow", 0, 0) ||
 		is_node_valid(node, "msub", 0, 0) ||
 		is_node_valid(node, "msup", 0, 0) ||
 		is_node_valid(node, "msubsup", 0, 0) ||
-		is_node_valid(node, "mfenced", 0, 0)
+		is_node_valid(node, "mfenced", 0, 0) ||
+		is_node_valid(node, "menclose", 0, 0)
 		;
 }
 
@@ -827,7 +829,7 @@ void transform_underline_pattern(xmlNodePtr root, xmlTransformationEntry * param
 			(tmp = node->children) &&
 			is_node_valid(tmp, "param", 0, 0) &&
 			(content = tmp->next) &&
-			is_node_valid(content, "hbox", 0, 0) &&
+			is_node_valid_mathbox(content) &&
 			(tmp = content->next) &&
 			is_node_valid(tmp, "kern", 0, 0) &&
 			(tmp = tmp->next) &&
@@ -891,7 +893,7 @@ void transform_overline_pattern(xmlNodePtr root, xmlTransformationEntry * param)
 			(tmp = tmp->next) &&
 			is_node_valid(tmp, "kern", 0, 0) &&
 			(content = tmp->next) &&
-			is_node_valid(content, "hbox", 0, 0) &&
+			is_node_valid_mathbox(content) &&
 			(!content->next)
 		) {
 			xmlNodePtr over = xmlNewNode(0, BAD_CAST "menclose");
@@ -1263,8 +1265,12 @@ const char * get_composite_fence_char(const char ** fences, int len) {
 	const char * last = fences[len-1];
 	const char * middle = (len % 2) ? fences[len>>1] : 0;
 
-	if (strcmp(first, "⎧") == 0 && strcmp(middle, "⎨") == 0 && strcmp(last, "⎩") == 0)
-		return "{";
+	if (strcmp(first, "⎧") == 0 && strcmp(middle, "⎨") == 0 && strcmp(last, "⎩") == 0) return "{";
+	if (strcmp(first, "⎛") == 0 && (!middle || strcmp(middle, "⎜") == 0) && strcmp(last, "⎝") == 0) return "(";
+	if (strcmp(first, "⎞") == 0 && (!middle || strcmp(middle, "⎜") == 0) && strcmp(last, "⎠") == 0) return ")";
+	if (strcmp(first, "⎡") == 0 && (!middle || strcmp(middle, "⎜") == 0) && strcmp(last, "⎣") == 0) return "[";
+	if (strcmp(first, "⎤") == 0 && (!middle || strcmp(middle, "⎜") == 0) && strcmp(last, "⎦") == 0) return "]";
+	if (strcmp(first, "|") == 0 && (!middle || strcmp(middle, "|") == 0) && strcmp(last, "|") == 0) return "|";
 
 	fprintf(stderr, "lxir: unknown composite fence char <%s %s %s>\n", first, middle ? middle : "", last);
 	return 0;
@@ -2310,6 +2316,42 @@ void merge_mi_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
+static
+void merge_menclose_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children;
+	while(node) {
+		if (is_node_valid(node, "menclose", 0, 0) &&
+			node->children &&
+			is_node_valid(node->children, "menclose", 0, 0) &&
+			!node->children->next
+		) {
+			xmlNodePtr inner = node->children;
+			xmlNodePtr content = inner->children;
+			char * arg1 = (char *)xmlGetProp(node, BAD_CAST "notation");
+			char * arg2 = (char *)xmlGetProp(inner, BAD_CAST "notation");
+			if (strcmp(arg1, arg2)) {
+				int len = strlen(arg1) + strlen(arg2) + 2;
+				char * buffer = malloc(len);
+				strcpy(buffer, arg1);
+				strcat(buffer, " ");
+				strcat(buffer, arg2);
+				xmlSetProp(node, BAD_CAST "notation", buffer);
+				free(buffer);
+				xmlUnlinkNode(content);
+				xmlUnlinkNode(inner);
+				xmlAddChild(node, content);
+				xmlFreeNode(inner);
+			}
+			xmlFree(arg1);
+			xmlFree(arg2);
+			xmlTransformationPush(content, merge_menclose_sequence, param);
+		} else {
+			xmlTransformationPush(node, merge_menclose_sequence, param);
+			node = node->next;
+		}
+	}
+}
+
 /*
     <mo mathvariant="normal">[</mo>
     <mi mathvariant="italic">entity</mi>
@@ -2426,6 +2468,7 @@ void xmlRegisterMathTransformations() {
 	DEF(transform_mtable_pattern)
 	DEF(merge_mn_sequence)
 	DEF(merge_mi_sequence)
+	DEF(merge_menclose_sequence)
 	DEF(replace_entities_in_math)
 	DEF(decode_box_parameters)
 #undef DEF
