@@ -2181,13 +2181,43 @@ void transform_math_above2(xmlNodePtr root, xmlTransformationEntry * param) {
 			} else if (strcmp(type, "dot") == 0) {
 				diacritic = "̇";
 			} else if (strcmp(type, "hat") == 0) {
-				diacritic = "";
+				diacritic = "̂";
 			} else {
 				fprintf(stderr, "lxir: unknown math-above type `%s'\n", type);
 				diacritic = "";
 			}
 			xmlFree(type);
 			xmlTextConcat(child->children, diacritic, strlen(diacritic));
+			xmlUnlinkNode(node);
+			xmlFreeNode(node);
+		} else if (is_node_valid(node, "math-above", 0, 0)) {
+			const xmlChar * symbol;
+			xmlChar * type = xmlGetProp(node, BAD_CAST "type");
+			xmlNodePtr mover = xmlNewNode(NULL, BAD_CAST "mover");
+			xmlSetProp(mover, BAD_CAST "accent", BAD_CAST "true");
+			xmlNodePtr contener = mover;
+			if (node->children->next) {
+				contener = xmlNewNode(NULL, BAD_CAST "mrow");
+				xmlAddChild(mover, contener);
+			}
+			while (node->children) {
+				xmlNodePtr child = node->children;
+				xmlUnlinkNode(child);
+				xmlAddChild(contener, child);
+			}
+			if (strcmp(type, "bar") == 0) {
+				symbol = "¯";
+			} else if (strcmp(type, "dot") == 0) {
+				symbol = "˙";
+			} else if (strcmp(type, "hat") == 0) {
+				symbol = "ˆ";
+			} else {
+				fprintf(stderr, "lxir: unknown math-above type `%s'\n", type);
+				symbol = "";
+			}
+			xmlFree(type);
+			xmlNewTextChild(mover, NULL, BAD_CAST "mo", symbol);
+			xmlAddPrevSibling(node, mover);
 			xmlUnlinkNode(node);
 			xmlFreeNode(node);
 		} else {
