@@ -350,7 +350,8 @@ int is_node_valid_mathbox(xmlNodePtr node) {
 		is_node_valid(node, "msup", 0, 0) ||
 		is_node_valid(node, "msubsup", 0, 0) ||
 		is_node_valid(node, "mfenced", 0, 0) ||
-		is_node_valid(node, "menclose", 0, 0)
+		is_node_valid(node, "menclose", 0, 0) ||
+		is_node_valid(node, "math-above", 0, 0)
 		;
 }
 
@@ -1267,9 +1268,9 @@ const char * get_composite_fence_char(const char ** fences, int len) {
 
 	if (strcmp(first, "⎧") == 0 && strcmp(middle, "⎨") == 0 && strcmp(last, "⎩") == 0) return "{";
 	if (strcmp(first, "⎛") == 0 && (!middle || strcmp(middle, "⎜") == 0) && strcmp(last, "⎝") == 0) return "(";
-	if (strcmp(first, "⎞") == 0 && (!middle || strcmp(middle, "⎜") == 0) && strcmp(last, "⎠") == 0) return ")";
-	if (strcmp(first, "⎡") == 0 && (!middle || strcmp(middle, "⎜") == 0) && strcmp(last, "⎣") == 0) return "[";
-	if (strcmp(first, "⎤") == 0 && (!middle || strcmp(middle, "⎜") == 0) && strcmp(last, "⎦") == 0) return "]";
+	if (strcmp(first, "⎞") == 0 && (!middle || strcmp(middle, "⎟") == 0) && strcmp(last, "⎠") == 0) return ")";
+	if (strcmp(first, "⎡") == 0 && (!middle || strcmp(middle, "⎢") == 0) && strcmp(last, "⎣") == 0) return "[";
+	if (strcmp(first, "⎤") == 0 && (!middle || strcmp(middle, "⎥") == 0) && strcmp(last, "⎦") == 0) return "]";
 	if (strcmp(first, "|") == 0 && (!middle || strcmp(middle, "|") == 0) && strcmp(last, "|") == 0) return "|";
 
 	fprintf(stderr, "lxir: unknown composite fence char <%s %s %s>\n", first, middle ? middle : "", last);
@@ -2085,7 +2086,116 @@ void transform_string_patterns(xmlNodePtr root, xmlTransformationEntry * param) 
 }
 
 /*
+	<special> ::tag lxir begin math-above-{1}
+	<*>
+	<special> ::tag lxir end math-above-{1}
+
+	->
+
+	<math-above type={1}>
+		<*>
+	</math-above>
 */
+static
+void transform_math_above1(xmlNodePtr root, xmlTransformationEntry * param) {
+	xmlNodePtr node = root->children;
+	while (node) {
+		xmlNodePtr next = node->next;
+		if (is_node_valid(node, "special", "{::tag lxir begin(math-above-", 29)) {
+			xmlNodePtr last, tmp;
+			const char *type = (const char *) node->children->children->content + 29;
+			char * real_type = strdup(type);
+			char * endpos = strchr(real_type, ')');
+			assert(endpos);
+			*endpos = 0;
+			char * endtag = malloc(29 + strlen(type));
+			int endlen;
+			strcpy(endtag, "{::tag lxir end(math-above-");
+			strcat(endtag, real_type);
+			strcat(endtag, ")");
+			endlen = strlen(endtag);
+			tmp = xmlNewNode(NULL, BAD_CAST "math-above");
+			xmlSetProp(tmp, BAD_CAST "type", BAD_CAST real_type);
+			xmlAddPrevSibling(node, tmp);
+			free(real_type);
+			last = next;
+			while (last) {
+				next = last->next;
+				xmlUnlinkNode(last);
+				if (is_node_valid(last, "special", endtag, endlen)) {
+					break;
+				} else {
+					xmlAddChild(tmp, last);
+				}
+				last = next;
+			}
+			if (last) {
+				xmlUnlinkNode(node);
+				xmlFreeNode(node);
+				xmlFreeNode(last);
+			} else {
+				fprintf(stderr, "lxir: math-above without endtag !\n");
+				exit(-1);
+			}
+			free(endtag);
+		} else {
+			xmlTransformationPush(node, transform_math_above1, param);
+		}
+		node = next;
+	}
+}
+
+/*
+	<math-above type="{1}>
+		<m{ion} />
+	</math-above>
+
+	->
+
+	<m{ion} /> + *diacritic
+*/
+static
+void transform_math_above2(xmlNodePtr root, xmlTransformationEntry * param) {
+
+	xmlNodePtr node = root->children;
+
+	while (node) {
+		xmlNodePtr child, next;
+		next = node->next;
+		if (
+			is_node_valid(node, "math-above", 0, 0) &&
+			(child = node->children) &&
+			(
+				is_node_valid(child, "mo", 0, 0) ||
+				is_node_valid(child, "mi", 0, 0) ||
+				is_node_valid(child, "mn", 0, 0)
+			) &&
+			(!child->next)
+		) {
+			const xmlChar * diacritic;
+			xmlChar * type = xmlGetProp(node, BAD_CAST "type");
+			xmlUnlinkNode(child);
+			xmlAddPrevSibling(node, child);
+			if (strcmp(type, "bar") == 0) {
+				diacritic = "̅";
+			} else if (strcmp(type, "dot") == 0) {
+				diacritic = "̇";
+			} else if (strcmp(type, "hat") == 0) {
+				diacritic = "";
+			} else {
+				fprintf(stderr, "lxir: unknown math-above type `%s'\n", type);
+				diacritic = "";
+			}
+			xmlFree(type);
+			xmlTextConcat(child->children, diacritic, strlen(diacritic));
+			xmlUnlinkNode(node);
+			xmlFreeNode(node);
+		} else {
+			xmlTransformationPush(node, transform_math_above2, param);
+		}
+		node = next;
+	}
+}
 
 static
 void drop_remaining_tex_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
@@ -2462,6 +2572,8 @@ void xmlRegisterMathTransformations() {
 	DEF(transform_underline_pattern)
 	DEF(transform_overline_pattern)
 	DEF(transform_mathsym_patterns)
+	DEF(transform_math_above1)
+	DEF(transform_math_above2)
 	DEF(transform_array_pattern)
 	DEF(drop_remaining_tex_nodes)
 	DEF(transform_string_patterns)
