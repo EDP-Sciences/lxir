@@ -411,6 +411,11 @@ int lfm_init() {
 		docs = next;
 	}
 
+	if (!fontencs) {
+		fprintf(stderr, "libfontmap: No fonts declared in fonts.xml. This is an error.\n");
+		return -1;
+	}
+
 	add_neutral_font();
 
 	lfm_init_done++;
