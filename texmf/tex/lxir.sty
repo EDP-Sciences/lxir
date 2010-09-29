@@ -521,9 +521,9 @@
    \xBegin{theoremMark}\item[\hskip \labelsep{\bfseries \xBegin{theoremType}#1\xEnd{theoremType}\ \xBegin{theoremCount}{#2}\xEnd{theoremCount}}]\xEnd{theoremMark}\itshape}
 \def\@endtheorem{\endtrivlist\xEnd{theorem}}
 %%% From File: ltsect.dtx l5597
-\def\title#1{\gdef\@title{\xBegin{title}#1\xEnd{title}}}
-\def\author#1{\gdef\@author{\xBegin{author}#1\xEnd{author}}}
-\def\date#1{\gdef\@date{\xBegin{date}#1\xEnd{date}}}
+\def\title#1{\gdef\@title{\xBegin{title}\xAttr{header=yes}#1\xEnd{title}}}
+\def\author#1{\gdef\@author{\xBegin{author}\xAttr{header=yes}#1\xEnd{author}}}
+\def\date#1{\gdef\@date{\xBegin{date}\xAttr{header=yes}#1\xEnd{date}}}
 \def\thanks#1{\xBegin{thanks}\xBegin{thanksMark}\footnotemark\xEnd{thanksMark}%
   \xBegin{thanksText}{#1}\xEnd{thanksText}\xEnd{thanks}}
 \let\t@gand=\and
