@@ -385,8 +385,7 @@
 \def\H#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7D }\else{\ifmmode\mathaccent\else\accent\fi"7D #1}\fi}}
 \def\~#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7E }\else{\ifmmode\mathaccent\else\accent\fi"7E #1}\fi}}
 \def\"#1{{\def\h@test{}\def\h@testa{#1}\ifx\h@test\h@testa{\xEmpty{spacing}\char"7F }\else{\ifmmode\mathaccent\else\accent\fi"7F #1}\fi}}
-\let\oldcopyright=\copyright
-\def\copyright{{\xEmpty{textaccent}\oldcopyright}}%
+\def\copyright{\ifmmode\mathord{\xEmptyAA{copyright}{mathtype=ord}{mathchar=A9}}\else[entity!\#xA9!]\fi}%
 %    \end{macrocode}
 %\subsection{Entities for some special characters}
 %
