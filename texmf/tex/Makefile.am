@@ -12,7 +12,8 @@ PACKAGES = \
 	url_lxir.sty \
 	nameref_lxir.sty \
 	txfonts_lxir.sty \
-	multirow_lxir.sty
+	multirow_lxir.sty \
+	rotating_lxir.sty
 
 CORE = \
 	lxir.dtx \
