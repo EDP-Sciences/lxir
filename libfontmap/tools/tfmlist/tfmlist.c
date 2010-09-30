@@ -294,6 +294,8 @@ void sort_tfm_list() {
 		result[i]->next = result[i + 1];
 	}
 	result[count - 1]->next = 0;
+
+	free(result);
 }
 
 int export_encodings() {
