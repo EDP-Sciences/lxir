@@ -13,16 +13,16 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is Jean-Paul Jorda.
 %
 % This work consists of the files footnote.xsl.
 -->
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns:lxir="http://www.latex-lxir.org">
-<xsl:output method="xml" 
-	    indent="yes" 
+<xsl:output method="xml"
+	    indent="yes"
 	    />
 
 <!-- footnote cleaning: we rebuild a xlatex call for footnote   -->
@@ -35,7 +35,7 @@
 <!-- CASE (1)							-->
 <!-- \footnode[4]{a footnote} leads to:				-->
 <!-- 								-->
-<!--     <footnoteCall id="127" page="1" deffnmark="5" close-id="142">        --> 
+<!--     <footnoteCall id="127" page="1" deffnmark="5" close-id="142">        -->
 <!--       <footnoteMark id="129" page="1" close-id="132">		      -->
 <!--         <superscript>5</superscript>				      -->
 <!--       </footnoteMark>						      -->
@@ -43,7 +43,7 @@
 <!--       <footnoteText id="140" close-id="141">			      -->
 <!--         <text font="14" h="4336238" v="19436458">a footnote</text>	      -->
 <!--       </footnoteText>                    				      -->
-<!--                                                                          --> 
+<!--                                                                          -->
 <!-- 								-->
 <!-- ....							-->
 <!--    <footnote id="134" page="1" close-id="139">                          -->
@@ -52,10 +52,10 @@
 <!--         <text font="25" h="5065689" v="39516306">a footnote</text>	     -->
 <!--       </footnoteText>						     -->
 <!--     </footnote>							     -->
-<!--                                                                         -->    
+<!--                                                                         -->
 <!-- CASE (2)							-->
 <!-- \footnode{a footnote} leads to:				-->
-<!--     <footnoteCall id="127" page="1" close-id="142">                 -->  
+<!--     <footnoteCall id="127" page="1" close-id="142">                 -->
 <!--       <footnoteMark id="129" page="1" close-id="132">		 -->
 <!--         <superscript>3</superscript>				 -->
 <!--       </footnoteMark>						 -->
@@ -63,9 +63,9 @@
 <!--       <footnoteText id="140" close-id="141">			 -->
 <!--         <text font="14" h="4336238" v="19436458">a footnote</text>	 -->
 <!--       </footnoteText>						 -->
-<!--     </footnoteCall>                                                 -->  
+<!--     </footnoteCall>                                                 -->
 <!-- ....							-->
-<!--    <footnote id="134" page="1" close-id="139">                       -->   
+<!--    <footnote id="134" page="1" close-id="139">                       -->
 <!--      <superscript>3</superscript>					  -->
 <!--      <footnoteText id="137" close-id="138">			  -->
 <!--        <text font="25" h="5065689" v="39516306">a footnote</text>	  -->
@@ -78,7 +78,7 @@
 <!-- 								-->
 <!-- CASE (4)							-->
 <!-- \footnote{inside minipage} leads to:			-->
-<!--     <footnoteCall id="75" page="1" close-id="91">                          -->                   
+<!--     <footnoteCall id="75" page="1" close-id="91">                          -->
 <!--        <footnoteMark id="77" page="1" close-id="81">			-->
 <!--          <superscript>a</superscript>					-->
 <!--        </footnoteMark>							-->
@@ -86,14 +86,14 @@
 <!--        <footnoteText id="89" close-id="90">				-->
 <!--          <text font="14" h="5453964" v="14407348">inside minipage</text>	-->
 <!--        </footnoteText>							-->
-<!--      </footnoteCall>                                                       -->    
+<!--      </footnoteCall>                                                       -->
 <!-- ....							-->
 <!--      <mpfootnote id="83" page="1" close-id="88">                           -->
 <!--        <superscript>a</superscript>					-->
 <!--        <footnoteText id="86" close-id="87">				-->
 <!--          <text font="14" h="6225633" v="15575932">inside minipage</text>	-->
 <!--        </footnoteText>							-->
-<!--      </mpfootnote>                                                         -->								
+<!--      </mpfootnote>                                                         -->
 <!-- CASE (5)							-->
 <!-- \footnotemark{} inside minipage leads to			-->
 <!--      <footnoteMark id="93" page="1" close-id="96">     -->
@@ -111,8 +111,8 @@
 <!--     </footnote>                                                                      -->
 <!-- 								-->
 
-<!-- OUTPUT: 
-We aim to: 
+<!-- OUTPUT:
+We aim to:
 - put all <footnote> but those of minipage a the end of the document in a  <footnotelist>
 - build an @idFootnote for the footnote, containing the footnoteMark and the page
 - add this @idFootnote in both  <footnoteCall> and <footnote>
@@ -123,7 +123,7 @@ We aim to:
   <xsl:copy>
     <xsl:apply-templates select="*[name()!='footnote']"/>
     <xsl:if test="//footnote">
-      <footnotelist>
+      <footnotelist lxir:back="yes">
 	<xsl:apply-templates select="//footnote"/>
       </footnotelist>
     </xsl:if>
