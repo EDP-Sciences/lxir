@@ -1036,9 +1036,9 @@
 % for footnotes inside minipages
 \long\def\@mpfootnotetext#1{%
   \global\setbox\@mpfootins\vbox{%
+    \unvbox\@mpfootins
 \xBegin{mpfootnote}
 \xEmptyA{params}{page=\thepage}
-    \unvbox\@mpfootins
     %\reset@font\footnotesize
     \hsize\columnwidth
     \@parboxrestore
