@@ -7,4 +7,4 @@ tfmlist_LDADD = @LIBXML2_LIBS@
 tfmlist_CFLAGS = @LIBXML2_CFLAGS@
 
 fonts.xml: tfmlist
-	./tfmlist $(srcdir)/patterns.xml /usr/share/texmf/fonts/tfm /var/lib/texmf/tfm $(TEXMF_DEST_DIR)/fonts/tfm $(TFM_SEARCH_PATH) > $@
+	./tfmlist $(srcdir)/patterns.xml /usr/share/texmf/fonts/tfm /usr/share/texmf-texlive/fonts/tfm /var/lib/texmf/tfm $(TEXMF_DEST_DIR)/fonts/tfm $(TFM_SEARCH_PATH) > $@

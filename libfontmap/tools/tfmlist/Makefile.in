@@ -528,7 +528,7 @@ uninstall-am: uninstall-xmlDATA
 
 
 fonts.xml: tfmlist
-	./tfmlist $(srcdir)/patterns.xml /usr/share/texmf/fonts/tfm /var/lib/texmf/tfm $(TEXMF_DEST_DIR)/fonts/tfm $(TFM_SEARCH_PATH) > $@
+	./tfmlist $(srcdir)/patterns.xml /usr/share/texmf/fonts/tfm /usr/share/texmf-texlive/fonts/tfm /var/lib/texmf/tfm $(TEXMF_DEST_DIR)/fonts/tfm $(TFM_SEARCH_PATH) > $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
