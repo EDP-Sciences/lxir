@@ -13,7 +13,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is Xavier Trochu.
 %
 % This work consists of the files patterns.xml.
@@ -24,7 +24,7 @@
 		The parameters `encoding' or `family' default to ".*" if not provided.
 	-->
 	<!-- default, match everything -->
-	<pattern encoding="DefaultLXirEncoding" result="DefaultLXirEncoding" /> 
+	<pattern encoding="DefaultLXirEncoding" result="DefaultLXirEncoding" />
 
 	<pattern encoding="TEX TEXT" result="OT1Encoding" />
 	<pattern encoding="TeXBase1Encoding" result="TeXBase1Encoding"/>
@@ -37,12 +37,13 @@
 	<pattern encoding="TEX MATH SYMBOLS" family="MSAM V.*\..*" result="DummyEncoding" />
 	<pattern encoding="TEX MATH SYMBOLS" family="MSBM V2\.2" result="AMSSymbolsBEncoding" />
 	<pattern encoding="TEX MATH SYMBOLS" family="MSBM V.*\..*" result="DummyEncoding" />
-	
+
 	<pattern encoding="TEX TEXT WITHOUT F\-LIGATURES" result="OT1woflEncoding" />
 	<pattern encoding="EXTENDED TEX FONT ENCODING \- LATIN" result="CorkEncoding" />
 	<pattern encoding="CORK" result="CorkEncoding" />
 	<pattern encoding="TEX MATH ITALIC" result="TeXMathItalicEncoding" />
 	<pattern encoding="TEX MATH SYMBOLS" result="TeXMathSymbolEncoding" />
+	<pattern encoding="FONTSPECIFIC + CMSYENCODING" result="TeXMathSymbolEncoding" />
 	<pattern encoding="TEX MATH EXTENSION" result="TeXMathExtensionEncoding" />
 	<pattern encoding="TEX TYPEWRITER TEXT" result="TeXTypewriterTextEncoding" />
 	<pattern encoding="U" family="EUROSYM" result="EurosymEncoding" />
