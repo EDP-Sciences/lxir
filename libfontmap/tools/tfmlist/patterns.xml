@@ -44,6 +44,10 @@
 	<pattern encoding="TEX MATH ITALIC" result="TeXMathItalicEncoding" />
 	<pattern encoding="TEX MATH SYMBOLS" result="TeXMathSymbolEncoding" />
 	<pattern encoding="FONTSPECIFIC + CMSYENCODING" result="TeXMathSymbolEncoding" />
+	<pattern encoding="FONTSPECIFIC + MSAMENCODING" result="AMSSymbolsAEncoding" />
+	<pattern encoding="FONTSPECIFIC + MSBMENCODING" result="AMSSymbolsBEncoding" />
+	<pattern encoding="FONTSPECIFIC + CMEXENCODING" result="TeXMathExtensionEncoding" />
+	<pattern encoding="FONTSPECIFIC + CMMIENCODING" result="TeXMathItalicEncoding" />
 	<pattern encoding="TEX MATH EXTENSION" result="TeXMathExtensionEncoding" />
 	<pattern encoding="TEX TYPEWRITER TEXT" result="TeXTypewriterTextEncoding" />
 	<pattern encoding="U" family="EUROSYM" result="EurosymEncoding" />

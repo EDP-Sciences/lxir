@@ -54,9 +54,9 @@ void init_fontenc(const char * pattern) {
 	int i;
 
 	doc = xmlReadFile(pattern, NULL, 0);
-	
+
 	node = find_first_element_node(doc); i = 0;
-	
+
 	while(node) {
 		if (node->type == XML_ELEMENT_NODE) ++i;
 		node = node->next;
@@ -64,12 +64,12 @@ void init_fontenc(const char * pattern) {
 	fontenclen = i;
 	fontenctbl = malloc(fontenclen * sizeof(struct fontenc_t));
 	node = find_first_element_node(doc); i = 0;
-	
+
 	while(node) {
 		if (node->type == XML_ELEMENT_NODE) {
 			xmlChar * attr;
 			struct fontenc_t * enc = fontenctbl + i;
-			
+
 			attr = xmlGetProp(node, BAD_CAST "encoding");
 			if (attr) {
 				int ret;
@@ -82,7 +82,7 @@ void init_fontenc(const char * pattern) {
 			} else {
 				enc->encpattern = 0;
 			}
-			
+
 			attr = xmlGetProp(node, BAD_CAST "family");
 			if (attr) {
 				int ret;
@@ -95,14 +95,14 @@ void init_fontenc(const char * pattern) {
 			} else {
 				enc->fampattern = 0;
 			}
-			
+
 			attr = xmlGetProp(node, BAD_CAST "result");
 			if (!attr) {
 				fprintf(stderr, "Invalid pattern\n");
 				exit(1);
 			}
 			enc->encoding = strdup((const char *)attr);
-			
+
 			++i;
 		}
 		node = node->next;
@@ -132,11 +132,11 @@ char * get_font_name(const char * filename) {
 	char * fontname;
 	char * fstart, *fend;
 	int len;
-	
+
 	fstart = strrchr(filename, '/') + 1;
 	fend = strchr(fstart, '.');
 	len = fend - fstart;
-	
+
 	fontname = malloc(len + 1);
 	memcpy(fontname, fstart, len);
 	fontname[len] = 0;
@@ -159,7 +159,7 @@ void add_tfm_info(const char * file, const char * encname, const char * name) {
 	struct tfm_list * entry;
 	const char * encoding = 0, * penc;
 	int i;
-	
+
 	for (i = 0; i < fontenclen; ++i) {
 		if(
 			(fontenctbl[i].encpattern == 0 || 0 == regexec(fontenctbl[i].encpattern, encname, 0, 0, 0))
@@ -174,7 +174,7 @@ void add_tfm_info(const char * file, const char * encname, const char * name) {
 		encoding = fontenctbl[0].encoding;
 		fprintf(stderr, "File \"%s\": Couldn't find a match for Font name \"%s\" and encoding name \"%s\", defaulting to \"%s\"\n", file, name, encname, encoding);
 	}
-	
+
 	if ((penc = has_tfm_info(fontname))) {
 		if (strcmp(penc, encoding)) {
 			fprintf(stderr, "Warning, font \"%s\" set twice with mismatching encodings : \"%s\" and \"%s\".\n", fontname, encoding, penc);
@@ -182,7 +182,7 @@ void add_tfm_info(const char * file, const char * encname, const char * name) {
 		free(fontname);
 		return ;
 	}
-	
+
 	entry = (struct tfm_list *) malloc(sizeof(struct tfm_list));
 	entry->next = tfms;
 	tfms = entry;
@@ -203,20 +203,20 @@ struct encoding_list {
 
 struct encoding_list * find_encoding(struct encoding_list ** plist, const char * encoding) {
 	struct encoding_list * list = *plist;
-	
+
 	while(list) {
 		if (strcmp(encoding, list->name) == 0) return list;
 		list = list->next;
 	}
-	
+
 	/* not found, allocate a new one */
-	
+
 	list = (struct encoding_list *) malloc(sizeof(struct encoding_list));
 	list->name = strdup(encoding);
 	list->fonts = 0;
 	list->next = *plist;
 	*plist = list;
-	
+
 	return list;
 }
 
@@ -227,13 +227,13 @@ struct encoding_list * make_encoding_list(struct tfm_list * tfms) {
 		struct font_list * font = (struct font_list *) malloc(sizeof(struct font_list));
 
 		font->name = strdup(tfms->file);
-		
+
 		font->next = current->fonts;
 		current->fonts = font;
-		
+
 		tfms = tfms->next;
 	}
-	
+
 	return ret;
 }
 
@@ -261,6 +261,41 @@ int handle_tfm(const char * fname) {
 
 extern int find_in_path(const char *, const char *, int (*)(const char *));
 
+static
+int compare_tfm_entry(struct tfm_list ** a, struct tfm_list ** b) {
+	return strcmp((*a)->file, (*b)->file);
+}
+
+static
+void sort_tfm_list() {
+	struct tfm_list ** result = 0;
+	int count = 0, i;
+	struct tfm_list * tfm = tfms;
+
+	while(tfm) {
+		++count;
+		tfm = tfm->next;
+	}
+
+	result = (struct tfm_list **) malloc(count * sizeof(struct tfm_list *));
+	if (!result) {
+		perror("allocation error");
+		exit(-1);
+	}
+	tfm = tfms;
+	count = 0;
+	while (tfm) {
+		result[count++] = tfm;
+		tfm = tfm->next;
+	}
+	qsort(result, count, sizeof(struct tfm_list *), compare_tfm_entry);
+	tfms = result[0];
+	for (i = 0; i < count - 1; ++i) {
+		result[i]->next = result[i + 1];
+	}
+	result[count - 1]->next = 0;
+}
+
 int export_encodings() {
     xmlDocPtr doc;
     xmlNodePtr root;
@@ -269,17 +304,17 @@ int export_encodings() {
 	doc = xmlNewDoc(BAD_CAST "1.0");
 	root = xmlNewNode(NULL, BAD_CAST "encodings");
 	xmlDocSetRootElement(doc, root);
-	
+
 	tfm = tfms;
 	while(tfm) {
 		xmlNodePtr node = xmlNewChild(root, NULL, BAD_CAST "font", NULL);
 		xmlNewProp(node, BAD_CAST "name", BAD_CAST tfm->file);
 		xmlNewProp(node, BAD_CAST "encoding", BAD_CAST tfm->encoding);
-		
+
 		tfm = tfm->next;
 	}
-	
-	
+
+
 	xmlSaveFormatFileEnc("-", doc, "UTF-8", 1);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
@@ -296,14 +331,16 @@ int main(int argc, char * argv[]) {
 		fprintf(stderr, "Usage : %s <patterns> <path> [<path> ...]\n", argv[1]);
 		return -1;
 	}
-	
+
 	init_fontenc(argv[1]);
 	for(i = 2; i < argc; ++i) {
 		find_in_path(argv[i], ".tfm", handle_tfm);
 	}
 	close_fontenc();
 
+	sort_tfm_list();
+
 	export_encodings();
-	
+
 	return 0;
 }
