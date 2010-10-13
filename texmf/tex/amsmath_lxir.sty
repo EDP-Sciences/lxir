@@ -16,8 +16,9 @@
 %
 % This work consists of the files amsmath_lxir.sty.
 % amsmath redefinie cette macro
+\newif\ift@ginmath@
+\t@ginmath@true
 \ifverbatimmath
-
 \renewenvironment{equation}{\lxirvmathenv{equation}}{\endlxirvmathenv{equation}}
 \renewenvironment{equation*}{\lxirvmathenvstar{equation-star}}{\endlxirvmathenvstar{equation-star}}
 \renewenvironment{multline}{\lxirvmathenv{multline}}{\endlxirvmathenv{multline}}
@@ -31,7 +32,15 @@
 \renewenvironment{split}{\lxirvmathenv{split}}{\endlxirvmathenv{split}}
 \renewenvironment{gathered}{\lxirvmathenv{gathered}}{\endlxirvmathenv{gathered}}
 \renewenvironment{aligned}{\lxirvmathenv{aligned}}{\endlxirvmathenv{aligned}}
+\renewenvironment{subequations}{\lxirvmathenv{subequations}}{\endlxirvmathenv{subequations}}
 \else
+\def\Xenddisplay{\xEnd{display}}
+\frozen@everydisplay = {%
+	\ift@ginmath@\xBegin{display}\fi%
+	\check@mathfonts%
+	\the\everydisplay%
+	\ift@ginmath@\aftergroup\Xenddisplay\fi%
+}%
 \def\endmathdisplay@a{%
 	\ifx\df@tag\@empty \else \veqno \alt@tag \df@tag \fi
 	\ifx\df@label\@empty \else \@xp\ltx@label\@xp{\df@label}\fi
@@ -89,6 +98,39 @@
   \endgather
 	\xEnd{gather-star}%
 }
+\def\start@align#1#2#3{%
+    \let\xatlevel@#1% always \z@, \@ne, or \tw@
+    \maxfields@#3\relax
+    \ifnum\maxfields@>\m@ne
+        \checkat@true
+        \ifnum\xatlevel@=\tw@
+            \xxat@true
+        \fi
+        \multiply\maxfields@\tw@
+    \else
+        \checkat@false
+    \fi
+    \ifingather@
+        \iffalse{\fi\ifnum0=`}\fi
+        \DN@{\vcenter\bgroup\savealignstate@\align@#2}%
+    \else
+        \ifmmode
+          \if@display
+             \DN@{\align@recover}%
+          \else
+            \nomath@env
+            \DN@{\@namedef{end\@currenvir}{}\@gobble}%
+          \fi
+        \else
+    \t@ginmath@false%
+            $$%
+            \let\split\insplit@
+            \DN@{\align@#2}%
+        \fi
+    \fi
+    \collect@body\next@
+}
+%
 \renewenvironment{align}{%
 	\xBegin{align}%
   \start@align\@ne\st@rredfalse\m@ne
@@ -102,6 +144,7 @@
     \ifnum0=`{\fi\iffalse}\fi
   \else
     $$%
+    \t@ginmath@true%
   \fi
 	\xEnd{align}%
   \ignorespacesafterend
@@ -110,14 +153,18 @@
 	\xBegin{align-star}%
   \start@align\@ne\st@rredtrue\m@ne
 }{%
-  \endalign
+  \math@cr \black@\totwidth@
+  \egroup
+  \ifingather@
+    \restorealignstate@
+    \egroup
+    \nonumber
+    \ifnum0=`{\fi\iffalse}\fi
+  \else
+    $$%
+    \t@ginmath@true%
+  \fi
 	\xEnd{align-star}%
+  \ignorespacesafterend
 }
-\frozen@everydisplay = {%
- 	\xBegin{display}
-	\check@mathfonts
-	\the\everydisplay%
-	\@displaytrue
-	\aftergroup\Xenddisplay
-	}%
 \fi
