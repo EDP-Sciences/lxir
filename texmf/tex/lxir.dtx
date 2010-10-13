@@ -412,10 +412,10 @@
 \def\textordmasculine{[entity!\#xBA!]}
 \def\textquotedblright{\xEmpty{RQUOTE}}
 \def\textperthousand{[entity!\#x2030!]}
-\def\dag{[entity!\#x2020!]}
+\def\dag{\ifmmode\mathord{\xEmptyAA{dag}{mathtype=ord}{mathchar=2020}}\else[entity!\#x2020!]\fi}
 \def\textbullet{[entity!\#x2022!]}
 \def\dagger{\mathrel{\xEmptyAA{dagger}{mathtype=rel}{mathchar=2020}}}
-\def\ddag{[entity!\#x2021!]}
+\def\ddag{\ifmmode\mathord{\xEmptyAA{ddag}{mathtype=ord}{mathchar=2021}}\else[entity!\#x2021!]\fi}
 \def\ddagger{\mathrel{\xEmptyAA{ddagger}{mathtype=rel}{mathchar=2021}}}
 %    \end{macrocode}
 %\subsection{Commands for spacing}
