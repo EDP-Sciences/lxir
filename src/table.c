@@ -22,8 +22,18 @@ struct row_t {
 	int num_cells;
 };
 
+struct col_t {
+	xmlNodePtr node;
+	xmlChar * align;
+};
+
 struct table_t {
 	xmlNodePtr node;
+	xmlNodePtr colgroup;
+
+	struct col_t ** cols;
+	int num_cols;
+
 	struct row_t ** rows;
 	int num_rows;
 };
@@ -44,11 +54,20 @@ void free_row(struct row_t * row) {
 }
 
 static
+void free_col(struct col_t * col) {
+	xmlFree(col->align);
+	free(col);
+}
+
+static
 void free_table(struct table_t * table) {
 	int i;
 	for (i = 0; i < table->num_rows; ++i)
 		free_row(table->rows[i]);
 	free(table->rows);
+	for (i = 0; i < table->num_cols; ++i)
+		free_col(table->cols[i]);
+	free(table->cols);
 	free(table);
 }
 
@@ -68,6 +87,22 @@ int is_row_node(xmlNodePtr node) {
 		node &&
 		node->type == XML_ELEMENT_NODE &&
 		strcasecmp((const char *)node->name, "tr") == 0;
+}
+
+static
+int is_col_node(xmlNodePtr node) {
+	return
+		node &&
+		node->type == XML_ELEMENT_NODE &&
+		strcasecmp((const char *)node->name, "col") == 0;
+}
+
+static
+int is_colgroup_node(xmlNodePtr node) {
+	return
+		node &&
+		node->type == XML_ELEMENT_NODE &&
+		strcasecmp((const char *)node->name, "colgroup") == 0;
 }
 
 static
@@ -92,10 +127,12 @@ struct cell_t * build_cell(xmlNodePtr node) {
 	attr = xmlGetProp(node, "rowspan");
 	if (attr) {
 		result->row_span = atoi((const char *) attr);
+		xmlFree(attr);
 	}
 	attr = xmlGetProp(node, "colspan");
 	if (attr) {
 		result->col_span = atoi((const char *) attr);
+		xmlFree(attr);
 	}
 	// has_content is 0 only if one TEXT child which is only space
 	if (
@@ -120,7 +157,7 @@ struct row_t * build_row(xmlNodePtr node) {
 	result->cells = 0;
 	result->node = node;
 
-	for (n = node->children; n != node->last; n = n->next) {
+	for (n = node->children; (n != 0); n = n->next) {
 		struct cell_t * cell = build_cell(n);
 		if (cell) {
 			result->num_cells++;
@@ -132,6 +169,32 @@ struct row_t * build_row(xmlNodePtr node) {
 }
 
 static
+struct col_t * build_col(xmlNodePtr node) {
+	struct col_t * result;
+	if (!is_col_node(node)) return 0;
+	result = (struct col_t *) malloc(sizeof(struct col_t));
+	result->node = node;
+	result->align = xmlGetProp(node, "align");
+
+	return result;
+}
+
+static
+xmlNodePtr * build_cols(xmlNodePtr node, struct table_t * result) {
+	xmlNodePtr n;
+	if (!is_colgroup_node(node)) return 0;
+	result->colgroup = node;
+	for (n = node->children; (n != 0); n = n->next) {
+		struct col_t * col = build_col(n);
+		if (col) {
+			result->num_cols++;
+			result->cols = realloc(result->cols, result->num_cols * sizeof(struct col_t *));
+			result->cols[result->num_cols - 1] = col;
+		}
+	}
+}
+
+static
 struct table_t * build_table(xmlNodePtr node) {
 	struct table_t * result;
 	xmlNodePtr n;
@@ -139,14 +202,19 @@ struct table_t * build_table(xmlNodePtr node) {
 	result = (struct table_t *) malloc(sizeof(struct table_t));
 	result->num_rows = 0;
 	result->rows = 0;
+	result->cols = 0;
+	result->num_cols = 0;
 	result->node = node;
 
-	for (n = node->children; n != node->last; n = n->next) {
+
+	for (n = node->children; (n != 0); n = n->next) {
 		struct row_t * row = build_row(n);
 		if (row) {
 			result->num_rows++;
 			result->rows = realloc(result->rows, result->num_rows * sizeof(struct row_t *));
 			result->rows[result->num_rows - 1] = row;
+		} else if (!result->cols) {
+			build_cols(n, result);
 		}
 	}
 	return result;
@@ -222,6 +290,31 @@ void clean_all_cells(struct table_t * table, xmlTransformationEntry * param) {
 	}
 }
 
+static
+void set_column_alignment(struct table_t * table) {
+	int r, c;
+	for (r = 0; r < table->num_rows; ++r) {
+		struct row_t * row = table->rows[r];
+		for (c = 0; c < table->num_cols; ++c) {
+			struct cell_t * cell = get_cell_by_index(row, c);
+			if (cell && cell->node) {
+				xmlChar * align = table->cols[c]->align;
+				xmlChar * attr = xmlGetProp(cell->node, "align");
+				if (!attr && align) {
+					xmlSetProp(cell->node, "align", align);
+				}
+				if (attr) {
+					xmlFree(attr);
+				}
+			}
+		}
+	}
+	if (table->colgroup) {
+		xmlUnlinkNode(table->colgroup);
+		xmlFreeNode(table->colgroup);
+	}
+}
+
 extern
 void clean_rowspan(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
@@ -231,6 +324,7 @@ void clean_rowspan(xmlNodePtr root, xmlTransformationEntry * param) {
 		struct table_t * table = build_table(node);
 		if (table) {
 			fix_table_row_span(table);
+			set_column_alignment(table);
 			clean_all_cells(table, param);
 			free_table(table);
 		} else {
