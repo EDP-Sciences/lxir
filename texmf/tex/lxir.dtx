@@ -1101,6 +1101,8 @@
 % If such a file exists, it will be added at the end of the class or package.
 % \par
 % We also tag the name of the class and packages used in the document.
+% \par
+% Sometime, loading an lxir package twice cause problems. It's possible to avoir that: see e.g natbib\_lxir.sty.
 %    \begin{macrocode}
 \newsavebox{\lxir@pckg@list}
 \def\add@toLXirList#1{%
@@ -1110,10 +1112,12 @@
 \def\add@toPkg@Cls@List#1{%
   \global\sbox{\lxir@pckg@list}{\unhbox\lxir@pckg@list\xEmptyA{ClassOrPackageUsed}{name=#1}}%
 }
+\def\@lxir@loaded{\relax}
 %%% From File: ltclass.dtx
 \def\@onefilewithoptions#1[#2][#3]#4{%
   \@pushfilename
   \xdef\@currname{#1}%
+  \def\@@currname{#1}
   \global\let\@currext#4%
   \expandafter\let\csname\@currname.\@currext-h@@k\endcsname\@empty
   \def\LXir@tag@filename{\@currname_lxir}
@@ -1163,12 +1167,19 @@
           is available}}%
     \ifx\@currext\@clsextension\let\LoadClass\@twoloadclasserror\fi
 % lxir mechanism for tagging
+% tag lxir package is not yet loaded (unless it is already loaded) 
+       \expandafter\ifx\csname lxir@\@@currname\endcsname \@lxir@loaded
+        \else
+          \global\expandafter\let\csname lxir@\@@currname\endcsname\@empty%
+        \fi
     \InputIfFileExists
          {\LXir@tag@file}%
-         {\xdef\@currname{\LXir@tag@filename}\LXir@Info{`\LXir@tag@file' loaded for tagging of `\LXir@tag@filename'}%
-           \add@toLXirList{\LXir@tag@file}}%
-         {\LXir@Info{No file `\LXir@tag@file' found for tagging of `\LXir@tag@filename'}
+         {\LXir@Info{`\LXir@tag@file' loaded for tagging of `\@currname.\@currext'}%
+           \add@toLXirList{\LXir@tag@file}\xdef\@currname{\LXir@tag@filename}}%
+         {\LXir@Info{No file `\LXir@tag@file' found for tagging of `\@currname.\@currext'}
          }%
+% tag lxir package as loaded
+     \IfFileExists{\@@currname_lxir.\@currext}{\global\expandafter\let\csname lxir@\@@currname\endcsname\@lxir@loaded}{}
 % end of lxir mechanism for tagging
     \@popfilename
     \@reset@ptions}%
