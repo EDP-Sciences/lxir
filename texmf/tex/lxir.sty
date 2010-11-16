@@ -189,13 +189,13 @@
 \def\,{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2009}}\else[entity!\#x2009!]\fi}
 \def\:{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2003}}\else[entity!\#x2003!]\fi}
 \def\;{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2004}}\else[entity!\#x2004!]\fi}
-\def\AA{\ifmmode\mathord{\xEmptyAA{AA}{mathtype=ord}{mathchar=212B}}\else[entity!\#x212B!]\fi}
+\def\AA{\ifmmode\mathord{\xEmptyAA{AA}{mathtype=ord}{mathchar=C5}}\else[entity!\#xC5!]\fi}
 \def\aa{\ifmmode\mathord{\xEmptyAA{aa}{mathtype=ord}{mathchar=E5}}\else[entity!\#xE5!]\fi}
 \def\enspace{[entity!\#x2002!]}
 \def\enskip{[entity!\#x2002!]}
 \def\quad{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!]\fi} % quad = 1 em
 \def\qquad{\ifmmode\mathrel{\xEmptyAA{qquad}{mathtype=rel}{mathchar=2001}}\else[entity!\#x2001!][entity!\#x2001!]\fi} % qquad = 2 em
-\def~{[entity!\#xa0!]}
+\def~{\ifmmode\mathrel{\xEmptyAA{tilde}{mathtype=rel}{mathchar=A0}}\else[entity!\#xa0!]\fi}
 \def\linebreak{\xEmpty{linebreak}}
 \def\/{}% xitalic correction
 \newsavebox{\XX@font@list}
