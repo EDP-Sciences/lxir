@@ -13,7 +13,8 @@ PACKAGES = \
 	nameref_lxir.sty \
 	txfonts_lxir.sty \
 	multirow_lxir.sty \
-	rotating_lxir.sty
+	rotating_lxir.sty \
+	cases_lxir.sty
 
 CORE = \
 	lxir.dtx \

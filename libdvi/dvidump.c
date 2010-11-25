@@ -40,7 +40,7 @@ void dump_page(dvifont_t * fonts, dvinode_header_t * node) {
 				int index;
 				dvinode_text_t * text = (dvinode_text_t *) node;
 				for(index = 0; fonts[index].index != text->font; ++index) ;
-				printf("\tTEXT (%s, %d) : %s\n", fonts[index].name, text->size, text->content);
+				printf("\tTEXT (%s, %d) : [%s]\n", fonts[index].name, text->size, text->content);
 			} break;
 			case DVINODE_RULE: printf("\tRULE\n"); break;
 			case DVINODE_CONTROL: printf("\tCONTROL\n"); break;

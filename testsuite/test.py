@@ -42,7 +42,7 @@ class Test:
 		o = Popen(self.LATEX_CMD_P % self.name, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
 		outdata, errdata = o.communicate()
 		returncode = o.wait()
-		assert returncode == 0
+		assert returncode == 0, "LaTeX compilation failed for `%s'" % self.name
 	def _compile_lxir(self):
 		o = Popen(self.LXIR_CMD_P % self.name, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
 		outdata, errdata = o.communicate()
