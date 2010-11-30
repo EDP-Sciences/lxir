@@ -9,9 +9,8 @@
 
 static
 int make_tfm_kerning_info(struct tfm_file_s * tfm, struct tfm_internal_file_s * f, int i) {
-	int c = tfm->character_offset + i;
 	int kern_count = 0;
-	int index = f->char_info[c].remainder;
+	int index = f->char_info[i].remainder;
 	while (1) {
 		int skip_byte = f->lig_kern[index].skip_byte;
 		if (f->lig_kern[index].op_byte >= 128)	{
@@ -30,7 +29,7 @@ int make_tfm_kerning_info(struct tfm_file_s * tfm, struct tfm_internal_file_s * 
 		}
 
 		kern_count = 0;
-		index = f->char_info[c].remainder;
+		index = f->char_info[i].remainder;
 		while (1) {
 			float value;
 			int skip_byte = f->lig_kern[index].skip_byte;
@@ -89,24 +88,21 @@ tfmfile_t * tfm_open(char const * fontname, int scale) {
 		return NULL;
 	}
 	for (i = 0; i < tfm->character_count; ++i) {
-		int c;
 		float value;
 
-		c = tfm->character_offset + i;
-
-		value = fix_word_to_float(f->width[f->char_info[c].width_index]);
+		value = fix_word_to_float(f->width[f->char_info[i].width_index]);
 		tfm->characters[i].width = (int) floor(value * scale + .5f);
-		value = fix_word_to_float(f->height[f->char_info[c].height_index]);
+		value = fix_word_to_float(f->height[f->char_info[i].height_index]);
 		tfm->characters[i].height = (int) floor(value * scale + .5f);
-		value = fix_word_to_float(f->depth[f->char_info[c].depth_index]);
+		value = fix_word_to_float(f->depth[f->char_info[i].depth_index]);
 		tfm->characters[i].depth = (int) floor(value * scale + .5f);
-		value = fix_word_to_float(f->italic[f->char_info[c].italic_index]);
+		value = fix_word_to_float(f->italic[f->char_info[i].italic_index]);
 		tfm->characters[i].italic = (int) floor(value * scale + .5f);
 
 		tfm->characters[i].kerning_count = 0;
 		tfm->characters[i].kernings = 0;
 
-		if (f->char_info[c].tag == 1) {
+		if (f->char_info[i].tag == 1) {
 			if (make_tfm_kerning_info(tfm, f, i) < 0) {
 				fprintf(stderr, "libtfm error: allocation error\n");
 				int_tfm_close(f);
