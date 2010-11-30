@@ -29,7 +29,9 @@ struct col_t {
 
 struct table_t {
 	xmlNodePtr node;
-	xmlNodePtr colgroup;
+
+	int num_colgroups;
+	xmlNodePtr * colgroups;
 
 	struct col_t ** cols;
 	int num_cols;
@@ -68,6 +70,7 @@ void free_table(struct table_t * table) {
 	for (i = 0; i < table->num_cols; ++i)
 		free_col(table->cols[i]);
 	free(table->cols);
+	free(table->colgroups);
 	free(table);
 }
 
@@ -183,7 +186,11 @@ static
 xmlNodePtr * build_cols(xmlNodePtr node, struct table_t * result) {
 	xmlNodePtr n;
 	if (!is_colgroup_node(node)) return 0;
-	result->colgroup = node;
+
+	result->num_colgroups++;
+	result->colgroups = realloc(result->colgroups, result->num_colgroups * sizeof(xmlNodePtr));
+	result->colgroups[result->num_colgroups - 1] = node;
+
 	for (n = node->children; (n != 0); n = n->next) {
 		struct col_t * col = build_col(n);
 		if (col) {
@@ -205,7 +212,8 @@ struct table_t * build_table(xmlNodePtr node) {
 	result->cols = 0;
 	result->num_cols = 0;
 	result->node = node;
-
+	result->num_colgroups = 0;
+	result->colgroups = 0;
 
 	for (n = node->children; (n != 0); n = n->next) {
 		struct row_t * row = build_row(n);
@@ -213,7 +221,7 @@ struct table_t * build_table(xmlNodePtr node) {
 			result->num_rows++;
 			result->rows = realloc(result->rows, result->num_rows * sizeof(struct row_t *));
 			result->rows[result->num_rows - 1] = row;
-		} else if (!result->cols) {
+		} else {
 			build_cols(n, result);
 		}
 	}
@@ -309,10 +317,12 @@ void set_column_alignment(struct table_t * table) {
 			}
 		}
 	}
-	if (table->colgroup) {
-		xmlUnlinkNode(table->colgroup);
-		xmlFreeNode(table->colgroup);
+/*
+	for (r = 0; r < table->num_colgroups; ++r) {
+		xmlUnlinkNode(table->colgroups[r]);
+		xmlFreeNode(table->colgroups[r]);
 	}
+*/
 }
 
 extern
