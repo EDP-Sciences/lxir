@@ -74,9 +74,8 @@ void rebuild_all_lists(xmlNodePtr root, xmlTransformationEntry * param) {
 		xmlNodePtr next = node->next;
 		if (is_node_element(node, "list")) {
 			close_siblings(node, "item");
-		} else {
-			xmlTransformationPush(node, rebuild_all_lists, param);
 		}
+		xmlTransformationPush(node, rebuild_all_lists, param);
 		node = next;
 	}
 }
