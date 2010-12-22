@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <libdvi.h>
 #include <libfontmap.h>
 
+#include <iconv.h>
+
 #include <kpathsea/kpathsea.h>
 
 #include "transformations.h"
@@ -41,11 +43,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int do_not_add_space = 0;
 
-static char pbuffer[128];
+static
+xmlChar * utf8_str(iconv_t cd, char * inbuff, size_t s) {
+	size_t len = (s > 0 ? s : strlen(inbuff));
+	size_t dlen = len * 4;
+	size_t obl = dlen;
+	char * output = xmlMalloc(dlen);
+	char * o = output;
+	char * b = inbuff;
+	int result = iconv(cd, &b, &len, &o, &obl);
+	if (result == -1) {
+		perror("iconv error");
+		exit(-1);
+	}
+	assert(len == 0);
+	assert(obl > 0);
+	*o = 0;
+	return (xmlChar *) xmlRealloc(output, dlen - (obl - 1));
+}
 
 static
-void print_font(xmlNodePtr root, dvifont_t * font) {
+void make_font(xmlNodePtr root, iconv_t cd, dvifont_t * font) {
 	xmlNodePtr node, size;
+	char pbuffer[32];
 
 	node = xmlNewChild(root, NULL, BAD_CAST "font", NULL);
 
@@ -58,17 +78,23 @@ void print_font(xmlNodePtr root, dvifont_t * font) {
 	sprintf(pbuffer, "%ld", (long)font->design_size);	xmlNewProp(size, BAD_CAST "design_size", BAD_CAST pbuffer);
 
 	if (font->area && *font->area) {
-		xmlNewTextChild(node, NULL, BAD_CAST "area", BAD_CAST font->area);
+		xmlChar * s = utf8_str(cd, font->area, 0);
+		xmlNewTextChild(node, NULL, BAD_CAST "area", s);
+		xmlFree(s);
 	}
 	if (font->name && *font->name) {
-		xmlNewTextChild(node, NULL, BAD_CAST "name", BAD_CAST font->name);
+		xmlChar * s = utf8_str(cd, font->name, 0);
+		xmlNewTextChild(node, NULL, BAD_CAST "name", s);
+		xmlFree(s);
 	}
 }
 
 static
-void make_header(xmlNodePtr root, dvifile_t * dvi) {
+void make_header(xmlNodePtr root, iconv_t cd, dvifile_t * dvi) {
 	int i;
 	xmlNodePtr header, size;
+	char pbuffer[128];
+	xmlChar * s;
 
 	header = xmlNewChild(root, NULL, BAD_CAST "header", NULL);
 
@@ -80,14 +106,17 @@ void make_header(xmlNodePtr root, dvifile_t * dvi) {
 	sprintf(pbuffer, "%ld", (long)dvi->den);	xmlNewProp(size, BAD_CAST "den", BAD_CAST pbuffer);
 	sprintf(pbuffer, "%ld", (long)dvi->mag);	xmlNewProp(size, BAD_CAST "mag", BAD_CAST pbuffer);
 
+	s = utf8_str(cd, dvi->comment, 0);
 	xmlNewTextChild(header, NULL, BAD_CAST "comment", BAD_CAST dvi->comment);
+	xmlFree(s);
 
 	for(i = 0; i < dvi->nbfonts; ++i)
-			print_font(header, &dvi->fonts[i]);
+			make_font(header, cd, &dvi->fonts[i]);
 }
 
 static
-void make_node(xmlNodePtr root, dvinode_header_t * node) {
+void make_node(xmlNodePtr root, iconv_t cd, dvinode_header_t * node) {
+	char pbuffer[128];
 	switch(node->type) {
 		case DVINODE_BOP: {
 				int i;
@@ -104,7 +133,7 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 				dvinode_text_t * text = (dvinode_text_t *) node;
 				char * content;
 				xmlNodePtr node;
-
+				/* text is already in UTF-8, as libtfm is in UTF-8 */
 				content = malloc(text->size + 1);
 				memcpy(content, text->content, text->size);
 				content[text->size] = 0;
@@ -119,14 +148,9 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 			} break;
 		case DVINODE_XXX: {
 				dvinode_xxx_t * xxx = (dvinode_xxx_t *) node;
-				char * content;
-
-				content = malloc(xxx->size + 1);
-				memcpy(content, xxx->content, xxx->size);
-				content[xxx->size] = 0;
-
+				xmlChar * content = utf8_str(cd, xxx->content, xxx->size);
 				xmlNewTextChild(root, NULL, BAD_CAST "xxx", BAD_CAST content);
-				free(content);
+				xmlFree(content);
 			} break;
 		case DVINODE_CONTROL: {
 				dvinode_control_t * control = (dvinode_control_t *) node;
@@ -158,14 +182,14 @@ void make_node(xmlNodePtr root, dvinode_header_t * node) {
 }
 
 static
-void make_content(xmlNodePtr root, dvifile_t * dvi) {
+void make_content(xmlNodePtr root, iconv_t cd, dvifile_t * dvi) {
 	int i;
 	dvinode_header_t * node;
 	for(i = 0; i < dvi->nbpages; ++i) {
 		xmlNodePtr page = xmlNewChild(root, NULL, BAD_CAST "page", NULL);
 		node = dvi->pages[i];
 		while(node) {
-			make_node(page, node);
+			make_node(page, cd, node);
 			node = node->next;
 		}
 	}
@@ -1542,6 +1566,8 @@ int main(int argc, char * argv[]) {
     xmlDocPtr mathdoc;
     xmlNodePtr root;
 
+	iconv_t cd;
+
 	if(cmdline_parser(argc, argv, &args))
 		return -1;
 	switch(args.skip_arg) {
@@ -1561,7 +1587,6 @@ int main(int argc, char * argv[]) {
 		return -1;
 	}
 	dvifile = args.inputs[0];
-
 
 	kpse_set_program_name(argv[0], "lxir");
 
@@ -1592,8 +1617,16 @@ int main(int argc, char * argv[]) {
 	root = xmlNewNode(NULL, BAD_CAST "document");
 	xmlDocSetRootElement(doc, root);
 
-	make_header(root, dvi);
-	make_content(root, dvi);
+	cd = iconv_open("UTF-8", args.src_encoding_arg);
+
+	if (cd == (iconv_t) -1) {
+		perror("iconv failed to create a context");
+	}
+
+	make_header(root, cd, dvi);
+	make_content(root, cd, dvi);
+
+	iconv_close(cd);
 
 	dvi_destroy(dvi);
 

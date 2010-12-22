@@ -1,7 +1,7 @@
 # package "lxir"
 # version "1.0"
 purpose "Convert specially tagged DVI files into XML"
-usage "lxir [OPTIONS] DVIFILE"
+usage " [OPTIONS] DVIFILE"
 args "--unamed-opts"
 option "skip" s "Set the space skip detection method"
 	enum values="1","sp","all" default="1" optional
@@ -13,3 +13,5 @@ option "save-raw" R "Save raw XML files after DVI and LOG parsing."
 	flag off
 option "report-all-transformations" - "Save all intermediate DOM states."
 	flag off
+option "src-encoding" e "Encoding of the source DVI"
+	string default="windows-1252" optional
