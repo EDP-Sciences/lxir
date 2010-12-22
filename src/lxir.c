@@ -1699,6 +1699,7 @@ int main(int argc, char * argv[]) {
 #ifndef _WIN32
 	stop_entities();
 #endif
+	kpse_reset_program_name(argv[0]);
 	return 0;
 }
 

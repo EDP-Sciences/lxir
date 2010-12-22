@@ -198,8 +198,8 @@ static int read_encoding_docs(xmlDocPtr doc) {
 					if (children->type == XML_ELEMENT_NODE) {
 						xmlChar * src = xmlGetProp(children, BAD_CAST "value");
 						const char * lig = find_ligature((const char *) src);
-						xmlFree(src);
 						map->info.map[map->info.size++] = strdup(lig);
+						xmlFree(src);
 					}
 					children = children->next;
 				}

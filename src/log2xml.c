@@ -1033,6 +1033,7 @@ const char * get_fenced_char(xmlNodePtr node) {
 }
 
 static regex_t box_param_regex;
+static int regex_use_count;
 
 static
 xmlChar * extract_match(const xmlChar * content, const regmatch_t * match) {
@@ -1079,8 +1080,12 @@ void real_decode_box_parameters(xmlNodePtr root, xmlTransformationEntry * param)
 				if (sub) { xmlSetProp(node, BAD_CAST "shift", sub); xmlFree(sub); }
 			}
 		}
+		++regex_use_count;
 		xmlTransformationPush(node, real_decode_box_parameters, param);
 		node = next;
+	}
+	if (--regex_use_count == 0) {
+		regfree(&box_param_regex);
 	}
 }
 
@@ -1097,6 +1102,7 @@ void decode_box_parameters(xmlNodePtr root, xmlTransformationEntry * param) {
 		exit(-1);
 	}
 
+	regex_use_count = 1;
 	real_decode_box_parameters(root, param);
 }
 
@@ -1863,11 +1869,10 @@ xmlNodePtr insert_character_node(xmlNodePtr node, const char * font, const char 
 			}
 		} else {
 			if (strcmp((const char *)v, mathvariant)) {
-				fprintf(stderr, "lxir: Mathvariant mistmath !\n");
+				fprintf(stderr, "lxir: mathvariant mismatch !\n");
 			}
 			xmlFree(v);
 		}
-		xmlFree(v);
 		xmlNodeAddContent(node, BAD_CAST content);
 		return node;
 	} else {

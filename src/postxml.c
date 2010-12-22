@@ -363,7 +363,7 @@ xmlNodePtr create_line_groups(xmlNodePtr tab) {
 			tageol = 1;
 		} else if (is_node_element(node, "setcolor")) {
 			/* nothing here */
-		} else if (is_node_element_not(node,"text")) {
+		} else if (is_node_element_not(node, "text")) {
 			xmlChar * id = xmlGetProp(node, BAD_CAST "id");
 			fprintf(stderr, "Unknown node in tabular, %s (id: %s)\n", (const char *)node->name, (const char *)id);
 			xmlFree(id);
