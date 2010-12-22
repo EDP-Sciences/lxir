@@ -184,6 +184,8 @@ void rebuild_paragraphs(xmlNodePtr root, xmlTransformationEntry * param) {
 
 			if (par->children) {
 				xmlAddNextSibling(node, par);
+			} else {
+				xmlFreeNode(par);
 			}
 			if (strcmp(node->name, "parsep") == 0) {
 				xmlUnlinkNode(node);
@@ -453,7 +455,11 @@ xmlNodePtr check_multirow_node(xmlNodePtr node) {
 
 	if (!is_node_element(node, "span")) return node;
 	attr = xmlGetProp(node, "class");
-	if (!attr || strcmp(attr, "multirow")) return node;
+	if (!attr || strcmp(attr, "multirow")) {
+		xmlFree(attr);
+		return node;
+	}
+	xmlFree(attr);
 	attr = xmlGetProp(node, "rows");
 	if (!attr) return node;
 	v = atoi((const char *) attr);
@@ -464,6 +470,7 @@ xmlNodePtr check_multirow_node(xmlNodePtr node) {
 		return 0;
 	}
 	xmlNewProp(parent, BAD_CAST "rowspan", attr);
+	xmlFree(attr);
 	return node;
 }
 

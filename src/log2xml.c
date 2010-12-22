@@ -1867,6 +1867,7 @@ xmlNodePtr insert_character_node(xmlNodePtr node, const char * font, const char 
 			}
 			xmlFree(v);
 		}
+		xmlFree(v);
 		xmlNodeAddContent(node, BAD_CAST content);
 		return node;
 	} else {
@@ -2431,10 +2432,15 @@ void merge_mn_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 }
 
 static
-int mathvariant_equal(xmlChar * mv1, xmlChar * mv2) {
+int mathvariant_equal(xmlNodePtr n1, xmlNodePtr n2) {
+	int result = 0;
+	xmlChar * mv1 = xmlGetProp(n1, BAD_CAST "mathvariant");
+	xmlChar * mv2 = xmlGetProp(n2, BAD_CAST "mathvariant");
 	if (!mv1 && !mv2) return 1;
-	if (mv1 && mv2) return !strcmp(mv1, mv2);
-	return 0;
+	if (mv1 && mv2) result = !strcmp(mv1, mv2);
+	xmlFree(mv1);
+	xmlFree(mv2);
+	return result;
 }
 
 static
@@ -2443,7 +2449,7 @@ void merge_mi_sequence(xmlNodePtr root, xmlTransformationEntry * param) {
 	while(node) {
 		if (is_node_valid(node, "mi", 0, 0) &&
 			node->next && is_node_valid(node->next, "mi", 0, 0) &&
-			mathvariant_equal(xmlGetProp(node, BAD_CAST "mathvariant"), xmlGetProp(node->next, BAD_CAST "mathvariant"))
+			mathvariant_equal(node, node->next)
 		) {
 			xmlChar * content = xmlNodeGetContent(node->next);
 			xmlNodeAddContent(node, content);

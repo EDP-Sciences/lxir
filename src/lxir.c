@@ -203,14 +203,24 @@ int is_valid_node(xmlNodePtr node, const char * name) {
 
 static
 int is_valid_control_node(xmlNodePtr node, const char * type) {
-	return is_valid_node(node, "control") &&
-		(!type || strcmp((const char *)xmlGetProp(node, BAD_CAST "type"), type) == 0);
+	xmlChar * prop = 0;
+	int result = is_valid_node(node, "control") &&
+		(!type || (
+			(prop = xmlGetProp(node, BAD_CAST "type")) &&
+			(strcmp((const char *)prop, type) == 0)
+		));
+	xmlFree(prop);
+	return result;
 }
 
 static inline
 int is_valid_node_type(xmlNodePtr node, const char * type) {
-	return is_valid_node(node, "node") &&
-		(strcmp((const char *)xmlGetProp(node, BAD_CAST "type"), type) == 0);
+	xmlChar * prop = 0;
+	int result = is_valid_node(node, "node") &&
+		(prop = xmlGetProp(node, BAD_CAST "type")) &&
+		(strcmp((const char *)prop, type) == 0);
+	xmlFree(prop);
+	return result;
 }
 
 void remove_page_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
@@ -440,6 +450,8 @@ void remove_control_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
 					) {
 						has_space = 1;
 					}
+					xmlFree(type);
+					xmlFree(param);
 
 					n = current->next;
 					xmlUnlinkNode(current);
@@ -616,6 +628,7 @@ int is_node_env_name(xmlNodePtr node, xmlChar ** ptype, int * popen) {
 			memcpy(name, content, len);
 			name[len] = 0;
 			*ptype = (xmlChar *)name;
+			xmlFree(content);
 			return 1;
 		} else if (strcmp(p, "@:Begin") == 0) {
 			len -= 7;
@@ -624,9 +637,11 @@ int is_node_env_name(xmlNodePtr node, xmlChar ** ptype, int * popen) {
 			memcpy(name, content, len);
 			name[len] = 0;
 			*ptype = (xmlChar *)name;
+			xmlFree(content);
 			return 1;
 		}
 	}
+	xmlFree(content);
 	return 0;
 }
 
@@ -640,16 +655,25 @@ int is_node_special(xmlNodePtr node, xmlChar ** ptype, xmlChar ** pvalue) {
 
 	ps = strchr(content, ':');
 	pe = strrchr(content, ':');
-	if(!ps || !pe || ps == pe) return 0;
+	if(!ps || !pe || ps == pe) {
+		xmlFree(content);
+		return 0;
+	}
 
 	has_at = (ps[1] == '@' && pe[-1] == '@');
 	if (has_at) {
 		ps += 1; pe -= 1;
 
 		len = ps - content;
-		if(len < 2 || ps[-1] != ':' || pe[1] != ':') return 0;
+		if(len < 2 || ps[-1] != ':' || pe[1] != ':') {
+			xmlFree(content);
+			return 0;
+		}
 		len -= 1;
-		if (strncmp(pe + 2, content, len) != 0) return 0;
+		if (strncmp(pe + 2, content, len) != 0) {
+			xmlFree(content);
+			return 0;
+		}
 		name = malloc(len + 1);
 		memcpy(name, content, len);
 		name[len] = 0;
@@ -662,11 +686,18 @@ int is_node_special(xmlNodePtr node, xmlChar ** ptype, xmlChar ** pvalue) {
 		name[len] = 0;
 		*pvalue = (xmlChar *)name;
 
+		xmlFree(content);
 		return 1;
 	} else {
 		len = ps - content;
-		if(len < 1) return 0;
-		if (strncmp(pe + 1, content, len) != 0) return 0;
+		if(len < 1) {
+			xmlFree(content);
+			return 0;
+		}
+		if (strncmp(pe + 1, content, len) != 0) {
+			xmlFree(content);
+			return 0;
+		}
 		name = malloc(len + 1);
 		memcpy(name, content, len);
 		name[len] = 0;
@@ -679,6 +710,7 @@ int is_node_special(xmlNodePtr node, xmlChar ** ptype, xmlChar ** pvalue) {
 		name[len] = 0;
 		*pvalue = (xmlChar *)name;
 
+		xmlFree(content);
 		return 1;
 	}
 }
@@ -703,6 +735,12 @@ struct node_stack_entry {
 	struct node_stack_entry * next;
 	struct node_stack_entry * prev;
 };
+
+static
+void free_node_stack_entry(struct node_stack_entry * entry) {
+	free(entry->name);
+	free(entry);
+}
 
 struct node_stack {
 	struct node_stack_entry * first;
@@ -731,7 +769,7 @@ static
 struct node_stack_entry *
 new_node_stack_entry(xmlNodePtr node) {
 	struct node_stack_entry * entry;
-	const char * id;
+	xmlChar * id;
 
 	if (!is_valid_node(node, "xxx")) return 0;
 
@@ -743,12 +781,13 @@ new_node_stack_entry(xmlNodePtr node) {
 		exit(-1);
 	}
 
-	id = (const char *)xmlGetProp(entry->attr, BAD_CAST "id");
+	id = xmlGetProp(entry->attr, BAD_CAST "id");
 	if (id) {
-		entry->id = atoi(id);
+		entry->id = atoi((const char *)id);
 	} else {
 		entry->id = -1;
 	}
+	xmlFree(id);
 
 	if (entry->type == NODE_TYPE_EMPTY) {
 		xmlNodePtr next = node->next;
@@ -759,6 +798,7 @@ new_node_stack_entry(xmlNodePtr node) {
 		xmlAddPrevSibling(next, node);
 		copy_props(node, entry->attr, 0);
 		xmlFreeNode(entry->attr);
+		free(entry->name);
 		free(entry);
 		return 0;
 	} else if (entry->type == NODE_TYPE_SPECIAL) {
@@ -770,6 +810,7 @@ new_node_stack_entry(xmlNodePtr node) {
 		xmlAddPrevSibling(next, node);
 		copy_props(node, entry->attr, 0);
 		xmlFreeNode(entry->attr);
+		free(entry->name);
 		free(entry);
 		return 0;
 	}
@@ -887,8 +928,8 @@ int build_hierarchy_step(struct node_stack * stack) {
 		xmlUnlinkNode(next);
 		xmlFreeNode(next);
 	}
-	free(entry);
-	free(match);
+	free_node_stack_entry(entry);
+	free_node_stack_entry(match);
 	return 1;
 }
 
@@ -966,6 +1007,14 @@ void fix_special_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
 	}
 }
 
+static
+int get_text_prop(xmlNodePtr node, xmlChar * name) {
+	xmlChar * p = xmlGetProp(node, name);
+	int result = atoi((const char *) p);
+	xmlFree(p);
+	return result;
+}
+
 int merge_adjacent_text(xmlNodePtr root) {
 	int count = 0;
 	xmlNodePtr node = root->children;
@@ -982,14 +1031,14 @@ int merge_adjacent_text(xmlNodePtr root) {
 				} else {
 					unsigned int nodeF, nextF;
 					int nodeH, nodeV, nextH, nextV;
-					nodeH = atoi((const char *)xmlGetProp(node, BAD_CAST "h"));
-					nodeV = atoi((const char *)xmlGetProp(node, BAD_CAST "v"));
+					nodeH = get_text_prop(node, BAD_CAST "h");
+					nodeV = get_text_prop(node, BAD_CAST "v");
 
-					nextH = atoi((const char *)xmlGetProp(next, BAD_CAST "h"));
-					nextV = atoi((const char *)xmlGetProp(next, BAD_CAST "v"));
+					nextH = get_text_prop(next, BAD_CAST "h");
+					nextV = get_text_prop(next, BAD_CAST "v");
 
-					nodeF = atoi((const char *)xmlGetProp(node, BAD_CAST "font"));
-					nextF = atoi((const char *)xmlGetProp(next, BAD_CAST "font"));
+					nodeF = get_text_prop(node, BAD_CAST "font");
+					nextF = get_text_prop(next, BAD_CAST "font");
 
 					if ( (nodeF == nextF) && (nodeH == nextH ||
 						/* the next one is more experimental. 786432 is the "normal" spacing between lines (this should be detected ?) */
@@ -1307,7 +1356,7 @@ xmlNodePtr get_math_node(xmlDocPtr doc, int begin_id, int end_id) {
 void replace_tabular_math_entities(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
-		xmlChar * type;
+		xmlChar * type = 0, * ctype = 0;
 		xmlNodePtr child, next = node->next;
 		if (is_valid_node(node, "node") &&
 			(type = xmlGetProp(node, BAD_CAST "type")) &&
@@ -1322,7 +1371,7 @@ void replace_tabular_math_entities(xmlNodePtr root, xmlTransformationEntry * par
 				)
 			) &&
 			is_valid_node(child, "node") &&
-			(type = xmlGetProp(child, BAD_CAST "type")) &&
+			(ctype = xmlGetProp(child, BAD_CAST "type")) &&
 			strcmp((const char *)type, "math") == 0 &&
 			!child->next
 		) {
@@ -1334,6 +1383,8 @@ void replace_tabular_math_entities(xmlNodePtr root, xmlTransformationEntry * par
 			xmlUnlinkNode(child);
 			xmlFreeNode(child);
 		}
+		xmlFree(type);
+		xmlFree(ctype);
 		xmlTransformationPush(node, replace_tabular_math_entities, param);
 		node = next;
 	}
@@ -1356,7 +1407,7 @@ void relink_label(xmlNodePtr src, xmlNodePtr dst) {
 void replace_math_entities(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
 	while(node) {
-		xmlChar * type;
+		xmlChar * type = 0;
 		xmlNodePtr next = node->next;
 		if (is_valid_node(node, "node") &&
 			(type = xmlGetProp(node, BAD_CAST "type")) &&
@@ -1371,8 +1422,10 @@ void replace_math_entities(xmlNodePtr root, xmlTransformationEntry * param) {
 
 			param = xmlGetProp(node, BAD_CAST "id");
 			begin_id = param ? atoi((const char *)param) : -1;
+			xmlFree(param);
 			param = xmlGetProp(node, BAD_CAST "close-id");
 			end_id = param ? atoi((const char *)param) : -1;
+			xmlFree(param);
 
 			math = get_math_node(root->doc, begin_id, end_id);
 			if (math) {
@@ -1387,6 +1440,7 @@ void replace_math_entities(xmlNodePtr root, xmlTransformationEntry * param) {
 		} else {
 			xmlTransformationPush(node, replace_math_entities, param);
 		}
+		xmlFree(type);
 		node = next;
 	}
 }

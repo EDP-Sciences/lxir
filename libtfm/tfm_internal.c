@@ -215,10 +215,15 @@ struct tfm_internal_file_s * int_tfm_open(char const * filename) {
 void int_tfm_close(struct tfm_internal_file_s * f) {
 	if (f->info_header.encoding) free(f->info_header.encoding);
 	if (f->info_header.family) free(f->info_header.family);
+	if (f->char_info) free(f->char_info);
 	if (f->width) free(f->width);
 	if (f->height) free(f->height);
 	if (f->depth) free(f->depth);
 	if (f->italic) free(f->italic);
+	if (f->lig_kern) free(f->lig_kern);
+	if (f->kern) free(f->kern);
+	if (f->extensible) free(f->extensible);
+	if (f->param) free(f->param);
 	free(f);
 }
 

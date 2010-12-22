@@ -127,6 +127,7 @@ static struct doc_s * read_config() {
 					doc->next = docs;
 					docs = doc;
 				}
+				xmlFree(opt);
 			}
 		}
 		node = node->next;
@@ -176,12 +177,12 @@ static int read_encoding_docs(xmlDocPtr doc) {
 	while (node) {
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "encoding") == 0) {
 			xmlNodePtr children = node->children;
-			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
+			xmlChar * name = xmlGetProp(node, BAD_CAST "name");
 
 			if (name && children) {
 				struct fontmap_s * map = fontmaps;
 				while (map) {
-					if (strcmp(map->name, name) == 0) {
+					if (strcmp(map->name, (const char *)name) == 0) {
 						fprintf(stderr, "Warning: encoding \"%s\" registered more than once !\n", name);
 						break;
 					}
@@ -195,13 +196,15 @@ static int read_encoding_docs(xmlDocPtr doc) {
 				map->info.size = 0;
 				while(children) {
 					if (children->type == XML_ELEMENT_NODE) {
-						const char * src = (const char *) xmlGetProp(children, BAD_CAST "value");
-						src = find_ligature(src);
-						map->info.map[map->info.size++] = strdup(src);
+						xmlChar * src = xmlGetProp(children, BAD_CAST "value");
+						const char * lig = find_ligature((const char *) src);
+						xmlFree(src);
+						map->info.map[map->info.size++] = strdup(lig);
 					}
 					children = children->next;
 				}
 			}
+			xmlFree(name);
 		}
 		node = node->next;
 	}
@@ -225,15 +228,15 @@ static int read_font_docs(xmlDocPtr doc) {
 	while (node) {
 
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "font") == 0) {
-			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
-			const char * encoding = (const char *)xmlGetProp(node, BAD_CAST "encoding");
+			xmlChar * name = xmlGetProp(node, BAD_CAST "name");
+			xmlChar * encoding = xmlGetProp(node, BAD_CAST "encoding");
 
 			if (name && encoding) {
-				struct fontmap_s * map = find_encoding(encoding);
+				struct fontmap_s * map = find_encoding((const char *)encoding);
 				if (map) {
 					struct fontenc_s * font = fontencs;
 					while (font) {
-						if (strcmp(font->name, name) == 0) {
+						if (strcmp(font->name, (const char *)name) == 0) {
 							fprintf(stderr, "Warning: font \"%s\" declared more than once !\n", name);
 							break;
 						}
@@ -250,8 +253,10 @@ static int read_font_docs(xmlDocPtr doc) {
 				}
 			} else {
 				fprintf(stderr, "Invalid font declaration, no name or no encoding found (%s, %s)\n",
-					name ? name : "", encoding ? encoding : "");
+					name ? (const char *)name : "", encoding ? (const char *)encoding : "");
 			}
+			xmlFree(name);
+			xmlFree(encoding);
 		}
 
 		node = node->next;
@@ -266,16 +271,16 @@ static int read_mathfont_docs(xmlDocPtr doc) {
 	while (node) {
 
 		if(node->type == XML_ELEMENT_NODE && strcmp((const char *) node->name, "mathfont") == 0) {
-			const char * name = (const char *)xmlGetProp(node, BAD_CAST "name");
-			const char * encoding = (const char *)xmlGetProp(node, BAD_CAST "encoding");
-			const char * variant = (const char *)xmlGetProp(node, BAD_CAST "mathvariant");
+			xmlChar * name = xmlGetProp(node, BAD_CAST "name");
+			xmlChar * encoding = xmlGetProp(node, BAD_CAST "encoding");
+			xmlChar * variant = xmlGetProp(node, BAD_CAST "mathvariant");
 
 			if (name && encoding) {
-				struct fontmap_s * map = find_encoding(encoding);
+				struct fontmap_s * map = find_encoding((const char *)encoding);
 				if (map) {
 					struct mathfontenc_s * font = mathfontencs;
 					while (font) {
-						if (strcmp(font->name, name) == 0) {
+						if (strcmp(font->name, (const char *)name) == 0) {
 							fprintf(stderr, "Warning: mathfont \"%s\" declared more than once !\n", name);
 							break;
 						}
@@ -293,8 +298,11 @@ static int read_mathfont_docs(xmlDocPtr doc) {
 				}
 			} else {
 				fprintf(stderr, "Invalid mathfont declaration, no name or no encoding found (%s, %s)\n",
-					name ? name : "", encoding ? encoding : "");
+					name ? (const char *)name : "", encoding ? (const char *)encoding : "");
 			}
+			xmlFree(name);
+			xmlFree(encoding);
+			xmlFree(variant);
 		}
 
 		node = node->next;
@@ -323,6 +331,10 @@ static int read_accent_docs(xmlDocPtr doc) {
 			a->base = strdup((const char *)base);
 			a->accent = strdup((const char *)accent);
 			a->conv = strdup((const char *)conv);
+
+			xmlFree(base);
+			xmlFree(accent);
+			xmlFree(conv);
 		}
 
 		node = node->next;
