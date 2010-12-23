@@ -242,6 +242,7 @@ top_srcdir = @top_srcdir@
 xmldir = $(TEXMF_XML_DIR)
 xml_DATA = config.xml ligatures.xml transformations.xml
 EXTRA_DIST = config.xml ligatures.xml transformations.xml
+BUILT_SOURCES = cmdline.h
 lxir_SOURCES = lxir.c transformations.c utf8string.c log2xml.c entities.c \
 	postxml.c table.c \
 	utf8string.h log2xml.h transformations.h entities.h
@@ -253,7 +254,8 @@ lxir_CFLAGS = -Werror $(CFLAGS) $(LIBXML2_CFLAGS) $(LIBXSLT_CFLAGS) \
 	-I$(srcdir)/../libdvi -I$(srcdir)/../libfontmap -I$(srcdir)/../libtfm
 
 lxir_LDFLAGS = $(AM_LDFLAGS) $(LIBXML2_LIBS) $(LIBXSLT_LIBS) -lkpathsea
-all: all-am
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -576,13 +578,15 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(PROGRAMS) $(DATA)
 installdirs:
 	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(xmldir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -607,6 +611,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
@@ -677,7 +682,7 @@ ps-am:
 
 uninstall-am: uninstall-binPROGRAMS uninstall-xmlDATA
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
 	clean-generic clean-libtool ctags distclean distclean-compile \
