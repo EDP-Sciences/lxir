@@ -1372,7 +1372,7 @@ void replace_tabular_math_entities(xmlNodePtr root, xmlTransformationEntry * par
 			) &&
 			is_valid_node(child, "node") &&
 			(ctype = xmlGetProp(child, BAD_CAST "type")) &&
-			strcmp((const char *)type, "math") == 0 &&
+			strcmp((const char *)ctype, "math") == 0 &&
 			!child->next
 		) {
 			xmlNodePtr content;
