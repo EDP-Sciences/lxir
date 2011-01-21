@@ -4,7 +4,7 @@
   <xsl:template match="tabbing">
     <div class="{name()}">
       <table class="{name()}">
-	<xsl:apply-templates select="tabLine"/>
+	<xsl:apply-templates select="tabLine|par/tabLine"/>
       </table>
     </div>
   </xsl:template>
