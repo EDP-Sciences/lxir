@@ -16,5 +16,9 @@
 %
 % This work consists of the files cases_lxir.sty.
 \ifverbatimmath
-\renewenvironment{subequations}{\lxirvmathenv{subequations}}{\endlxirvmathenv{subequations}}
+\@ifundefined{c@parentequation}{
+\let\lxir@subequations=\subequations
+\let\lxir@endsubequations=\endsubequations
+\renewenvironment{subequations}{\xBegin{subequations}\lxir@subequations}{\xEnd{subequations}\lxir@endsubequations}
+}{}
 \else\fi

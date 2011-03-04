@@ -32,7 +32,6 @@
 \renewenvironment{split}{\lxirvmathenv{split}}{\endlxirvmathenv{split}}
 \renewenvironment{gathered}{\lxirvmathenv{gathered}}{\endlxirvmathenv{gathered}}
 \renewenvironment{aligned}{\lxirvmathenv{aligned}}{\endlxirvmathenv{aligned}}
-\renewenvironment{subequations}{\lxirvmathenv{subequations}}{\endlxirvmathenv{subequations}}
 \else
 \def\Xenddisplay{\xEnd{display}}
 \frozen@everydisplay = {%
@@ -45,7 +44,7 @@
 	\ifx\df@tag\@empty \else \veqno \alt@tag \df@tag \fi
 	\ifx\df@label\@empty \else \@xp\ltx@label\@xp{\df@label}\fi
 }
-\def\@eqnnum{\xEmptyA{equationnumber}{value=\theequation}}
+\def\@eqnnum{\xEmptyA{eqnnum}{value=\theequation}}
 \renewenvironment{equation}{%
   \incr@eqnum
   \mathdisplay@push
@@ -169,3 +168,6 @@
 }
 \fi
 \def\,{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2009}}\else[entity!\#x2009!]\fi}
+\let\lxir@subequations=\subequations
+\let\lxir@endsubequations=\endsubequations
+\renewenvironment{subequations}{\xBegin{subequations}\lxir@subequations}{\xEnd{subequations}\lxir@endsubequations}
