@@ -1037,7 +1037,6 @@ static int regex_use_count;
 
 static
 xmlChar * extract_match(const xmlChar * content, const regmatch_t * match) {
-	double result;
 	int len;
 	xmlChar * buffer;
 	len = match->rm_eo - match->rm_so;
@@ -1293,7 +1292,6 @@ const char * is_composite_fence_node(xmlNodePtr node, double height) {
 		const char * fences[32];
 		int len = 0;
 		while (sub) {
-			const char * fence;
 			xmlNodePtr o = is_basic_fence_node(sub);
 			if (!o) return 0;
 			assert(len < 32);
@@ -1988,9 +1986,29 @@ char * replace_entities(const char *);
 
 static
 char * content_from_mathcontent(char const * mcontent) {
-	char * content = replace_entities(mcontent);
-	*strchr(content, '}') = 0;
-	return content;
+	char * content = make_temp_copy(mcontent, '}');
+	char * rcontent = replace_entities(content);
+	free(content);
+	return rcontent;
+}
+
+static
+xmlNodePtr add_content_to_node(xmlNodePtr node, xmlChar const * type, xmlChar * content) {
+	xmlNodePtr list = 0;
+	xmlNodePtr chr;
+	int result = xmlParseBalancedChunkMemory(node->doc, NULL, NULL, 0, content, &list);
+	if (result == 0) {
+		chr = xmlNewNode(NULL, BAD_CAST "mrow");
+		xmlAddChildList(chr, list);
+	} else {
+		chr = xmlNewNode(NULL, type);
+		xmlNodeAddContent(chr, content);
+	}
+	free(content);
+	xmlAddPrevSibling(node, chr);
+	xmlUnlinkNode(node);
+	xmlFreeNode(node);
+	return chr;
 }
 
 static
@@ -2000,12 +2018,13 @@ void transform_mathsym_patterns(xmlNodePtr root, xmlTransformationEntry * param)
 		xmlNodePtr next = node->next;
 
 		if(is_node_valid(node, "special", "{::tag lxir empty(", 18)) {
-			const char * type, * mathtype, * mathchar, * mathcontent;
+			const char * type, * mathtype, * mathchar, * mathcontent, *no_html;
 
 			type = (const char *) node->children->children->content + 20;
 			mathtype = strstr(type, "{mathtype=");
 			mathchar = strstr(type, "{mathchar=");
 			mathcontent = strstr(type, "{mathcontent=");
+			no_html = strstr(type, "{no-html=true}");
 			if(mathtype) {
 				mathtype += 10;
 				type = "mi";
@@ -2025,12 +2044,9 @@ void transform_mathsym_patterns(xmlNodePtr root, xmlTransformationEntry * param)
 						content = content_from_mathchar(mathchar + 10);
 					}
 					if (content) {
-						xmlNodePtr chr = xmlNewNode(NULL, BAD_CAST type);
-						xmlNodeAddContent(chr, BAD_CAST content);
-						free(content);
-						xmlAddPrevSibling(node, chr);
-						xmlUnlinkNode(node);
-						xmlFreeNode(node);
+						xmlNodePtr chr = add_content_to_node(node, BAD_CAST type, BAD_CAST content);
+						if (no_html)
+							xmlSetProp(chr, BAD_CAST "no-html", BAD_CAST "true");
 						next = chr->next;
 					}
 				}
@@ -2049,7 +2065,7 @@ void transform_string_patterns(xmlNodePtr root, xmlTransformationEntry * param) 
 		xmlNodePtr next = node->next;
 		if (is_node_valid(node, "other", 0, 0) && node->children && node->children->children && node->children->children->content) {
 			struct translation_info trans;
-			char * type, * slash;
+			char * type/*, * slash*/;
 			int len;
 			xmlNodePtr prev, tmp, end = node->next;
 			type = strdup((const char *)node->children->children->content);
