@@ -22,9 +22,9 @@
   \let\do\@makeother \dospecials
   \formule@font
   \everypar \expandafter{\the\everypar \unpenalty}}
-\def\formule{\xBegin{formule}\begingroup\@formule \frenchspacing\@vobeyspaces
+\def\lxirformule{\xBegin{lxir-formule}\begingroup\@formule \frenchspacing\@vobeyspaces
               \formule@start}
-\def\endformule{\endgroup\xEnd{formule}}
+\def\endlxirformule{\endgroup\xEnd{lxir-formule}}
 \begingroup
  \vrb@catcodes
  \lccode`\!=`\\ \lccode`\[=`\{ \lccode`\]=`\}
@@ -113,5 +113,5 @@
 \renewenvironment{equation}{\lxirvmathenv{equation}}{\endlxirvmathenv{equation}}
 \renewenvironment{eqnarray}{\lxirvmathenv{eqnarray}}{\endlxirvmathenv{eqnarray}}
 \renewenvironment{displaymath}{\lxirvmathenv{displaymath}}{\endlxirvmathenv{displaymath}}
-\def\verbatimmathformule#1{\xEmptyA{formule}{content=#1}}
-\def\verbatimmacro#1{\xEmptyA{macro}{content=#1}}
+\def\verbatimmathformule#1{\xEmptyA{lxir-formule}{content=#1}}
+\def\verbatimmacro#1{\xEmptyA{lxir-macro}{content=#1}}

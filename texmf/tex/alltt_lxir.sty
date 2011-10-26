@@ -1,0 +1,11 @@
+%% Package 'alltt' latex_x_ tagging
+%% copyright EDP Sciences 2007
+%% Xavier Trochu
+%%
+\let\t@galltt\alltt
+\def\alltt{\xBegin{alltt}\t@galltt%
+	\def\t@g@ttline{\par\xEmpty{alltt-line}}
+	\let^^M\t@g@ttline
+}
+\let\t@gendalltt\endalltt
+\def\endalltt{\t@gendalltt\xEnd{alltt}}

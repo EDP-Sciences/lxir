@@ -1,0 +1,57 @@
+/txmia[
+	/Gamma /$Delta /Theta /Lambda /Xi /Pi /Sigma /Upsilon /Phi
+	/Psi /$Omega /alpha /beta /gamma /delta /$epsilon1 /zeta
+	/eta /theta /iota /kappa /lambda /$mu /nu /xi
+	/pi /rho /sigma /tau /upsilon /phi /chi /psi
+	/omega /epsilon /theta1 /$pi1 /$rho1 /sigma1 /phi1
+	/$g1 /$y1 /$v1 /$w1 /A /B /C /D /E /F
+	/G /H /I /J /K /L /M /N /O /P /Q /R /S /T /U /V /W
+	/X /Y /Z /a /b /c /d /e /f /g
+	/h
+	/i
+	/j
+	/k
+	/l
+	/m
+	/n
+	/o
+	/p
+	/q
+	/r
+	/s
+	/t
+	/u
+	/v
+	/w
+	/x
+	/y
+	/z
+	/tie
+	/bbA
+	/bbB
+	/bbC
+	/bbD
+	/bbE
+	/bbF
+	/bbG
+	/bbH
+	/bbI
+	/bbJ
+	/bbK
+	/bbL
+	/bbM
+	/bbN
+	/bbO
+	/bbP
+	/bbQ
+	/bbR
+	/bbS
+	/bbT
+	/bbU
+	/bbV
+	/bbW
+	/bbX
+	/bbY
+	/bbZ
+	/bbk
+] def

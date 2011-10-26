@@ -1515,7 +1515,7 @@ void transform_verbatim_formula(xmlNodePtr root, xmlTransformationEntry * param)
 
 	while (node) {
 		xmlNodePtr next = node->next;
-		if (is_valid_node_type(node, "formule")) {
+		if (is_valid_node_type(node, "lxir-formule")) {
 			xmlChar * content = xmlGetProp(node, BAD_CAST "content");
 			if (content) {
 				transform_formula_content(node, content);
@@ -1548,7 +1548,7 @@ void transform_verbatim_macro(xmlNodePtr root, xmlTransformationEntry * param) {
 
 	while (node) {
 		xmlNodePtr next = node->next;
-		if (is_valid_node_type(node, "macro")) {
+		if (is_valid_node_type(node, "lxir-macro")) {
 			xmlChar * content = xmlGetProp(node, BAD_CAST "content");
 			if (content) {
 				transform_macro_content(node, content);

@@ -205,8 +205,6 @@
 \newcommand{\FontMatchList}{\usebox{\XX@font@list}}
 \def\extract@font{%
    \get@external@font%
-   \newbox{\XX@font}%
-   \sbox{\XX@font}{\font@name\external@font}%
    \global\expandafter\font\font@name\external@font\relax%
  \global\addFontTo@list{\f@encoding}{\f@family}{\f@series}{\f@shape}{\f@size}{\external@font}%
     \font@name \relax%
