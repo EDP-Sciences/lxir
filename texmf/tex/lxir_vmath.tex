@@ -103,12 +103,12 @@
        \fi
        \next}}
 
-\def\lxirvmathenv#1{\xBegin{#1}\xBegin{formule}\refstepcounter{equation}\begingroup\@formule \frenchspacing\@vobeyspaces
+\def\lxirvmathenv#1{\xBegin{#1}\xBegin{lxir-formule}\refstepcounter{equation}\begingroup\@formule \frenchspacing\@vobeyspaces
               \formule@start}
-\def\endlxirvmathenv#1{\endgroup\xEmptyA{eqnnum}{value=\theequation}\xEnd{formule}\xEnd{#1}}
-\def\lxirvmathenvstar#1{\xBegin{#1}\xBegin{formule}\begingroup\@formule \frenchspacing\@vobeyspaces
+\def\endlxirvmathenv#1{\endgroup\xEmptyA{eqnnum}{value=\theequation}\xEnd{lxir-formule}\xEnd{#1}}
+\def\lxirvmathenvstar#1{\xBegin{#1}\xBegin{lxir-formule}\begingroup\@formule \frenchspacing\@vobeyspaces
               \formule@start}
-\def\endlxirvmathenvstar#1{\endgroup\xEnd{formule}\xEnd{#1}}
+\def\endlxirvmathenvstar#1{\endgroup\xEnd{lxir-formule}\xEnd{#1}}
 
 \renewenvironment{equation}{\lxirvmathenv{equation}}{\endlxirvmathenv{equation}}
 \renewenvironment{eqnarray}{\lxirvmathenv{eqnarray}}{\endlxirvmathenv{eqnarray}}
