@@ -29,7 +29,7 @@
 <xsl:strip-space elements="*"/>
 <xsl:output method="xml" indent="no" encoding="UTF-8"/>
 
-<xsl:template match="@width|@height|@depth|@shift" />
+<xsl:template match="@width|@height|@depth|@shift|rule" />
 
 <xsl:template match="*|@*">
 	<xsl:copy>

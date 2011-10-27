@@ -1998,8 +1998,11 @@ xmlNodePtr add_content_to_node(xmlNodePtr node, xmlChar const * type, xmlChar * 
 	xmlNodePtr chr;
 	int result = xmlParseBalancedChunkMemory(node->doc, NULL, NULL, 0, content, &list);
 	if (result == 0) {
-		chr = xmlNewNode(NULL, BAD_CAST "mrow");
+		if (list->next || list->children || list->type == XML_ELEMENT_NODE)
+			type = BAD_CAST "mrow";
+		chr = xmlNewNode(NULL, type);
 		xmlAddChildList(chr, list);
+		// xmlFreeNodeList(list);
 	} else {
 		chr = xmlNewNode(NULL, type);
 		xmlNodeAddContent(chr, content);
