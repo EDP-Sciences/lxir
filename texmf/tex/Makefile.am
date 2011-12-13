@@ -15,6 +15,7 @@ PACKAGES = \
 	multirow_lxir.sty \
 	rotating_lxir.sty \
 	alltt_lxir.sty \
+	wasysym_lxir.sty \
 	cases_lxir.sty
 
 CORE = \
