@@ -11,7 +11,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is EDP-Sciences.
 %
 % This work consists of the files graphicx_lxir.sty.
@@ -19,16 +19,19 @@
 \def\Gin@ii[#1]#2{%
 \xBegin{includegraphics}
 \xEmptyAA{params}{option=#1}{file=#2}
-    \def\@tempa{[}\def\@tempb{#2}%
-    \ifx\@tempa\@tempb
-      \def\@tempa{\Gin@iii[#1][}%
-      \expandafter\@tempa
-    \else
-     \begingroup
-       \@tempswafalse
-       \toks@{\Ginclude@graphics{#2}}%
-       \setkeys{Gin}{#1}%
-       \Gin@esetsize
-       \the\toks@
-     \endgroup
-     \fi\xEnd{includegraphics}}
+%     \def\@tempa{[}\def\@tempb{#2}%
+%     \ifx\@tempa\@tempb
+%       \def\@tempa{\Gin@iii[#1][}%
+%       \expandafter\@tempa
+%     \else
+%      \begingroup
+%        \@tempswafalse
+%        %\toks@{Ginclude@graphics{#2}}%
+%        %\setkeys{Gin}{#1}%
+%        %\Gin@esetsize
+%        %\the\toks@
+%      \endgroup
+%     \fi
+	\hspace{2 mm}
+	 \xEnd{includegraphics}
+}
