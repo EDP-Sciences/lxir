@@ -16,7 +16,8 @@
 %
 % As a try, we just copy and paste the \@citex definition of lxir.sty
 %
-\def\@citex[#1]#2{\leavevmode
+\endinput
+\def\@citex[#1]#2{\leavevmode \xEmpty{from-cite}
   \xBegin{citation}
   \let\@citea\@empty
   \@cite{\@for\@citeb:=#2\do

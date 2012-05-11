@@ -1,0 +1,30 @@
+\long\def\@footnotetext#1{\insert\footins{%
+    \xBegin{footnote}
+    \xEmptyA{params}{page=\thepage}
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@\footnotesep\ignorespaces\xBegin{footnoteText}#1\xEnd{footnoteText}\@finalstrut\strutbox}%
+    \color@endgroup\xEnd{footnote}}}%
+\long\def\@mpfootnotetext#1{%
+  \global\setbox\@mpfootins\vbox{%
+    \unvbox\@mpfootins
+\xBegin{mpfootnote}
+\xEmptyA{params}{page=\thepage}
+    %\reset@font\footnotesize
+    \hsize\columnwidth
+    \@parboxrestore
+    \protected@edef\@currentlabel
+         {\csname p@mpfootnote\endcsname\@thefnmark}%
+    \color@begingroup
+      \@makefntext{%
+      \xBegin{footnoteText}%
+        \rule\z@\footnotesep\ignorespaces#1\@finalstrut\strutbox\xEnd{footnoteText}}%
+    \color@endgroup\xEnd{mpfootnote}}}

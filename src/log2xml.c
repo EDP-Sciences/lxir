@@ -730,7 +730,7 @@ int is_sqrt_symbol_node(xmlNodePtr node) {
 		node = node->children;
 
 	if(
-		is_node_valid(node, "mi", 0, 0) &&
+		is_node_valid(node, "mi", 0, 0) && node->children &&
 		(content = (const char *)node->children->content) &&
 		(code = utf8(content)) &&
 		(
@@ -1985,10 +1985,21 @@ extern
 char * replace_entities(const char *);
 
 static
+void cleanup_backspaces(char * data) {
+	while (true) {
+		char * p = strchr(data, '\\');
+		if (!p) return;
+		memmove(p, p + 1, strlen(p));
+		data = p + 1;
+	}
+}
+
+static
 char * content_from_mathcontent(char const * mcontent) {
 	char * content = make_temp_copy(mcontent, '}');
 	char * rcontent = replace_entities(content);
 	free(content);
+	cleanup_backspaces(rcontent);
 	return rcontent;
 }
 

@@ -11,12 +11,14 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is EDP-Sciences.
 %
 % This work consists of the files babel_lxir.sty.
-%% 
+%%
 \AtBeginDocument{
+\@ifpackageloaded{natbib}{
+  }{
 \let\t@gbbl@frenchitemize=\bbl@frenchitemize
 \def\bbl@frenchitemize{\t@gbbl@frenchitemize\let\itemize\itemizeORI}
 %
@@ -27,7 +29,7 @@
   \expandafter\def\expandafter\@fortmp\expandafter{#2}%
   \ifx\@fortmp\@empty \else
     \expandafter\@forloop#2,\@nil,\@nil\@@#1{#3}\fi}
-\def\@citex[#1]#2{\leavevmode
+\def\@citex[#1]#2{\leavevmode \xEmpty{from-babel}
   \xBegin{citation}
   \let\@citea\@empty
   \@cite{\@for\@citeb:=#2\do%
@@ -41,4 +43,4 @@
        {\xBegin{cite}\xEmptyA{params}{key=\@citeb}%
     \@cite@ofmt{\csname b@\@citeb\endcsname}\xEnd{cite}}}%
    }{#1}\xEnd{citation}}
-}
+}}

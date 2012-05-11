@@ -16,6 +16,8 @@ PACKAGES = \
 	rotating_lxir.sty \
 	alltt_lxir.sty \
 	wasysym_lxir.sty \
+	setspace_lxir.sty \
+	enumerate_lxir.sty \
 	cases_lxir.sty
 
 CORE = \
