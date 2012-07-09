@@ -13,12 +13,12 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainer of this work is Jean-Paul Jorda.
 %
 % This work consists of the files float2xhtml.xsl.
 -->
-<xsl:stylesheet version="1.0" 
+<xsl:stylesheet version="1.0"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns="http://www.w3.org/1999/xhtml"
 		xmlns:lxir="http://www.latex-lxir.org">
@@ -55,12 +55,12 @@
 	  <xsl:value-of select="@lxir:id"/>
 	</xsl:attribute>
       </a>
-      
-    <xsl:apply-templates select="captionMark"/>
+
+    <xsl:apply-templates select="captionMark | par/captionMark"/>
     <!-- avec hyperref : -->
-    <xsl:apply-templates select="hyperlinkurl/captionMark"/>
+    <xsl:apply-templates select="hyperlinkurl/captionMark | par/hyperlinkurl/captionMark"/>
     <xsl:text> </xsl:text>
-    <xsl:apply-templates select="captionText"/>    
+    <xsl:apply-templates select="captionText | par/captionText"/>
   </div>
     <!-- line break for better debug -->
     <xsl:text>&#xa;</xsl:text>
