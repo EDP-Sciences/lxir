@@ -2408,8 +2408,10 @@ void transform_mtable_pattern(xmlNodePtr root, xmlTransformationEntry * param) {
 				xmlNodePtr next = children->next;
 				xmlNodePtr mtr = xmlNewNode(0, BAD_CAST "mtr");
 				xmlAddChild(mtable, mtr);
+				xmlNodePtr mtd = xmlNewNode(0, BAD_CAST "mtd");
+				xmlAddChild(mtr, mtd);
 				xmlUnlinkNode(children);
-				xmlAddChild(mtr, children);
+				xmlAddChild(mtd, children);
 				xmlTransformationPush(children, transform_mtable_pattern, param);
 				children = next;
 			}
