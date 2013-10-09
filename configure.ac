@@ -1,4 +1,4 @@
-AC_INIT([lxir], [1.1.0])
+AC_INIT([lxir],[1.1.0])
 
 AC_CANONICAL_TARGET
 AC_CONFIG_MACRO_DIR([m4])
@@ -12,8 +12,11 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
+# AC_REQUIRE(AC_CANONICAL_HOST)_LT_SET_OPTION([LT_INIT],[win32-dll])
+# AC_DIAGNOSE([obsolete],[AC_LIBTOOL_WIN32_DLL: Remove this warning and the call to _LT_SET_OPTION when you
+# put the `win32-dll' option into LT_INIT's first parameter.])
+
+LT_INIT
 AM_PROG_LEX
 AC_PROG_YACC
 
@@ -53,6 +56,7 @@ AC_CHECK_FUNCS([strstr])
 AC_CHECK_FUNCS([strtol])
 AC_CHECK_FUNCS([strtoul])
 
+PKG_CHECK_MODULES([ICU], [icu-uc])
 
 AC_ARG_WITH([tools], [AS_HELP_STRING([--with-tools], [build helper tools])])
 

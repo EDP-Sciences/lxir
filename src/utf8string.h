@@ -20,14 +20,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <libxml/tree.h>
 
+int utf8_is_accented_char(const char *);
 int utf8_char_len(const char *);
 int utf8_copy_char(const char *, char *);
 int utf8_string_len(const char *);
 int utf8_get_next_char(xmlNodePtr, xmlChar *);
 
-#define UTF8_CHAR_FAMILY_NUMBER 1
-#define UTF8_CHAR_FAMILY_OPERATOR 2
-#define UTF8_CHAR_FAMILY_OTHER 3
-int utf8_get_next_family_char(xmlChar *, int *, xmlChar **);
+//~ #define UTF8_CHAR_FAMILY_NUMBER 1
+//~ #define UTF8_CHAR_FAMILY_OPERATOR 2
+//~ #define UTF8_CHAR_FAMILY_OTHER 3
+//~ int utf8_get_next_family_char(xmlChar *, int *, xmlChar **);
 
 #endif

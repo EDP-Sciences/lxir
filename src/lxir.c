@@ -1278,9 +1278,9 @@ int get_char_from_next_text(xmlNodePtr node, xmlChar * text) {
 	if (node->parent &&
 			node->parent->next &&
 			is_valid_node(node->parent->next, "text") &&
-			node->parent->next->last &&
-			xmlNodeIsText(node->parent->next->last)) {
-		return utf8_get_next_char(node->parent->next->last, text);
+			node->parent->next->children &&
+			xmlNodeIsText(node->parent->next->children)) {
+		return utf8_get_next_char(node->parent->next->children, text);
 	}
 	return -1;
 }
@@ -1306,38 +1306,43 @@ void transform_accent_tags(xmlNodePtr root, xmlTransformationEntry * param) {
 					xmlNewTextChild(node, NULL, BAD_CAST "accent", BAD_CAST "*error*");
 					node = next; continue ;
 				}
-				err = get_char_from_next_text(node, base);
-				if(err) {
-					fprintf(stderr, "Invalid accent ! unable to find text for base\n");
-					xmlNewTextChild(node, NULL, BAD_CAST "letter", BAD_CAST "*error*");
-					xmlNewTextChild(node, NULL, BAD_CAST "accent", accent);
-					node = next; continue ;
-				}
-				err = lfm_get_accent((const char *)base,(const char *) accent,(char *) conv);
-				if (err) {
-					fprintf(stderr, "Unknown accent found ! letter = \"%s\", accent = \"%s\"\n", base, accent);
-					xmlNewTextChild(node, NULL, BAD_CAST "letter", base);
-					xmlNewTextChild(node, NULL, BAD_CAST "accent", accent);
+				err = utf8_is_accented_char(accent);
+				if (err > 0) {
+					utf8_copy_char(accent, conv);
+					//~ fprintf(stderr, "%s is an accented char, treating it as such...\n", accent);
 				} else {
-					xmlNodePtr text = xmlNewText(conv);
-					next = node->next;
-
-					if (next) {
-						xmlUnlinkNode(node);
-						xmlFreeNode(node);
-						xmlAddPrevSibling(next, text);
-						if (
-							xmlNodeIsText(next) && next->prev && xmlNodeIsText(next->prev)
-						) {
-							next = xmlTextMerge(next->prev, next);
-						}
-					} else {
-						xmlNodePtr parent = node->parent;
-						xmlUnlinkNode(node);
-						xmlFreeNode(node);
-						xmlAddChild(parent, text);
+					err = get_char_from_next_text(node, base);
+					if(err) {
+						fprintf(stderr, "Invalid accent ! unable to find text for base\n");
+						xmlNewTextChild(node, NULL, BAD_CAST "letter", BAD_CAST "*error*");
+						xmlNewTextChild(node, NULL, BAD_CAST "accent", accent);
+						node = next; continue ;
 					}
+					err = lfm_get_accent((const char *)base,(const char *) accent,(char *) conv);
+					if (err) {
+						fprintf(stderr, "Unknown accent found ! letter = \"%s\", accent = \"%s\"\n", base, accent);
+						xmlNewTextChild(node, NULL, BAD_CAST "letter", base);
+						xmlNewTextChild(node, NULL, BAD_CAST "accent", accent);
+						node = next; continue;
+					}
+				}
+				xmlNodePtr text = xmlNewText(conv);
+				next = node->next;
 
+				if (next) {
+					xmlUnlinkNode(node);
+					xmlFreeNode(node);
+					xmlAddPrevSibling(next, text);
+					if (next->prev &&
+						xmlNodeIsText(next) && xmlNodeIsText(next->prev)
+					) {
+						next = xmlTextMerge(next->prev, next);
+					}
+				} else {
+					xmlNodePtr parent = node->parent;
+					xmlUnlinkNode(node);
+					xmlFreeNode(node);
+					xmlAddChild(parent, text);
 				}
 			} else {
 				xmlTransformationPush(node, transform_accent_tags, param);

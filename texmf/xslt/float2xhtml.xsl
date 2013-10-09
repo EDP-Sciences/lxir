@@ -55,12 +55,7 @@
 	  <xsl:value-of select="@lxir:id"/>
 	</xsl:attribute>
       </a>
-
-    <xsl:apply-templates select="captionMark | par/captionMark"/>
-    <!-- avec hyperref : -->
-    <xsl:apply-templates select="hyperlinkurl/captionMark | par/hyperlinkurl/captionMark"/>
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="captionText | par/captionText"/>
+	  <xsl:apply-templates select="captionText|captionMark|par/captionText|par/captionMark|hyperlinkurl/captionMark|par/hyperlinkurl/captionMark" />
   </div>
     <!-- line break for better debug -->
     <xsl:text>&#xa;</xsl:text>
@@ -68,6 +63,9 @@
 
 <xsl:template match="captionMark|captionText">
   <span class="{name()}">
+    <xsl:if test="@lxir:language">
+      <xsl:attribute name="xml:lang"><xsl:value-of select="@lxir:language" /></xsl:attribute>
+    </xsl:if>
     <xsl:apply-templates/>
   </span>
 </xsl:template>

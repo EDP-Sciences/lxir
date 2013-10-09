@@ -308,8 +308,8 @@ void xmlTransformationRegister(const char * type, const char * name, xmlTransfor
 static
 void dump_tree(xmlNodePtr root, xmlTransformationEntry * param) {
 	if (param->parameter) {
+		fprintf(stderr, "Dumping tree into file \"%s\"\n", param->parameter);
 		xmlSaveFormatFileEnc(param->parameter, root->doc, "UTF-8", 1);
-/*		fprintf(stderr, "Dumping tree into file \"%s\"\n", param->parameter); */
 	}
 }
 

@@ -237,17 +237,24 @@ static int read_font_docs(xmlDocPtr doc) {
 					struct fontenc_s * font = fontencs;
 					while (font) {
 						if (strcmp(font->name, (const char *)name) == 0) {
-							fprintf(stderr, "Warning: font \"%s\" declared more than once !\n", name);
 							break;
 						}
 						font = font->next;
 					}
 
-					font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
-					font->next = fontencs;
-					fontencs = font;
-					font->name = strdup((const char *)name);
-					font->map = map;
+					if (font) {
+						if (font->map != map) {
+							fprintf(stderr, "Warning: font \"%s\" declared more than once with different encodings!\n", name);
+							fprintf(stderr, "\toverriding %s with %s\n", font->map->name, map->name);
+							font->map = map;
+						}
+					} else {
+						font = (struct fontenc_s *)malloc(sizeof(struct fontenc_s));
+						font->next = fontencs;
+						fontencs = font;
+						font->name = strdup((const char *)name);
+						font->map = map;
+					}
 				} else {
 					fprintf(stderr, "Unknown encoding in font declaration %s : \"%s\"\n", name, encoding);
 				}
