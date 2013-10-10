@@ -121,30 +121,30 @@ void make_node(xmlNodePtr root, iconv_t cd, dvinode_header_t * node) {
 		case DVINODE_BOP: {
 				int i;
 				dvinode_bop_t * bop = (dvinode_bop_t *) node;
-				xmlNodePtr node = xmlNewChild(root, NULL, BAD_CAST "bop", NULL);
+				xmlNodePtr child_node = xmlNewChild(root, NULL, BAD_CAST "bop", NULL);
 
 				for(i = 0; i < 10; ++i) {
 					sprintf(pbuffer, "n%d", i);
 					sprintf(pbuffer+64, "%d", bop->counts[i]);
-					xmlNewProp(node, BAD_CAST pbuffer, BAD_CAST pbuffer+64);
+					xmlNewProp(child_node, BAD_CAST pbuffer, BAD_CAST pbuffer+64);
 				}
 			} break;
 		case DVINODE_TEXT: {
 				dvinode_text_t * text = (dvinode_text_t *) node;
 				char * content;
-				xmlNodePtr node;
+				xmlNodePtr child_node;
 				/* text is already in UTF-8, as libtfm is in UTF-8 */
 				content = malloc(text->size + 1);
 				memcpy(content, text->content, text->size);
 				content[text->size] = 0;
 
-				node = xmlNewTextChild(root, NULL, BAD_CAST "text", BAD_CAST content);
+				child_node = xmlNewTextChild(root, NULL, BAD_CAST "text", BAD_CAST content);
 
 				free(content);
-				sprintf(pbuffer, "%ld", (long)text->font); xmlNewProp(node, BAD_CAST "font", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", (long)text->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", (long)text->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", (long)text->width); xmlNewProp(node, BAD_CAST "width", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)text->font); xmlNewProp(child_node, BAD_CAST "font", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)text->h); xmlNewProp(child_node, BAD_CAST "h", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)text->v); xmlNewProp(child_node, BAD_CAST "v", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)text->width); xmlNewProp(child_node, BAD_CAST "width", BAD_CAST pbuffer);
 			} break;
 		case DVINODE_XXX: {
 				dvinode_xxx_t * xxx = (dvinode_xxx_t *) node;
@@ -154,7 +154,7 @@ void make_node(xmlNodePtr root, iconv_t cd, dvinode_header_t * node) {
 			} break;
 		case DVINODE_CONTROL: {
 				dvinode_control_t * control = (dvinode_control_t *) node;
-				char * content;
+				const char * content;
 				switch(control->type) {
 					case DVICONTROL_PUSH: content = "push"; break;
 					case DVICONTROL_POP: content = "pop"; break;
@@ -166,17 +166,17 @@ void make_node(xmlNodePtr root, iconv_t cd, dvinode_header_t * node) {
 					case DVICONTROL_Z: content = "z"; break;
 					default: content = "invalid"; break;
 				}
-				xmlNodePtr node = xmlNewChild(root, NULL, BAD_CAST "control", NULL);
-				xmlNewProp(node, BAD_CAST "type", BAD_CAST content);
-				sprintf(pbuffer, "%d", control->param); xmlNewProp(node, BAD_CAST "param", BAD_CAST pbuffer);
+				xmlNodePtr child_node = xmlNewChild(root, NULL, BAD_CAST "control", NULL);
+				xmlNewProp(child_node, BAD_CAST "type", BAD_CAST content);
+				sprintf(pbuffer, "%d", control->param); xmlNewProp(child_node, BAD_CAST "param", BAD_CAST pbuffer);
 			} break;
 		case DVINODE_RULE: {
 				dvinode_rule_t * rule = (dvinode_rule_t *) node;
-				xmlNodePtr node = xmlNewChild(root, NULL, BAD_CAST "rule", NULL);
-				sprintf(pbuffer, "%ld", (long)rule->h); xmlNewProp(node, BAD_CAST "h", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", (long)rule->v); xmlNewProp(node, BAD_CAST "v", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", (long)rule->a); xmlNewProp(node, BAD_CAST "a", BAD_CAST pbuffer);
-				sprintf(pbuffer, "%ld", (long)rule->b); xmlNewProp(node, BAD_CAST "b", BAD_CAST pbuffer);
+				xmlNodePtr child_node = xmlNewChild(root, NULL, BAD_CAST "rule", NULL);
+				sprintf(pbuffer, "%ld", (long)rule->h); xmlNewProp(child_node, BAD_CAST "h", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)rule->v); xmlNewProp(child_node, BAD_CAST "v", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)rule->a); xmlNewProp(child_node, BAD_CAST "a", BAD_CAST pbuffer);
+				sprintf(pbuffer, "%ld", (long)rule->b); xmlNewProp(child_node, BAD_CAST "b", BAD_CAST pbuffer);
 			} break;
 	}
 }

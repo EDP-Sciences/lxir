@@ -21,10 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <unicode/utf8.h>
 #include <unicode/unorm2.h>
 
+#if U_ICU_VERSION_MAJOR_NUM < 4 || (U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM < 2)
+#error need ICU version 4.2
+#endif
+
 
 int utf8_is_accented_char(const char * src) {
 	UChar32 c;
 	UChar decomposition[16];
+#if U_ICU_VERSION_MAJOR_NUM == 4 && U_ICU_VERSION_MINOR_NUM <= 6
+	UChar composed[16];
+#endif
 	int32_t length, i;
 	UErrorCode error = U_ZERO_ERROR;
 	const UNormalizer2 * nfd;
@@ -41,11 +48,24 @@ int utf8_is_accented_char(const char * src) {
 		fprintf(stderr, "Unable to initialize NFD normalizer\n");
 		return -1;
 	}
+#if U_ICU_VERSION_MAJOR_NUM > 4 || U_ICU_VERSION_MINOR_NUM >= 6
 	length = unorm2_getDecomposition(nfd, (UChar32) c, decomposition, 16, &error);
 	if (U_FAILURE(error)) {
 		fprintf(stderr, "Unable to get NFD decomposition for codepoint U%04X\n", c);
 		return -1;
 	}
+#else
+	u_strFromUTF8(composed, 16, &length, src, 16, &error);
+	if (U_FAILURE(error)) {
+		fprintf(stderr, "Unable to convert %s from UTF-8\n", src);
+		return -1;
+	}
+	if (length != 1) {
+		fprintf(stderr, "Source string (%s) has more than one codepoint\n", src);
+		return -1;
+	}
+	length = unorm2_normalize(nfd, composed, 1, decomposition, 16, &error);
+#endif
 	if (length <= 1) {
 		//~ fprintf(stderr, " nope, no decomposition\n");
 		return 0;
