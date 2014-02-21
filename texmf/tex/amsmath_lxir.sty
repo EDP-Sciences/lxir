@@ -170,4 +170,8 @@
 \def\,{\ifmmode\mathrel{\xEmptyAA{quad}{mathtype=rel}{mathchar=2009}}\else[entity!\#x2009!]\fi}
 \let\lxir@subequations=\subequations
 \let\lxir@endsubequations=\endsubequations
-\renewenvironment{subequations}{\xBegin{subequations}\lxir@subequations}{\xEnd{subequations}\lxir@endsubequations}
+\AtBeginDocument{
+\renewenvironment{subequations}%
+	{\xBegin{subequations}\lxir@subequations}%
+	{\xEnd{subequations}\lxir@endsubequations}%
+}
