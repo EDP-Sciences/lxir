@@ -381,3 +381,7 @@
 % \def\multimapdotbothAvert{\mathrel{\xEmptyAA{multimapdotbothAvert}{mathtype=rel}{mathchar=}}}
 %%
 \def\varv{\mathord{\xEmptyAA{varv}{mathtype=ord}{mathchar=03BD}}}
+\AtBeginDocument{
+\def\farcm{\ifmmode\mathrel{\xEmptyAA{farcm}{mathtype=rel}{mathchar=002E,0301}}\else[entity!\#x002e!][entity!\#x0301!]\fi}
+\def\farcs{\ifmmode\mathrel{\xEmptyAA{farcs}{mathtype=rel}{mathchar=002E,030B}}\else[entity!\#x002e!][entity!\#x030b!]\fi}
+\def\fdg{\ifmmode\mathrel{\xEmptyAA{fdg}{mathtype=rel}{mathchar=002E,030A}}\else[entity!\#x002e!][entity!\#x030a!]\fi}}
