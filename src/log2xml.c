@@ -2584,7 +2584,7 @@ void math_strtol_node(xmlNodePtr node, xmlChar const * buffer) {
 static
 void replace_entities_in_math(xmlNodePtr root, xmlTransformationEntry * param) {
 	xmlNodePtr node = root->children;
-	xmlNodePtr temp, start, end;
+    xmlNodePtr temp, start, end, cont, child;
 	while(node) {
 		if (is_math_text_valid(node, "mo", "[") &&
 			(temp = node->next) && is_math_text_valid(temp, "mi", "entity") &&
@@ -2597,30 +2597,52 @@ void replace_entities_in_math(xmlNodePtr root, xmlTransformationEntry * param) {
 				if (is_math_text_valid(end, "mo", "!")) { break; }
 				end = end->next;
 			}
-			if (start && end &&
-				(temp = end->next) && is_math_text_valid(temp, "mo", "]")
-			) {
-				xmlNodePtr n = start;
-				xmlBufferPtr buffer = xmlBufferCreate();
-				while (n != end) {
-					xmlChar * content = xmlNodeGetContent(n);
-					xmlBufferCat(buffer, content);
-					xmlFree(content);
-					n = n->next;
-				}
-				n = xmlNewNode(0, BAD_CAST "mo");
-				xmlSetProp(n, BAD_CAST "entity", BAD_CAST "1");
-				math_strtol_node(n, xmlBufferContent(buffer));
-				xmlBufferFree(buffer);
-				xmlAddPrevSibling(node, n);
+            if (start && end && (cont = end->next) && is_math_text_valid(cont, "mo", "]")) {
+                xmlNodePtr n = start;
+                xmlBufferPtr buffer = xmlBufferCreate();
+                while (n != end) {
+                    xmlChar * content = xmlNodeGetContent(n);
+                    xmlBufferCat(buffer, content);
+                    xmlFree(content);
+                    n = n->next;
+                }
+                n = xmlNewNode(0, BAD_CAST "mo");
+                xmlSetProp(n, BAD_CAST "entity", BAD_CAST "1");
+                math_strtol_node(n, xmlBufferContent(buffer));
+                xmlBufferFree(buffer);
+                xmlAddPrevSibling(node, n);
 
-				temp = temp->next;
-				while (node != temp) {
-					xmlNodePtr next = node->next;
-					xmlUnlinkNode(node);
-					node = next;
-				}
-			} else {
+                temp = cont->next;
+                while (node != temp) {
+                    xmlNodePtr next = node->next;
+                    xmlUnlinkNode(node);
+                    node = next;
+                }
+            } else if (start && end &&
+                       (cont = end->next) && is_dual_math_node(cont) &&
+                       (child = cont->children) && is_math_text_valid(child, "mo", "]")) {
+                xmlNodePtr n = start;
+                xmlBufferPtr buffer = xmlBufferCreate();
+                while (n != end) {
+                    xmlChar * content = xmlNodeGetContent(n);
+                    xmlBufferCat(buffer, content);
+                    xmlFree(content);
+                    n = n->next;
+                }
+                n = xmlNewNode(0, BAD_CAST "mo");
+                xmlSetProp(n, BAD_CAST "entity", BAD_CAST "1");
+                math_strtol_node(n, xmlBufferContent(buffer));
+                xmlBufferFree(buffer);
+                xmlAddPrevSibling(child, n);
+
+                while (node != cont) {
+                    xmlNodePtr next = node->next;
+                    xmlUnlinkNode(node);
+                    node = next;
+                }
+                xmlUnlinkNode(child);
+                node = cont;
+            } else {
 				node = temp;
 			}
 		} else {
