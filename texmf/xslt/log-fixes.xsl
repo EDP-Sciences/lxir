@@ -27,6 +27,7 @@
 <xsl:include href="log-negative.xsl"/>
 
 <xsl:strip-space elements="*"/>
+<xsl:preserve-space elements="mo"/>
 <xsl:output method="xml" indent="no" encoding="UTF-8"/>
 
 <xsl:template match="@width|@height|@depth|@shift|rule" />

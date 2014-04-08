@@ -42,7 +42,7 @@
  
   <xsl:output method="xml" indent="no" encoding="ascii"/>
   <xsl:strip-space elements="*"/> 
-  <xsl:preserve-space elements="text"/> 
+  <xsl:preserve-space elements="text mm:mo"/> 
   <xsl:template match="/document">
     <xsl:apply-templates/>
   </xsl:template>
