@@ -15,3 +15,5 @@ option "report-all-transformations" - "Save all intermediate DOM states."
 	flag off
 option "src-encoding" e "Encoding of the source DVI"
 	string default="windows-1252" optional
+option "dump_doc_on_failure" D "Save current XML document upon abnormal error."
+        flag off

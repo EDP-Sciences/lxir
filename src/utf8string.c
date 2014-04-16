@@ -103,9 +103,9 @@ int utf8_string_len(const char * str) {
 }
 
 int utf8_get_next_char(xmlNodePtr text, xmlChar * output) {
-	int len, lchar;
+	int len;
 	if (text->content != 0 && (len = strlen((const char *)text->content)) > 0) {
-		lchar = utf8_copy_char((const char *)text->content, (char *)output);
+		int lchar = utf8_copy_char((const char *)text->content, (char *)output);
 		output[lchar] = 0;
 		if (len > lchar) {
 			xmlNodePtr rest = xmlNewText(text->content + lchar);

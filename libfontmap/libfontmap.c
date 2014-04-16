@@ -19,6 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <config.h>
 #endif
 
+#ifndef TEXMF_XML_DIR
+#define TEXMF_XML_DIR "."
+#endif
+
 #include <string.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -191,7 +195,7 @@ static int read_encoding_docs(xmlDocPtr doc) {
 				map = (struct fontmap_s *) malloc(sizeof(struct fontmap_s));
 				map->next = fontmaps;
 				fontmaps = map;
-				map->name = strdup(name);
+				map->name = strdup((const char*)name);
 				map->info.map = malloc(256*sizeof(char*));
 				map->info.size = 0;
 				while(children) {

@@ -45,7 +45,10 @@ char * get_bcpl_string(FILE * fp, int max_len) {
 	output = malloc(len + 1);
 	if (!output) return NULL;
 	result = fread(output, 1, len, fp);
-	if (result != len) return NULL;
+    if (result != (size_t)len) {
+		free(output);
+		return NULL;
+	}
 	output[len] = 0;
 	fseek(fp, max_len - 1 - len, SEEK_CUR);
 
@@ -126,13 +129,13 @@ int int_tfm_read_char_info(struct tfm_internal_file_s * f, FILE * fp) {
 
 static
 int int_tfm_read_lig_kern(struct tfm_internal_file_s * f, FILE * fp) {
-	int i, b;
+	int i;
 	int num_lig_kern = f->file_header.nl;
 	f->lig_kern = (struct tfm_internal_lig_kern_s *)
 		malloc(num_lig_kern * sizeof(struct tfm_internal_lig_kern_s));
 	if (!f->lig_kern) return -1;
 	for (i = 0; i < num_lig_kern; ++i) {
-		b = get_byte(fp); if (b < 0) return -1;
+		int b = get_byte(fp); if (b < 0) return -1;
 		f->lig_kern[i].skip_byte = b;
 		b = get_byte(fp); if (b < 0) return -1;
 		f->lig_kern[i].next_char = b;
@@ -146,13 +149,13 @@ int int_tfm_read_lig_kern(struct tfm_internal_file_s * f, FILE * fp) {
 
 static
 int int_tfm_read_exten(struct tfm_internal_file_s * f, FILE * fp) {
-	int i, b;
+	int i;
 	int num_exten = f->file_header.ne;
 	f->extensible = (struct tfm_internal_extensible_s *)
 		malloc(num_exten * sizeof(struct tfm_internal_extensible_s));
 	if (!f->extensible) return -1;
 	for (i = 0; i < num_exten; ++i) {
-		b = get_byte(fp); if (b < 0) return -1;
+		int b = get_byte(fp); if (b < 0) return -1;
 		f->extensible[i].top = b;
 		b = get_byte(fp); if (b < 0) return -1;
 		f->extensible[i].middle = b;
@@ -193,7 +196,10 @@ struct tfm_internal_file_s * int_tfm_open(char const * filename) {
 	if(!fp) return NULL;
 
 	f = (struct tfm_internal_file_s *) malloc(sizeof(struct tfm_internal_file_s));
-	if(!f) return NULL;
+	if(!f) {
+		fclose(fp);
+		return NULL;
+	}
 
 	memset(f, 0, sizeof(struct tfm_internal_file_s));
 	if (int_tfm_read_file_header(f, fp) < 0) return NULL;

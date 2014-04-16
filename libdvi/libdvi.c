@@ -221,7 +221,7 @@ int dvi_close_text_node(dvifilestate_t * s) {
 
 	if (!c || c->header.type != DVINODE_TEXT || c->content) return 0;
 
-	if((s->flags & DVI_SKIP_SPACE_NORMAL) == 1 && s->size > 0 && s->buffer[s->size - 1] == ' ') s->size--;
+	if((s->flags & DVI_SKIP_SPACE_NORMAL) == DVI_SKIP_SPACE_NORMAL && s->size > 0 && s->buffer[s->size - 1] == ' ') s->size--;
 
 	// fixme : what if size == 0 ?
 
@@ -311,7 +311,6 @@ int dvi_append_text(dvifilestate_t * s, int ch) {
 	if(!(s->flags & DVI_NO_FONT_TRANSLATION)) {
 		char * chr;
 		int l, size;
-		int width;
 		tfmfile_t * tfm;
 		if(ch < 0 || !s->font || ch >= s->font->mapsize) {
 			return DVIERR_INVALID_CHAR;
@@ -445,9 +444,9 @@ int dvi_read_number_2(dvifilestate_t *s, int * pn) {
 		signed short number;
 		unsigned char bytes[2];
 	} v;
-	int i, c;
+	int i;
 	for (i = 0; i < 2; ++i) {
-		c = fgetc(s->fp);
+		int c = fgetc(s->fp);
 		if (c == EOF) return DVIERR_UNEXPECTED_EOF;
 		v.bytes[1 - i] = c;
 	}
@@ -463,9 +462,9 @@ int dvi_read_number_3(dvifilestate_t *s, int * pn) {
 		signed int number;
 		unsigned char bytes[4];
 	} v;
-	int i, c;
+	int i;
 	for (i = 0; i < 3; ++i) {
-		c = fgetc(s->fp);
+		int c = fgetc(s->fp);
 		if (c == EOF) return DVIERR_UNEXPECTED_EOF;
 		v.bytes[2 - i] = c;
 	}
@@ -483,9 +482,9 @@ int dvi_read_number_4(dvifilestate_t *s, int * pn) {
 		signed int number;
 		unsigned char bytes[4];
 	} v;
-	int i, c;
+	int i;
 	for (i = 0; i < 4; ++i) {
-		c = fgetc(s->fp);
+		int c = fgetc(s->fp);
 		if (c == EOF) return DVIERR_UNEXPECTED_EOF;
 		v.bytes[3 - i] = c;
 	}
@@ -524,9 +523,9 @@ int dvi_read_number_2_u(dvifilestate_t *s, unsigned int * pn) {
 		unsigned short number;
 		unsigned char bytes[2];
 	} v;
-	int i, c;
+	int i;
 	for (i = 0; i < 2; ++i) {
-		c = fgetc(s->fp);
+		int c = fgetc(s->fp);
 		if (c == EOF) return DVIERR_UNEXPECTED_EOF;
 		v.bytes[1 - i] = c;
 	}
@@ -542,9 +541,9 @@ int dvi_read_number_3_u(dvifilestate_t *s, unsigned int * pn) {
 		unsigned int number;
 		unsigned char bytes[4];
 	} v;
-	int i, c;
+	int i;
 	for (i = 0; i < 3; ++i) {
-		c = fgetc(s->fp);
+		int c = fgetc(s->fp);
 		if (c == EOF) return DVIERR_UNEXPECTED_EOF;
 		v.bytes[2 - i] = c;
 	}
@@ -562,9 +561,9 @@ int dvi_read_number_4_u(dvifilestate_t *s, unsigned int * pn) {
 		unsigned int number;
 		unsigned char bytes[4];
 	} v;
-	int i, c;
+	int i;
 	for (i = 0; i < 4; ++i) {
-		c = fgetc(s->fp);
+		int c = fgetc(s->fp);
 		if (c == EOF) return DVIERR_UNEXPECTED_EOF;
 		v.bytes[3 - i] = c;
 	}
@@ -804,9 +803,9 @@ int dvi_check_font(dvifilestate_t * s) {
 }
 
 int dvi_read_page_opcodes(dvifilestate_t * s) {
-	int c, err, a;
+	int err, a;
 	while (1) {
-		c = fgetc(s->fp);
+		int c = fgetc(s->fp);
 		if (c >= OPCODE_SET_CHAR0 && c <= OPCODE_SET_CHAR127) {
 			DUMP("OPCODE : %d : CHAR : %c\n", c, c);
 			err = dvi_append_text(s, c);
@@ -828,8 +827,8 @@ int dvi_read_page_opcodes(dvifilestate_t * s) {
 			err = dvi_append_rule_node(s, a, b);
 			if (err) return err;
 			s->stack->state.h += b;
-		} else if (c >= OPCODE_SET1 && c <= OPCODE_SET4) {
-			err = dvi_read_number(s, c - OPCODE_SET1 + 1, &a);
+		} else if (c >= OPCODE_PUT1 && c <= OPCODE_PUT4) {
+			err = dvi_read_number(s, c - OPCODE_PUT1 + 1, &a);
 			if (err) return err;
 			DUMP("OPCODE : %d : PUT (%d)\n", c, a);
 			err = dvi_append_text(s, a); /* fixme : probably not */
@@ -958,7 +957,10 @@ int dvi_read_page_opcodes(dvifilestate_t * s) {
 			buffer = malloc(a+1);
 			if (!buffer) return -1;
 			err = dvi_read_bytes(s, a, buffer);
-			if (err) return err;
+			if (err) {
+				free(buffer);
+				return err;
+			}
 			buffer[a] = 0;
 
 			DUMP("OPCODE : %d : XXX (%s)\n", c, buffer);

@@ -31,9 +31,9 @@ int make_tfm_kerning_info(struct tfm_file_s * tfm, struct tfm_internal_file_s * 
 		kern_count = 0;
 		index = f->char_info[i].remainder;
 		while (1) {
-			float value;
 			int skip_byte = f->lig_kern[index].skip_byte;
 			if (f->lig_kern[index].op_byte >= 128)	{
+				float value;
 				tfm->characters[i].kernings[kern_count].next_char = f->lig_kern[index].next_char;
 				value = fix_word_to_float(f->kern[f->lig_kern[index].op_byte - 128 + f->lig_kern[index].remainder]);
 				tfm->characters[i].kernings[kern_count].kerning = (int) floor(value * tfm->scale + .5f);

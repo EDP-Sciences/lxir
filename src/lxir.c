@@ -42,6 +42,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define REPORT_ALL 0
 
 int do_not_add_space = 0;
+int dump_doc_on_failure = 0;
+
+static
+void lxir_exit(xmlDocPtr doc, int return_code) {
+    if (return_code) {
+        if (doc && dump_doc_on_failure) {
+            xmlSaveFormatFileEnc("lxir_error_dvi.xml", doc, "UTF-8", 1);
+            if (doc->_private) {
+                xmlSaveFormatFileEnc("lxir_error_log.xml", doc->_private, "UTF-8", 1);
+            }
+        }
+    }
+    exit(return_code);
+}
 
 static
 xmlChar * utf8_str(iconv_t cd, char * inbuff, size_t s) {
@@ -575,7 +589,7 @@ void fill_attributes(const char * content, xmlNodePtr attr) {
 static
 int is_xxx_valid_name(xmlNodePtr node, xmlChar ** pname, int * popen, xmlNodePtr attr) {
 	int len;
-	char * content, * name;
+	char * content;
 
 	if(node->type != XML_ELEMENT_NODE) return 0;
 
@@ -601,6 +615,7 @@ int is_xxx_valid_name(xmlNodePtr node, xmlChar ** pname, int * popen, xmlNodePtr
 		}
 		return res;
 	} else {
+		char * name;
 		*popen = NODE_TYPE_SPECIAL;
 		name = malloc(len + 1);
 		memcpy(name, content, len);
@@ -612,19 +627,18 @@ int is_xxx_valid_name(xmlNodePtr node, xmlChar ** pname, int * popen, xmlNodePtr
 
 static
 int is_node_env_name(xmlNodePtr node, xmlChar ** ptype, int * popen) {
-	int len;
-	char * name, * content = (char *)xmlGetProp(node, BAD_CAST "type");
+	char * content = (char *)xmlGetProp(node, BAD_CAST "type");
 
 	if(!content) return 0;
 
 	if(strncmp(content, "Env:@", 5) == 0) {
 		content += 5;
-		len = strlen(content);
+		int len = strlen(content);
 		char * p = strrchr(content, '@');
 		if (strcmp(p, "@:End") == 0) {
 			len -= 5;
 			*popen = NODE_TYPE_CLOSE;
-			name = malloc(len + 1);
+			char * name = malloc(len + 1);
 			memcpy(name, content, len);
 			name[len] = 0;
 			*ptype = (xmlChar *)name;
@@ -633,7 +647,7 @@ int is_node_env_name(xmlNodePtr node, xmlChar ** ptype, int * popen) {
 		} else if (strcmp(p, "@:Begin") == 0) {
 			len -= 7;
 			*popen = NODE_TYPE_OPEN;
-			name = malloc(len + 1);
+			char * name = malloc(len + 1);
 			memcpy(name, content, len);
 			name[len] = 0;
 			*ptype = (xmlChar *)name;
@@ -778,7 +792,7 @@ new_node_stack_entry(xmlNodePtr node) {
 	entry->attr = xmlNewNode(NULL, BAD_CAST "temp-attribute");
 	if (!is_xxx_valid_name(node, &entry->name, &entry->type, entry->attr)) {
 		fprintf(stderr, "Invalid xxx node structure ! it has no name ???\n");
-		exit(-1);
+        lxir_exit(node->doc, -1);
 	}
 
 	id = xmlGetProp(entry->attr, BAD_CAST "id");
@@ -869,7 +883,7 @@ int build_hierarchy_step(struct node_stack * stack) {
 	if(!entry) {
 		fprintf(stderr, "Invalid xxx hierarchy, open node \"%s:%d\" without "
 			"closing nodes found\n", stack->first->name, stack->first->id);
-		exit(-1);
+        lxir_exit(entry->node->doc, -1);
 	}
 	/* find the first OPEN node before */
 	while(entry && entry->type != NODE_TYPE_OPEN) entry = entry->prev;
@@ -898,7 +912,7 @@ int build_hierarchy_step(struct node_stack * stack) {
 	if(!match || match->type != NODE_TYPE_CLOSE) {
 		fprintf(stderr, "Invalid xxx hierarchy, unable to find a matching "
 			"close node for \"%s:%d\"\n", entry->name, entry->id);
-		exit(-1);
+        lxir_exit(entry->node->doc, -1);
 	}
 	/* place the "match" node just before the "entry->next" node */
 	if (match != entry->next) {
@@ -960,22 +974,22 @@ void replace_env_nodes(xmlNodePtr root, xmlTransformationEntry * param) {
 				} else if(open == NODE_TYPE_CLOSE) {
 					if (!is_valid_node(parent, "node")) {
 						fprintf(stderr, "Invalid xxx hierarchy !, got a closing node without opening node\n");
-						exit(-1);
+                        lxir_exit(root->doc, -1);
 					}
 					if (strcmp((const char *)xmlGetProp(parent, BAD_CAST "type"), "Env") != 0) {
 						fprintf(stderr, "Invalid xxx hierarchy !, parent is not an env node\n");
-						exit(-1);
+                        lxir_exit(root->doc, -1);
 					}
 					if (strcmp((const char *)xmlGetProp(parent, BAD_CAST "value"), (const char *)name) != 0) {
 						fprintf(stderr, "Invalid xxx hierarchy !, got \"%s\" and expected \"%s\"\n", node->content, xmlGetProp(parent, BAD_CAST "type"));
-						exit(-1);
+                        lxir_exit(root->doc, -1);
 					}
 					node = parent;
 					parent = node->parent;
 					relink_nodes(parent, next);
 				} else {
 					fprintf(stderr, "Invalid xxx hierarchy, Env is neither at begin nor end !\n");
-					exit(-1);
+                    lxir_exit(root->doc, -1);
 				}
 				free(name);
 			}
@@ -1399,7 +1413,6 @@ static
 void relink_label(xmlNodePtr src, xmlNodePtr dst) {
 	xmlNodePtr node = src->children;
 	while (node) {
-		xmlChar * type;
 		if (is_valid_node_type(node, "label")) {
 			xmlUnlinkNode(node);
 			xmlAddPrevSibling(dst, node);
@@ -1645,6 +1658,9 @@ int main(int argc, char * argv[]) {
 		fprintf(stderr, "Needs a single DVI file input (%d given)\n", args.inputs_num);
 		return -1;
 	}
+
+    dump_doc_on_failure = args.dump_doc_on_failure_flag;
+
 	dvifile = args.inputs[0];
 
 	kpse_set_program_name(argv[0], "lxir");

@@ -111,11 +111,12 @@ void adobe2unicode_init() {
 					exit(1);
 				}
 				code = strtoul((char const *)attr, 0, 0);
-				chr->unicode = malloc(32);
-				if (to_utf8(code, chr->unicode, 32)) {
+				char * unicode_char = malloc(32);
+				if (to_utf8(code, unicode_char, 32)) {
 					fprintf(stderr, "Invalid conversion to UTF-8 for character \"%s\"\n", chr->adobe);
 					exit(1);
 				}
+				chr->unicode = unicode_char;
 			} else {
 				chr->unicode = strdup((char const *)attr);
 			}

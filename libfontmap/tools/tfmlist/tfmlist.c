@@ -245,6 +245,7 @@ int handle_tfm(const char * fname) {
 	if (size < 19) {
 		// add_tfm_info(fname, "*UNSPECIFIED*", "*UNSPECIFIED*");
 		fprintf(stderr, "invalid TFM : %s", fname);
+		fclose(fp);
 		return 0;
 	} else {
 		char encoding[41], name[21];
