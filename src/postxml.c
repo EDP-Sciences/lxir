@@ -192,16 +192,11 @@ void rebuild_paragraphs(xmlNodePtr root, xmlTransformationEntry * param) {
 				xmlUnlinkNode(node);
 				xmlFreeNode(node);
 			}
+		} else {
+			xmlTransformationPush(node, rebuild_paragraphs, param);
 		}
 
 		node = next;
-	}
-	if (!found) {
-		node = root->children;
-		while (node) {
-			xmlTransformationPush(node, rebuild_paragraphs, param);
-			node = node->next;
-		}
 	}
 }
 
