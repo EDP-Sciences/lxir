@@ -46,14 +46,14 @@
 
   <!-- templates for "pseudo-math" -->
   <xsl:template match="msup" mode="simple_math">
-    <sup>
+    <sup><math>
       <xsl:apply-templates/>
-    </sup>
+    </math></sup>
   </xsl:template>
   <xsl:template match="msub" mode="simple_math">
-    <sub>
+    <sub><math>
       <xsl:apply-templates/>
-    </sub>
+    </math></sub>
   </xsl:template>
 
 <!-- Follow recursively the tree: -->
