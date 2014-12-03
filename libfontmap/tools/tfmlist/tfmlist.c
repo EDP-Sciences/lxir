@@ -277,6 +277,10 @@ void sort_tfm_list() {
 		++count;
 		tfm = tfm->next;
 	}
+	
+	if (count < 2)
+		/* nothing to sort */
+		return ;
 
 	result = (struct tfm_list **) malloc(count * sizeof(struct tfm_list *));
 	if (!result) {
@@ -331,7 +335,7 @@ int main(int argc, char * argv[]) {
     LIBXML_TEST_VERSION;
 
 	if (argc < 3) {
-		fprintf(stderr, "Usage : %s <patterns> <path> [<path> ...]\n", argv[1]);
+		fprintf(stderr, "Usage : %s <patterns> <path> [<path> ...]\n", argv[0]);
 		return -1;
 	}
 

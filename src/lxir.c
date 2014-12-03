@@ -406,17 +406,17 @@ void transform_large_accent_pattern(xmlNodePtr root, xmlTransformationEntry * pa
 			text1 = node;
 			state = 2;
 		} else if (state == 1 && !is_valid_control_node(node, 0)) {
-			state = 0; node = start->next;
+			state = 0;
 		} else if (state == 2 && is_valid_control_node(node, "pop")) {
 			state = 3;
 		} else if (state == 2 && !is_valid_control_node(node, 0)) {
-			state = 0; node = start->next;
+			state = 0;
 		} else if (state == 3 && is_valid_node(node, "text")) {
 			text2 = node;
 			make_accent(text1, text2);
-			state = 0; node = start->next;
+			state = 0;
 		} else if (state == 3 && !is_valid_control_node(node, 0)) {
-			state = 0; node = start->next;
+			state = 0;
 		}
 		node = next;
 	}
@@ -549,7 +549,7 @@ void fill_attributes(const char * content, xmlNodePtr attr) {
 	int stack = 0;
 	char * name = 0;
 	char * value = 0;
-	int start_pos;
+	volatile int start_pos;
 
 	/* a simple finite state machine. */
 	while (pos < len) {
@@ -883,7 +883,7 @@ int build_hierarchy_step(struct node_stack * stack) {
 	if(!entry) {
 		fprintf(stderr, "Invalid xxx hierarchy, open node \"%s:%d\" without "
 			"closing nodes found\n", stack->first->name, stack->first->id);
-        lxir_exit(entry->node->doc, -1);
+        lxir_exit(stack->first->node->doc, -1);
 	}
 	/* find the first OPEN node before */
 	while(entry && entry->type != NODE_TYPE_OPEN) entry = entry->prev;

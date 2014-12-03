@@ -276,6 +276,7 @@ int xmlTransformationApplyList(const char * type, xmlDocPtr * pdoc) {
 	}
 	if(!list) {
 		fprintf(stderr, "Unable to find transformation list \"%s\"\n", type);
+		xmlTransformationStackClear(&stack);
 		return 0;
 	}
 	trans.stack = &stack;

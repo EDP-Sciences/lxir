@@ -126,7 +126,10 @@ static struct doc_s * read_config() {
 					}
 				} else {
 					doc = malloc(sizeof(struct doc_s));
-					if(!doc) return 0;
+					if(!doc) {
+						fprintf(stderr, "malloc failed !\n");
+						return docs;
+					}
 					doc->doc = ptr;
 					doc->next = docs;
 					docs = doc;

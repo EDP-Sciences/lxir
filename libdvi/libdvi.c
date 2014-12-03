@@ -192,7 +192,8 @@ int dvi_stack_size(dvifilestate_t * s) {
 }
 
 int dvi_append_node(dvifilestate_t * s, dvinode_header_t * node) {
-	s->current_node->next = node;
+	if (s->current_node)
+		s->current_node->next = node;
 	s->current_node = node;
 
 	return 0;
@@ -678,11 +679,11 @@ int dvi_read_postamble(dvifilestate_t * s) {
 			if (!pfont) return -1; /* fixme : more cleanup is necessary */
 
 			err = dvi_read_number(s, c - OPCODE_FONT_DEF1 + 1, &pfont->current.index);
-			if (err) return err;
+			if (err) { free(pfont); return err; }
 			err = dvi_read_number(s, 4, &pfont->current.checksum);
-			if (err) return err;
+			if (err) { free(pfont); return err; }
 			err = dvi_read_number(s, 4, &pfont->current.scale);
-			if (err) return err;
+			if (err) { free(pfont); return err; }
 			err = dvi_read_number(s, 4, &pfont->current.design_size);
 			if (err) return err;
 			a = fgetc(s->fp);
@@ -731,7 +732,7 @@ int dvi_read_postamble(dvifilestate_t * s) {
 	}
 
 	s->file->nbfonts = nfont;
-	s->file->fonts = malloc(sizeof(dvifont_t) * nfont);
+	s->file->fonts = nfont ? malloc(sizeof(dvifont_t) * nfont) : NULL;
 	c = 0;
 	while(list) {
 		struct font_list_s * next = list->next;
